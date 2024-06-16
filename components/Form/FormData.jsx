@@ -5,11 +5,25 @@ import CloseButton from "/images/closeButton.png"
 import { Link } from 'react-router-dom';
 
 const MyForm = ({isVisible, onClose}) => {
-  const matricNumber= "214871"
-  const department = "Industrial Engineering"
-  const progType="Regular"
-  const yOE ="2021/2022"
-  const faculty ="Technology"
+  const [defMatric, matricNumber]= useState("214871")
+  const [defDept, department] = useState("Industrial Engineering")
+  const [defProg, progType]=useState("Regular")
+  const [defYOE, yOE] =useState("2021/2022")
+  const [defFaculty, faculty] =useState("Technology")
+
+
+// API to fetch user's details
+// declare a function here
+// matricNumber=getUserMatric
+// department=GetUserDept
+// /progType=getProgramtype
+
+
+
+
+
+
+
   return <div className={isVisible? 'visible': 'hidden'} id='formCase'>
 
   <div className="confirmation agreed">
@@ -29,21 +43,21 @@ const MyForm = ({isVisible, onClose}) => {
 
       <div className="userDetails">
         <div className="matricNumber">
-          Matric Number: <b>{matricNumber} </b>
+          Matric Number: <b>{defMatric} </b>
         </div>
         <div className="dept">
-          Department: <div>{department}</div>
+          Department: <div>{defDept}</div>
         </div>
         <div className="prog">
-          Programme Type: <div className="prog">{progType} </div>
+          Programme Type: <div className="prog">{defProg} </div>
         </div>
 
         <div className="session">
-          Session of Entry: <div>{yOE}</div>
+          Session of Entry: <div>{defYOE}</div>
         </div>
 
         <div className="faculty">
-          Faculty: <div>{faculty}</div>
+          Faculty: <div>{defFaculty}</div>
         </div>
       </div>
     </div>

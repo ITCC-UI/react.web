@@ -5,8 +5,7 @@ import Envelope from "/images/message.png"
 import Image from "/images/profile.jpg"
 import Chevy from "/images/chevron down.png"
 import './header.scss'; // Assuming a CSS file named TopNav.css exists
-import { Link } from 'react-router-dom';
-import Button from '../Button/Button';
+
 
 const TopNav = ({toggleVisibility}) => {
   const [userName, setUserName] = useState('Godwin James H.'); // Initial user name
