@@ -1,75 +1,59 @@
+// MyForm.js
 import React, { useState } from 'react';
-import { Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import "./form.scss"
+import CloseButton from "/images/closeButton.png"
+import { Link } from 'react-router-dom';
 
-const UpdateProfileSchema = Yup.object().shape({
-  matric: Yup.string()
-    .required('Matric No is required')
-    .length(7, 'Matric No must be 7 characters'),
-  fName: Yup.string().required('First Name is required'),
-  mName: Yup.string(),
-  lName: Yup.string().required('Last Name is required'),
-  pNumber: Yup.number().required('Phone Number is required'),
-  email: Yup.string().email('Invalid email format').required('Email is required'),
-  nationality: Yup.string(),
-  hAddress: Yup.string(),
-  gender: Yup.string().required('Gender is required'),
-  dob: Yup.date().required('Date of Birth is required'),
-  disability: Yup.string(),
-  language: Yup.string(),
-  mStatus: Yup.string().required('Marital Status is required'),
-  studentType: Yup.string().required('Student Type is required'),
-  // Add validation for passport and signature files (if needed)
-  entry: Yup.number().required('Year of Entry is required'),
-  level: Yup.string().required('Level is required'),
-  faculty: Yup.string().required('Faculty is required'),
-  department: Yup.string().required('Department is required'),
-  nextofKinName: Yup.string().required('Next of Kin Name is required'),
-  nextofKinAddress: Yup.string().required('Next of Kin Address is required'),
-  relationship: Yup.string().required('Relationship is required'),
-  nokPhone: Yup.number().required('Next of Kin Phone Number is required'),
-});
+const MyForm = ({isVisible, onClose}) => {
+  const matricNumber= "214871"
+  const department = "Industrial Engineering"
+  const progType="Regular"
+  const yOE ="2021/2022"
+  const faculty ="Technology"
+  return <div className={isVisible? 'visible': 'hidden'} id='formCase'>
 
-const UpdateProfile = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  <div className="confirmation agreed">
+    <div className="close" onClick={onClose}>
+<img src={CloseButton} alt="" />
+    </div>
+    <div className="confirm-warning">
 
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    setIsSubmitting(true);
-    // Simulate API call
-    console.log('Submitting form data:', values);
-    setSubmitting(false);
-    resetForm();
-  };
+      <div className="confirmThis">
+      Confirm your Programme Details
+      </div>
 
-  return (
-    <div className="formWrapper">
-      <div className="formCase">
-        <Form initialValues={{}} validationSchema={UpdateProfileSchema} onSubmit={handleSubmit}>
-          {/* Personal Information Section */}
-          <div className="personalInformation section">
-            <div className="formContents top">
-              <label htmlFor="matric">Matric No</label>
-              <Field type="text" name="matric" id="matric" maxLength="7" />
-              <ErrorMessage name="matric" component="div" className="error" />
-            </div>
-            {/* ... Other personal information fields ... */}
-          </div>
+      <div className="warning">
+      please check to confirm that your <b>matric number</b> is correct,
+      if any information is <span>incorrect</span> contact ITCC!
+      </div>
 
-          {/* Department Information Section */}
-          {/* ... Similar structure for department information fields ... */}
+      <div className="userDetails">
+        <div className="matricNumber">
+          Matric Number: <b>{matricNumber} </b>
+        </div>
+        <div className="dept">
+          Department: {department}
+        </div>
+        <div className="prog">
+          Programme Type: {progType}
+        </div>
 
-          {/* Next of Kin Information Section */}
-          {/* ... Similar structure for next of kin information fields ... */}
+        <div className="session">
+          Session of Entry: {yOE}
+        </div>
 
-          <div className="button-container">
-            <button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : 'Submit'}
-            </button>
-          </div>
-        </Form>
+        <div className="faculty">
+          Faculty: {faculty}
+        </div>
       </div>
     </div>
-  );
+
+    <Link to= "/registration_portal">
+    <div className="register_here">
+     
+     Register</div></Link>
+  </div>
+  </div>;
 };
 
-export default UpdateProfile;
+export default MyForm;

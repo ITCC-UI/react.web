@@ -5,8 +5,10 @@ import Envelope from "/images/message.png"
 import Image from "/images/profile.jpg"
 import Chevy from "/images/chevron down.png"
 import './header.scss'; // Assuming a CSS file named TopNav.css exists
+import { Link } from 'react-router-dom';
+import Button from '../Button/Button';
 
-const TopNav = () => {
+const TopNav = ({toggleVisibility}) => {
   const [userName, setUserName] = useState('Godwin James H.'); // Initial user name
   const [matricNumber, setMatricNumber] = useState('214872'); // Initial matriculation number
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -28,14 +30,19 @@ const TopNav = () => {
 
       <div className="actionsLog">
         <div className="registration">
-          <button>
+          <button onClick={toggleVisibility}>
             <img
               src={Pen}
               alt="Pen"
             />
             Registration
           </button>
+          
         </div>
+
+        {/* <Button/> */}
+
+
 
         <div className="notifications">
           <div className="notice">

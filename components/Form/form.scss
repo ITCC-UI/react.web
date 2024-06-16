@@ -1,0 +1,101 @@
+/* src/styles.css */
+.hidden {
+    // opacity: 0;
+    // visibility: hidden;
+    // display: none;
+    transition: opacity 0.5s ease, visibility 0.5s ease, display 0s 0.5s; /* display change is delayed by 0.5s */
+  }
+  
+  .visible {
+    opacity: 1;
+    visibility: visible;
+    // display: block;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    background-color: yellow;
+  }
+  
+  
+#formCase{
+    position: absolute;
+    width: 100%;
+    z-index: 4;
+    display: flex;
+    // align-items: center;
+    padding-top: 60px;
+    justify-content: center;
+    height: 100%;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.454);
+ 
+    .confirmation {
+        background-color:white;
+        padding: 10px;
+        margin: 10px;
+        width: 450px;
+        height: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+      }
+      
+      .close {
+        cursor: pointer;
+        color: rgb(0, 0, 0);
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        display: flex;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        align-items: center;
+        justify-content: center;
+        img{
+            width: 100%;
+
+        }
+      }
+
+      .confirm-warning{
+        text-align: center;
+        border: 1px solid red;
+        .confirmThis{
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            font-family: "Poppins";
+        }
+        .warning{
+            font-size: 10px;
+            font-family: "Inter";
+            font-style: italic;
+            opacity: .6;
+            width: 286px;
+            span{
+                color: red;
+            }
+        }
+
+        .userDetails{
+            
+        }
+      }
+
+      .register_here{
+        padding: 10px 26px;
+        gap: 8px;
+        opacity: 0px;
+        background-color: var(--deep-blue);
+        border: none;
+        color: var(--white);
+        display: flex;
+        place-items: center;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: background-color linear 0.2s;
+      }
+}
