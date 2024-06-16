@@ -32,3 +32,25 @@ width: 100%;
 
 
 
+
+.route-Dash{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+
+.overlay{
+  display: none;
+  background-color: red;
+  position: absolute;
+  z-index: 100;
+  width: 50px;
+  height: 200px;
+  top: 0;
+  left: 0;
+}
+
+.empty_dash{
+  width: 420px;
+}

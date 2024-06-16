@@ -32,18 +32,18 @@ const MyForm = ({isVisible, onClose}) => {
           Matric Number: <b>{matricNumber} </b>
         </div>
         <div className="dept">
-          Department: {department}
+          Department: <div>{department}</div>
         </div>
         <div className="prog">
-          Programme Type: {progType}
+          Programme Type: <div className="prog">{progType} </div>
         </div>
 
         <div className="session">
-          Session of Entry: {yOE}
+          Session of Entry: <div>{yOE}</div>
         </div>
 
         <div className="faculty">
-          Faculty: {faculty}
+          Faculty: <div>{faculty}</div>
         </div>
       </div>
     </div>

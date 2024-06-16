@@ -6,6 +6,7 @@ import Login from './pages/Login/Login.jsx';
 import SignUp from './pages/SignUp/signup.jsx';
 import Dashboard from './pages/DashBoard/Dashboard.jsx';
 import UpdateProfile from '../components/Form/FormData.jsx';
+import RegistrationDash from './pages/Registration Dashboard/Registration.jsx';
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/form" element={<UpdateProfile />} />
           <Route path='/' element={<Dashboard/>}></Route>
+          <Route path='/registration_portal' element= {<RegistrationDash/>}></Route>
 
         </Routes>
         

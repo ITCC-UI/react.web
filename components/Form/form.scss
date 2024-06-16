@@ -1,8 +1,8 @@
 /* src/styles.css */
 .hidden {
-    // opacity: 0;
-    // visibility: hidden;
-    // display: none;
+    opacity: 0;
+    visibility: hidden;
+    display: none;
     transition: opacity 0.5s ease, visibility 0.5s ease, display 0s 0.5s; /* display change is delayed by 0.5s */
   }
   
@@ -60,7 +60,9 @@
 
       .confirm-warning{
         text-align: center;
-        border: 1px solid red;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         .confirmThis{
             font-size: 14px;
             font-weight: 600;
@@ -68,6 +70,7 @@
             font-family: "Poppins";
         }
         .warning{
+            margin: 0 0 20px 0;
             font-size: 10px;
             font-family: "Inter";
             font-style: italic;
@@ -79,7 +82,21 @@
         }
 
         .userDetails{
-            
+
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            font-size: 12px;
+            &>div{
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                &:not(~){
+                    font-size: 120px;
+                }
+            }
         }
       }
 
