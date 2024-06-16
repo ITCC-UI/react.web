@@ -1,4 +1,9 @@
 import React, { useState, useRef } from 'react';
+import Pen from "/images/pen.png"
+import Bell from "/images/Notification.png"
+import Envelope from "/images/message.png"
+import Image from "/images/profile.jpg"
+import Chevy from "/images/chevron down.png"
 import './header.scss'; // Assuming a CSS file named TopNav.css exists
 
 const TopNav = () => {
@@ -25,7 +30,7 @@ const TopNav = () => {
         <div className="registration">
           <button>
             <img
-              src="../../../../static/assets/images/pen.png"
+              src={Pen}
               alt="Pen"
             />
             Registration
@@ -34,16 +39,16 @@ const TopNav = () => {
 
         <div className="notifications">
           <div className="notice">
-            <img src="../../../../static/assets/images/Notification.png" alt="" />
+            <img src={Bell} alt="" />
           </div>
           <div className="message">
-            <img src="../../../../static/assets/images/message.png" alt="" />
+            <img src={Envelope} alt="" />
           </div>
         </div>
 
         <div className="profileDetails">
           <div className="image">
-            <img src="../../../../static/assets/images/profile.jpg" alt="" />
+            <img src={Image} alt="" />
           </div>
           <div className="conDetails">
             <div className="name">{userName}</div>
@@ -60,7 +65,7 @@ const TopNav = () => {
           </div>
           <div className="chevy" id="chevron"    onClick={handleDropdownClick}>
             <img
-              src="../../../../static/assets/images/chevron down.png"
+              src={Chevy}
               alt="Chevron Down"
             />
           </div>

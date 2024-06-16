@@ -1,10 +1,10 @@
 import React from "react";
 import { useState } from "react";
-import Sidebar from "../../components/sidebar";
+// import Sidebar from "../../components/sidebar";
 
 const SignUp = () => {
     return ( <div className="signUp">
-<Sidebar/>
+{/* <Sidebar/> */}
     </div> );
 }
  

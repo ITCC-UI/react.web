@@ -1,13 +1,13 @@
 import React from "react";
 import "./login.scss"
-import Sidebar from "../../components/sidebar";
+// import Sidebar from "../../components/sidebar";
 
 const Login = () => {
     return ( 
         <div className="loginPage">
             <section className="signUp">
       
-<Sidebar/>
+{/* <Sidebar/> */}
         <main>
             <div className="main-container">
                 <div className="signUpContainer">
