@@ -19,8 +19,11 @@ const TopNav = ({toggleVisibility}) => {
 
   const callAPIFunct=()=>{
     // setUserName=
+  // Ignore the function above :-D
     // setMatricNumber=    setUserImage=
   }
+
+
   const handleDropdownClick = () => {
     setIsDropdownOpen(!isDropdownOpen); // Toggle the state on click
   };
