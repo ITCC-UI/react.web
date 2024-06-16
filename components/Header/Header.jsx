@@ -12,7 +12,16 @@ const TopNav = ({toggleVisibility}) => {
   const [userName, setUserName] = useState('Godwin James H.'); // Initial user name
   const [matricNumber, setMatricNumber] = useState('214872'); // Initial matriculation number
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userImage, setUserImage] = useState(Image)
 
+
+  // API Call to change the user's values in the respective component using the useState
+  // second properties
+
+  const callAPIFunct=()=>{
+    // setUserName=
+    // setMatricNumber=    setUserImage=
+  }
   const handleDropdownClick = () => {
     setIsDropdownOpen(!isDropdownOpen); // Toggle the state on click
   };
@@ -55,7 +64,7 @@ const TopNav = ({toggleVisibility}) => {
 
         <div className="profileDetails">
           <div className="image">
-            <img src={Image} alt="" />
+            <img src={userImage} alt="" />
           </div>
           <div className="conDetails">
             <div className="name">{userName}</div>
