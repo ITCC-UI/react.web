@@ -2,6 +2,7 @@ import Construction from "/images/WEBSITE_UNDER_CONSTRUCTION.jpg"
 import "./registration_dash.scss"
 import SideBar from "../../../components/Sidebar/Sidebar";
 import TopNav from "../../../components/Header/Header";
+import DepartmentTrainingCourses from "../../../components/Table/Table";
 const RegistrationDash = () => {
 
     return ( 
@@ -10,10 +11,12 @@ const RegistrationDash = () => {
             <main>
                 <TopNav />
 
-                <div className="construction">
+                {/* <div className="construction">
         
         <img src={Construction} alt="Construction" className="construction"/>
-            </div>
+            </div> */}
+
+            <DepartmentTrainingCourses />
             </main>
        
         </div>
