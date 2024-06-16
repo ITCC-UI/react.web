@@ -3,6 +3,7 @@ import "./dashboard.scss"
 import SideBar from "../../../components/Sidebar/Sidebar";
 import TopNav from "../../../components/Header/Header";
 import Empty from "/images/empty_dashboard.png"
+import SideBar from "../../../components/Sidebar/Sidebar";
 
 const Dashboard = () => {
     return ( 
