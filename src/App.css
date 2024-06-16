@@ -1,0 +1,34 @@
+
+:root{
+  --button-background: #3a499f;
+  --white: #ffff;
+  --secondary-button: #FEF7FF;
+  --orangeBG: #faa62c;
+  --deep-blue: rgba(0, 0, 128, 1);
+
+}
+
+#root{
+  width: 100%;
+}
+
+
+*{
+  position: relative;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+
+body{
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: space-between;
+width: 100%;
+}
+
+
+
+
+

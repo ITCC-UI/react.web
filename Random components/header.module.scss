@@ -1,0 +1,14 @@
+// MyModule.module.css
+.baseStyle {
+    /* Default styles */
+    cursor: pointer;
+    // pointer-events: none;
+  }
+  
+  .active {
+    /* Styles for active state */
+    color: red;
+    pointer-events: none;
+  }
+  
+  // export default .header;
