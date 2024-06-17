@@ -1,8 +1,6 @@
-// DepartmentTrainingCourses.js
-
 import React from 'react';
 import "./table.scss"
-const DepartmentTrainingCourses = () => {
+const DepartmentTrainingCourses = (props) => {
   return (
     <section>
       <div className="heading">

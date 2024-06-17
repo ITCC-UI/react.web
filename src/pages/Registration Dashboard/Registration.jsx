@@ -7,7 +7,7 @@ const RegistrationDash = () => {
 
     return ( 
         <div className="route-Dash">
-            <SideBar />
+            <SideBar className="dash_navigation"/>
             <main>
                 <TopNav />
 

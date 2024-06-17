@@ -3,14 +3,14 @@
     opacity: 0;
     visibility: hidden;
     display: none;
-    transition: opacity 0.5s ease, visibility 0.5s ease, display 0s 0.5s; /* display change is delayed by 0.5s */
+    transition: opacity 0.2s ease, visibility 0.1s ease, display 0s 0.5s; /* display change is delayed by 0.5s */
   }
   
   .visible {
     opacity: 1;
     visibility: visible;
-    // display: block;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
+    display: block;
+    transition: opacity 0.3s ease, visibility 0.2s ease;
     background-color: yellow;
   }
   
@@ -94,9 +94,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                &:not(~){
-                    font-size: 120px;
-                }
+                
             }
         }
       }

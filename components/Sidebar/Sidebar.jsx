@@ -4,7 +4,7 @@ import Dashy from "/images/Vector.png"
 import Document from "/images/document.png"
 import Logout from "/images/Logout.png"
 import AccordionS from "../Accordion/Accordion"
-const SideBar = () => {
+const SideBar = (props) => {
 
 
   return (
@@ -23,7 +23,7 @@ const SideBar = () => {
               </div>
             </div>
 
-            <div className="dash_navigation">
+            <div className ={props.className} >
               <div className="dashy" id="dashboard">
                 <img src={Dashy} alt="Dashboard" />
                 <p>Dashboard</p>

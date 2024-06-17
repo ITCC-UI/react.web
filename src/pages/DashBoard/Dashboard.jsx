@@ -20,7 +20,7 @@ const toggleVisibility =()=>{
     return ( 
         <div className="route-Dash">
          
-            <SideBar />
+            <SideBar className="disable_props dash_navigation"/>
             <div className="overlay">
 
             </div>
