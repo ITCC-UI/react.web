@@ -1,39 +1,59 @@
-import React, { useState,useEffect } from "react";
-import "./dashboard.scss"
-import TopNav from "../../../components/Header/Header";
-import Empty from "/images/empty_dashboard.png"
-import SideBar from "../../../components/Sidebar/Sidebar";
-import MyForm from "../../../components/Form/FormData";
+import React, { useState } from 'react';
+import './dashboard.scss';
+import TopNav from '../../../components/Header/Header';
+import Empty from '/images/empty_dashboard.png';
+import SideBar from '../../../components/Sidebar/Sidebar';
+import UserForm from '../../../components/Fill Form/FillForm';
+// import MyForm from '../../../components/Form/MyForm';
+import MForm from '../../../components/Form/FormData';
 
 const Dashboard = () => {
-const[isVisible, setIsVisible]= useState(false)
+  const [isVisible, setIsVisible] = useState(false);
+  const [formData, setFormData] = useState(null);
 
-useEffect(() => {
-    // On component mount, you can ensure visibility is set to hidden
-    setIsVisible(false);
-  }, []);
-const toggleVisibility =()=>{
-    setIsVisible((prev)=> !prev)
-}
+  const toggleVisibility = () => {
+    setIsVisible((prev) => !prev);
+  };
 
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      // Simulating API call for form submission
+      const response = await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const success = Math.random() > 0.5;
+          if (success) {
+            resolve({ ok: true });
+          } else {
+            reject(new Error('Failed to submit form'));
+          }
+        }, 1000); // Simulating 1 second delay
+      });
 
-    return ( 
-        <div className="route-Dash">
-         
-            <SideBar className="disable_props dash_navigation"/>
-            <div className="overlay">
+      if (response.ok) {
+        console.log('Form data saved successfully');
+        setFormData(values); // Store form data in state
+        setIsVisible(true); // Show confirmation after successful form submission
+      } else {
+        console.error('Error saving form data');
+      }
+    } catch (error) {
+      console.error('Error saving form data:', error);
+    }
+    setSubmitting(false);
+  };
 
-            </div>
-<main>
-   <TopNav toggleVisibility={toggleVisibility}/>
+  return (
+    <div className="route-Dash">
+      <SideBar className="disable_props dash_navig" />
+      <div className="overlay"></div>
+      <main>
+        <TopNav toggleVisibility={toggleVisibility} isVisible={isVisible} />
+        <img src={Empty} alt="Empty dashboard" className="empty_dash" />
+      </main>
+      <UserForm isVisible={isVisible} onClose={() => setIsVisible(false)} onSubmit={handleSubmit} />
+      {formData && <MForm isVisible={!isVisible} onClose={() => setIsVisible(false)} formData={formData} />}
+    </div>
+  );
+};
 
-<img src={Empty} alt="Empty dashbaord" className="empty_dash"/>
- 
-</main>
-
-<MyForm isVisible={isVisible}  onClose={toggleVisibility}/>
-        </div>
-     );
-}
- 
 export default Dashboard;

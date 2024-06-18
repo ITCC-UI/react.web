@@ -1,6 +1,14 @@
 import React from 'react';
 import "./table.scss"
+import classNames from 'classnames';
 const DepartmentTrainingCourses = (props) => {
+  const isEligible = props.eligible;
+const userYear=200
+  const activeClasses= classNames({
+    'eligibility': true,
+    'eligible': userYear===200,
+    'ineligible': 3>7
+  })
   return (
     <section>
       <div className="heading">
@@ -27,7 +35,7 @@ const DepartmentTrainingCourses = (props) => {
                 <td>2019/2020</td>
                 <td>8 Weeks</td>
                 <td>
-                  <div className="eligibility eligible">
+                  <div className={activeClasses}>
                     Eligible
                   </div>
                 </td>

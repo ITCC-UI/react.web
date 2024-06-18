@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "classnames": "^2.5.1",
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "formik": "^2.4.6",
     "react": "^18.2.0",
@@ -29,5 +32,10 @@
     "eslint-plugin-react-refresh": "^0.4.6",
     "sass": "^1.77.0",
     "vite": "^5.2.0"
-  }
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "vite.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

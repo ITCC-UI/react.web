@@ -1,0 +1,116 @@
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+    transition: opacity 0.2s ease, visibility 0.1s ease, display 0s 0.5s;
+  }
+  
+  .visible {
+    opacity: 1;
+    visibility: visible;
+    display: block;
+    transition: opacity 0.3s ease, visibility 0.2s ease;
+    background-color: yellow;
+  }
+  
+  #formCase {
+    position: absolute;
+    width: 100%;
+    z-index: 4;
+    display: flex; /* Change display to flex */
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Adjust height to fill the screen */
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.454);
+    backdrop-filter: blur(15px);
+  }
+  
+  .fillForm {
+    background-color: white;
+    padding: 10px;
+    margin: 10px;
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    transition: height 0.3s ease; /* Add transition for height */
+    min-height: 300px; /* Set a minimum height */
+  }
+  
+  .form-container.visible .fillForm {
+    height: auto; /* Let it grow dynamically */
+  }
+  
+  .close {
+    cursor: pointer;
+    color: rgb(0, 0, 0);
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px 0;
+  }
+  
+  .details {
+    font-weight: 600;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    position: relative; /* Make it relative for label positioning */
+    label {
+      position: absolute;
+      z-index: 2;
+      font-size: 12px;
+      left: 5px;
+      top: -10px;
+      background: rgba(254, 247, 255, 1);
+    }
+    input[type="text"],
+    input[type="email"],
+    select {
+      width: 300px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      font-size: 14px;
+      color: #333;
+      outline: none;
+    }
+    input[type="text"],
+    input[type="email"] {
+      &:focus {
+        background-color: #ffff;
+        border: 1px solid rgba(121, 116, 126, 1);
+      }
+    }
+  }
+  
+  .error {
+    color: red;
+    font-size: 10px;
+    padding: 3px 4px;
+    right: 0;
+    // top: 18px;
+    border-radius: 20px;
+    position: absolute;
+    // background-color: red;
+  }
+  
