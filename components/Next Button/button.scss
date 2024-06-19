@@ -1,0 +1,15 @@
+.register_here{
+    padding: 10px 26px;
+    gap: 8px;
+    opacity: 0px;
+    background-color: var(--deep-blue);
+    border: none;
+    color: var(--white);
+    display: flex;
+    place-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background-color linear 0.2s;
+  }

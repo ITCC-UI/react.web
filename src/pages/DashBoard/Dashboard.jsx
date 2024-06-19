@@ -7,7 +7,7 @@ import UserForm from '../../../components/Fill Form/FillForm';
 // import MyForm from '../../../components/Form/MyForm';
 import MForm from '../../../components/Form/FormData';
 
-const Dashboard = (dashboardClass, placementClass, disableCover) => {
+const Dashboard = (dashboardClass, placementClass, disableCover,disableReg) => {
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState(null);
 
@@ -44,10 +44,10 @@ const Dashboard = (dashboardClass, placementClass, disableCover) => {
 
   return (
     <div className="route-Dash">
-      <SideBar disableCover="disable_props dash_navig" dashboardClass="dashy" placementClass="placement" />
+      <SideBar disableCover="dash_navig disable_props" dashboardClass="dashy" placementClass="placement" />
       <div className="overlay"></div>
       <main>
-        <TopNav toggleVisibility={toggleVisibility} isVisible={isVisible} />
+        <TopNav toggleVisibility={toggleVisibility} isVisible={isVisible} disableReg="registration"/>
         <img src={Empty} alt="Empty dashboard" className="empty_dash" />
       </main>
       <UserForm isVisible={isVisible} onClose={() => setIsVisible(false)} onSubmit={handleSubmit} />

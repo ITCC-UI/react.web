@@ -1,16 +1,30 @@
 import React from 'react';
 import "./table.scss"
 import classNames from 'classnames';
-const DepartmentTrainingCourses = (props) => {
-  const isEligible = props.eligible;
+import { useState } from 'react';
+import NormalButton from '../Normal Button/NormalButton';
+import DisplayedComponent from '../Confirmation Form/ConfamForm';
+const DepartmentTrainingCourses = ({toggleRegistration, isRegistered, registerSelf,checked}) => {
+  // const isEligible = props.eligible;
 const userYear=200
   const activeClasses= classNames({
     'eligibility': true,
     'eligible': userYear===200,
     'ineligible': 3>7
   })
+
+  // const [isDisplayed, setIsDisplayed] = useState(false);
+
+  // const handleDisplay = () => {
+  //   setIsDisplayed(true);
+  // };
+
+  // const handleClose = () => {
+  //   setIsDisplayed(false);
+  // };
   return (
     <section>
+      {/* {isDisplayed && <DisplayedComponent onClose={handleClose}/>} */}
       <div className="heading">
         <h2>
           Department Training Courses
@@ -39,7 +53,7 @@ const userYear=200
                     Eligible
                   </div>
                 </td>
-                <td><button className="register">Register</button></td>
+                <td><NormalButton registerSelf="register" onButtonClick={checked}/></td>
               </tr>
               <tr>
                 <td>TIT 323 - 3 Units</td>
@@ -48,7 +62,7 @@ const userYear=200
                 <td>
                   <div className="eligibility ineligible">Ineligible</div>
                 </td>
-                <td><button className="register denied">Register</button></td>
+                <td><NormalButton registerSelf="register inactive"/></td>
               </tr>
               <tr>
                 <td>TIT 423 - 6 Units</td>

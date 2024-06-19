@@ -50,7 +50,7 @@ const AccordionS = () => {
       prevToggle.style.transform = 'rotate(90deg)';
       prevToggle.style.filter = 'invert(0)';
     } else {
-      header.style.color = "black";
+      header.style.color = "white";
       content.style.maxHeight = '0';
       toggle.style.transform = 'rotate(0deg)';
       toggle.style.filter = 'invert(1)';

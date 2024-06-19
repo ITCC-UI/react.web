@@ -5,8 +5,7 @@ import Envelope from "/images/message.png";
 import Image from "/images/profile.jpg";
 import Chevy from "/images/chevron down.png";
 import './header.scss';
-
-const TopNav = (nat, { toggleVisibility, isVisible }) => {
+const TopNav = ({ disableReg, toggleVisibility, isVisible} ) => {
   const [userName, setUserName] = useState('Godwin James H.');
   const [matricNumber, setMatricNumber] = useState('214872');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -23,7 +22,7 @@ const TopNav = (nat, { toggleVisibility, isVisible }) => {
         <div className="date">{new Date().toLocaleDateString()}</div>
       </div>
       <div className="actionsLog">
-        <div className={nat.disableReg}>
+        <div className={disableReg}>
           <button onClick={toggleVisibility}>
             {/* {isVisible ? 'Hide Form' : 'Show Form'} */}
             <img src={Pen} alt="Pen" />

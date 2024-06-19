@@ -61,7 +61,7 @@
   .form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
     padding: 20px 0;
   }
   
@@ -93,15 +93,22 @@
       font-size: 14px;
       color: #333;
       outline: none;
-      transition: all linear .2s;
+      transition: all ease-in-out .2s;
+      
     }
     input[type="text"],
-    input[type="email"] {
+    input[type="email"], select {
       &:focus {
-        z-index: 3;
+        // z-index: 3;
+        scale: 1.1;
         background-color: #ffff;
         border: 1px solid rgba(121, 116, 126, 1);
+        
       }
+    }
+    input:focus + label,
+    input:valid + label{
+        color: orange !important;
     }
   }
   
