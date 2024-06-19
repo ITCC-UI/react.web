@@ -23,12 +23,12 @@ const SideBar = (props) => {
               </div>
             </div>
 
-            <div className ={props.className} >
-              <div className="dashy" id="dashboard">
+            <div className ={props.disableCover} >
+              <div className={props.dashboardClass} id="dashboard">
                 <img src={Dashy} alt="Dashboard" />
                 <p>Dashboard</p>
               </div>
-              <div className="placement">
+              <div className={props.placementClass}>
                 <img src={Document} alt="docs" /> Placement
               </div>
 

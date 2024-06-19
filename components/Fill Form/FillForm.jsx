@@ -72,7 +72,7 @@ const UserForm = ({ isVisible, onClose }) => {
                 </div>
                 <div className="form-group">
                   <label htmlFor="matricNumber">Matric Number</label>
-                  <Field name="matricNumber" type="text" />
+                  <Field name="matricNumber" type="text" placeholder="Matric Number"/>
                   <ErrorMessage name="matricNumber" component="div" className="error" />
                 </div>
                 <div className="form-group">
@@ -125,7 +125,7 @@ const UserForm = ({ isVisible, onClose }) => {
                 </div>
                 <div className="form-group">
                   <label htmlFor="schoolEmail">School Email</label>
-                  <Field name="schoolEmail" type="email" />
+                  <Field name="schoolEmail" type="email" placeholder="myemail@stu.ui.edu.ng"/>
                   <ErrorMessage name="schoolEmail" component="div" className="error" />
                 </div>
                 <button type="submit" disabled={isSubmitting} className='register_here'>

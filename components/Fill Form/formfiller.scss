@@ -61,7 +61,7 @@
   .form {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
     padding: 20px 0;
   }
   
@@ -93,10 +93,12 @@
       font-size: 14px;
       color: #333;
       outline: none;
+      transition: all linear .2s;
     }
     input[type="text"],
     input[type="email"] {
       &:focus {
+        z-index: 3;
         background-color: #ffff;
         border: 1px solid rgba(121, 116, 126, 1);
       }
@@ -124,10 +126,10 @@
   
   .spinner {
     border: 16px solid #f3f3f3;
-    border-top: 16px solid #3498db;
+    border-top: 16px solid #096c8e;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     animation: spin 2s linear infinite;
   }
   

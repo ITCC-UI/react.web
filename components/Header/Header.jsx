@@ -6,7 +6,7 @@ import Image from "/images/profile.jpg";
 import Chevy from "/images/chevron down.png";
 import './header.scss';
 
-const TopNav = ({ toggleVisibility, isVisible }) => {
+const TopNav = (nat, { toggleVisibility, isVisible }) => {
   const [userName, setUserName] = useState('Godwin James H.');
   const [matricNumber, setMatricNumber] = useState('214872');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -23,7 +23,7 @@ const TopNav = ({ toggleVisibility, isVisible }) => {
         <div className="date">{new Date().toLocaleDateString()}</div>
       </div>
       <div className="actionsLog">
-        <div className="registration">
+        <div className={nat.disableReg}>
           <button onClick={toggleVisibility}>
             {/* {isVisible ? 'Hide Form' : 'Show Form'} */}
             <img src={Pen} alt="Pen" />

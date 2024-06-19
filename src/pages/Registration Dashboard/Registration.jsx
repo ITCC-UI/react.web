@@ -3,13 +3,13 @@ import "./registration_dash.scss"
 import SideBar from "../../../components/Sidebar/Sidebar";
 import TopNav from "../../../components/Header/Header";
 import DepartmentTrainingCourses from "../../../components/Table/Table";
-const RegistrationDash = () => {
+const RegistrationDash = (dashboardClass, placementClass, disableCover, disableReg) => {
 
     return ( 
         <div className="route-Dash">
-            <SideBar className="dash_navigation"/>
+            <SideBar dashboardClass="dashy" placementClass="placement" disableCover="disable_props dash_navig"/>
             <main>
-                <TopNav />
+                <TopNav disableReg="registration" />
 
                 {/* <div className="construction">
         
