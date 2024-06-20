@@ -4,7 +4,6 @@ import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import './formfiller.scss';
 import Forward from "/images/icon.png"
-import NextButton from '../Next Button/Next';
 
 // Dummy data for the dropdowns
 const programmeTypes = ['Undergraduate', 'Postgraduate'];
@@ -48,7 +47,7 @@ const UserForm = ({ isVisible, onClose }) => {
   const handleBack = () => {
     setShowForm(true);
   };
-  const next= <NextButton/>
+  const next= `Next ${<img src={Forward}/>}`
 
   return (
     <div className={`form-container ${isVisible ? 'visible' : 'hidden'}`} id='formCase'>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Pen from "/images/pen.png";
 import Bell from "/images/Notification.png";
-import Envelope from "/images/message.png";
 import Image from "/images/profile.jpg";
 import Chevy from "/images/chevron down.png";
 import './header.scss';
@@ -33,9 +32,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible} ) => {
           <div className="notice">
             <img src={Bell} alt="Notification Bell" />
           </div>
-          <div className="message">
-            <img src={Envelope} alt="Envelope" />
-          </div>
+         
         </div>
         <div className="profileDetails">
           <div className="image">

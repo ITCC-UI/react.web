@@ -1,10 +1,8 @@
 .registrationConfirmation {
-    border: 2px solid red;
     width: 400px;
 }
 
 .backgroundOverlay {
-    border: 1px solid red;
     width: 100%;
     height: 100%;
     z-index: 5;
@@ -20,10 +18,104 @@
 }
 
 .next-button {
-    background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
   }
+.thisConfirmation{
+    height: fit-content;
+    padding: 10px 20px;
+    background-color: #ffff;
+.registration_form{
+    padding-bottom: 10px;
+    height: fit-content;
+    
+        p{
+            font-family: "Poppins";
+            font-size: 16px;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+    
+    .formInput{
+        display: flex;
+        flex-direction: column;
+        margin: 5px 0;
+        margin-bottom: 20px;
+        .error{
+            bottom: -6px;
+         right: 0;
+            z-index: 1;
+        }
+        label {
+            position: absolute;
+            z-index: 2;
+            font-size: 12px;
+            left: 5px;
+            top: -10px;
+            background: rgba(254, 247, 255, 1);
+          }
+          input[type="text"],
+          input[type="email"],
+          input[type="number"],
+          select {
+            width: 300px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            transition: all ease-in-out .2s;
+            margin-bottom: 10px;
+            
+          }
+          input[type="text"],
+          input[type="number"],
+          input[type="email"], select {
+            &:focus {
+              // z-index: 3;
+              scale: 1.1;
+              background-color: #ffff;
+              border: 1px solid rgba(121, 116, 126, 1);
+              
+            }
+          }
+    }
+}
+}
+
+.thisForm{
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-top: 80px;
+    padding-bottom: 50px;
+}
+
+.buttonContainer{
+    display: flex;
+    gap: 20px;
+    button{
+        width: 120px;
+        height: 40px;
+        font-size: 12px;
+        color: white;
+    }
+    button.next-button{
+        background: rgba(0, 0, 128, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    button.prev-button{
+        background-color: rgb(255, 149, 0);
+
+    }
+}

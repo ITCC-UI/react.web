@@ -1,9 +1,7 @@
 import React from 'react';
 import "./table.scss"
 import classNames from 'classnames';
-import { useState } from 'react';
 import NormalButton from '../Normal Button/NormalButton';
-import DisplayedComponent from '../Confirmation Form/ConfamForm';
 const DepartmentTrainingCourses = ({toggleRegistration, isRegistered, registerSelf,checked}) => {
   // const isEligible = props.eligible;
 const userYear=200
