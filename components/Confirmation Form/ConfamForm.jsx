@@ -142,26 +142,21 @@ const DisplayedComponent = ({ onClose }) => {
                   </div>
                 )}
                 {currentStep === 4 && (
-                  <div className='registration'>
+                  <div className='registration_form'>
                     <div className="details"> Registration Form</div>
                     <p>Bank Details</p>
                     <div className='formInput'>
-                      <label htmlFor="bankName">Field 5 (Dropdown)</label>
-                      <Field as="select" name="bankName">
-                        <option value="">Select Bank</option>
-                        <option value="Option 1">Option 1</option>
-                        <option value="Option 2">Option 2</option>
-                        <option value="Option 3">Option 3</option>
-                      </Field>
+                      <label htmlFor="bankName">Bank Name</label>
+                      <Field name="bankName" type="text" />
                       <ErrorMessage name="bankName" component="div" className="error" />
                     </div>
                     <div className='formInput'>
-                      <label htmlFor="nuban">Field 6</label>
-                      <Field name="nuban" type="text" />
+                      <label htmlFor="nuban">Account Number</label>
+                      <Field name="nuban" type="number" />
                       <ErrorMessage name="nuban" component="div" className="error" />
                     </div>
                     <div className='formInput'>
-                      <label htmlFor="bankSortCode">Field 7</label>
+                      <label htmlFor="bankSortCode">Bank Sort Code</label>
                       <Field name="bankSortCode" type="text" />
                       <ErrorMessage name="bankSortCode" component="div" className="error" />
                     </div>
@@ -177,7 +172,7 @@ const DisplayedComponent = ({ onClose }) => {
                     Previous
                   </button>
                   <button type="submit" disabled={!isValid} className='next-button'>
-                    {currentStep === 4 ? 'Submit': 'Next'}
+                    {currentStep === 4 ? 'Register': 'Next'}
                   </button>
                 </div>
               </Form>
@@ -194,9 +189,9 @@ const DisplayedComponent = ({ onClose }) => {
             <p>Address: {submittedData.nokAddress}</p>
             <p>Relationship: {submittedData.nokRelationship}</p>
             <p>Phone Number: {submittedData.nokPhoneNumber}</p>
-            <p>Field 5: {submittedData.bankName}</p>
-            <p>Field 6: {submittedData.nuban}</p>
-            <p>Field 7: {submittedData.bankSortCode}</p>
+            <p>Bank Name: {submittedData.bankName}</p>
+            <p>Account Number: {submittedData.nuban}</p>
+            <p>Bank Sort Code: {submittedData.bankSortCode}</p>
           </div>
         )}
         <div className="close" onClick={onClose}><img src={Close} alt="close"/></div>
