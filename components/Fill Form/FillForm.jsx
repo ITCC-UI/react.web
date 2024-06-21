@@ -18,8 +18,8 @@ const UserForm = ({ isVisible, onClose }) => {
 
   const validationSchema = Yup.object({
     matricNumber: Yup.number()
-    .min(5, "Minimum matric number is 6")
-    .max(7, "Maximum matric number is 7")
+    // .min(5, "Minimum matric number is 6")
+    // .max(7, "Maximum matric number is 7")
     .required('Matric Number is required'),
     programmeType: Yup.string().required('Programme Type is required'),
     faculty: Yup.string().required('Faculty is required'),

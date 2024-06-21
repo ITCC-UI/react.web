@@ -4,8 +4,10 @@ import * as Yup from 'yup';
 import "./confirmRegister.scss";
 import Close from "/images/closeButton.png";
 import Mark from "/images/succesfull circle.svg"
+import ProfileHead from '../Profile Header/ProfileHeader';
+import Logo from "/images/UI_logo.png"
 
-const DisplayedComponent = ({ onClose }) => {
+const DisplayedComponent = ({ onClose,headings }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
@@ -72,7 +74,7 @@ const DisplayedComponent = ({ onClose }) => {
 
   return (
     <div className="backgroundOverlay">
-      <div className='registrationConfirmation'>
+    <div className='registrationConfirmation'>
         {isSubmitted ? (
           !viewForm ? (
             <div className='thisConfirmation cheers'>
@@ -84,7 +86,22 @@ const DisplayedComponent = ({ onClose }) => {
             </div>
           ) : (
             <div className='reviewPage thisConfirmation'>
-              <h2>Submitted Data</h2>
+             <div className="formHeading">
+             <h1 className="headings"> INDUSTRIAL TRAINING COORDINATING CENTRE</h1>
+              <h2 className="headings"> UNIVERSITY OF IBADAN, IBADAN.</h2>
+             </div>
+
+<div className="logoHeadType">
+  <div className="logo">
+    <img src={Logo} className='reviewLogo' alt="" />
+  </div>
+
+  <div className="formType">
+  STUDENT INDUSTRIAL TRAINING REGISTRATION FORM (IT-UI-011)
+  </div>
+</div>
+
+             <ProfileHead headings={"Godwin"} />
               <p>Level: {submittedData.level}</p>
               <p>Marital Status: {submittedData.maritalStatus}</p>
               <p>Disability: {submittedData.disability}</p>

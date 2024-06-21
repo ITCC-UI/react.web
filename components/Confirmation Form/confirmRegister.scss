@@ -1,5 +1,6 @@
 .registrationConfirmation {
-    width: 400px;
+    width: fit-content;
+    padding: 0 20px !important;
 }
 
 .backgroundOverlay {
@@ -160,13 +161,44 @@ font-size: 15px;
 
 .reviewPage{
     border: 1px solid rebeccapurple;
-    position: absolute;
-    top: -100px;
-    left: 10px;
+    margin: 0 auto;
+    width: 595px;
+    padding: 0;
+    padding-top: 28px;
 
 }
 
 .closer{
-    top: -60px;
-    right: -30px;   
+    top: 60px;
+    right: 30px;   
+}
+
+.headings{
+    font-size: 14px;
+    font-family: 'Poppins';
+    font-weight: 700;
+    text-align: center;
+
+}
+h2.headings{
+    font-weight: 600;
+}
+
+.logoHeadType{
+    border:1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .logo{
+        .reviewLogo{
+            width: 60px;
+        }
+    }
+
+    .formType{
+        width:379px;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+    }
 }
