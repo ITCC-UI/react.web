@@ -17,7 +17,10 @@ const UserForm = ({ isVisible, onClose }) => {
   const [showForm, setShowForm] = useState(true);
 
   const validationSchema = Yup.object({
-    matricNumber: Yup.string().matches(/^E?\d+$/, 'Invalid matric number').required('Matric Number is required'),
+    matricNumber: Yup.number()
+    .min(5, "Minimum matric number is 6")
+    .max(7, "Maximum matric number is 7")
+    .required('Matric Number is required'),
     programmeType: Yup.string().required('Programme Type is required'),
     faculty: Yup.string().required('Faculty is required'),
     department: Yup.string().required('Department is required'),
@@ -72,7 +75,7 @@ const UserForm = ({ isVisible, onClose }) => {
                 </div>
                 <div className="form-group">
                   <label htmlFor="matricNumber">Matric Number</label>
-                  <Field name="matricNumber" type="text" placeholder="Matric Number"/>
+                  <Field name="matricNumber" type="number" placeholder="Matric Number"/>
                   <ErrorMessage name="matricNumber" component="div" className="error" />
                 </div>
                 <div className="form-group">

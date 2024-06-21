@@ -83,10 +83,20 @@
               border: 1px solid rgba(121, 116, 126, 1);
               
             }
+
+            input[type=number]::-webkit-outer-spin-button,
+             input[type=number]::-webkit-inner-spin-button{
+                    -webkit-appearance: none;
+                    // appearance: none;
+                    
+                }
+
+               
+            }
           }
     }
 }
-}
+
 
 .thisForm{
     border-radius: 10px;
@@ -118,4 +128,45 @@
         background-color: rgb(255, 149, 0);
 
     }
+}
+
+
+
+.cheers{
+ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-direction: column;
+    padding: 30px;
+    width: 100%;
+    margin: 0 auto;
+    .success{
+font-size: 27px;
+    }
+
+    p{
+        font-size: 13px;
+        font-weight: 400;
+    }
+    .viewReg{
+        background: rgba(0, 0, 128, 1);
+color: #ffffff;
+font-size: 15px;
+      
+    }
+}
+
+.reviewPage{
+    border: 1px solid rebeccapurple;
+    position: absolute;
+    top: -100px;
+    left: 10px;
+
+}
+
+.closer{
+    top: -60px;
+    right: -30px;   
 }
