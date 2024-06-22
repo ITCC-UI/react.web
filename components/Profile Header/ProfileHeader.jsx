@@ -1,9 +1,9 @@
 import "./headingstyle.scss"
 
-const ProfileHead = ({headings}) => {
+const ProfileHead = ({headings, duration}) => {
     return ( 
         <div className="headingx">
-            {headings}
+            {headings}  <i>{duration}</i>
         </div>
      );
 }

@@ -4,7 +4,7 @@ import Dashy from "/images/Vector.png"
 import Document from "/images/document.png"
 import Logout from "/images/Logout.png"
 import AccordionS from "../Accordion/Accordion"
-const SideBar = (props) => {
+const SideBar = ({disableCover, dashboardClass, placementClass}) => {
 
 
   return (
@@ -23,12 +23,12 @@ const SideBar = (props) => {
               </div>
             </div>
 
-            <div className ={props.disableCover} >
-              <div className={props.dashboardClass} id="dashboard">
+            <div className ={disableCover} >
+              <div className={dashboardClass} id="dashboard">
                 <img src={Dashy} alt="Dashboard" />
                 <p>Dashboard</p>
               </div>
-              <div className={props.placementClass}>
+              <div className={placementClass}>
                 <img src={Document} alt="docs" /> Placement
               </div>
 

@@ -6,8 +6,10 @@ import Close from "/images/closeButton.png";
 import Mark from "/images/succesfull circle.svg"
 import ProfileHead from '../Profile Header/ProfileHeader';
 import Logo from "/images/UI_logo.png"
+import ProfilePic from "/images/profile.png"
+import PrintButton from '../Print/Print';
 
-const DisplayedComponent = ({ onClose,headings }) => {
+const DisplayedComponent = ({ onClose, headings, duration }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
@@ -74,7 +76,7 @@ const DisplayedComponent = ({ onClose,headings }) => {
 
   return (
     <div className="backgroundOverlay">
-    <div className='registrationConfirmation'>
+      <div className='registrationConfirmation'>
         {isSubmitted ? (
           !viewForm ? (
             <div className='thisConfirmation cheers'>
@@ -85,35 +87,61 @@ const DisplayedComponent = ({ onClose,headings }) => {
               <button onClick={handleViewForm} className='viewReg'>View Registration Form</button>
             </div>
           ) : (
-            <div className='reviewPage thisConfirmation'>
-             <div className="formHeading">
-             <h1 className="headings"> INDUSTRIAL TRAINING COORDINATING CENTRE</h1>
-              <h2 className="headings"> UNIVERSITY OF IBADAN, IBADAN.</h2>
-             </div>
+            <PrintButton>
+              <div className='reviewPage thisConfirmation'>
+                <div className="formHeading">
+                  <h1 className="headings"> INDUSTRIAL TRAINING COORDINATING CENTRE</h1>
+                  <h2 className="headings"> UNIVERSITY OF IBADAN, IBADAN.</h2>
+                </div>
 
-<div className="logoHeadType">
-  <div className="logo">
-    <img src={Logo} className='reviewLogo' alt="" />
-  </div>
+                <div className="logoHeadType">
+                  <div className="logo">
+                    <img src={Logo} className='reviewLogo' alt="" />
+                  </div>
 
-  <div className="formType">
-  STUDENT INDUSTRIAL TRAINING REGISTRATION FORM (IT-UI-011)
-  </div>
-</div>
+                  <div className="formType">
+                    STUDENT INDUSTRIAL TRAINING REGISTRATION FORM (IT-UI-011)
+                  </div>
 
-             <ProfileHead headings={"Godwin"} />
-              <p>Level: {submittedData.level}</p>
-              <p>Marital Status: {submittedData.maritalStatus}</p>
-              <p>Disability: {submittedData.disability}</p>
-              <p>Language: {submittedData.language}</p>
-              <p>Name: {submittedData.nokName}</p>
-              <p>Address: {submittedData.nokAddress}</p>
-              <p>Relationship: {submittedData.nokRelationship}</p>
-              <p>Phone Number: {submittedData.nokPhoneNumber}</p>
-              <p>Bank Name: {submittedData.bankName}</p>
-              <p>Account Number: {submittedData.nuban}</p>
-              <p>Bank Sort Code: {submittedData.bankSortCode}</p>
-            </div>
+                  <div className="profile">
+                    <img src={ProfilePic} alt="" />
+                  </div>
+                </div>
+
+                <ProfileHead headings={"Personal Information"} duration={"- 3 months"} />
+                <div className="firstRow rowIdea">
+                  <p>Name: <span>{submittedData.nokName}</span></p>
+                  <p>Level: <span> {submittedData.level}</span></p>
+                  <p>Marital Status: <span>{submittedData.maritalStatus}</span></p>
+                  <p>Disability: <span>{submittedData.disability}</span></p>
+
+                </div>
+
+                <ProfileHead headings={"Department Information"} />
+                <div className="rowIdea">
+
+                  <p>Language: <span>{submittedData.language}</span></p>
+                </div>
+
+
+                <ProfileHead headings={"Next of Kin Information"} />
+
+
+                <div className="rowIdea">
+                  <p>Address: <span>{submittedData.nokAddress}</span></p>
+                  <p>Relationship: <span>{submittedData.nokRelationship}</span></p>
+
+                  <p>Phone Number: <span>{submittedData.nokPhoneNumber}</span></p>
+                </div>
+
+                <div className="rowIdea"><p>Bank Name: <span>{submittedData.bankName}</span></p>
+                  <p>Account Number: <span>{submittedData.nuban}</span></p>
+                  <p>Bank Sort Code: <span>{submittedData.bankSortCode}</span></p>
+                </div>
+
+
+              </div>
+            </PrintButton>
           )
         ) : (
           <Formik
@@ -124,9 +152,9 @@ const DisplayedComponent = ({ onClose,headings }) => {
             {({ isValid, touched, setTouched }) => (
               <Form className='thisConfirmation thisForm'>
                 {currentStep === 1 && (
-                  
+
                   <div className='registration_form'>
-                     <div className="close closer" onClick={onClose}><img src={Close} alt="close" /></div>
+                    <div className="close closer" onClick={onClose}><img src={Close} alt="close" /></div>
                     <div className="details">Select your current Level</div>
                     <div className="formInput">
                       <label htmlFor="level">Level</label>
@@ -233,7 +261,7 @@ const DisplayedComponent = ({ onClose,headings }) => {
             )}
           </Formik>
         )}
-      
+
       </div>
     </div>
   );

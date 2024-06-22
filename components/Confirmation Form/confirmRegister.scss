@@ -160,11 +160,23 @@ font-size: 15px;
 }
 
 .reviewPage{
-    border: 1px solid rebeccapurple;
     margin: 0 auto;
-    width: 595px;
+    width: 279mm;
     padding: 0;
     padding-top: 28px;
+
+    .rowIdea{
+        display: flex;
+        padding: 10px ;
+        justify-content: space-between;
+        font-size: 12px;
+        margin: 10px 0 10px 0;
+        p{
+            span{
+                font-weight: 700;
+            }
+        }
+    }
 
 }
 
@@ -185,14 +197,16 @@ h2.headings{
 }
 
 .logoHeadType{
-    border:1px solid red;
     display: flex;
     align-items: center;
-    justify-content: center;
-    .logo{
+    justify-content: space-between;
+    .logo, .profile{
         .reviewLogo{
             width: 60px;
         }
+    }
+    .profile{
+        margin-right:10px;
     }
 
     .formType{

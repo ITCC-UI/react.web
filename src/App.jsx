@@ -8,6 +8,7 @@ import Dashboard from './pages/DashBoard/Dashboard.jsx';
 import UpdateProfile from '../components/Form/FormData.jsx';
 import RegistrationDash from './pages/Registration Dashboard/Registration.jsx';
 import ConfamForm from '../components/Confirmation Form/ConfamForm.jsx';
+import MainDashboard from './pages/Main Dashboard/MainDash.jsx';
 function App() {
     return (
 
@@ -19,6 +20,7 @@ function App() {
           <Route path='/' element={<Dashboard/>}></Route>
           <Route path='/registration_portal' element= {<RegistrationDash/>}></Route>
           <Route path='/userform' element={<ConfamForm/>} />
+          <Route path='/dashboard' element={<MainDashboard/>} />
 
         </Routes>
         
