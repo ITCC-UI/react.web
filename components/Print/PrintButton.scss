@@ -1,0 +1,26 @@
+/* PrintButton.css */
+@media print {
+    @page {
+      size: A4;
+      margin: 0;
+    }
+  
+    .print-body {
+      width: 210mm;
+      height: 297mm;
+      margin: 0;
+      padding: 0;
+    }
+  
+    .print-container {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 10mm;
+      overflow: hidden;
+    }
+  }
+  
+//   .print-content {
+//     /* Add any styles you want for the content container */
+//   }
