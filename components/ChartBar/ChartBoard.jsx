@@ -15,7 +15,7 @@ const ChartBoard = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://random-data-api.com/api/v2/users?size=7');
+      const response = await fetch('https://random-data-api.com/api/v2/users?size=2');
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
