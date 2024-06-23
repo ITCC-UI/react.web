@@ -1,17 +1,9 @@
 import "./content.scss";
-
+import ChartBoard from "../ChartBar/ChartBoard";
 const Content = () => {
     return (
         <div className="timeline">
-            <div className="industrial days">
-                <div className="daysDone">
-
-                </div>
-                <div className="daysRem">
-
-                </div>
-            
-            </div>
+            <ChartBoard/>
 
             <div className="daysCompleted">
                 <div className="indicator complete">

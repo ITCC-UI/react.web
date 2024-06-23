@@ -13,6 +13,7 @@ const DynamicPieChart = ({ data, legendPosition, legendFontSize, legendTitle, ch
   const options = {
     plugins: {
       legend: {
+        display: false,
         position: legendPosition || 'bottom',
         labels: {
           font: {
@@ -25,12 +26,7 @@ const DynamicPieChart = ({ data, legendPosition, legendFontSize, legendTitle, ch
           boxWidth: 10,
         },
         title: {
-          display: false,
-          text: legendTitle || 'Subscription Plan Distribution',
-          font: {
-            size: 16,
-            weight: 'bold',
-          },
+          display: false
         },
       },
       tooltip: {
@@ -57,7 +53,6 @@ const DynamicPieChart = ({ data, legendPosition, legendFontSize, legendTitle, ch
       flexDirection: "column",
       alignItems: "center", 
       justifyContent: "center", 
-      border: '1px solid red', 
       margin: '0 auto',
       padding: '20px',
     }}>
