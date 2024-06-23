@@ -5,12 +5,22 @@
         display: flex;
         width: 100%;
         height: 70%;
-        border: 1px solid red;
         justify-content: space-between;
         padding: 10px;
         .trainingLog{
-            border: 1px solid green;
+.timelineNlog{
+display: flex;
+flex-direction: column;
+height: 100%;
+gap: 50px;
+}
         }
        }
     }
+}
+
+#thisSchedule{
+    border: 1px solid red;
+    width: 100%;
+    height: 100%;
 }

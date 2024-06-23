@@ -5,7 +5,9 @@ const Content = () => {
         <div className="timeline">
             <ChartBoard/>
 
-            <div className="daysCompleted">
+         <div className="industrial">
+         <div className="daysDone">
+           <div className="daysCompleted">
                 <div className="indicator complete">
 
                 </div> Days Completed
@@ -16,6 +18,8 @@ const Content = () => {
 
                 </div> Days Remaining
             </div>
+           </div>
+         </div>
         </div>
      );
 }

@@ -18,7 +18,7 @@ const MainDashboard = () => {
     <div className="timelineNlog">
     <DasboardComponents header={"Training Timeline"} content={<Content/>}/>
 
-    <DasboardComponents header={"Training Schedule"}/>
+    <DasboardComponents header={"Training Schedule"} schedule="thisSchedule" />
     </div>
    </div>
     <div className="rightSide">

@@ -1,7 +1,7 @@
 // Pie.js
 import React, { useState, useEffect } from 'react';
 import DynamicPieChart from './DynamicPie';
-// import './Pie.scss';
+import './Pie.scss';
 
 const ChartBoard = () => {
   const [chartData, setChartData] = useState(null);
@@ -15,7 +15,7 @@ const ChartBoard = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://random-data-api.com/api/v2/users?size=2');
+      const response = await fetch('https://random-data-api.com/api/v2/users?size=7');
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -28,12 +28,14 @@ const ChartBoard = () => {
       }, {});
 
       // Format data for Chart.js
+    //   Declaring the data stuffs here
       const formattedData = {
         labels: Object.keys(planCounts),
         datasets: [{
           data: Object.values(planCounts),
+          borderColor: ['transparent', 'transparent'],
           backgroundColor: [
-            'orange', 'pink',
+            'rgba(0, 0, 128, 1)', 'rgba(250, 166, 44, 1)',
           ],
         }],
       };
@@ -46,29 +48,24 @@ const ChartBoard = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className='loading'>Loading your data</div>;
   if (error) return <div>{error}</div>;
 
-// Pie.js
-// ... (rest of the code remains the same)
+
 
 return (
-    <div>
+    <div className='donutContainer'>
       {chartData && (
         <DynamicPieChart
           data={chartData}
-          legendPosition="bottom"
-        
-          legendFontSize={14}
-        //   legendTitle="Subscription Plan Distribution"
-          chartWidth={200} // Set your desired chart width here
+        //   legendTitle="Student Days Duration"
+          chartWidth={150} // Set your desired chart width here
         />
       )}
-      <button onClick={fetchData}>Refresh Data</button>
+      {/* <button onClick={fetchData}>Refresh Data</button> */}
     </div>
   );
   
-  // ... (rest of the code remains the same)
 };
 
 export default ChartBoard;
