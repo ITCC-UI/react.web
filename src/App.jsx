@@ -10,6 +10,7 @@ import RegistrationDash from './pages/Registration Dashboard/Registration.jsx';
 import ConfamForm from '../components/Confirmation Form/ConfamForm.jsx';
 import MainDashboard from './pages/Main Dashboard/MainDash.jsx';
 import PieC from '../Random components/Piechart.jsx';
+import TVariant from '../components/TimelineShow/TimeVariationComp.jsx';
 function App() {
     return (
 
@@ -23,6 +24,7 @@ function App() {
           <Route path='/userform' element={<ConfamForm/>} />
           <Route path='/dashboard' element={<MainDashboard/>} />
           <Route path='/piechart' element={<PieC />} />
+          <Route path='/timeline' element={<TVariant/>}></Route>
 
         </Routes>
         

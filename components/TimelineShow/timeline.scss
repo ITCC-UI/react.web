@@ -1,0 +1,93 @@
+.timeVariant{
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    // margin-top: 15px;
+    align-items: flex-start;
+    height: fit-content;
+    gap: 5px;
+    font-size: 16px;
+    .imageTimeline{
+        margin-top: 5px;
+        height: fit-content;
+        img{
+            width: 30px;
+            height: 50px;
+        
+        }
+    }
+
+    .todo{
+        margin-top: 5px;
+    }
+    #doings{
+        margin-top: -10px;
+
+    }
+}
+
+#preTrain{
+    margin-top: -8px;
+    // border: 1px solid red;
+    img{
+        height: 175px;
+    }
+
+   
+}
+
+.tVant{
+    
+    display: flex;
+    // align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+    width: fit-content;
+}
+// .checkbox{
+    
+//     display: flex;
+//     justify-content:  center;
+ 
+//     img{
+//         width: 30px;
+//         height: 50px;
+//     }
+   
+// }
+
+// This code directly above is a redundant code that can be removed. It is not being used in the project.
+
+
+.subDoings{
+    position: absolute;
+    top:80px;
+    left: 15px;
+    // border: 1px solid red;
+    .subings{
+        display: flex;
+        align-items: center;
+        width: 350px;
+        gap: 8px;
+        justify-content: space-between;
+        .images{
+            width: 30px;
+            img{
+                width: inherit;
+            }
+        }
+        .subheading{
+            font-size: 8px;
+        }
+    }
+}
+
+.nestle{
+    
+    display: flex;
+    // height: fit-content;
+    align-items: center;
+    justify-content: space-between;
+    width: 350px;
+    gap: 5px;
+}
