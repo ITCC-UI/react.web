@@ -37,3 +37,7 @@ const RegistrationDash = ({dashboardClass, placementClass, disableCover, disable
 }
  
 export default RegistrationDash;
+
+
+
+
