@@ -1,0 +1,433 @@
+.formWrapper {
+    width: 100%;
+    padding: 20px;
+    margin: 20px auto;
+
+    & > .formCase {
+        width: 95%;
+        margin: 20px auto;
+
+        & > form {
+
+            .personalInformation {
+                > .formContents {
+                    display: flex;
+                    flex-direction: column;
+                    width: 185px;
+                    height: 40px;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto;
+
+                    label {
+                        position: absolute;
+                        top: -12px;
+                        left: 6px;
+                        background-color: var(--label-bg);
+                        padding: 3px;
+                        z-index: 2;
+                        font-size: 10px;
+                    }
+
+                    input[type="text"] {
+                        width: 100%;
+                        height: 100%;
+                        padding: 10px;
+                        border-radius: 4px;
+                        outline: none;
+                        border: 1px solid;
+                        font-size: 15px;
+
+                        &:focus {
+                            border: 1px solid black;
+                            outline: none;
+                        }
+
+
+                    }
+                }
+
+            }
+
+            .h2 {
+                font-size: 20px;
+                width: 100%;
+                border-bottom: 1px solid #000000;
+                margin: 10px auto 40px;
+                padding: 5px;
+
+            }
+
+            .personalDetails {
+                width: 100%;
+                display: grid;
+                grid-template-columns: auto auto auto;
+                /*grid-template-rows: none;*/
+                row-gap: 70px;
+                justify-content: space-between;
+
+
+                .formContents {
+                    display: flex;
+                    flex-direction: column;
+                    width: 280px;
+                    height: 40px;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto;
+
+                    label {
+                        position: absolute;
+                        top: -12px;
+                        left: 6px;
+                        background-color: var(--label-bg);
+                        padding: 3px;
+                        z-index: 2;
+                        font-size: 10px;
+                    }
+
+                    input[type="number"], input[type="email"], input[type="text"], input[type="file"], input[type="date"], select {
+                        width: 100%;
+                        height: 100%;
+                        padding: 10px;
+                        border-radius: 4px;
+                        outline: none;
+                        border: 1px solid #000000;
+                        font-size: 15px;
+
+                        &::-webkit-inner-spin-button,
+                        &::-webkit-outer-spin-button {
+                            -webkit-appearance: none;
+                            margin: 0;
+                        }
+                    }
+
+                    input[type="file"] {
+
+                        width: 0.1px;
+                        height: 0.1px;
+                        opacity: 0;
+                        overflow: hidden;
+                        position: absolute;
+                        z-index: -1;
+
+
+                    }
+                }
+            }
+        }
+    }
+}
+
+.section {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+
+.inputfile + label {
+    width: 300px;
+    font-size: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.625rem 1.25rem;
+    border-radius: 4px;
+    border: 1px solid #000000;
+}
+
+.js .inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile:focus + label,
+.inputfile.has-focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
+.inputfile + label img {
+    width: 15px;
+    height: 20px;
+    vertical-align: middle;
+    fill: currentColor;
+    margin-top: -0.25em;
+    /* 4px */
+    margin-right: 0.25em;
+    /* 4px */
+}
+
+.inputfile-1 + label {
+    color: black;
+    background-color: transparent;
+}
+
+.button-container {
+    position: fixed;
+    bottom: 0;
+    margin: 0 auto;
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    z-index: 4;
+    width: 95%;
+
+    button {
+        background-color: var(--blue);
+        border: none;
+        padding: 7px 15px;
+        border-radius: 5px;
+        color: #FFFFFF;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 15px;
+        }
+
+    }
+}
+
+.button-container button {
+    margin: 0 10px;
+}
+
+.error-popup {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f44336;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    animation: fadeIn 0.5s;
+    z-index: 20;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+input.invalid, textarea.invalid, label.invalid {
+    border: 2px solid #f44336 !important;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+
+
+.section {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.button-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.button-container button {
+    margin: 0 10px;
+}
+
+.error-popup {
+    display: none;
+    position: fixed;
+    z-index: 4;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f44336;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    animation: fadeIn 0.5s;
+}
+
+.preview-popup {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+input.invalid, textarea.invalid {
+    border: 2px solid #f44336;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+
+.nextBtn, .prev-btn {
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid #DDB2DE;
+
+}
+
+
+@media (max-width: 426px) {
+
+    header{
+        .headerWrapper{
+            .logo{
+                width: 30px;
+            }
+
+            h1{
+                font-size: 15px;
+            }
+        }
+    }
+    .formWrapper {
+        & > .formCase {
+            & > form {
+                .personalInformation {
+                    > .formContents {
+margin-bottom: 50px;
+
+                    }
+                }
+           .personalDetails{
+               /*margin: 0 auto 0;*/
+               grid-template-columns: auto ;
+               align-items: center;
+               text-align: center;
+               row-gap: 50px ;
+               justify-content: center;
+               .formContents{
+                   margin: 0 auto;
+                   width: 100%;
+               }
+           }
+
+            }
+        }
+    }
+
+    .inputfile + label{
+        width: 200px;
+    }
+}

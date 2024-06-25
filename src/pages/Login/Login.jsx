@@ -18,16 +18,40 @@ const Login = () => {
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
 
+  const checkUserDetails = async (token) => {
+    try {
+      const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/account/user-details/', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Check if essential details are present
+      if (response.data && response.data.first_name && response.data.last_name) {
+        return true; // User details are complete
+      }
+      return false; // User details are incomplete
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+      return false; // Assume details are incomplete if there's an error
+    }
+  };
+
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await axios.post('https://theegsd.pythonanywhere.com/api/v1/account/login/', values);
       
       if (response.data && response.data.token) {
-        // Store the token in localStorage
-        localStorage.setItem('token', response.data.token);
-        console.log('Login successful, token:', response.data.token);
-        // Navigate to dashboard
-        navigate('/dashboard');
+        const token = response.data.token;
+        localStorage.setItem('token', token);
+        console.log('Login successful, token:', token);
+
+        // Check user details
+        const isProfileComplete = await checkUserDetails(token);
+        
+        if (isProfileComplete) {
+          navigate('/dashboard');
+        } else {
+          navigate('/complete-profile');
+        }
       } else {
         setLoginError('Login failed. Unexpected response format.');
       }

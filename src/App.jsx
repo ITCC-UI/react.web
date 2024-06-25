@@ -11,6 +11,7 @@ import ConfamForm from '../components/Confirmation Form/ConfamForm.jsx';
 import MainDashboard from './pages/Main Dashboard/MainDash.jsx';
 import PieC from '../Random components/Piechart.jsx';
 import TVariant from '../components/TimelineShow/TimeVariationComp.jsx';
+import CompleteProfile from './pages/Complete Profile/CompleteProfile.jsx';
 function App() {
     return (
 
@@ -25,6 +26,7 @@ function App() {
           <Route path='/dashboard' element={<MainDashboard/>} />
           <Route path='/piechart' element={<PieC />} />
           <Route path='/timeline' element={<TVariant/>}></Route>
+          <Route path='/complete-profile' element ={<CompleteProfile />}></Route>
 
         </Routes>
         
