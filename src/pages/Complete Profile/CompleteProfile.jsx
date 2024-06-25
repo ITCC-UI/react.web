@@ -1,325 +1,348 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import './complete_profile.scss';
+import { useNavigate } from 'react-router-dom';
+// import './update_profile.css';
 
-const PersonalInfoSchema = Yup.object().shape({
-  matric: Yup.string().required('Matric Number is required'),
-  fName: Yup.string().required('First Name is required'),
-  lName: Yup.string().required('Last Name is required'),
-  pNumber: Yup.string().required('Phone Number is required'),
-  email: Yup.string().email('Invalid email address').required('Email is required'),
-  nationality: Yup.string().required('Nationality is required'),
-  hAddress: Yup.string().required('Home Address is required'),
-  gender: Yup.string().required('Gender is required'),
+const PersonalDetailsSchema = Yup.object().shape({
+  first_name: Yup.string().required('First Name is required'),
+  middle_name: Yup.string(),
+  phone_number: Yup.string().required('Phone Number is required'),
   dob: Yup.date().required('Date of Birth is required'),
-  disability: Yup.string().required('Disability is required'),
-  language: Yup.string().required('Languages other than English are required'),
-  mStatus: Yup.string().required('Marital Status is required'),
-  studentType: Yup.string().required('Type of Student is required'),
+  gender: Yup.string().required('Gender is required'),
+  nationality: Yup.string().required('Nationality is required'),
+  address: Yup.string().required('Address is required'),
+  next_of_kin: Yup.string(),
+  next_of_kin_address: Yup.string(),
+  next_of_kin_relationship: Yup.string(),
+  next_of_kin_phone_number: Yup.string(),
+  campus_address: Yup.string(),
+  language: Yup.string().required('Language is required'),
   passport: Yup.mixed().required('Passport is required'),
-  signature: Yup.mixed().required('Signature is required')
+  signature: Yup.mixed().required('Signature is required'),
 });
 
-const DepartmentInfoSchema = Yup.object().shape({
-  entry: Yup.number().required('Year of Entry is required'),
-  level: Yup.string().required('Level is required'),
+const DepartmentDetailsSchema = Yup.object().shape({
+  matric_number: Yup.string().required('Matric Number is required'),
   faculty: Yup.string().required('Faculty is required'),
-  department: Yup.string().required('Department is required')
+  department: Yup.string().required('Department is required'),
+  programme_type: Yup.string().required('Programme Type is required'),
+  session_of_entry: Yup.string()
+    .matches(/^\d{4}\/\d{4}$/, 'Session of Entry must be in the format YYYY/YYYY')
+    .required('Session of Entry is required'),
+  school_email: Yup.string()
+    .email('Invalid email address')
+    .matches(/^[a-zA-Z0-9._%+-]+@ui\.edu\.ng$/, 'Email must be a valid UI email address')
+    .required('School Email is required'),
 });
 
-const NextOfKinInfoSchema = Yup.object().shape({
-  nextofKinName: Yup.string().required('Next of Kin Name is required'),
-  nextofKinAddress: Yup.string().required('Next of Kin Address is required'),
-  relationship: Yup.string().required('Relationship is required'),
-  nokPhone: Yup.string().required('Next of Kin Phone Number is required')
-});
-
-const validationSchemas = [PersonalInfoSchema, DepartmentInfoSchema, NextOfKinInfoSchema];
-
-const CompleteProfile = () => {
+const UpdateProfileForm = () => {
   const [currentSection, setCurrentSection] = useState(0);
-  const [error, setError] = useState('');
+  const [facultyData, setFacultyData] = useState([]);
+  const [departmentData, setDepartmentData] = useState([]);
+  const [programmeTypeData, setProgrammeTypeData] = useState([]);
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
 
-  const showSection = (index) => {
-    document.querySelectorAll('.section').forEach((section, i) => {
-      section.style.display = i === index ? 'block' : 'none';
-    });
-  };
+  useEffect(() => {
+    // Fetch the faculty, department, and programme type data from the backend
+    const fetchData = async () => {
+      try {
+        const [facultyRes, departmentRes, programmeTypeRes] = await Promise.all([
+          axios.get('https://theegsd.pythonanywhere.com/api/v1/lookups/faculties', {
+            headers: { Authorization: `Token ${token}` },
+          }),
+          axios.get('https://theegsd.pythonanywhere.com/api/v1/lookups/departments', {
+            headers: { Authorization: `Token ${token}` },
+          }),
+         
+        ]);
+        setFacultyData(facultyRes.data);
+        setDepartmentData(departmentRes.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, [token]);
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmitPersonalDetails = async (values) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post('https://api.example.com/update-profile', values, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const formData = new FormData();
+      Object.keys(values).forEach((key) => {
+        if (values[key] instanceof File) {
+          formData.append(key, values[key], values[key].name);
+        } else if (values[key] !== undefined && values[key] !== null) {
+          formData.append(key, values[key]);
         }
       });
-      console.log('Form submitted successfully', response.data);
+  
+      // Log the form data
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+      }
+  
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+  
+      const response = await axios.post(
+        'https://theegsd.pythonanywhere.com/api/v1/student/profile',
+        formData,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+  
+      console.log('Response:', response);
+  
+      if (response.status === 200) {
+        console.log('Personal details submitted successfully');
+        return true; // Indicate successful submission
+      } else {
+        console.error('Unexpected response status:', response.status);
+        return false;
+      }
     } catch (error) {
-      setError('Submission failed. Please try again.');
-      console.error('Submission error:', error);
-    } finally {
-      setSubmitting(false);
+      console.error('Error in handleSubmitPersonalDetails:');
+      if (error.response) {
+        // console.error('Error response:', error.response.data);
+        console.error('Status code:', error.response.status);
+        console.error('Headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
+      console.error('Error config:', error.config);
+      return false;
     }
   };
+  
 
-  const handleNext = (validateForm, values) => {
-    validateForm().then(errors => {
-      if (Object.keys(errors).length === 0) {
-        setCurrentSection(currentSection + 1);
+  const handleSubmitDepartmentDetails = async (values) => {
+    try {
+      const response = await axios.post(
+        'https://theegsd.pythonanywhere.com/api/v1/student/programmes',
+        values,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        navigate('/profile-success');
       }
-    });
-  };
-
-  const handlePrev = () => {
-    setCurrentSection(currentSection - 1);
+    } catch (error) {
+      console.error('Error updating department details:', error);
+    }
   };
 
   return (
     <div className="formWrapper">
       <div className="formCase">
+        <h1>Update Profile Information</h1>
         <Formik
           initialValues={{
-            matric: '',
-            fName: '',
-            mName: '',
-            lName: '',
-            pNumber: '',
-            email: '',
-            nationality: '',
-            hAddress: '',
-            gender: '',
+            first_name: '',
+            middle_name: '',
+            phone_number: '',
             dob: '',
-            disability: '',
+            gender: '',
+            nationality: '',
+            address: '',
+            next_of_kin: '',
+            next_of_kin_address: '',
+            next_of_kin_relationship: '',
+            next_of_kin_phone_number: '',
+            campus_address: '',
             language: '',
-            mStatus: '',
-            studentType: '',
             passport: null,
             signature: null,
-            entry: '',
-            level: '',
+            matric_number: '',
             faculty: '',
             department: '',
-            nextofKinName: '',
-            nextofKinAddress: '',
-            relationship: '',
-            nokPhone: ''
+            programme_type: '',
+            session_of_entry: '',
+            school_email: '',
           }}
-          validationSchema={validationSchemas[currentSection]}
-          onSubmit={handleSubmit}
+          validationSchema={currentSection === 0 ? PersonalDetailsSchema : DepartmentDetailsSchema}
+          onSubmit={async (values, { setSubmitting }) => {
+            if (currentSection === 0) {
+              await handleSubmitPersonalDetails(values);
+            } else {
+              await handleSubmitDepartmentDetails(values);
+            }
+            setSubmitting(false);
+          }}
         >
-          {({ isSubmitting, setFieldValue, validateForm, values }) => (
+          {({ isSubmitting, setFieldValue }) => (
             <Form id="regForm">
               {currentSection === 0 && (
-                <div className="personalInformation section">
-                  <div className="formContents top">
-                    <label htmlFor="matric">Matric No</label>
-                    <Field type="text" name="matric" id="matric" placeholder="Matric Number" />
-                    <ErrorMessage name="matric" component="div" className="error" />
+                <div className="section">
+                  <h2>Personal Details</h2>
+                  <div className="formContents">
+                    <label htmlFor="first_name">First Name</label>
+                    <Field type="text" name="first_name" placeholder="First Name" />
+                    <ErrorMessage name="first_name" component="div" className="error" />
                   </div>
-                  <div className="h2">Personal Details</div>
-                  <div className="personalDetails">
-                    <div className="formContents">
-                      <label htmlFor="fName">First Name</label>
-                      <Field type="text" name="fName" id="fName" placeholder="First Name" />
-                      <ErrorMessage name="fName" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="mName">Middle Name</label>
-                      <Field type="text" name="mName" id="mName" placeholder="Middle Name" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="lName">Last Name</label>
-                      <Field type="text" name="lName" id="lName" placeholder="Last Name" />
-                      <ErrorMessage name="lName" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="pNumber">Phone Number</label>
-                      <Field type="text" name="pNumber" id="pNumber" placeholder="Mobile Number" />
-                      <ErrorMessage name="pNumber" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="email">Email</label>
-                      <Field type="email" name="email" id="email" placeholder="Email" autoComplete="email" />
-                      <ErrorMessage name="email" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="nationality">Nationality</label>
-                      <Field type="text" name="nationality" id="nationality" placeholder="Nationality" />
-                      <ErrorMessage name="nationality" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="hAddress">Home Address</label>
-                      <Field type="text" name="hAddress" id="hAddress" placeholder="Home Address" />
-                      <ErrorMessage name="hAddress" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="gender">Gender</label>
-                      <Field as="select" name="gender" id="gender">
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                      </Field>
-                      <ErrorMessage name="gender" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="dob">Date of Birth</label>
-                      <Field type="date" name="dob" id="dob" />
-                      <ErrorMessage name="dob" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="disability">Disability</label>
-                      <Field type="text" name="disability" id="disability" placeholder="Disability NA if not applicable" />
-                      <ErrorMessage name="disability" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="language">Languages other than English</label>
-                      <Field type="text" name="language" id="language" placeholder="Languages other than English" />
-                      <ErrorMessage name="language" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="mStatus">Marital Status</label>
-                      <Field as="select" name="mStatus" id="mStatus">
-                        <option value="">Select Status</option>
-                        <option value="married">Married</option>
-                        <option value="single">Single</option>
-                        <option value="divorced">Divorced</option>
-                      </Field>
-                      <ErrorMessage name="mStatus" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="studentType">Type of Student</label>
-                      <Field as="select" name="studentType" id="studentType">
-                        <option value="">Select Type</option>
-                        <option value="dlc">Part-Time</option>
-                        <option value="main">Full-Time</option>
-                      </Field>
-                      <ErrorMessage name="studentType" component="div" className="error" />
-                    </div>
-                    <div className="passport">
-                      <input
-                        type="file"
-                        name="passport"
-                        id="passport"
-                        className="inputfile inputfile-1"
-                        onChange={(event) => {
-                          setFieldValue("passport", event.currentTarget.files[0]);
-                        }}
-                      />
-                      <label htmlFor="passport" className="passport">
-                        <img src="../../../../static/assets/images/profile-svg.svg" alt="" />
-                        <span>Upload Passport <span style={{ color: 'red' }}>*</span></span>
-                      </label>
-                      <ErrorMessage name="passport" component="div" className="error" />
-                    </div>
-                    <div>
-                      <input
-                        type="file"
-                        name="signature"
-                        id="signature"
-                        className="inputfile inputfile-1"
-                        onChange={(event) => {
-                          setFieldValue("signature", event.currentTarget.files[0]);
-                        }}
-                      />
-                      <label htmlFor="signature">
-                        <img src="../../../../static/assets/images/signature.jpg" alt="" />
-                        <span>Upload Signature <span style={{ color: 'red' }}>*</span></span>
-                      </label>
-                      <ErrorMessage name="signature" component="div" className="error" />
-                    </div>
+                  <div className="formContents">
+                    <label htmlFor="middle_name">Middle Name</label>
+                    <Field type="text" name="middle_name" placeholder="Middle Name" />
+                    <ErrorMessage name="middle_name" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="phone_number">Phone Number</label>
+                    <Field type="text" name="phone_number" placeholder="Mobile Number" />
+                    <ErrorMessage name="phone_number" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="dob">Date of Birth</label>
+                    <Field type="date" name="dob" />
+                    <ErrorMessage name="dob" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="gender">Gender</label>
+                    <Field as="select" name="gender">
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </Field>
+                    <ErrorMessage name="gender" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="nationality">Nationality</label>
+                    <Field type="text" name="nationality" placeholder="Nationality" />
+                    <ErrorMessage name="nationality" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="address">Address</label>
+                    <Field type="text" name="address" placeholder="Home Address" />
+                    <ErrorMessage name="address" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="next_of_kin">Next of Kin</label>
+                    <Field type="text" name="next_of_kin" placeholder="Name of Next of Kin" />
+                    <ErrorMessage name="next_of_kin" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="next_of_kin_address">Next of Kin Address</label>
+                    <Field type="text" name="next_of_kin_address" placeholder="Address of Next of Kin" />
+                    <ErrorMessage name="next_of_kin_address" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="next_of_kin_relationship">Next of Kin Relationship</label>
+                    <Field type="text" name="next_of_kin_relationship" placeholder="Relationship with Next of Kin" />
+                    <ErrorMessage name="next_of_kin_relationship" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="next_of_kin_phone_number">Next of Kin Phone Number</label>
+                    <Field type="text" name="next_of_kin_phone_number" placeholder="Phone Number of Next of Kin" />
+                    <ErrorMessage name="next_of_kin_phone_number" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="campus_address">Campus Address</label>
+                    <Field type="text" name="campus_address" placeholder="Campus Address" />
+                    <ErrorMessage name="campus_address" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="language">Language</label>
+                    <Field type="text" name="language" placeholder="Language" />
+                    <ErrorMessage name="language" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="passport">Passport</label>
+                    <input type="file" name="passport" onChange={(event) => setFieldValue('passport', event.currentTarget.files[0])} />
+                    <ErrorMessage name="passport" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="signature">Signature</label>
+                    <input type="file" name="signature" onChange={(event) => setFieldValue('signature', event.currentTarget.files[0])} />
+                    <ErrorMessage name="signature" component="div" className="error" />
                   </div>
                 </div>
               )}
+
               {currentSection === 1 && (
-                <div className="departmentInformation section">
-                  <div className="h2">Department Information</div>
-                  <div className="personalDetails">
-                    <div className="formContents">
-                      <label htmlFor="entry">Year of Entry</label>
-                      <Field type="number" name="entry" id="entry" placeholder="2021/2022" />
-                      <ErrorMessage name="entry" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="level">Level</label>
-                      <Field as="select" name="level" id="level">
-                        <option value="">Select Level</option>
-                        <option value="200">200</option>
-                        <option value="300">300</option>
-                        <option value="400">400</option>
-                        <option value="500">500</option>
-                        <option value="600">600</option>
-                      </Field>
-                      <ErrorMessage name="level" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="faculty">Faculty</label>
-                      <Field as="select" name="faculty" id="faculty">
-                        <option value="">Select Faculty</option>
-                        <option value="science">Science</option>
-                      </Field>
-                      <ErrorMessage name="faculty" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="department">Department</label>
-                      <Field as="select" name="department" id="department">
-                        <option value="">Select Department</option>
-                        <option value="computer_science">Computer Science</option>
-                      </Field>
-                      <ErrorMessage name="department" component="div" className="error" />
-                    </div>
+                <div className="section">
+                  <h2>Department Details</h2>
+                  <div className="formContents">
+                    <label htmlFor="matric_number">Matric Number</label>
+                    <Field type="text" name="matric_number" placeholder="Matric Number" />
+                    <ErrorMessage name="matric_number" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="faculty">Faculty</label>
+                    <Field as="select" name="faculty">
+                      <option value="">Select Faculty</option>
+                      {facultyData.map((faculty) => (
+                        <option key={faculty.id} value={faculty.name}>
+                          {faculty.name}
+                        </option>
+                      ))}
+                    </Field>
+                    <ErrorMessage name="faculty" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="department">Department</label>
+                    <Field as="select" name="department">
+                      <option value="">Select Department</option>
+                      {departmentData.map((department) => (
+                        <option key={department.id} value={department.name}>
+                          {department.name}
+                        </option>
+                      ))}
+                    </Field>
+                    <ErrorMessage name="department" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="programme_type">Programme Type</label>
+                    <Field as="select" name="programme_type">
+                      <option value="">Select Programme Type</option>
+                      {programmeTypeData.map((type) => (
+                        <option key={type.id} value={type.name}>
+                          {type.name}
+                        </option>
+                      ))}
+                    </Field>
+                    <ErrorMessage name="programme_type" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="session_of_entry">Session of Entry</label>
+                    <Field type="text" name="session_of_entry" placeholder="YYYY/YYYY" />
+                    <ErrorMessage name="session_of_entry" component="div" className="error" />
+                  </div>
+                  <div className="formContents">
+                    <label htmlFor="school_email">School Email</label>
+                    <Field type="email" name="school_email" placeholder="example@ui.edu.ng" />
+                    <ErrorMessage name="school_email" component="div" className="error" />
                   </div>
                 </div>
               )}
-              {currentSection === 2 && (
-                <div className="nextOfKinInformation section">
-                  <div className="h2">Next of Kin Information</div>
-                  <div className="personalDetails">
-                    <div className="formContents">
-                      <label htmlFor="nextofKinName">Name</label>
-                      <Field type="text" name="nextofKinName" id="nextofKinName" placeholder="Name of Next of Kin" />
-                      <ErrorMessage name="nextofKinName" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="nextofKinAddress">Address</label>
-                      <Field type="text" name="nextofKinAddress" id="nextofKinAddress" placeholder="Address of Next of Kin" />
-                      <ErrorMessage name="nextofKinAddress" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="relationship">Relationship</label>
-                      <Field type="text" name="relationship" id="relationship" placeholder="Relationship with next of kin" />
-                      <ErrorMessage name="relationship" component="div" className="error" />
-                    </div>
-                    <div className="formContents">
-                      <label htmlFor="nokPhone">Phone Number</label>
-                      <Field type="text" name="nokPhone" id="nokPhone" placeholder="Phone number of Next of kin" />
-                      <ErrorMessage name="nokPhone" component="div" className="error" />
-                    </div>
-                  </div>
-                </div>
-              )}
+
               <div className="button-container">
                 {currentSection > 0 && (
-                  <button type="button" id="prevBtn" className="prev-btn" onClick={handlePrev}>
-                    <img src="../../../../static/assets/images/Forward%20Button.png" style={{ transform: 'rotate(180deg)' }} alt="" />
+                  <button type="button" onClick={() => setCurrentSection(currentSection - 1)}>
                     Previous
                   </button>
                 )}
-                {currentSection < validationSchemas.length - 1 && (
-                  <button type="button" id="nextBtn" className="next-btn" onClick={() => handleNext(validateForm, values)}>
+                {currentSection < 1 ? (
+                  <button type="submit" disabled={isSubmitting}>
                     Next
-                    <img src="../../../../static/assets/images/Forward%20Button.png" alt="" />
                   </button>
-                )}
-                {currentSection === validationSchemas.length - 1 && (
-                  <button type="submit" id="submitBtn" disabled={isSubmitting}>
+                ) : (
+                  <button type="submit" disabled={isSubmitting}>
                     Submit
                   </button>
                 )}
               </div>
-              {error && <div className="error-popup">{error}</div>}
             </Form>
           )}
         </Formik>
@@ -328,4 +351,4 @@ const CompleteProfile = () => {
   );
 };
 
-export default CompleteProfile;
+export default UpdateProfileForm;

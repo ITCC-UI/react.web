@@ -14,14 +14,15 @@ const LoginSchema = Yup.object().shape({
     .required('Password is required'),
 });
 
+
 const Login = () => {
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
-
+const endpoint="https://theegsd.pythonanywhere.com"
   const checkUserDetails = async (token) => {
     try {
-      const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/account/user-details/', {
-        headers: { Authorization: `Bearer ${token}` }
+      const response = await axios.post(`${endpoint}/api/v1/student/profile`, {
+        headers: { Authorization: `Token ${token}` }
       });
       
       // Check if essential details are present
@@ -112,7 +113,7 @@ const Login = () => {
                       </div>
 
                       <div className="login">
-                        Don't have an account? <span><a href="/signUp">Create an Account</a></span>
+                        Don't have an account? <span><a href="/">Create an Account</a></span>
                       </div>
 
                       <div className="reset">
@@ -136,3 +137,10 @@ const Login = () => {
 }
  
 export default Login;
+
+
+// test1@gmail.com
+// Test1234
+
+// testing@gmail.com 
+// Test1234

@@ -18,9 +18,9 @@ function App() {
       <div className="routes app-container">
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/" element={<SignUp />} />
           <Route path="/form" element={<UpdateProfile />} />
-          <Route path='/' element={<Dashboard/>}></Route>
+          <Route path='/register' element={<Dashboard/>}></Route>
           <Route path='/registration_portal' element= {<RegistrationDash/>}></Route>
           <Route path='/userform' element={<ConfamForm/>} />
           <Route path='/dashboard' element={<MainDashboard/>} />

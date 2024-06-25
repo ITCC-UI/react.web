@@ -1,14 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Make sure to install axios: npm install axios
 import Pen from "/images/pen.png";
 import Bell from "/images/Notification.png";
-import Image from "/images/profile.jpg";
 import Chevy from "/images/chevron down.png";
 import './header.scss';
-const TopNav = ({ disableReg, toggleVisibility, isVisible} ) => {
-  const [userName, setUserName] = useState('Godwin James H.');
-  const [matricNumber, setMatricNumber] = useState('214872');
+
+const TopNav = ({ disableReg, toggleVisibility, isVisible }) => {
+  const [userName, setUserName] = useState(' ');
+  const [matricNumber, setMatricNumber] = useState(' ');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [userImage, setUserImage] = useState(Image);
+  const [userImage, setUserImage] = useState(" ");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token'); // Assuming you store the auth token in localStorage
+        const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/student/profile/', {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        });
+
+        const { gender, passport, first_name, last_name, } = response.data;
+        setMatricNumber(gender);
+        
+          setUserImage(passport);
+        
+        
+          setUserName(first_name+" "+last_name);
+        
+        
+
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleDropdownClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -23,7 +52,6 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible} ) => {
       <div className="actionsLog">
         <div className={disableReg}>
           <button onClick={toggleVisibility}>
-            {/* {isVisible ? 'Hide Form' : 'Show Form'} */}
             <img src={Pen} alt="Pen" />
             Registration
           </button>
@@ -32,7 +60,6 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible} ) => {
           <div className="notice">
             <img src={Bell} alt="Notification Bell" />
           </div>
-         
         </div>
         <div className="profileDetails">
           <div className="image">
@@ -43,7 +70,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible} ) => {
             <div className="matricNum">Matric No: {matricNumber}</div>
             <div className="profileOpt" style={{ display: isDropdownOpen ? 'flex' : 'none' }}>
               <a href="#profile">Profile</a>
-              <a href="#logout">Logout</a>
+              <div className="logout" onClick={LogOut}>Log Out</div>
             </div>
           </div>
           <div className="chevy" onClick={handleDropdownClick}>
