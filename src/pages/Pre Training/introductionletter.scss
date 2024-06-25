@@ -1,0 +1,79 @@
+.introComponent{
+    width: 100%;
+    height: 70%;
+    padding: 10px;
+    margin: auto auto;
+    border: 1px solid;
+    justify-content: space-between;
+    background-color: #fff;
+    .header{
+        color: #000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    button{
+        padding: 10px 24px 10px 16px;
+        gap: 8px;
+        opacity: 0px;
+        background-color: rgba(0, 0, 128, 1);
+        border: none;
+        color: white;
+        display: flex;
+        place-items: center;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: background-color linear 0.2s;
+    }
+}
+.searchbar{
+    color: #000;
+    background-color: #ccc;
+    display: flex;
+    padding: 8px 8px;
+    border-radius: 2px;
+    justify-content: space-around;
+    input{
+        border: 1px solid #000;
+        border-radius: 6px;
+        outline: none;
+        color: #000;
+        background-color: #ccc;
+    }
+    .choose{
+        display: flex;
+        align-items: center;
+        .select{
+            margin: 0 10px 0 10px;
+            outline: none;
+        }
+    }
+}
+table{
+    width: 100%;
+    color: #000;
+}
+
+.statusComponent{
+    width: 30%;
+    height: auto;
+    padding: 18px;
+    margin-right: "auto";
+    color: #000;
+    background-color: #eee;
+    position: relative;
+    left: 70%;
+    bottom: 20%;
+    h3{
+        margin-left: 95%;
+        cursor: pointer;
+    }
+    h5{
+        margin-bottom: 12px;
+    }
+    p{
+        color: #888;
+    }
+}
