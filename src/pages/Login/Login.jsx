@@ -1,89 +1,114 @@
-import React from "react";
-import "./login.scss"
-// import Sidebar from "../../components/sidebar";
+import React, { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import "./login.scss";
+import DummySideBar from "../../../components/Sidebar/DummySB";
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Email is required'),
+  password: Yup.string()
+    .required('Password is required'),
+});
 
 const Login = () => {
-    return ( 
-        <div className="loginPage">
-            <section className="signUp">
+  const [loginError, setLoginError] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const response = await axios.post('https://theegsd.pythonanywhere.com/api/v1/account/login/', values);
       
-{/* <Sidebar/> */}
+      if (response.data && response.data.token) {
+        // Store the token in localStorage
+        localStorage.setItem('token', response.data.token);
+        console.log('Login successful, token:', response.data.token);
+        // Navigate to dashboard
+        navigate('/dashboard');
+      } else {
+        setLoginError('Login failed. Unexpected response format.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setLoginError('Invalid email or password!');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return ( 
+    <div className="loginPage route-Dash">
+      <DummySideBar />
+      <section className="signUp">
         <main>
-            <div className="main-container">
-                <div className="signUpContainer">
-                    <header>
-                        <h1>
-                            INDUSTRIAL TRAINING COORDINATING CENTER
-                        </h1>
-                        <h3><i>bridging the gap between theory and practical....</i></h3>
-
-
-                        <div className="logo">
-                            <img src="../../../../static/assets/images/logo_new.png" alt="University of Ibadan Logo"/>
-                        </div>
-                    </header>
-
-                    <div className="signUpForm">
-                        <div className="todo">
-                            Sign In
-                        </div>
-                        <div className="signInError">
-                            Invalid email or password!
-                        </div>
-                        <form action="/redirect to main dashboard" method="post" className="formSignUp" id="signupForm">
-
-
-                            <input type="email" name="email" id="email" placeholder="Email" autocomplete="on"/>
-
-                            <div className="password">
-                                <input type="password" name="password" id="password" placeholder="Password" required/>
-
-                            </div>
-                            <button className="signIn" type="submit">Sign In</button>
-
-                            <div className="or">
-                                <hr/> <span>
-                                    or
-                                </span>
-                            </div>
-
-                            <div className="signInWithGoogle">
-                                <a href="googleAPIHere" className="googleSign">
-                                    <img src="../../../../static/assets/images/google.png" alt="Google Image"/>
-                                    Continue with Google
-                                </a>
-                            </div>
-
-
-                            <div className="login">
-                                Don't have an account? <span><a href="/signUp">Create an Account</a></span>
-                            </div>
-
-                            <div className="reset">
-                                Forgotten Password? <span><a href="password_reset.html">Reset Password</a></span>
-                            </div>
-                        </form>
-
-
-                    </div>
+          <div className="main-container">
+            <div className="signUpContainer">
+              <header>
+                <h1>INDUSTRIAL TRAINING COORDINATING CENTER</h1>
+                <h3><i>bridging the gap between theory and practical....</i></h3>
+                <div className="logo">
+                  <img src="../../../../static/assets/images/logo_new.png" alt="University of Ibadan Logo"/>
                 </div>
+              </header>
+
+              <div className="signUpForm">
+                <div className="todo">Sign In</div>
+                {loginError && <div className="signInError">{loginError}</div>}
+                <Formik
+                  initialValues={{ email: '', password: '' }}
+                  validationSchema={LoginSchema}
+                  onSubmit={handleSubmit}
+                >
+                  {({ isSubmitting }) => (
+                    <Form className="formSignUp" id="signupForm">
+                      <Field type="email" name="email" placeholder="Email" autoComplete="on"/>
+                      <ErrorMessage name="email" component="div" className="error" />
+
+                      <div className="password">
+                        <Field type="password" name="password" placeholder="Password" />
+                        <ErrorMessage name="password" component="div" className="error" />
+                      </div>
+
+                      <button className="signIn" type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? 'Signing In...' : 'Sign In'}
+                      </button>
+
+                      <div className="or">
+                        <hr/> <span>or</span>
+                      </div>
+
+                      <div className="signInWithGoogle">
+                        <a href="googleAPIHere" className="googleSign">
+                          <img src="../../../../static/assets/images/google.png" alt="Google Image"/>
+                          Continue with Google
+                        </a>
+                      </div>
+
+                      <div className="login">
+                        Don't have an account? <span><a href="/signUp">Create an Account</a></span>
+                      </div>
+
+                      <div className="reset">
+                        Forgotten Password? <span><a href="password_reset.html">Reset Password</a></span>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+              </div>
             </div>
+          </div>
         </main>
 
         <div className="barsMobile">
-            <div className="purpleBar">
-
-            </div>
-            <div className="goldBar">
-
-            </div>
+          <div className="purpleBar"></div>
+          <div className="goldBar"></div>
         </div>
-    </section>
-
-
-
-        </div>
-     );
+      </section>
+    </div>
+  );
 }
  
 export default Login;

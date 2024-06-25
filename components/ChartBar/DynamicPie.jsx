@@ -9,28 +9,17 @@ const DynamicPieChart = ({ data, legendPosition, legendFontSize, legendTitle, ch
   if (!data || !data.labels || data.labels.length === 0) {
     return <div>No data available</div>;
   }
-
+const config={
+  type: 'doughnut',
+  data: 'data'
+}
   const options = {
     plugins: {
       legend: {
+        display: false,
         position: legendPosition || 'bottom',
-        labels: {
-          font: {
-            size: legendFontSize || 14,
-            family: 'Arial',
-          },
-          color: '#333',
-          padding: 20,
-          usePointStyle: true,
-          boxWidth: 10,
-        },
         title: {
-          display: false,
-          text: legendTitle || 'Subscription Plan Distribution',
-          font: {
-            size: 16,
-            weight: 'bold',
-          },
+          display: false
         },
       },
       tooltip: {
@@ -52,13 +41,13 @@ const DynamicPieChart = ({ data, legendPosition, legendFontSize, legendTitle, ch
 
   return (
     <div style={{ 
-      width: '400px', 
+      width: 'fit-content', 
       display: "flex", 
       flexDirection: "column",
       alignItems: "center", 
       justifyContent: "center", 
-      border: '1px solid red', 
       margin: '0 auto',
+      
       padding: '20px',
     }}>
       <div style={{

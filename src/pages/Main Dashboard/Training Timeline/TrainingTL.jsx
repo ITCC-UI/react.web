@@ -1,7 +1,7 @@
 import "./dashcomponents.scss"
-const DasboardComponents = ({header, content}) => {
+const DasboardComponents = ({header, content,schedule}) => {
     return ( 
-        <div className="dashComponents">
+        <div className="dashComponents" id={schedule}>
             <div className="container dashCont">
                 <div className="head">{header}</div>
            <div className="contents">

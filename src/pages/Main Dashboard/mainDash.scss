@@ -5,12 +5,48 @@
         display: flex;
         width: 100%;
         height: 70%;
-        border: 1px solid red;
         justify-content: space-between;
         padding: 10px;
         .trainingLog{
-            border: 1px solid green;
+.timelineNlog{
+display: flex;
+flex-direction: column;
+height: 100%;
+gap: 50px;
+width: 550px;
+margin-left: 20px;
+}
         }
        }
     }
+}
+
+#thisSchedule{
+    width: 100%;
+    height: 100%;
+}
+
+
+.rightSide{
+    background: rgba(227, 229, 236, 1);
+border-radius: 12px;
+    width: 360px;
+    height: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: space-around ;
+    align-items: center;
+}
+
+#activities,#announcement{
+    
+    height: 47%;
+    width: 335px;
+    background: rgba(240, 241, 246, 0.87);
+
+}
+
+.announcement{
+    border-top: 1px solid rgba(58, 73, 159, 1);
 }

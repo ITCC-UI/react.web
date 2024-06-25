@@ -5,6 +5,8 @@ import TopNav from "../../../components/Header/Header";
 import "./mainDash.scss"
 import DasboardComponents from "./Training Timeline/TrainingTL";
 import Content from "../../../components/Content/Content";
+import TVariant from "../../../components/TimelineShow/TimeVariationComp";
+import Announcement from "../../../components/Announcement/Announcement";
 
 const MainDashboard = () => {
     return ( <div className="mainDash route-Dash">
@@ -18,12 +20,12 @@ const MainDashboard = () => {
     <div className="timelineNlog">
     <DasboardComponents header={"Training Timeline"} content={<Content/>}/>
 
-    <DasboardComponents header={"Training Schedule"}/>
+    <DasboardComponents header={"Training Schedule"} schedule="thisSchedule" content={<TVariant/>} />
     </div>
    </div>
     <div className="rightSide">
-    <DasboardComponents header={"Announcement"} />
-    <DasboardComponents header={"Recent Activities"} />
+    <DasboardComponents header={"Announcement"} schedule="announcement" content={<Announcement/>}/>
+    <DasboardComponents header={"Recent Activities"} schedule="activities" content={<Announcement/>}/>
     </div>
   </div>
     </main>

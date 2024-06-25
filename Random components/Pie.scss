@@ -1,0 +1,13 @@
+.absoluteHead{
+    width: 600px;
+    height: 300px;
+    display: flex;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+position: absolute;
+top: 65px;
+z-index: 5;
+// left: 50px;
+}

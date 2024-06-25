@@ -1,29 +1,26 @@
 .timeline{
-    border: 1px solid red;
+    display: flex;
+    align-items: flex-end;
     .industrial{
-        width: 200px;
-        height: 200px;
-        background-color: red;
-        border-radius: 50%;
-        .daysDone{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 128, 1);
-            border-radius: inherit;
-        }
-
+        width: 170px;
+        height: fit-content;
+        // border-radius: 50%;
+        display: flex;
+        // align-items: flex-end;
+        // justify-content: flex-start;
+        padding: 4px;
+        margin-bottom: 30px;
 
     }
 
     .daysCompleted, .daysIncompleted{
         display: flex;
         gap: 10px;
-    
 align-items: center;
-justify-content: center;
+justify-content: flex-start;
+font-size: 16px;
+font-weight: 300;
+font-family: "Poppins";
         .indicator{
             
             width: 10px;

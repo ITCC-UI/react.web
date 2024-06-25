@@ -1,0 +1,332 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+  --blue: #3a499f;
+  --gold: #ddb940;
+  --text-black: #434343;
+  --fade-grey: #aeaeae;
+  --stronger-grey: #999999;
+  --error: #ff0000;
+  --error-bg: #cccccc;
+  --some-red: #dc3545;
+  --google-sign-in: #edeaea;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  scroll-behavior: smooth;
+}
+body {
+  font-family: "Poppins", sans-serif;
+  width: 100%;
+  /* display: flex; */
+  /* justify-content: space-around; */
+}
+
+section.signUp {
+  /* position:static; */
+  width: 100%;
+  display: flex;
+  height: 100vh;
+}
+
+.barsMobile {
+  width: 100vw;
+  position: fixed;
+  display: none;
+  flex-direction: column;
+  bottom: 0;
+  height: 50px;
+  .purpleBar {
+    height: 30px;
+    width: 100%;
+    background-color: var(--blue);
+    box-shadow: 0 2px 15px #292a2e;
+  }
+
+  .goldBar {
+    height: 20px;
+    width: 100%;
+    background-color: var(--gold);
+  }
+}
+
+.barsDesktop {
+  height: 100vh;
+  display: flex;
+  position: fixed;
+
+  bottom: 0;
+  width: 10%;
+  .gold-bar {
+    height: 100%;
+    width: 30%;
+    background-color: var(--gold);
+    z-index: 1;
+  }
+  .purple-bar {
+    height: 100%;
+    width: 70%;
+    background-color: var(--blue);
+    box-shadow: 2px 0 15px #292a2e;
+  }
+}
+main {
+  width: 90%;
+  min-width: 200px;
+  margin: 0 auto 30px;
+}
+
+.main-container {
+  width: 70%;
+  margin: 30px auto;
+  .signUpContainer {
+    margin: 0 auto;
+
+    header {
+      h1 {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: var(--blue);
+      }
+      h3 {
+        text-align: center;
+        color: var(--stronger-grey);
+        font-weight: 100;
+      }
+
+      .logo {
+        width: fit-content;
+        margin: 15px auto 0;
+      }
+    }
+
+    .signUpForm {
+      width: 80%;
+      margin: 45px auto 0;
+
+      .todo {
+        color: var(--blue);
+        font-size: 28px;
+        font-weight: 600;
+        /*margin-left: 40px;*/
+        margin-bottom: 20px;
+      }
+      .instruction{
+font-weight: lighter ;
+      font-size: 12px;
+        width: 70%;
+        line-height: 1.5;
+      color: var(--stronger-grey);
+     margin-bottom: 20px;
+      }
+
+      .formSignUp {
+        display: flex;
+        flex-direction: column;
+        /*width: 90%;*/
+        margin: 0 auto;
+        min-width: 200px;
+        gap: 40px;
+        padding-bottom: 50px;
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+          border: none;
+          border-bottom: 1px solid var(--stronger-grey);
+          padding: 7px 1px;
+          transition: all 0.3s ease;
+          width: 100%;
+          font-size: 15px;
+          color: #434343;
+          font-family: "Poppins", sans-serif;
+          &::placeholder {
+            color: var(--stronger-grey);
+            font-size: 15px;
+          }
+          &:focus {
+            font-size: 18px;
+            padding-bottom: 2px;
+            border: none;
+            outline: none;
+            border-bottom: 2px solid var(--stronger-grey);
+            caret-color: var(--blue);
+          }
+        }
+        button.createAccount,
+        button.signIn {
+          background-color: var(--blue);
+          color: #ffffff;
+          border: none;
+          padding: 10px;
+          border-radius: 7px;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 18px;
+          transition: background-color 0.3s ease, color 0.3s linear;
+
+          &:hover {
+            background-color: white;
+            color: var(--blue);
+            border: 1px solid var(--blue);
+          }
+        }
+
+        .login,.reset {
+          margin-top: -20px;
+          color: var(--stronger-grey);
+          span {
+            a {
+              text-decoration: none;
+              color: var(--blue);
+              font-weight: 300;
+              &:hover{
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.password {
+  width: 100%;
+  .bi {
+    position: absolute;
+    z-index: 2;
+    right: 5px;
+    cursor: pointer;
+  }
+}
+
+.or {
+  color: var(--stronger-grey);
+  span {
+    position: absolute;
+    top: -12px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    display: block;
+    width: fit-content;
+    padding: 0 5px;
+    background-color: white;
+    /* border: 1px solid red; */
+  }
+}
+
+.signInWithGoogle {
+  width: 100%;
+  background-color: var(--google-sign-in, #edeaea);
+  color: var(--text-black);
+  border-radius: 7px;
+  .googleSign {
+    display: flex;
+    border-radius: 7px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 7px 10px;
+    text-decoration: none;
+    color: var(--text-black);
+    transition: all 0.3s ease-in-out;
+    border: 2px solid #ffffff;
+    font-size: 15px;
+    img {
+      width: 4%;
+      min-width: 15px;
+    }
+
+    &:hover {
+      background-color: #ffffff;
+      border: 2px solid var(--google-sign-in);
+      font-weight: 600;
+    }
+  }
+}
+
+@media (max-width: 426px), (max-width: 769px) {
+  .main-container {
+    margin-bottom: 100px;
+    .signUpContainer {
+      header {
+        h1 {
+          font-size: 16px;
+        }
+        h3 {
+          font-size: 14px;
+          font-weight: normal;
+        }
+
+        .logo {
+          img {
+            width: 40px;
+          }
+        }
+      }
+      .signUpForm {
+        height: 100vh;
+        .todo {
+          font-size: 17px;
+        }
+        .formSignUp {
+          input[type="email"],
+          input[type="password"],
+          input[type="text"] {
+            font-size: 12px;
+            &::placeholder {
+              font-size: 12px;
+            }
+          }
+          .login, .reset {
+            font-size: 12px;
+          }
+
+          button.createAccount,
+          button.signIn {
+            font-size: 15px;
+            font-weight: normal;
+          }
+        }
+      }
+    }
+  }
+
+ .signInWithGoogle{
+  .googleSign{
+    font-size: 13px;
+  }
+ }
+
+  .barsDesktop {
+    display: none;
+  }
+
+  .barsMobile {
+    display: flex;
+  }
+}
+
+
+
+.return {
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  color: var(--blue);
+  font-weight: 600;
+  margin: 0 auto;
+}
+
+
+.resetPassword{
+  gap: 20px !important;
+}
