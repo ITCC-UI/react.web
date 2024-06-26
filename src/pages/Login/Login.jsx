@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import "./login.scss";
 import DummySideBar from "../../../components/Sidebar/DummySB";
+import Google from "/images/google.png"
+import UILogo from "/images/UI_logo.png"
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -21,7 +23,7 @@ const Login = () => {
 const endpoint="https://theegsd.pythonanywhere.com"
   const checkUserDetails = async (token) => {
     try {
-      const response = await axios.post(`${endpoint}/api/v1/student/profile`, {
+      const response = await axios.get(`${endpoint}/api/v1/student/details`, {
         headers: { Authorization: `Token ${token}` }
       });
       
@@ -47,11 +49,13 @@ const endpoint="https://theegsd.pythonanywhere.com"
 
         // Check user details
         const isProfileComplete = await checkUserDetails(token);
-        
+        console.log('isProfileComplete:', isProfileComplete);
         if (isProfileComplete) {
           navigate('/dashboard');
+          console.log('User details are complete');
         } else {
           navigate('/complete-profile');
+          console.log('User details are incomplete');
         }
       } else {
         setLoginError('Login failed. Unexpected response format.');
@@ -75,12 +79,12 @@ const endpoint="https://theegsd.pythonanywhere.com"
                 <h1>INDUSTRIAL TRAINING COORDINATING CENTER</h1>
                 <h3><i>bridging the gap between theory and practical....</i></h3>
                 <div className="logo">
-                  <img src="../../../../static/assets/images/logo_new.png" alt="University of Ibadan Logo"/>
+                  <img src={UILogo} alt="University of Ibadan Logo"/>
                 </div>
               </header>
 
               <div className="signUpForm">
-                <div className="todo">Sign In</div>
+                <div className="todo">Log In</div>
                 {loginError && <div className="signInError">{loginError}</div>}
                 <Formik
                   initialValues={{ email: '', password: '' }}
@@ -107,7 +111,7 @@ const endpoint="https://theegsd.pythonanywhere.com"
 
                       <div className="signInWithGoogle">
                         <a href="googleAPIHere" className="googleSign">
-                          <img src="../../../../static/assets/images/google.png" alt="Google Image"/>
+                          <img src={Google} alt="Google Image"/>
                           Continue with Google
                         </a>
                       </div>

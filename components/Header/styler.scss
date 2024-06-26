@@ -1,0 +1,22 @@
+.headerForm{
+    width: 100%;
+    padding: 10px 20px;
+    box-shadow: 6px 6px 16px 0px rgba(0, 0, 0, 0.25);
+    .headerContainer{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Poppins;
+font-size: 30px;
+font-weight: 500;
+height: 100px;
+
+
+        img{
+            position: absolute;
+            left: 20px;
+            width: 65px;
+        }
+    }
+}

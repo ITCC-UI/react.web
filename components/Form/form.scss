@@ -1,10 +1,10 @@
 /* src/styles.css */
-.hidden {
-    opacity: 0;
-    visibility: hidden;
-    display: none;
-    transition: opacity 0.2s ease, visibility 0.1s ease, display 0s 0.5s; /* display change is delayed by 0.5s */
-  }
+// .hidden {
+//     opacity: 0;
+//     visibility: hidden;
+//     display: none;
+//     transition: opacity 0.2s ease, visibility 0.1s ease, display 0s 0.5s; /* display change is delayed by 0.5s */
+//   }
   
   .visible {
     opacity: 1;

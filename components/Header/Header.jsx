@@ -4,18 +4,26 @@ import Pen from "/images/pen.png";
 import Bell from "/images/Notification.png";
 import Chevy from "/images/chevron down.png";
 import './header.scss';
+import { useNavigate } from 'react-router-dom';
 
 const TopNav = ({ disableReg, toggleVisibility, isVisible }) => {
   const [userName, setUserName] = useState(' ');
   const [matricNumber, setMatricNumber] = useState(' ');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userImage, setUserImage] = useState(" ");
+  // const [passport, setPassport] = useState({pass});
+
+  const navigate = useNavigate();
+const LogOut=()=>{
+  localStorage.removeItem('token');
+  navigate('/login');
+}
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token'); // Assuming you store the auth token in localStorage
-        const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/student/profile/', {
+        const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/student/details', {
           headers: {
             Authorization: `Token ${token}`
           }
@@ -25,9 +33,8 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible }) => {
         setMatricNumber(gender);
         
           setUserImage(passport);
-        
-        
-          setUserName(first_name+" "+last_name);
+      
+          setUserName(first_name.charAt(0)+"."+last_name);
         
         
 

@@ -11,15 +11,7 @@ const userYear=200
     'ineligible': 3>7
   })
 
-  // const [isDisplayed, setIsDisplayed] = useState(false);
-
-  // const handleDisplay = () => {
-  //   setIsDisplayed(true);
-  // };
-
-  // const handleClose = () => {
-  //   setIsDisplayed(false);
-  // };
+  
   return (
     <section>
       {/* {isDisplayed && <DisplayedComponent onClose={handleClose}/>} */}
@@ -50,6 +42,9 @@ const userYear=200
                   <div className={activeClasses}>
                     Eligible
                   </div>
+                  <div className={response.status === 'active' ? 'eligible' : 'ineligible'}>
+  Eligibile
+</div>
                 </td>
                 <td><NormalButton registerSelf="register" onButtonClick={checked}/></td>
               </tr>

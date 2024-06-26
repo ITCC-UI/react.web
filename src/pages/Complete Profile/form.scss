@@ -1,0 +1,120 @@
+.form-container{
+    position:  relative !important;
+}
+
+#formAce{
+    background-color: orange;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // width: fit-content;
+}
+
+#newformCase{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .fillForm{
+        width: 100%;
+        form{
+            width: 100%;
+           
+            .register_here{
+                background-color: rgba(0, 0, 128, 1);
+                width: 200px;
+                margin: 50px auto 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+    }
+}
+
+.formTop{
+                
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: 0 auto;
+    margin-bottom: 50px;
+  
+}
+
+.section{
+  .button-container{
+width: fit-content;
+margin: 0 auto;
+margin-bottom: 40px;
+display: flex;
+gap: 30px;
+button{
+  color: #ffff;
+  background-color: #0056b3;
+  align-items: center;
+  display: flex;gap: 10px;
+  transition: .2s ease-in all;
+
+  &:hover{
+    gap: 15px;
+    box-shadow: -2px 2px #05182d;
+  }
+}
+  }
+  .container2{
+    width: 50%;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 100px;
+  }
+}
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+  }
+  
+  .shake {
+    animation: shake 0.5s;
+  }
+  
+
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+  
+    button {
+      margin-top: 10px;
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+  
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }

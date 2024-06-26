@@ -330,3 +330,20 @@ font-weight: lighter ;
 .resetPassword{
   gap: 20px !important;
 }
+
+
+.success-message{
+  position: absolute;
+  top: -235px;
+  width: fit-content;
+  padding: 20px 100px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  font-size: 25px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: rgb(8, 87, 172);
+  border-top: 2px solid green;
+  transition: all linear .3s ;
+}
