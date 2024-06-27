@@ -347,3 +347,48 @@ font-weight: lighter ;
   border-top: 2px solid green;
   transition: all linear .3s ;
 }
+
+.password-strength {
+  margin-top: 5px;
+  font-size: 0.875em;
+  width: fit-content;
+  float: right;
+  // display: none;
+
+  &.strength-1 {
+    color: red;
+    // display: block;
+  
+  }
+
+  &.strength-2 {
+    color: orange;
+  }
+
+  &.strength-3 {
+    color: green;
+  }
+}
+
+.error {
+  color: red;
+  margin-top: 5px;
+}
+
+.success-message {
+  background-color: green;
+  color: white;
+  border: 2px solid green;
+  width: fit-content;
+  padding: 10px 20px;
+  margin: 0 auto;
+  position: absolute;
+  top: -50px;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+.existingUser{
+  border: 1px solid red;
+  top: 0;
+}

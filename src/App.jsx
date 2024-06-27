@@ -26,8 +26,8 @@ function App() {
     
 
     <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<SignUp />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/form" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
           <Route path='/register' element={<Dashboard/>}></Route>
       

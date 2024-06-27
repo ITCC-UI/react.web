@@ -42,9 +42,6 @@ const userYear=200
                   <div className={activeClasses}>
                     Eligible
                   </div>
-                  <div className={response.status === 'active' ? 'eligible' : 'ineligible'}>
-  Eligibile
-</div>
                 </td>
                 <td><NormalButton registerSelf="register" onButtonClick={checked}/></td>
               </tr>

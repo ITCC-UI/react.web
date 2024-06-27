@@ -33,6 +33,58 @@ section.signUp {
   height: 100vh;
 }
 
+.signInError {
+  background-color: var(--error);
+  color: white;
+  width: fit-content;
+  padding: 10px 20px;
+  margin: 0 auto;
+  top: -50px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  z-index: 1;
+  border-radius: 0 0 4px 4px;
+  transition: all .3s ease-in-out;
+  animation: opacify 1s ease both;
+}
+
+.errorCountdown {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: rgb(245, 202, 9);
+  transition:  all .3s ease-in-out;
+  animation: countdown 5s ease forwards;
+}
+
+@keyframes countdown {
+  from {
+    width: 100%;
+    
+  }
+  to {
+    width: 0%;
+    
+  }
+}
+
+@keyframes opacify {
+  0%{
+    
+    scale: 0;
+
+  }
+  50%{
+    scale: 1;
+    
+  }
+
+  
+}
+
 
 main {
   width: 90%;

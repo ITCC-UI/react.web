@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Forward from "/images/icon.png";
 import FormHeader from '../Header/FormHeader';
-// import "./thisForm.scss";
+import "./pageForm.scss"
 
 const FormCase = () => {
   const navigate = useNavigate();
@@ -98,9 +98,9 @@ const FormCase = () => {
   };
 
   return (
-    <><FormHeader/>
+    <>
     <div className={`form-container`} id='newformCase'>
-      
+    <FormHeader/>
       <div className="fillForm">
         {isLoading ? (
           <div className="loading-spinner">
@@ -123,16 +123,20 @@ const FormCase = () => {
                     <Field name="matric_number" type="text" placeholder="Matric Number"/>
                     <ErrorMessage name="matric_number" component="div" className="error" />
                   </div>
+                 
                   <div className="form-group">
-                    <label htmlFor="programme_type">Programme Type</label>
-                    <Field as="select" name="programme_type">
-                      <option value="">Select Programme Type</option>
-                      <option value="DLC">DLC</option>
-                      <option value="REGULAR">REGULAR</option>
-                      <option value="POSTGRADUATE">POSTGRADUATE</option>
+                    <label htmlFor="department">Department</label>
+                    <Field as="select" name="department">
+                      <option value="" name="department">Select Department</option>
+                      {departmentData.map((department) => (
+                        <option key={department.id} value={department.id}>
+                          {department.name}
+                        </option>
+                      ))}
                     </Field>
-                    <ErrorMessage name="programme_type" component="div" className="error" />
+                    <ErrorMessage name="department" component="div" className="error" />
                   </div>
+
                   <div className="form-group">
                     <label htmlFor="faculty">Faculty</label>
                     <Field as="select" name="faculty" onChange={(e) => {
@@ -152,17 +156,15 @@ const FormCase = () => {
                 </div>
 
                 <div className="formTop">
-                  <div className="form-group">
-                    <label htmlFor="department">Department</label>
-                    <Field as="select" name="department">
-                      <option value="" name="department">Select Department</option>
-                      {departmentData.map((department) => (
-                        <option key={department.id} value={department.id}>
-                          {department.name}
-                        </option>
-                      ))}
+                <div className="form-group">
+                    <label htmlFor="programme_type">Programme Type</label>
+                    <Field as="select" name="programme_type">
+                      <option value="">Select Programme Type</option>
+                      <option value="DLC">DLC</option>
+                      <option value="REGULAR">REGULAR</option>
+                      <option value="POSTGRADUATE">POSTGRADUATE</option>
                     </Field>
-                    <ErrorMessage name="department" component="div" className="error" />
+                    <ErrorMessage name="programme_type" component="div" className="error" />
                   </div>
                   <div className="form-group">
                     <label htmlFor="session_of_entry">Session of Entry</label>

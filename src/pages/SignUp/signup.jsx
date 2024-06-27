@@ -4,9 +4,10 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import DummySideBar from '../../../components/Sidebar/DummySB';
+import { ClipLoader } from 'react-spinners';
 import './SignUp.scss';
-import Google from "/images/google.png"
-import UILogo from "/images/UI_logo.png"
+import Google from "/images/google.png";
+import SignLogHeader from '../../../components/Header/SignupLoginHead';
 
 const SignUpSchema = Yup.object().shape({
   email: Yup.string()
@@ -14,11 +15,22 @@ const SignUpSchema = Yup.object().shape({
     .required('Email is required'),
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters')
+    .matches(/[A-Z]/, 'Password must contain an uppercase letter')
+    .matches(/[0-9]/, 'Password must contain a number')
     .required('Password is required'),
 });
 
+const getPasswordStrength = (password) => {
+  let strength = 0;
+  if (password.length >= 8) strength += 1;
+  if (/[A-Z]/.test(password)) strength += 1;
+  if (/[0-9]/.test(password)) strength += 1;
+  return strength;
+};
+
 const SignUp = () => {
   const [successMessage, setSuccessMessage] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState(0);
   const navigate = useNavigate();
 
   const handleSubmit = async (values, { setSubmitting, setStatus }) => {
@@ -32,10 +44,20 @@ const SignUp = () => {
       }, 5000); // 5000 milliseconds = 5 seconds
     } catch (error) {
       console.error('Signup failed', error);
-      setStatus({ error: 'Signup failed. Please try again.' });
+      if (error.response && error.response.data && error.response.data.email) {
+        setStatus({ error: 'User already exists.' });
+      } else {
+        setStatus({ error: 'Signup failed. Please try again.' });
+      }
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handlePasswordChange = (e, setFieldValue) => {
+    const password = e.target.value;
+    setFieldValue('password', password);
+    setPasswordStrength(getPasswordStrength(password));
   };
 
   return (
@@ -45,13 +67,7 @@ const SignUp = () => {
         <main>
           <div className="main-container">
             <div className="signUpContainer">
-              <header>
-                <h1>INDUSTRIAL TRAINING COORDINATING CENTER</h1>
-                <h3><i>bridging the gap between theory and practical....</i></h3>
-                <div className="logo">
-                  <img src={UILogo} alt="University of Ibadan Logo" />
-                </div>
-              </header>
+              <SignLogHeader />
 
               <div className="signUpForm">
                 <div className="todo">Create Account</div>
@@ -60,7 +76,7 @@ const SignUp = () => {
                   validationSchema={SignUpSchema}
                   onSubmit={handleSubmit}
                 >
-                  {({ isSubmitting, status }) => (
+                  {({ isSubmitting, status, setFieldValue }) => (
                     <Form className="formSignUp" id="signUpForm" noValidate>
                       <div className="email">
                         <Field
@@ -78,15 +94,20 @@ const SignUp = () => {
                           type="password"
                           name="password"
                           placeholder="Password"
+                          onChange={(e) => handlePasswordChange(e, setFieldValue)}
                         />
                         <div className="error">
                           <ErrorMessage name="password" component="div" />
                         </div>
+                        <div className={`password-strength strength-${passwordStrength}`}>
+                          Password strength: {passwordStrength === 3 ? 'Strong' : passwordStrength === 2 ? 'Medium' : 'Weak'}
+                        </div>
                       </div>
+                      {status && status.error && <div className="error existingUser">{status.error}</div>}
                       <button className="createAccount" type="submit" disabled={isSubmitting}>
-                      {isSubmitting ? "Signing up...": "Sign Up"}
+                        {isSubmitting ? <ClipLoader size={20} color="inherit" /> : "Sign Up"}
                       </button>
-                      {status && status.error && <div className="error">{status.error}</div>}
+                     
 
                       <div className="or">
                         <hr /> <span>or</span>
