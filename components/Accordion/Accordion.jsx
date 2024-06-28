@@ -52,7 +52,7 @@ const AccordionS = ({ initialOpenSection }) => {
       header.style.color = "white";
       content.style.maxHeight = '0';
       toggle.style.transform = 'rotate(0deg)';
-      toggle.style.filter = 'invert(1)';
+      // toggle.style.filter = 'invert(1)';
     }
 
     if (prevOpenAccordion !== null && prevOpenAccordion !== index) {

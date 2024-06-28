@@ -50,7 +50,9 @@ const DepartmentTrainingCourses = ({ checked }) => {
       <>
         {formattedDate}
         <br />
+        <div className="timer">
         {formattedTime}
+        </div>
       </>
     );
   };
@@ -71,7 +73,7 @@ const DepartmentTrainingCourses = ({ checked }) => {
                 <th>Course Code</th>
                 <th>Level</th>
                 <th>Duration</th>
-                <th>Status</th>
+                {/* <th>Status</th> */}
                 <th>Registration <br /> Start Date</th>
                 <th>Registration <br /> End Date</th>
                 <th>Status</th>
@@ -90,19 +92,21 @@ const DepartmentTrainingCourses = ({ checked }) => {
                     <td>{course.course_code} <br/> {course.course_unit} units</td>
                     <td>{course.level}</td>
                     <td>{course.training_type_duration} - Weeks</td>
-                    <td>{course.registration_status}</td>
+                    {/* <td>{course.registration_status}</td> */}
                     <td>{formatDate(course.registration_start_date)}</td>
                     <td>{formatDate(course.registration_end_date)}</td>
                     <td>
+            {/* log the v */}
                       <div className={activeClasses}>
-                        {course.activeClass === 'active' ? 'Eligible' : 'Ineligible'}
+                        {course.registration_status}
+                        {console.log(course.registration_status)}
                       </div>
                     </td>
                     <td>
                       {course.can_register ? (
                         <NormalButton registerSelf="register active" onButtonClick={checked} />
                       ) : (
-                        <NormalButton registerSelf="register active" disabled />
+                        <NormalButton registerSelf="register inactive" disabled />
                       )}
                     </td>
                   </tr>

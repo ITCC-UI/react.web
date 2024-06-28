@@ -79,8 +79,8 @@ height: inherit;
 .width{
   width: fit-content;
 }
-  .active{
-    color: rgba(0, 0, 0, 1) ;
+  .active-accordion{
+    color: rgba(0, 0, 0, 1) !important;
     transition: .2s linear all;
     img{
       filter: invert(0) !important;
