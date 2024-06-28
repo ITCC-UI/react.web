@@ -74,6 +74,8 @@ const SignUp = () => {
                 <Formik
                   initialValues={{ email: '', password: '' }}
                   validationSchema={SignUpSchema}
+                  validateOnChange={true}
+                  validateOnBlur={true}
                   onSubmit={handleSubmit}
                 >
                   {({ isSubmitting, status, setFieldValue }) => (
@@ -99,15 +101,16 @@ const SignUp = () => {
                         <div className="error">
                           <ErrorMessage name="password" component="div" />
                         </div>
-                        <div className={`password-strength strength-${passwordStrength}`}>
-                          Password strength: {passwordStrength === 3 ? 'Strong' : passwordStrength === 2 ? 'Medium' : 'Weak'}
+                        <div className="password-strength">
+                          <div className={`bar ${passwordStrength >= 1 ? 'filled' : ''}`}></div>
+                          <div className={`bar ${passwordStrength >= 2 ? 'filled' : ''}`}></div>
+                          <div className={`bar ${passwordStrength >= 3 ? 'filled' : ''}`}></div>
                         </div>
                       </div>
-                      {status && status.error && <div className="error existingUser">{status.error}</div>}
                       <button className="createAccount" type="submit" disabled={isSubmitting}>
                         {isSubmitting ? <ClipLoader size={20} color="inherit" /> : "Sign Up"}
                       </button>
-                     
+                      {status && status.error && <div className="error">{status.error}</div>}
 
                       <div className="or">
                         <hr /> <span>or</span>
@@ -144,3 +147,6 @@ const SignUp = () => {
 };
 
 export default SignUp;
+
+
+// HelloHuman123

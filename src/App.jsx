@@ -27,11 +27,12 @@ function App() {
 
     <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/form" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
           <Route path='/register' element={<Dashboard/>}></Route>
       
-       <Route path='/registration_portal' element= {<RegistrationDash/>}></Route>
+       <Route path='/registration-portal' element= {<RegistrationDash/>}></Route>
           <Route path='/dashboard' element={<MainDashboard/>  } />
           {/* <Route path='/complete-profile' element ={<CompleteProfile />}></Route> */}
 {/* <Route path='/complete-profile' element={<CombinedForm/>} /> */}

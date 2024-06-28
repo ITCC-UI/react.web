@@ -46,8 +46,9 @@ const Dashboard = (dashboardClass, placementClass, disableCover,disableReg) => {
     <div className="route-Dash">
       <SideBar disableCover="dash_navig disable_props" dashboardClass="dashy" placementClass="placement" />
       <div className="overlay"></div>
+      
       <main>
-        <TopNav toggleVisibility={toggleVisibility} isVisible={isVisible} disableReg="registration"/>
+      <TopNav toggleVisibility={toggleVisibility} isVisible={isVisible} disableReg="registration"/>
         <img src={Empty} alt="Empty dashboard" className="empty_dash" />
       </main>
       <UserForm isVisible={isVisible} onClose={() => setIsVisible(false)} onSubmit={handleSubmit} />

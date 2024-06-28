@@ -75,7 +75,7 @@ const Login = () => {
             navigate('/dashboard');
           } else {
             console.log('User needs to complete program registration. Redirecting to complete-program-registration page.');
-            navigate('/complete-program-registration');
+            navigate('/register');
           }
         } else {
           console.log('User details are incomplete. Redirecting to complete-profile page.');

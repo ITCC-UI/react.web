@@ -6,12 +6,27 @@ import { useNavigate } from 'react-router-dom';
 import "./thisForm.scss";
 import FormHeader from '../../../components/Header/FormHeader';
 
+const FILE_SIZE = 800 * 1024; // 800kb in bytes
+
 const PersonalDetailsSchema = Yup.object().shape({
   first_name: Yup.string().required('First Name is required'),
   middle_name: Yup.string(),
   phone_number: Yup.string().required('Phone Number is required'),
   last_name: Yup.string().required('Last Name is required'),
-  dob: Yup.date().required('Date of Birth is required'),
+  dob: Yup.date().required('Date of Birth is required').test(
+    'is-16-years-old',
+    'You must be 16 years old and above to commence this training',
+    function (value) {
+      const today = new Date();
+      const birthDate = new Date(value);
+      const age = today.getFullYear() - birthDate.getFullYear();
+      const monthDifference = today.getMonth() - birthDate.getMonth();
+      if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+        return age > 16;
+      }
+      return age >= 16;
+    }
+  ),
   gender: Yup.string().required('Gender is required'),
   nationality: Yup.string().required('Nationality is required'),
   address: Yup.string().required('Address is required'),
@@ -21,8 +36,16 @@ const PersonalDetailsSchema = Yup.object().shape({
   next_of_kin_phone_number: Yup.string(),
   campus_address: Yup.string(),
   language: Yup.string().required('Language is required'),
-  passport: Yup.mixed().required('Passport is required'),
-  signature: Yup.mixed().required('Signature is required'),
+  passport: Yup.mixed().required('Passport is required').test(
+    'fileSize',
+    'File size too large, should be less than 800kb',
+    value => value && value.size <= FILE_SIZE
+  ),
+  signature: Yup.mixed().required('Signature is required').test(
+    'fileSize',
+    'File size too large, should be less than 800kb',
+    value => value && value.size <= FILE_SIZE
+  ),
 });
 
 const UpdateProfileForm = () => {
@@ -68,7 +91,7 @@ const UpdateProfileForm = () => {
       } else {
         console.error('Unexpected response status:', response.status);
         console.error('Unexpected response data:', response.data);
-        <div className="error">There was an error saving your data</div>
+        alert('There was an error saving your data');
       }
     } catch (error) {
       console.error('Error in handleSubmitPersonalDetails:');
@@ -89,7 +112,6 @@ const UpdateProfileForm = () => {
     <div className="formWrapper">
       <FormHeader/>
       <div className="formCase">
-        {/* <h1>Update Profile Information</h1> */}
         <Formik
           initialValues={{
             first_name: '',
@@ -221,11 +243,9 @@ const UpdateProfileForm = () => {
                 </div>
 
                 <div className="button-container">
-                <button type="submit" disabled={isSubmitting} className='register_here'>Next</button>
+                  <button type="submit" disabled={isSubmitting} className='register_here'>Next</button>
+                </div>
               </div>
-              </div>
-
-              
             </Form>
           )}
         </Formik>

@@ -29,8 +29,8 @@ const LogOut=()=>{
           }
         });
 
-        const { gender, passport, first_name, last_name, } = response.data;
-        setMatricNumber(gender);
+        const { matric_number, passport, first_name, last_name, } = response.data;
+        setMatricNumber(matric_number);
         
           setUserImage(passport);
       
