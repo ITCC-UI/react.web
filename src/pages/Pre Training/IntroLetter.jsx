@@ -113,27 +113,31 @@ const IntroLetter = () => {
                         </div>
                         <div>
                             <table>
-                                <thead style={{ position: "sticky", top: 60 }}>
+                                <thead style={{}}>
+                                {/* <thead style={{ position: "sticky", top: 60 }}> */}
                                     <tr>
                                         <td>COMPANY NAME</td>
                                         <td>Address to</td>
                                         <td>State</td>
-                                        <td>Status</td>
+                                        <td><p>Status</p></td>
                                         <td>Date</td>
                                         <td>Action</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
-                                        [...data].map((i) =>
+                                        [...data, ...data, ...data].map((i) =>
                                             <tr key={i._id || i.id}>
                                                 <td>{i.name}</td>
                                                 <td>{i.address}</td>
                                                 <td>{i.state}</td>
-                                                <td>{i.status}</td>
+                                                <td><p className = {i.status}>{i.status}</p></td>
                                                 <td>{new Date().toLocaleString('en-US', options) + "."}</td>
-                                                <td>
-                                                    <button className="view-more-btn" onClick={() => { setStatusVisible(true); console.log(i) }}>View more <MdOutlineFileDownload /></button>
+                                                <td className="td-last">
+                                                    <div className="view-more-btn" onClick={() => { setStatusVisible(true); console.log(i) }}>
+                                                        View more
+                                                    </div>
+                                                    <MdOutlineFileDownload color="blue" size={24} className="download-icon"/>
                                                 </td>
                                             </tr>
                                         )
