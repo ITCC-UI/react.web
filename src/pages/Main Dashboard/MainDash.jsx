@@ -11,7 +11,7 @@ import Announcement from "../../../components/Announcement/Announcement";
 const MainDashboard = () => {
     return ( <div className="mainDash route-Dash">
     
-    <SideBar dashboardClass={"active dashy"} placementClass={"placement"} init={0}/>
+    <SideBar dashboardClass={"active dashy"} placementClass={"placement"} init={0}/>  {/*State management for the accordion where 0= first accordion */}
     <main>
     <TopNav disableReg={"registration disable"}/>
 
@@ -33,3 +33,10 @@ const MainDashboard = () => {
 }
  
 export default MainDashboard;
+
+
+
+
+
+// aeorck@gmail.com
+// Godwin1245
