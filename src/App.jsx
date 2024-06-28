@@ -29,11 +29,12 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/form" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
           <Route path='/register' element={<Dashboard/>}></Route>
-      
        <Route path='/registration-portal' element= {<RegistrationDash/>}></Route>
           <Route path='/dashboard' element={<MainDashboard/>  } />
+               
+               
+               {/* <Route path="/form" element={<UpdateProfile />} /> */}
           {/* <Route path='/complete-profile' element ={<CompleteProfile />}></Route> */}
 {/* <Route path='/complete-profile' element={<CombinedForm/>} /> */}
        <Route path='/complete-profile2' element={<FormCase/>}/>

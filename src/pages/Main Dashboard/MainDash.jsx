@@ -11,7 +11,7 @@ import Announcement from "../../../components/Announcement/Announcement";
 const MainDashboard = () => {
     return ( <div className="mainDash route-Dash">
     
-    <SideBar dashboardClass={"active dashy"} placementClass={"placement"}/>
+    <SideBar dashboardClass={"active dashy"} placementClass={"placement"} init={0}/>
     <main>
     <TopNav disableReg={"registration disable"}/>
 

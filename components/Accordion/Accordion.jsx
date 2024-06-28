@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-// import './styles.css';
-import Chevy from "/images/Chevron Right.png"
+import Chevy from "/images/Chevron Right.png";
 import { Link } from 'react-router-dom';
 
-const AccordionS = () => {
-  const [openAccordion, setOpenAccordion] = useState(null);
+const AccordionS = ({ initialOpenSection }) => {
+  const [openAccordion, setOpenAccordion] = useState(initialOpenSection);
   const contentRefs = [useRef(null), useRef(null), useRef(null)];
 
   const toggleAccordion = (index) => {
@@ -31,7 +30,7 @@ const AccordionS = () => {
   }, [openAccordion]);
 
   const handlePanelToggle = (index) => {
-    const prevOpenAccordion = openAccordion; // Store the previously open accordion index
+    const prevOpenAccordion = openAccordion;
     toggleAccordion(index);
 
     const item = contentRefs[index].current.parentElement;
@@ -91,8 +90,8 @@ const AccordionS = () => {
           }}
         >
           <a href="#Register">Registration</a>
-          <Link to="/companies">Browse Companies</Link> 
-          <Link to="/introduction-letter">Introduction Letter</Link> 
+          <Link to="/companies">Browse Companies</Link>
+          <Link to="/introduction-letter">Introduction Letter</Link>
         </div>
       </div>
 
@@ -115,14 +114,12 @@ const AccordionS = () => {
             maxHeight: openAccordion === 1 ? `${contentRefs[1].current?.scrollHeight}px` : '0',
           }}
         >
-
-<Link to="/job-reporting-form">Job Reporting Form</Link> 
-<Link to="/daily-logs">Daily logs</Link> 
-<Link to="/new-logbook-request">New Logbook Request</Link> 
+          <Link to="/job-reporting-form">Job Reporting Form</Link>
+          <Link to="/daily-logs">Daily logs</Link>
+          <Link to="/new-logbook-request">New Logbook Request</Link>
         </div>
       </div>
 
-      {/* Add the third accordion here */}
       <div className={`navigation-item ${openAccordion === 2 ? 'active' : ''}`}>
         <div className="navigation-header" onClick={() => handlePanelToggle(2)}>
           <h3>Post-Training</h3>
@@ -142,8 +139,8 @@ const AccordionS = () => {
             maxHeight: openAccordion === 2 ? `${contentRefs[2].current?.scrollHeight}px` : '0',
           }}
         >
-          <Link to="/submit-training-document">Submission of Training Documents</Link> 
-          <Link to="/results">Results</Link> 
+          <Link to="/submit-training-document">Submission of Training Documents</Link>
+          <Link to="/results">Results</Link>
         </div>
       </div>
     </div>

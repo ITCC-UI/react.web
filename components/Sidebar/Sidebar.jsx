@@ -4,7 +4,7 @@ import Dashy from "/images/Vector.png"
 import Document from "/images/document.png"
 import Logout from "/images/Logout.png"
 import AccordionS from "../Accordion/Accordion"
-const SideBar = ({disableCover, dashboardClass, placementClass}) => {
+const SideBar = ({disableCover, dashboardClass, placementClass, init}) => {
 
 
   return (
@@ -33,7 +33,7 @@ const SideBar = ({disableCover, dashboardClass, placementClass}) => {
               </div>
 
               {/* Accordion Goes here */}
-<AccordionS/>
+<AccordionS initialOpenSection={init}/>
 
 
               {/* Accordion Ends here */}
