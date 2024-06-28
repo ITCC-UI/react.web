@@ -54,6 +54,11 @@
 table{
     width: 100%;
     color: #000;
+    .view-more-btn{
+        color: blue;
+        background-color: #fff;
+        border-color: 1px solid blue;
+    }
 }
 
 .statusComponent{
@@ -63,9 +68,9 @@ table{
     margin-right: "auto";
     color: #000;
     background-color: #eee;
-    position: relative;
+    position: absolute;
     left: 70%;
-    bottom: 20%;
+    top: 20%;
     h3{
         margin-left: 95%;
         cursor: pointer;

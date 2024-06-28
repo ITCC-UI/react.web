@@ -11,8 +11,10 @@ const Placement = () => {
             <TopNav disableReg={"registration disable"}/>
 
             <div className="placementComponent entireContainer">
-                <h4 className="title">PLACEMENT</h4>
-                <div>
+                <div className="title">
+                    <h4 >PLACEMENT</h4>
+                </div>
+                <div className="placementHeaderList">
                     <p>Placement List</p>
                     <p>Placement Request</p>
                     <p>Acceptance Letter</p>
@@ -23,29 +25,23 @@ const Placement = () => {
                     + New submission
                     </button>
                 </div>
-                <div className="mainView">
-                    <table>
-                        <thead>
-                            <tr>
-                                <td><input placeholder="Search here"/></td>
-                                <td>
-                                    <div>Display</div>
-                                    <div>
-                                        <select>
-                                            <option>Choose</option>
-                                        </select>
-                                    </div>
-                                    <div>Row</div>
-                                </td>
-                                <td>Filter</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
+                <hr style={{margin: "10px 10px", borderColor: "#aaa"}}/>
+                <div className="searchbar">
+                    <input type="search" placeholder="Search here"/>
+                        <div className="choose">
+                            <div>Display</div>
+                            <div className="select">
+                                <select>
+                                    <option selected>10</option>
+                                    <option>25</option>
+                                    <option>50</option>
+                                    <option>100</option>
+                                </select>
+                            </div>
+                            <div>Row</div>
+                        </div>
+                    <div>Filter</div>
                 </div>
-                {/* <hr style={{display:"flex", borderColor: "yellow"}}/> */}
             </div>
             </main>           
         </div>
