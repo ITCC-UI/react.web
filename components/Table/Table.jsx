@@ -1,17 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import "./table.scss";
+import classNames from 'classnames';
+import axios from 'axios';
+import NormalButton from '../Normal Button/NormalButton';
 
-const DepartmentTrainingCourses = ({ checked, courses }) => {
+const DepartmentTrainingCourses = ({ checked }) => {
+  const [courses, setCourses] = useState([]);
+
+  const fetchTrainingCourses = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get("https://theegsd.pythonanywhere.com/api/v1/trainings/department/trainings/registrations/", {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      });
+      const courses = response.data;
+
+      // Process courses data if needed (e.g., set 'active' class based on status)
+      const processedCourses = courses.map(course => ({
+        ...course,
+        activeClass: course.registration_status === "ACTIVE" ? "active" : "inactive",
+        canRegister: course.can_register === "true"
+      }));
+
+      setCourses(processedCourses);
+    } catch (error) {
+      console.error("Error fetching training courses:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTrainingCourses();
+  }, []);
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
-    const formattedDate = date.toLocaleDateString('en-US', {
+    const formattedDate = date.toLocaleDateString('en-UK', {
       year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+      month: 'short',
+      day: 'numeric'
     });
     const formattedTime = date.toLocaleTimeString('en-US', {
       hour: '2-digit',
-      minute: '2-digit',
+      minute: '2-digit'
     });
     return (
       <>
@@ -23,41 +56,64 @@ const DepartmentTrainingCourses = ({ checked, courses }) => {
   };
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Course Code</th>
-          <th>Level</th>
-          <th>Training Type</th>
-          <th>Duration</th>
-          <th>Status</th>
-          <th>Reg. Start Date</th>
-          <th>Reg. End Date</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {courses.map((course, index) => (
-          <tr key={index} className='tableRow'>
-            <td>{course.course_code} - {course.course_unit} units</td>
-            <td>{course.level}</td>
-            <td>{course.training_type_name}</td>
-            <td>{course.training_type_duration} Weeks</td>
-            <td>{course.registration_status}</td>
-            <td>{formatDate(course.registration_start_date)}</td>
-            <td>{formatDate(course.registration_end_date)}</td>
-            <td>
-              {course.can_register === "true" ? (
-                <button className="register true" onClick={checked}>Register</button>
-              ) : (
-                <button className="register false" disabled>Register</button>
-              )}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <section>
+      <div className="heading">
+        <h2>
+          Department Training Courses
+        </h2>
+      </div>
+
+      <div className="mainBody">
+        <div className="containerCourse">
+          <table>
+            <thead>
+              <tr>
+                <th>Course Code</th>
+                <th>Level</th>
+                <th>Duration</th>
+                <th>Status</th>
+                <th>Registration <br /> Start Date</th>
+                <th>Registration <br /> End Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {courses.map((course, index) => {
+                const activeClasses = classNames({
+                  'eligibility': true,
+                  'eligible': course.activeClass === 'active',
+                  'ineligible': course.activeClass !== 'active'
+                });
+                return (
+                  <tr key={index} >
+                    <td>{course.course_code} <br/> {course.course_unit} units</td>
+                    <td>{course.level}</td>
+                    <td>{course.training_type_duration} - Weeks</td>
+                    <td>{course.registration_status}</td>
+                    <td>{formatDate(course.registration_start_date)}</td>
+                    <td>{formatDate(course.registration_end_date)}</td>
+                    <td>
+                      <div className={activeClasses}>
+                        {course.activeClass === 'active' ? 'Eligible' : 'Ineligible'}
+                      </div>
+                    </td>
+                    <td>
+                      {course.can_register ? (
+                        <NormalButton registerSelf="register active" onButtonClick={checked} />
+                      ) : (
+                        <NormalButton registerSelf="register active" disabled />
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   );
-}
+};
 
 export default DepartmentTrainingCourses;

@@ -6,7 +6,10 @@ section{
     align-items: center;
     flex-direction: column;
     justify-content: center;
-  
+    width: 88%;
+  .mainBody{
+    width: 100%;
+  }
     .heading{
         margin: 0 auto;
         h2{
@@ -18,11 +21,14 @@ section{
 
     table{
         font-family: "Poppins";
-        width: 80%;
+        // width: 894px;
+        width: 100%;
+        // transform: scale(.8);
         border-radius: 12px !important; 
-        gap: 10px;
+        display: flex;
+        flex-direction: column;
         margin: 35px auto 0;
-        padding: 20px;
+        // padding: 20px;
         font-size: 14px;
         box-shadow: 0px 12px 24px 0px rgba(0, 0, 0, 0.1);
         tbody{
@@ -30,8 +36,11 @@ section{
             flex-direction: column;
             align-items: center;
             border: 1px solid rgb(214,214,214,0.6);
-            padding: 20px;
+            // padding: 20px;
             border-radius: 12px;
+            tr{
+                // padding: 20px 0;
+            }
         }
     }
     table,th,td{
@@ -39,7 +48,7 @@ section{
         border-collapse: collapse;
       th{
         border: 0;
-        font-weight: 400;
+        font-weight: 600;
       }
     tr{
         
@@ -52,13 +61,15 @@ section{
         align-items: center;
         &:first-child{
             border: 0;
+            
             th{
                 width: 150px;
 
                }
         }
         td{
-            width: 150px;
+            width: 100px;
+            
             
             .eligibility{
                 margin: 0 auto;
