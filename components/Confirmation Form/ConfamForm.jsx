@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios'; // Import axios for API requests
 import "./confirmRegister.scss";
 import Close from "/images/closeButton.png";
-import Mark from "/images/succesfull circle.svg"
+import Mark from "/images/succesfull circle.svg";
 import ProfileHead from '../Profile Header/ProfileHeader';
-import Logo from "/images/UI_logo.png"
-import ProfilePic from "/images/profile.png"
+import Logo from "/images/UI_logo.png";
+import ProfilePic from "/images/profile.png";
 import PrintButton from '../Print/Print';
 
 const DisplayedComponent = ({ onClose, headings, duration }) => {
@@ -54,14 +55,23 @@ const DisplayedComponent = ({ onClose, headings, duration }) => {
     }),
   ];
 
-  const handleSubmit = (values, actions) => {
+  const handleSubmit = async (values, actions) => {
     if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
       actions.setTouched({});
       actions.setSubmitting(false);
     } else {
-      setIsSubmitted(true);
-      setSubmittedData(values);
+      try {
+        const response = await axios.post('https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/', values); // Replace 'YOUR_API_ENDPOINT' with your actual endpoint
+        if (response.status === 200) {
+          setIsSubmitted(true);
+          setSubmittedData(values);
+        } else {
+          console.error('Error submitting the form');
+        }
+      } catch (error) {
+        console.error('Error submitting the form', error);
+      }
     }
   };
 
@@ -82,7 +92,6 @@ const DisplayedComponent = ({ onClose, headings, duration }) => {
             <div className='thisConfirmation cheers'>
               <img src={Mark} alt="success" />
               <h2 className="success">Registration Successful!</h2>
-
               <p>You have successfully registered for TIT 223</p> {/*API collect the course type*/}
               <button onClick={handleViewForm} className='viewReg'>View Registration Form</button>
             </div>
@@ -149,10 +158,9 @@ const DisplayedComponent = ({ onClose, headings, duration }) => {
             validationSchema={validationSchemas[currentStep - 1]}
             onSubmit={handleSubmit}
           >
-            {({ isValid, touched, setTouched }) => (
+            {({ isValid, touched, setTouched, values }) => (
               <Form className='thisConfirmation thisForm'>
                 {currentStep === 1 && (
-
                   <div className='registration_form'>
                     <div className="close closer" onClick={onClose}><img src={Close} alt="close" /></div>
                     <div className="details">Select your current Level</div>
@@ -254,14 +262,13 @@ const DisplayedComponent = ({ onClose, headings, duration }) => {
                     Previous
                   </button>
                   <button type="submit" disabled={!isValid} className='next-button'>
-                    {currentStep === 4 ? 'Confirm' : 'Next'}
+                    {currentStep === 3 && values.level !== '500' ? 'Submit' : currentStep === 4 ? 'Confirm' : 'Next'}
                   </button>
                 </div>
               </Form>
             )}
           </Formik>
         )}
-
       </div>
     </div>
   );

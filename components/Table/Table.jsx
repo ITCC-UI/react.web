@@ -99,11 +99,11 @@ const DepartmentTrainingCourses = ({ checked }) => {
             {/* log the v */}
                       <div className={activeClasses}>
                         {course.registration_status}
-                        {console.log(course.registration_status)}
+                        {/* {console.log(course.registration_status)} */}
                       </div>
                     </td>
                     <td>
-                      {course.can_register ? (
+                      {!(course.can_register) ? (
                         <NormalButton registerSelf="register active" onButtonClick={checked} />
                       ) : (
                         <NormalButton registerSelf="register inactive" disabled />

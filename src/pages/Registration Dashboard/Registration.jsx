@@ -12,6 +12,7 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
 
   const handleDisplay = () => {
     setIsDisplayed(true);
+    console.log("checkecing")
   };
 
   const handleClose = () => {
