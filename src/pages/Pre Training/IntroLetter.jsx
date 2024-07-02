@@ -3,36 +3,16 @@ import { MdOutlineFileDownload } from "react-icons/md";
 
 import SideBar from "../../../components/Sidebar/Sidebar";
 import TopNav from "../../../components/Header/Header";
-import "./introductionletter.scss"
+import LetterSidebar from "./LetterSidebar";
+import LetterRequest from "./LetterRequest";
+import CustomAlert from "./CustomAlert";
+import "./introductionletter.scss";
 
 const IntroLetter = () => {
-    const [statusVisible, setStatusVisible] = useState(false)
-    const [visibleData, setVisibleData] = useState(null)
+    const [sidebarData, setSidebarData] = useState({})
+    const [sidebarVisible, setSidebarVisible] = useState(false)
+    const [requestVisible, setRequestVisible] = useState(true)
 
-    const LetterStatus = () => {
-        const a = "lorem"
-        return (
-            <div className="statusComponent">
-                <div><h3 onClick={() => setStatusVisible((prev) => { !prev })}>&#215;</h3></div>
-                <div>
-                    <p>COMPANY NAME</p>
-                    <h5>{a}</h5>
-                    <p>ADDRESS TO</p>
-                    <h5>{a}</h5>
-                    <p>COMPANY ADDRESS</p>
-                    <h5>{a}</h5>
-                    <p>DATE OF REQUEST</p>
-                    <h5>{a}</h5>
-                    <p>APPROVAL STATUS</p>
-                    <h5>{a}</h5>
-                    <p>APPROVER'S COMMENT</p>
-                    <h5>{a}</h5>
-                    <p>APPROVAL DATE</p>
-                    <h5>{a}</h5>
-                </div>
-            </div>
-        )
-    }
     const options = {
         weekday: 'short',
         month: 'short',
@@ -78,18 +58,19 @@ const IntroLetter = () => {
             status: "Approved"
         }
     ]
+    
     return (
         <>
+            <CustomAlert/>
             <div className="placement route-Dash">
                 <SideBar dashboardClass={"active dashy"} placementClass={"placement"} />
                 <main>
                     <TopNav disableReg={"registration disable"} />
-
                     <div className="introComponent entireContainer">
                         <div className="header">
                             <h4 className="title">INTRODUCTION  LETTERS</h4>
                             <div className="submit-btn">
-                                <button>
+                                <button onClick={() => setRequestVisible(true)}>
                                     + New request
                                 </button>
                             </div>
@@ -134,7 +115,7 @@ const IntroLetter = () => {
                                                 <td><p className = {i.status}>{i.status}</p></td>
                                                 <td>{new Date().toLocaleString('en-US', options) + "."}</td>
                                                 <td className="td-last">
-                                                    <div className="view-more-btn" onClick={() => { setStatusVisible(true); console.log(i) }}>
+                                                    <div className="view-more-btn" onClick={() => { setSidebarData(i); setSidebarVisible(true); }}>
                                                         View more
                                                     </div>
                                                     <MdOutlineFileDownload color="blue" size={24} className="download-icon"/>
@@ -145,7 +126,8 @@ const IntroLetter = () => {
                                 </tbody>
                             </table>
                         </div>
-                        {statusVisible && <LetterStatus />}
+                        {sidebarVisible && <LetterSidebar sidebarData={sidebarData} setSidebarVisible={setSidebarVisible}/>}
+                        {requestVisible && <LetterRequest setRequestVisible={setRequestVisible}/>}
                     </div>
                 </main>
             </div>
