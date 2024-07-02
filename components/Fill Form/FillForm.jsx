@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './formfiller.scss';
 import Forward from '/images/icon.png';
+import Cookies from 'js-cookie'; // Import js-cookie
+import { PulseLoader } from 'react-spinners';
 
 const UserDetails = ({ isVisible, onClose }) => {
   const [userData, setUserData] = useState(null);
@@ -11,7 +13,7 @@ const UserDetails = ({ isVisible, onClose }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token'); // Get token from cookies
       if (!token) {
         setError('No authorization token found');
         setIsLoading(false);
@@ -19,16 +21,33 @@ const UserDetails = ({ isVisible, onClose }) => {
       }
 
       try {
-        const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/student/programmes/', {
+        // Fetch the ID from the first API
+        const idResponse = await axios.get('https://theegsd.pythonanywhere.com/api/v1/student/programmes/', {
           headers: {
             'Authorization': `Token ${token}`,
             'Content-Type': 'application/json',
           },
         });
-        if (response.data.length > 0) {
-          setUserData(response.data[0]); // Assuming you need the first object in the array
+
+        if (idResponse.data) {
+          const theID = idResponse.data[0].id
+          console.log(theID) // Assuming the ID is stored in the first entry's 'id' field
+
+          // Use the ID in the request to the second API
+          const response = await axios.get(`https://theegsd.pythonanywhere.com/api/v1/student/programmes/${theID}`, {
+            headers: {
+              'Authorization': `Token ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.data) {
+            setUserData(response.data);
+          } else {
+            setError('No user data available');
+          }
         } else {
-          setError('No user data available');
+          setError('No ID found');
         }
       } catch (error) {
         setError('Error fetching data');
@@ -49,12 +68,12 @@ const UserDetails = ({ isVisible, onClose }) => {
   return (
     <div className={`form-container ${isVisible ? 'visible' : 'hidden'}`} id='formCase'>
       <div className="fillForm">
-        <div className="close" onClick={onClose}>
-          <img src="/images/closeButton.png" alt="Close" />
+        <div className="close">
+          <img src="/images/closeButton.png" alt="Close" onClick={onClose} />
         </div>
         {isLoading ? (
           <div className="loading-spinner">
-            <div className="spinner"></div>
+            {<PulseLoader />}
           </div>
         ) : error ? (
           <div className="error">{error}</div>
@@ -73,7 +92,7 @@ const UserDetails = ({ isVisible, onClose }) => {
                   Matric Number: <b>{userData.matriculation.matric_number}</b>
                 </div>
                 <div className="dept">
-                  Department: <div>{userData.department.toUpperCase()}</div>
+                  Department: <div>{userData.department.name}</div>
                 </div>
                 <div className="prog">
                   Programme Type: <div className="prog">{userData.programme_type}</div>
@@ -82,7 +101,7 @@ const UserDetails = ({ isVisible, onClose }) => {
                   Session of Entry: <div>{userData.session_of_entry}</div>
                 </div>
                 <div className="faculty">
-                  Faculty: <div>{userData.faculty}</div>
+                  Faculty: <div>{userData.department.faculty.name}</div>
                 </div>
                 <div className="schoolEmail">
                   School Email: <div>{userData.matriculation.school_email}</div>

@@ -1,43 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Make sure to install axios: npm install axios
+import axios from 'axios';
 import Pen from "/images/pen.png";
 import Bell from "/images/Notification.png";
 import Chevy from "/images/chevron down.png";
 import './header.scss';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie'; // Import js-cookie
 
 const TopNav = ({ disableReg, toggleVisibility, isVisible }) => {
   const [userName, setUserName] = useState(' ');
   const [matricNumber, setMatricNumber] = useState(' ');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userImage, setUserImage] = useState(" ");
-  // const [passport, setPassport] = useState({pass});
 
   const navigate = useNavigate();
-const LogOut=()=>{
-  localStorage.removeItem('token');
-  navigate('/login');
-}
+
+  const LogOut = () => {
+    Cookies.remove('token'); // Remove token from cookies
+    navigate('/login');
+  }
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem('token'); // Assuming you store the auth token in localStorage
+        const token = Cookies.get('token'); // Get token from cookies
         const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/student/details', {
           headers: {
             Authorization: `Token ${token}`
           }
         });
 
-        const { matric_number, passport, first_name, last_name, } = response.data;
+        const { matric_number, passport, first_name, last_name } = response.data;
         setMatricNumber(matric_number);
-        
-          setUserImage(passport);
-      
-          setUserName(first_name.charAt(0)+"."+last_name);
-        
-        
-
+        setUserImage(passport);
+        setUserName(`${first_name.charAt(0)}.${last_name}`);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }

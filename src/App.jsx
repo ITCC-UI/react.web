@@ -23,8 +23,6 @@ function App() {
     return (
 
       <div className="routes app-container">
-    
-
     <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />

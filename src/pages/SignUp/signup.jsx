@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import DummySideBar from '../../../components/Sidebar/DummySB';
-import { ClipLoader } from 'react-spinners';
+import { PulseLoader } from 'react-spinners';
 import './SignUp.scss';
 import Google from "/images/google.png";
 import SignLogHeader from '../../../components/Header/SignupLoginHead';
@@ -108,7 +108,7 @@ const SignUp = () => {
                         </div>
                       </div>
                       <button className="createAccount" type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? <ClipLoader size={20} color="inherit" /> : "Sign Up"}
+                        {isSubmitting ? <PulseLoader size={20} color="green" /> : "Sign Up"}
                       </button>
                       {status && status.error && <div className="error">{status.error}</div>}
 

@@ -3,7 +3,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { ClipLoader } from 'react-spinners'; // Import the spinner component
+import { PulseLoader } from 'react-spinners'; // Import the PulseLoader component
+import Cookies from 'js-cookie'; // Import the js-cookie package
 import "./login.scss";
 import DummySideBar from "../../../components/Sidebar/DummySB";
 import Google from "/images/google.png";
@@ -60,7 +61,9 @@ const Login = () => {
       
       if (response.data && response.data.token) {
         const token = response.data.token;
-        localStorage.setItem('token', token);
+
+        // Set cookie with 1-day expiry
+        Cookies.set('token', token, { expires: 1 });
         console.log('Login successful, token:', token);
 
         const isProfileComplete = await checkUserDetails(token);
@@ -136,7 +139,7 @@ const Login = () => {
                         <ErrorMessage name="password" component="div" className="error" />
                       </div>
                       <button className="signIn" type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? <ClipLoader size={20} color="inherit"/>  : 'Sign In'}
+                        {isSubmitting ? <PulseLoader size={10} color="green"/> : 'Sign In'}
                       </button>
                       <div className="or">
                         <hr/> <span>or</span>

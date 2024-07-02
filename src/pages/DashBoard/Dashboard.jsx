@@ -26,7 +26,7 @@ const Dashboard = (dashboardClass, placementClass, disableCover,disableReg) => {
           } else {
             reject(new Error('Failed to submit form'));
           }
-        }, 1000); // Simulating 1 second delay
+        }, 2000); // Simulating 1 second delay
       });
 
       if (response.ok) {
