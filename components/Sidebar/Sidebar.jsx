@@ -4,6 +4,7 @@ import Dashy from "/images/Vector.png"
 import Document from "/images/document.png"
 import Logout from "/images/Logout.png"
 import AccordionS from "../Accordion/Accordion"
+import { Link } from "react-router-dom"
 const SideBar = ({disableCover, dashboardClass, placementClass, init}) => {
 
 
@@ -22,15 +23,19 @@ const SideBar = ({disableCover, dashboardClass, placementClass, init}) => {
                 <img src={Logo} alt="ITCC Logo" />
               </div>
             </div>
-
             <div className ={disableCover} >
+           <Link to="/dashboard">
+          
               <div className={dashboardClass} id="dashboard">
                 <img src={Dashy} alt="Dashboard" />
-                <p>Dashboard</p>
+               Dashboard
               </div>
-              <div className={placementClass}>
+              
+              </Link>
+            <Link to="/placement">
+            <div className={placementClass}>
                 <img src={Document} alt="docs" /> Placement
-              </div>
+              </div></Link>
 
               {/* Accordion Goes here */}
 <AccordionS initialOpenSection={init}/>

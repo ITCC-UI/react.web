@@ -89,7 +89,8 @@ const AccordionS = ({ initialOpenSection }) => {
             maxHeight: openAccordion === 0 ? `${contentRefs[0].current?.scrollHeight}px` : '0',
           }}
         >
-          <a href="#Register">Registration</a>
+          {/* <a href">Registration</a> */}
+          <Link to="/register">Registration</Link>
           <Link to="/companies">Browse Companies</Link>
           <Link to="/introduction-letter">Introduction Letter</Link>
         </div>

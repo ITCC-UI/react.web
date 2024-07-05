@@ -53,7 +53,8 @@ const Login = () => {
   const checkProgramRegistration = async () => {
     try {
       const response = await axiosInstance.get('/trainings/registrations');
-      if (response.data && response.data.id) {
+      console.log(response.data)
+      if (response.data && response.data.length > 0) {
         return true;
       }
       return false;

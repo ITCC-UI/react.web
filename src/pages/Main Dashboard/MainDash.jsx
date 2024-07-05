@@ -13,7 +13,7 @@ const MainDashboard = () => {
     
     <SideBar dashboardClass={"active-accordion dashy"} placementClass={"placement"} init={0}/>  {/*State management for the accordion where 0= first accordion */}
     <main>
-    <TopNav disableReg={"registration disable"}/>
+    <TopNav disableReg={"registration"}/>
 
   <div className="dashboardComponent entireContainer">
   <div className="trainingLog">
