@@ -1,0 +1,24 @@
+.introductionLetter{
+    display: flex;
+}
+
+.activen{
+color: royalblue !important;
+    background-color: white;
+}
+
+.container{
+    width: 100%;
+    margin: 0 auto;
+    
+
+    .topHead{
+        width: 100%;
+        
+   display: flex;
+   justify-content: space-between;
+   padding: 0 10px;
+   align-items: center;
+   
+    }
+}

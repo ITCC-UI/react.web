@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Chevy from "/images/Chevron Right.png";
 import { Link } from 'react-router-dom';
 
-const AccordionS = ({ initialOpenSection }) => {
+const AccordionS = ({ initialOpenSection, activeClass }) => {
   const [openAccordion, setOpenAccordion] = useState(initialOpenSection);
   const contentRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -92,7 +92,7 @@ const AccordionS = ({ initialOpenSection }) => {
           {/* <a href">Registration</a> */}
           <Link to="/register">Registration</Link>
           <Link to="/companies">Browse Companies</Link>
-          <Link to="/introduction-letter">Introduction Letter</Link>
+          <Link to="/introduction-letter" className={activeClass}>Introduction Letter</Link>
         </div>
       </div>
 
