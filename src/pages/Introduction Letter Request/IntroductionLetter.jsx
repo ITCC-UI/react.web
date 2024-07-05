@@ -16,7 +16,7 @@ const IntroductionLetter = () => {
     <button className="newReq">
         + New Request
     </button></div>    
-    <img src={Empty} alt="" />
+    <img src={Empty} alt="" className="image"/>
 </div>
 
         </main>
