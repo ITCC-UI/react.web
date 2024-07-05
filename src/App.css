@@ -31,7 +31,28 @@ background-color: #ffff !important;
 
 
 
+.logo{
+  width: 100px;
+  background-color: #faa62c;
+  border-radius: 20px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img{
+    width: inherit;
+  }
+}
 
+header{
+  .logo{
+    background-color: transparent;
+    width: 100px;
+    img{
+      width: 100px;
+    }
+  }
+}
 
 
 .route-Dash{
