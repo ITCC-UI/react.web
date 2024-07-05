@@ -26,7 +26,7 @@ body{
   display: flex;
   justify-content: space-between;
 width: 100%;
-background-color: #ffff;
+background-color: #ffff !important;
 }
 
 
