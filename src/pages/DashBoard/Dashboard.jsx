@@ -44,7 +44,7 @@ const Dashboard = (dashboardClass, placementClass, disableCover,disableReg) => {
 
   return (
     <div className="route-Dash">
-      <SideBar disableCover="dash_navig disable_props" dashboardClass="dashy" placementClass="placement" />
+      <SideBar disableCover="dash_navig" dashboardClass="dashy" placementClass="placement" />
       <div className="overlay"></div>
       
       <main>
