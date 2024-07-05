@@ -23,6 +23,7 @@ height: inherit;
     flex-direction: column;
      padding: 20px;
      gap: 50px;
+     height: 120vh;
      
 }
     &>.logo_placement{
@@ -186,7 +187,13 @@ height: inherit;
    justify-content: flex-end;
    gap: 20px;
    font-size: 15px;
-   margin-top: 50px;
+   position: absolute;
+  left: 20px;
+  right: 0;
+   bottom: 20px;
+  margin: 0 auto;
+
+  //  margin-top: 50px;
    img{
     width: 16px;
    }
