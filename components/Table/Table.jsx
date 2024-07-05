@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import "./table.scss";
 import classNames from 'classnames';
-import axios from 'axios';
-import NormalButton from '../Normal Button/NormalButton';
 import axiosInstance from '../../API Instances/AxiosIntances';
+import NormalButton from '../Normal Button/NormalButton';
+// import DisplayedComponent from '../DisplayedComponent/DisplayedComponent';
+import DisplayedComponent from '../Confirmation Form/ConfamForm';
 
 const DepartmentTrainingCourses = ({ checked }) => {
   const [courses, setCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   const fetchTrainingCourses = async () => {
     try {
-
-      const response = await axiosInstance.get("trainings/department/trainings/registrations/", {
-       
-      });
+      const response = await axiosInstance.get("trainings/department/trainings/registrations/");
       const courses = response.data;
 
-      // Process courses data if needed (e.g., set 'active' class based on status)
       const processedCourses = courses.map(course => ({
         ...course,
         activeClass: course.registration_status === "ACTIVE" ? "active" : "inactive",
@@ -50,18 +48,21 @@ const DepartmentTrainingCourses = ({ checked }) => {
         {formattedDate}
         <br />
         <div className="timer">
-        {formattedTime}
+          {formattedTime}
         </div>
       </>
     );
   };
 
+  const handleRegisterClick = (course) => {
+    console.log('Selected Course:', course);
+    setSelectedCourse(course);
+  };
+
   return (
     <section>
       <div className="heading">
-        <h2>
-          Department Training Courses
-        </h2>
+        <h2>Department Training Courses</h2>
       </div>
 
       <div className="mainBody">
@@ -72,7 +73,6 @@ const DepartmentTrainingCourses = ({ checked }) => {
                 <th>Course Code</th>
                 <th>Level</th>
                 <th>Duration</th>
-                {/* <th>Status</th> */}
                 <th>Registration <br /> Start Date</th>
                 <th>Registration <br /> End Date</th>
                 <th>Status</th>
@@ -87,23 +87,20 @@ const DepartmentTrainingCourses = ({ checked }) => {
                   'ineligible': course.activeClass !== 'active'
                 });
                 return (
-                  <tr key={index} >
-                    <td>{course.course_code} <br/> {course.course_unit} units</td>
+                  <tr key={index}>
+                    <td>{course.course_code} <br /> {course.course_unit} units</td>
                     <td>{course.level}</td>
                     <td>{course.training_type_duration} - Weeks</td>
-                    {/* <td>{course.registration_status}</td> */}
                     <td>{formatDate(course.registration_start_date)}</td>
                     <td>{formatDate(course.registration_end_date)}</td>
                     <td>
-            {/* log the v */}
                       <div className={activeClasses}>
                         {course.registration_status}
-                        {/* {console.log(course.registration_status)} */}
                       </div>
                     </td>
                     <td>
-                      {!(course.can_register) ? (
-                        <NormalButton registerSelf="register active" onButtonClick={checked} />
+                      {(course.can_register) ? (
+                        <NormalButton registerSelf="register active" onButtonClick={() => handleRegisterClick(course)} />
                       ) : (
                         <NormalButton registerSelf="register inactive" disabled />
                       )}
@@ -115,6 +112,15 @@ const DepartmentTrainingCourses = ({ checked }) => {
           </table>
         </div>
       </div>
+
+      {selectedCourse && (
+        <DisplayedComponent
+          onClose={() => setSelectedCourse(null)}
+          headings={selectedCourse.title}
+          duration={selectedCourse.training_type_duration}
+          selectedCourse={selectedCourse}
+        />
+      )}
     </section>
   );
 };
