@@ -54,6 +54,7 @@ height: inherit;
         margin-bottom: 20px;
         padding: 10px;
         z-index: 2;
+        color: #ffff;
     }
     .dashy#dashboard{
         display: flex;
@@ -82,9 +83,11 @@ height: inherit;
   .active-accordion{
     color: rgba(0, 0, 0, 1) !important;
     transition: .2s linear all;
+    // filter: invert(1);
     img{
       filter: invert(0) !important;
     }
+   
     &:before{
       content: " ";
       width: 200px;
@@ -96,6 +99,12 @@ height: inherit;
       height: 50px;
       z-index: -1;
    }
+}
+
+.filterPlacement{
+  img{
+    filter: invert(1) !important;
+  }
 }
   .navigation-item {
     
@@ -179,7 +188,7 @@ height: inherit;
 
 
   .logout_button{
-   width: 90%;
+   width: 80%;
    color: var(--white, #ffff); 
    display: flex;
    flex-direction: row-reverse;
@@ -188,10 +197,29 @@ height: inherit;
    gap: 20px;
    font-size: 15px;
    position: absolute;
-  left: 20px;
+  // left: 20px;
+  left: 0;
   right: 0;
    bottom: 20px;
   margin: 0 auto;
+  cursor: pointer;
+  .tip{
+    border: red 1px solid;
+background-color: white;
+color: rgba(0, 0, 128, 1);
+padding: 20px;    position: absolute;
+    top: -20px;
+    left: 0;
+    width: fit-content;
+    font-size: 8px;
+    font-weight: lighter;
+    display: none;
+  }
+  &:hover{
+    .tip{
+      // display: block;
+    }
+  }
 
   //  margin-top: 50px;
    img{

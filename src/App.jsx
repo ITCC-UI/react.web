@@ -19,6 +19,7 @@ import FormCase from '../components/PageForm/PageForm.jsx';
 import CombinedForm from './pages/Complete Profile/Combined.jsx';
 import UpdateProfileForm from './pages/Complete Profile/CompleteProfile.jsx';
 import FormHeader from '../components/Header/FormHeader.jsx';
+import Placement from './pages/Placement/Placement.jsx';
 function App() {
     return (
 
@@ -30,6 +31,7 @@ function App() {
           <Route path='/register' element={<Dashboard/>}></Route>
        <Route path='/registration-portal' element= {<RegistrationDash/>}></Route>
           <Route path='/dashboard' element={<MainDashboard/>  } />
+          <Route path='/placement' element={<Placement/>} />
                
                
                {/* <Route path="/form" element={<UpdateProfile />} /> */}
