@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios'; // Import axios for API requests
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useReactToPrint } from 'react-to-print';
 import "./confirmRegister.scss";
 import Close from "/images/closeButton.png";
 import Mark from "/images/succesfull circle.svg";
@@ -9,63 +11,96 @@ import ProfileHead from '../Profile Header/ProfileHeader';
 import Logo from "/images/UI_logo.png";
 import ProfilePic from "/images/profile.png";
 import PrintButton from '../Print/Print';
+import axiosInstance from '../../API Instances/AxiosIntances';
 
 const DisplayedComponent = ({ onClose, headings, duration }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
   const [viewForm, setViewForm] = useState(false);
+  const printRef = useRef();
+
+  useEffect(() => {
+    const fetchTrainingData = async () => {
+      try {
+        const token = Cookies.get('token');
+        const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/trainings/department/trainings/registrations/', {
+          headers: {
+            'Authorization': `Token ${token}`
+          }
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching training data', error);
+      }
+    };
+
+    fetchTrainingData();
+  }, []);
 
   const initialValues = {
-    level: '',
-    maritalStatus: '',
+    current_level: '',
+    marital_status: '',
     disability: '',
     language: '',
-    nokName: '',
-    nokAddress: '',
-    nokRelationship: '',
-    nokPhoneNumber: '',
-    bankName: '',
-    nuban: '',
-    bankSortCode: ''
+    next_of_kin: '',
+    next_of_kin_address: '',
+    next_of_kin_relationship: '',
+    next_of_kin_phone_number: '',
+    bank_name: '',
+    bank_account_number: '',
+    bank_sort_code: ''
   };
 
   const validationSchemas = [
     Yup.object({
-      level: Yup.string().required('Required'),
+      current_level: Yup.string().required('Required'),
     }),
     Yup.object({
-      maritalStatus: Yup.string().required('Required'),
+      marital_status: Yup.string().required('Required'),
       disability: Yup.string().required('Required'),
       language: Yup.string().required('Required'),
     }),
     Yup.object({
-      nokName: Yup.string().required('Required'),
-      nokAddress: Yup.string().required('Required'),
-      nokRelationship: Yup.string().required('Required'),
-      nokPhoneNumber: Yup.number().required('Required').typeError('Must be a number'),
+      next_of_kin: Yup.string().required('Required'),
+      next_of_kin_address: Yup.string().required('Required'),
+      next_of_kin_relationship: Yup.string().required('Required'),
+      next_of_kin_phone_number: Yup.number().required('Required').typeError('Must be a number').min(11, "Phone number too short"),
     }),
     Yup.object({
-      bankName: Yup.string().required('Required'),
-      nuban: Yup.string()
+      bank_name: Yup.string().required('Required'),
+      bank_account_number: Yup.string()
         .min(10, "Number must be more than 10")
         .max(11, "Number must be less than or equal to 11")
         .required("Required"),
-      bankSortCode: Yup.string().required('Required'),
+      bank_sort_code: Yup.string().required('Required'),
     }),
   ];
 
   const handleSubmit = async (values, actions) => {
-    if (currentStep < 4) {
+    if (currentStep < 3 || (currentStep === 3 && values.current_level === '500')) {
       setCurrentStep(currentStep + 1);
       actions.setTouched({});
       actions.setSubmitting(false);
     } else {
       try {
-        const response = await axios.post('https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/', values); // Replace 'YOUR_API_ENDPOINT' with your actual endpoint
+        const response = await axiosInstance.post('https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/', values);
         if (response.status === 200) {
+          // const token = response.data.token;
           setIsSubmitted(true);
-          setSubmittedData(values);
+          const dataResponse = await axiosInstance.get('https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/', {
+            // headers: {
+            //   'Authorization': `Token ${token}`
+            // }
+          });
+
+          const getTraining = await axiosInstance.get('https://theegsd.pythonanywhere.com/api/v1/trainings/department/trainings/registrations/', {
+            // headers: {
+            //   'Authorization': `Toekn ${token}`
+            // }
+          });
+
+          setSubmittedData(dataResponse.data);
         } else {
           console.error('Error submitting the form');
         }
@@ -84,6 +119,10 @@ const DisplayedComponent = ({ onClose, headings, duration }) => {
     setViewForm(true);
   };
 
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+  });
+
   return (
     <div className="backgroundOverlay">
       <div className='registrationConfirmation'>
@@ -92,15 +131,15 @@ const DisplayedComponent = ({ onClose, headings, duration }) => {
             <div className='thisConfirmation cheers'>
               <img src={Mark} alt="success" />
               <h2 className="success">Registration Successful!</h2>
-              <p>You have successfully registered for TIT 223</p> {/*API collect the course type*/}
+              <p>You have successfully registered for TIT 223</p>
               <button onClick={handleViewForm} className='viewReg'>View Registration Form</button>
             </div>
           ) : (
-            <PrintButton>
-              <div className='reviewPage thisConfirmation'>
+            <div>
+              <div ref={printRef} className='reviewPage thisConfirmation'>
                 <div className="formHeading">
-                  <h1 className="headings"> INDUSTRIAL TRAINING COORDINATING CENTRE</h1>
-                  <h2 className="headings"> UNIVERSITY OF IBADAN, IBADAN.</h2>
+                  <h1 className="headings">INDUSTRIAL TRAINING COORDINATING CENTRE</h1>
+                  <h2 className="headings">UNIVERSITY OF IBADAN, IBADAN.</h2>
                 </div>
 
                 <div className="logoHeadType">
@@ -119,38 +158,32 @@ const DisplayedComponent = ({ onClose, headings, duration }) => {
 
                 <ProfileHead headings={"Personal Information"} duration={"- 3 months"} />
                 <div className="firstRow rowIdea">
-                  <p>Name: <span>{submittedData.nokName}</span></p>
-                  <p>Level: <span> {submittedData.level}</span></p>
-                  <p>Marital Status: <span>{submittedData.maritalStatus}</span></p>
+                  <p>Name: <span>{submittedData.next_of_kin}</span></p>
+                  <p>Level: <span> {submittedData.current_level}</span></p>
+                  <p>Marital Status: <span>{submittedData.marital_status}</span></p>
                   <p>Disability: <span>{submittedData.disability}</span></p>
-
                 </div>
 
                 <ProfileHead headings={"Department Information"} />
                 <div className="rowIdea">
-
-                  <p>Language: <span>{submittedData.language}</span></p>
+                  <p>Language other than English: <span>{submittedData.language}</span></p>
                 </div>
-
 
                 <ProfileHead headings={"Next of Kin Information"} />
-
+                <div className="rowIdea">
+                  <p>Address: <span>{submittedData.next_of_kin_address}</span></p>
+                  <p>Relationship: <span>{submittedData.next_of_kin_relationship}</span></p>
+                  <p>Phone Number: <span>{submittedData.next_of_kin_phone_number}</span></p>
+                </div>
 
                 <div className="rowIdea">
-                  <p>Address: <span>{submittedData.nokAddress}</span></p>
-                  <p>Relationship: <span>{submittedData.nokRelationship}</span></p>
-
-                  <p>Phone Number: <span>{submittedData.nokPhoneNumber}</span></p>
+                  <p>Bank Name: <span>{submittedData.bank_name}</span></p>
+                  <p>Account Number: <span>{submittedData.bank_account_number}</span></p>
+                  <p>Bank Sort Code: <span>{submittedData.bank_sort_code}</span></p>
                 </div>
-
-                <div className="rowIdea"><p>Bank Name: <span>{submittedData.bankName}</span></p>
-                  <p>Account Number: <span>{submittedData.nuban}</span></p>
-                  <p>Bank Sort Code: <span>{submittedData.bankSortCode}</span></p>
-                </div>
-
-
               </div>
-            </PrintButton>
+              <button onClick={handlePrint} className='print-button'>Print</button>
+            </div>
           )
         ) : (
           <Formik
@@ -161,110 +194,170 @@ const DisplayedComponent = ({ onClose, headings, duration }) => {
             {({ isValid, touched, setTouched, values }) => (
               <Form className='thisConfirmation thisForm'>
                 {currentStep === 1 && (
-                  <div className='registration_form'>
+                  <>
                     <div className="close closer" onClick={onClose}><img src={Close} alt="close" /></div>
-                    <div className="details">Select your current Level</div>
-                    <div className="formInput">
-                      <label htmlFor="level">Level</label>
-                      <Field as="select" name="level">
-                        <option value="">Select Level</option>
-                        <option value="200">200 Level</option>
-                        <option value="300">300 Level</option>
-                        <option value="400">400 Level</option>
-                        <option value="500">500 Level</option>
-                      </Field>
-                      <ErrorMessage name="level" component="div" className="error" />
+                    <div className='registration_form'>
+                      <div className="details">Select your current Level</div>
+                      <div className="formInput">
+                        <label htmlFor="current_level">Level</label>
+                        <Field as="select" name="current_level">
+                          <option value="">Select Level</option>
+                          <option value="200">200 Level</option>
+                          <option value="300">300 Level</option>
+                          <option value="400">400 Level</option>
+                          <option value="500">500 Level</option>
+                        </Field>
+
+                      
+                        <ErrorMessage name="current_level" component="div" className="error" />
+                      </div>
                     </div>
-                  </div>
+                    <div className='buttonContainer'>
+                      <button
+                        type="button"
+                        onClick={() => handlePrevious(setTouched)}
+                        className='prev-button disable'
+                        disabled={true}
+                      >
+                        Previous
+                      </button>
+                      <button type="submit" disabled={!isValid} className='next-button'>
+                        Next
+                      </button>
+                    </div>
+                  </>
                 )}
                 {currentStep === 2 && (
-                  <div className='registration_form'>
+                  <>
                     <div className="close closer" onClick={onClose}><img src={Close} alt="close" /></div>
-                    <div className="details">Registration Form</div>
-                    <div className='formInput'>
-                      <label htmlFor="maritalStatus">Marital Status</label>
-                      <Field as="select" name="maritalStatus">
-                        <option value="">Select Marital Status</option>
-                        <option value="Single">Single</option>
-                        <option value="Married">Married</option>
-                        <option value="Divorced">Divorced</option>
-                      </Field>
-                      <ErrorMessage name="maritalStatus" component="div" className="error" />
+                    <div className='registration_form'>
+                      <div className="details">Fill in your Personal Information</div>
+                      <div className="formInput">
+                        <label htmlFor="marital_status">Marital Status</label>
+                        <Field as="select" name="marital_status">
+                          <option value="">Select Status</option>
+                          <option value="single">Single</option>
+                          <option value="married">Married</option>
+                          <option value="divorced">Divorced</option>
+                          <option value="widowed">Widowed</option>
+                        </Field>
+                        <ErrorMessage name="marital_status" component="div" className="error" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="disability">Disability</label>
+                        <Field as="select" name="disability">
+                          <option value="">Select Option</option>
+                          <option value="none">None</option>
+                          <option value="vision">Vision Impairment</option>
+                          <option value="hearing">Hearing Impairment</option>
+                          <option value="mobility">Mobility Impairment</option>
+                          <option value="cognitive">Cognitive Impairment</option>
+                          <option value="other">Other</option>
+                        </Field>
+                        <ErrorMessage name="disability" component="div" className="error" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="language">Language other than English</label>
+                        <Field type="text" name="language" />
+                        <ErrorMessage name="language" component="div" className="error" />
+                      </div>
                     </div>
-                    <div className='formInput'>
-                      <label htmlFor="disability">Disability</label>
-                      <Field name="disability" type="text" placeholder='Input "NA" if not applicable' />
-                      <ErrorMessage name="disability" component="div" className="error" />
+                    <div className='buttonContainer'>
+                      <button
+                        type="button"
+                        onClick={() => handlePrevious(setTouched)}
+                        className='prev-button'
+                      >
+                        Previous
+                      </button>
+                      <button type="submit" disabled={!isValid} className='next-button'>
+                        Next
+                      </button>
                     </div>
-                    <div className='formInput'>
-                      <label htmlFor="language">Language</label>
-                      <Field name="language" type="text" placeholder="Any other language aside English?" />
-                      <ErrorMessage name="language" component="div" className="error" />
-                    </div>
-                  </div>
+                  </>
                 )}
                 {currentStep === 3 && (
-                  <div className='registration_form'>
+                  <>
                     <div className="close closer" onClick={onClose}><img src={Close} alt="close" /></div>
-                    <div className="details">Registration Form</div>
-                    <p>Next of Kin Information</p>
-                    <div className='formInput'>
-                      <label htmlFor="nokName">Name</label>
-                      <Field name="nokName" type="text" />
-                      <ErrorMessage name="nokName" component="div" className="error" />
+                    <div className='registration_form'>
+                      <div className="details">Fill in your Next of Kin Information</div>
+                      <div className="formInput">
+                        <label htmlFor="next_of_kin">Next of Kin Name</label>
+                        <Field type="text" name="next_of_kin" />
+                        <ErrorMessage name="next_of_kin" component="div" className="error" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="next_of_kin_address">Next of Kin Address</label>
+                        <Field type="text" name="next_of_kin_address" />
+                        <ErrorMessage name="next_of_kin_address" component="div" className="error" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="next_of_kin_relationship">Next of Kin Relationship</label>
+                        <Field type="text" name="next_of_kin_relationship" />
+                        <ErrorMessage name="next_of_kin_relationship" component="div" className="error" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="next_of_kin_phone_number">Next of Kin Phone Number</label>
+                        <Field type="text" name="next_of_kin_phone_number" />
+                        <ErrorMessage name="next_of_kin_phone_number" component="div" className="error" />
+                      </div>
                     </div>
-                    <div className='formInput'>
-                      <label htmlFor="nokAddress">Address</label>
-                      <Field name="nokAddress" type="text" />
-                      <ErrorMessage name="nokAddress" component="div" className="error" />
+                    <div className='buttonContainer'>
+                      <button
+                        type="button"
+                        onClick={() => handlePrevious(setTouched)}
+                        className='prev-button'
+                      >
+                        Previous
+                      </button>
+                      <button type="submit" disabled={!isValid} className='next-button'>
+                        Next
+                      </button>
                     </div>
-                    <div className='formInput'>
-                      <label htmlFor="nokRelationship">Relationship</label>
-                      <Field name="nokRelationship" type="text" />
-                      <ErrorMessage name="nokRelationship" component="div" className="error" />
-                    </div>
-                    <div className='formInput'>
-                      <label htmlFor="nokPhoneNumber">Phone Number</label>
-                      <Field name="nokPhoneNumber" type="number" />
-                      <ErrorMessage name="nokPhoneNumber" component="div" className="error" />
-                    </div>
-                  </div>
+                  </>
                 )}
                 {currentStep === 4 && (
-                  <div className='registration_form'>
+                  <>
                     <div className="close closer" onClick={onClose}><img src={Close} alt="close" /></div>
-                    <div className="details">Registration Form</div>
-                    <p>Bank Details</p>
-                    <div className='formInput'>
-                      <label htmlFor="bankName">Bank Name</label>
-                      <Field name="bankName" type="text" />
-                      <ErrorMessage name="bankName" component="div" className="error" />
+                    <div className='registration_form'>
+                      <div className="details">Fill in your Bank Information</div>
+                      <div className="formInput">
+                        <label htmlFor="bank_name">Bank Name</label>
+                        <Field type="text" name="bank_name" />
+                        <ErrorMessage name="bank_name" component="div" className="error" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="bank_account_number">Bank Account Number</label>
+                        <Field type="text" name="bank_account_number" />
+                        <ErrorMessage name="bank_account_number" component="div" className="error" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="bank_sort_code">Bank Sort Code</label>
+                        <Field type="text" name="bank_sort_code" />
+                        <ErrorMessage name="bank_sort_code" component="div" className="error" />
+                      </div>
                     </div>
-                    <div className='formInput'>
-                      <label htmlFor="nuban">Account Number</label>
-                      <Field name="nuban" type="number" />
-                      <ErrorMessage name="nuban" component="div" className="error" />
+                    <div className='buttonContainer'>
+                      <button
+                        type="button"
+                        onClick={() => handlePrevious(setTouched)}
+                        className='prev-button'
+                      >
+                        Previous
+                      </button>
+                      <button type="submit" disabled={!isValid} className='next-button'>
+                        Submit
+                      </button>
                     </div>
-                    <div className='formInput'>
-                      <label htmlFor="bankSortCode">Bank Sort Code</label>
-                      <Field name="bankSortCode" type="text" />
-                      <ErrorMessage name="bankSortCode" component="div" className="error" />
-                    </div>
-                  </div>
+                  </>
                 )}
-                <div className='buttonContainer'>
-                  <button
-                    type="button"
-                    disabled={currentStep === 1}
-                    onClick={() => handlePrevious(setTouched)}
-                    className='prev-button'
-                  >
-                    Previous
-                  </button>
-                  <button type="submit" disabled={!isValid} className='next-button'>
-                    {currentStep === 3 && values.level !== '500' ? 'Submit' : currentStep === 4 ? 'Confirm' : 'Next'}
-                  </button>
-                </div>
               </Form>
             )}
           </Formik>

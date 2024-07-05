@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import DisplayedComponent from "../../../components/Confirmation Form/ConfamForm";
 import DepartmentTrainingCourses from "../../../components/Table/Table";
 import axios from "axios";
+import axiosInstance from "../../../API Instances/AxiosIntances";
 
 const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disableReg, onClose, onButtonClick, authToken }) => {
   const [isDisplayed, setIsDisplayed] = useState(false);
@@ -24,8 +25,8 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
     const fetchTrainingCourses = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(
-          "https://theegsd.pythonanywhere.com/api/v1/trainings/department/trainings/registrations/",
+        const response = await axiosInstance.get(
+          "trainings/department/trainings/registrations/",
           {
             headers: {
               Authorization: `Token ${token}`

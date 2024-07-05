@@ -1,11 +1,12 @@
+// src/components/FormCase.js
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Forward from "/images/icon.png";
+import axiosInstance from '../../API Instances/AxiosIntances';
+import Forward from '/images/icon.png';
 import FormHeader from '../Header/FormHeader';
-import "./pageForm.scss";
+import './pageForm.scss';
 
 const FormCase = () => {
   const navigate = useNavigate();
@@ -15,23 +16,34 @@ const FormCase = () => {
   const [facultyData, setFacultyData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
   const [formError, setFormError] = useState('');
+  const [programmeData, setProgrammeData] = useState([]);
 
   useEffect(() => {
     fetchFacultyData();
+    fetchProgrammeType();
   }, []);
 
   const fetchFacultyData = async () => {
     try {
-      const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/lookups/faculties/');
+      const response = await axiosInstance.get('lookups/programmes/faculties/');
       setFacultyData(response.data);
     } catch (error) {
       console.error('Error fetching faculty data:', error);
     }
   };
 
+  const fetchProgrammeType = async () => {
+    try {
+      const response = await axiosInstance.get('student/programmes/types/lookup/');
+      setProgrammeData(response.data);
+    } catch (error) {
+      console.error('Error fetching programme data:', error);
+    }
+  };
+
   const fetchDepartmentData = async (facultyId) => {
     try {
-      const response = await axios.get(`https://theegsd.pythonanywhere.com/api/v1/lookups/faculties/${facultyId}/departments/`);
+      const response = await axiosInstance.get(`lookups/programmes/faculties/${facultyId}/departments/`);
       setDepartmentData(response.data);
     } catch (error) {
       console.error('Error fetching department data:', error);
@@ -63,23 +75,12 @@ const FormCase = () => {
     setIsLoading(true);
     setFormError('');
     try {
-      const token = localStorage.getItem('token');
-
-      const response = await axios.post(
-        "https://theegsd.pythonanywhere.com/api/v1/student/programmes/", 
-        values,
-        {
-          headers: {
-            'Authorization': `Token ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      const response = await axiosInstance.post('student/programmes/', values);
 
       if (response.status === 201) {
         setSubmittedValues(values);
         setShowForm(false);
-        navigate('/dashboard'); // Navigate to dashboard on success
+        navigate('/register'); // Navigate to dashboard on success
       } else {
         console.error('Error submitting form:', response);
         setFormError('There was an error submitting your form. Please try again.');
@@ -94,9 +95,8 @@ const FormCase = () => {
   };
 
   return (
-    <>
-    <div className={`form-container`} id='newformCase'>
-      <FormHeader/>
+    <div className={`form-container`} id="newformCase">
+      <FormHeader />
       <div className="fillForm">
         {formError && <div className="error">{formError}</div>}
         {isLoading ? (
@@ -110,24 +110,26 @@ const FormCase = () => {
             onSubmit={handleSubmit}
           >
             {({ isSubmitting, setFieldValue }) => (
-              <Form className='form'>
-                <div className="details">
-                  Programme Details
-                </div>
+              <Form className="form">
+                <div className="details">Programme Details</div>
                 <div className="formTop">
                   <div className="form-group">
                     <label htmlFor="matric_number">Matric Number</label>
-                    <Field name="matric_number" type="text" placeholder="Matric Number"/>
+                    <Field name="matric_number" type="text" placeholder="Matric Number" />
                     <ErrorMessage name="matric_number" component="div" className="error" />
                   </div>
-                 
+
                   <div className="form-group">
                     <label htmlFor="faculty">Faculty</label>
-                    <Field as="select" name="faculty" onChange={(e) => {
-                      setFieldValue("faculty", e.target.value);
-                      setFieldValue("department", "");
-                      fetchDepartmentData(e.target.value);
-                    }}>
+                    <Field
+                      as="select"
+                      name="faculty"
+                      onChange={(e) => {
+                        setFieldValue('faculty', e.target.value);
+                        setFieldValue('department', '');
+                        fetchDepartmentData(e.target.value);
+                      }}
+                    >
                       <option value="">Select Faculty</option>
                       {facultyData.map((faculty) => (
                         <option key={faculty.id} value={faculty.id}>
@@ -141,7 +143,9 @@ const FormCase = () => {
                   <div className="form-group">
                     <label htmlFor="department">Department</label>
                     <Field as="select" name="department">
-                      <option value="" name="department">Select Department</option>
+                      <option value="" name="department">
+                        Select Department
+                      </option>
                       {departmentData.map((department) => (
                         <option key={department.id} value={department.id}>
                           {department.name}
@@ -150,18 +154,20 @@ const FormCase = () => {
                     </Field>
                     <ErrorMessage name="department" component="div" className="error" />
                   </div>
-
-                 
                 </div>
 
                 <div className="formTop">
                   <div className="form-group">
                     <label htmlFor="programme_type">Programme Type</label>
                     <Field as="select" name="programme_type">
-                      <option value="">Select Programme Type</option>
-                      <option value="DLC">DLC</option>
-                      <option value="REGULAR">REGULAR</option>
-                      <option value="POSTGRADUATE">POSTGRADUATE</option>
+                      <option value="" name="programme_type">
+                        Programme Type
+                      </option>
+                      {programmeData.map((programme) => (
+                        <option key={programme.id} value={programme.id}>
+                          {programme.name}
+                        </option>
+                      ))}
                     </Field>
                     <ErrorMessage name="programme_type" component="div" className="error" />
                   </div>
@@ -177,15 +183,11 @@ const FormCase = () => {
                   </div>
                   <div className="form-group">
                     <label htmlFor="school_email">School Email</label>
-                    <Field 
-                      name="school_email" 
-                      type="email" 
-                      placeholder="studentid@stu.ui.edu.ng"
-                    />
+                    <Field name="school_email" type="email" placeholder="studentid@stu.ui.edu.ng" />
                     <ErrorMessage name="school_email" component="div" className="error" />
                   </div>
                 </div>
-                <button type="submit" disabled={isSubmitting} className='register_here'>
+                <button type="submit" disabled={isSubmitting} className="register_here">
                   {isSubmitting ? 'Submitting...' : <><span>Submit</span> <img src={Forward} alt="" /></>}
                 </button>
               </Form>
@@ -194,7 +196,6 @@ const FormCase = () => {
         )}
       </div>
     </div>
-    </>
   );
 };
 

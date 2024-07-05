@@ -1,7 +1,8 @@
+// src/components/Login.js
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
+import axiosInstance from "../../../API Instances/AxiosIntances";
 import { useNavigate } from 'react-router-dom';
 import { PulseLoader } from 'react-spinners'; // Import the PulseLoader component
 import Cookies from 'js-cookie'; // Import the js-cookie package
@@ -23,12 +24,9 @@ const Login = () => {
   const navigate = useNavigate();
   const endpoint = "https://theegsd.pythonanywhere.com";
 
-  const checkUserDetails = async (token) => {
+  const checkUserDetails = async () => {
     try {
-      const response = await axios.get(`${endpoint}/api/v1/student/details`, {
-        headers: { Authorization: `Token ${token}` }
-      });
-      
+      const response = await axiosInstance.get('/student/details');
       if (response.data && response.data.first_name && response.data.last_name) {
         return true;
       }
@@ -39,12 +37,22 @@ const Login = () => {
     }
   };
 
-  const checkProgramRegistration = async (token) => {
+  const checkProgramCompletion = async () => {
     try {
-      const response = await axios.get(`${endpoint}/api/v1/trainings/registrations`, {
-        headers: { Authorization: `Token ${token}` }
-      });
+      const response = await axiosInstance.get('/student/programmes/');
+      if (response.data && response.data.length > 0) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error checking program completion:', error);
+      return false;
+    }
+  };
 
+  const checkProgramRegistration = async () => {
+    try {
+      const response = await axiosInstance.get('/trainings/registrations');
       if (response.data && response.data.id) {
         return true;
       }
@@ -57,28 +65,34 @@ const Login = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await axios.post('https://theegsd.pythonanywhere.com/api/v1/account/login/', values);
-      
+      const response = await axiosInstance.post('/account/login/', values);
       if (response.data && response.data.token) {
         const token = response.data.token;
-
         // Set cookie with 1-day expiry
         Cookies.set('token', token, { expires: 1 });
         console.log('Login successful, token:', token);
 
-        const isProfileComplete = await checkUserDetails(token);
+        const isProfileComplete = await checkUserDetails();
         console.log('isProfileComplete:', isProfileComplete);
 
         if (isProfileComplete) {
-          const isRegisteredForProgram = await checkProgramRegistration(token);
-          console.log('isRegisteredForProgram:', isRegisteredForProgram);
+          const isProgramComplete = await checkProgramCompletion();
+          console.log('isProgramComplete:', isProgramComplete);
 
-          if (isRegisteredForProgram) {
-            console.log('User is registered for a program. Redirecting to dashboard.');
-            navigate('/dashboard');
+          if (isProgramComplete) {
+            const isRegisteredForProgram = await checkProgramRegistration();
+            console.log('isRegisteredForProgram:', isRegisteredForProgram);
+
+            if (isRegisteredForProgram) {
+              console.log('User is registered for a program. Redirecting to dashboard.');
+              navigate('/dashboard');
+            } else {
+              console.log('User needs to complete program registration. Redirecting to complete-program-registration page.');
+              navigate('/register');
+            }
           } else {
-            console.log('User needs to complete program registration. Redirecting to complete-program-registration page.');
-            navigate('/register');
+            console.log('User needs to complete profile (step 2). Redirecting to complete-profile2 page.');
+            navigate('/complete-profile2');
           }
         } else {
           console.log('User details are incomplete. Redirecting to complete-profile page.');

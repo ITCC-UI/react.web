@@ -38,9 +38,9 @@ section{
             border: 1px solid rgb(214,214,214,0.6);
             // padding: 20px;
             border-radius: 12px;
-            tr{
-                // padding: 20px 0;
-            }
+            // tr{
+            //     // padding: 20px 0;
+            // }
         }
     }
     table,th,td{
@@ -108,8 +108,10 @@ opacity: 0px;
     color: green;
 }
  .ineligible{
-    color: red !important;
-    background: rgba(239, 62, 6, 0.1);
+    // color: red !important;
+    color:wheat;
+    background-color: rgb(173, 173, 173);
+    // background: rgba(239, 62, 6, 0.1);
  }
  .denied{
     pointer-events: none;

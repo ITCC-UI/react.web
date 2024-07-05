@@ -3,17 +3,16 @@ import "./table.scss";
 import classNames from 'classnames';
 import axios from 'axios';
 import NormalButton from '../Normal Button/NormalButton';
+import axiosInstance from '../../API Instances/AxiosIntances';
 
 const DepartmentTrainingCourses = ({ checked }) => {
   const [courses, setCourses] = useState([]);
 
   const fetchTrainingCourses = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get("https://theegsd.pythonanywhere.com/api/v1/trainings/department/trainings/registrations/", {
-        headers: {
-          Authorization: `Token ${token}`
-        }
+
+      const response = await axiosInstance.get("trainings/department/trainings/registrations/", {
+       
       });
       const courses = response.data;
 

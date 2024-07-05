@@ -1,10 +1,11 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
+import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import "./thisForm.scss";
 import FormHeader from '../../../components/Header/FormHeader';
+import axiosInstance from '../../../API Instances/AxiosIntances';
 
 const FILE_SIZE = 800 * 1024; // 800kb in bytes
 
@@ -29,12 +30,7 @@ const PersonalDetailsSchema = Yup.object().shape({
   ),
   gender: Yup.string().required('Gender is required'),
   nationality: Yup.string().required('Nationality is required'),
-  address: Yup.string().required('Address is required'),
-  next_of_kin: Yup.string(),
-  next_of_kin_address: Yup.string(),
-  next_of_kin_relationship: Yup.string(),
-  next_of_kin_phone_number: Yup.string(),
-  campus_address: Yup.string(),
+  address: Yup.string().required("Address is required"),
   language: Yup.string().required('Language is required'),
   passport: Yup.mixed().required('Passport is required').test(
     'fileSize',
@@ -50,7 +46,7 @@ const PersonalDetailsSchema = Yup.object().shape({
 
 const UpdateProfileForm = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const token = Cookies.get('token');
 
   const handleSubmitPersonalDetails = async (values) => {
     try {
@@ -73,12 +69,13 @@ const UpdateProfileForm = () => {
         return false;
       }
 
-      const response = await axios.post(
-        'https://theegsd.pythonanywhere.com/api/v1/student/profile/',
+      const response = await axiosInstance.post(
+        'student/profile/',
         formData,
         {
           headers: {
             Authorization: `Token ${token}`,
+            "Content-Type": "multipart/form-data"
           },
         }
       );
@@ -110,7 +107,7 @@ const UpdateProfileForm = () => {
 
   return (
     <div className="formWrapper">
-      <FormHeader/>
+      <FormHeader />
       <div className="formCase">
         <Formik
           initialValues={{
@@ -122,11 +119,6 @@ const UpdateProfileForm = () => {
             gender: '',
             nationality: '',
             address: '',
-            next_of_kin: '',
-            next_of_kin_address: '',
-            next_of_kin_relationship: '',
-            next_of_kin_phone_number: '',
-            campus_address: '',
             language: '',
             passport: null,
             signature: null,
@@ -188,62 +180,33 @@ const UpdateProfileForm = () => {
                     <ErrorMessage name="nationality" component="div" className="error" />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="address">Address</label>
+                    <label htmlFor="address">Home Address</label>
                     <Field type="text" name="address" placeholder="Home Address" />
                     <ErrorMessage name="address" component="div" className="error" />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="next_of_kin">Next of Kin</label>
-                    <Field type="text" name="next_of_kin" placeholder="Name of Next of Kin" />
-                    <ErrorMessage name="next_of_kin" component="div" className="error" />
-                  </div>
-                </div>
-
-                <div className="formTop">
-                  <div className="form-group">
-                    <label htmlFor="next_of_kin_address">Next of Kin Address</label>
-                    <Field type="text" name="next_of_kin_address" placeholder="Address of Next of Kin" />
-                    <ErrorMessage name="next_of_kin_address" component="div" className="error" />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="next_of_kin_relationship">Next of Kin Relationship</label>
-                    <Field type="text" name="next_of_kin_relationship" placeholder="Relationship with Next of Kin" />
-                    <ErrorMessage name="next_of_kin_relationship" component="div" className="error" />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="next_of_kin_phone_number">Next of Kin Phone Number</label>
-                    <Field type="text" name="next_of_kin_phone_number" placeholder="Phone Number of Next of Kin" />
-                    <ErrorMessage name="next_of_kin_phone_number" component="div" className="error" />
-                  </div>
-                </div>
-
-                <div className="formTop">
-                  <div className="form-group">
-                    <label htmlFor="campus_address">Campus Address</label>
-                    <Field type="text" name="campus_address" placeholder="Campus Address" />
-                    <ErrorMessage name="campus_address" component="div" className="error" />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="language">Language</label>
+                    <label htmlFor="language">Language(s) other than English</label>
                     <Field type="text" name="language" placeholder="Language" />
                     <ErrorMessage name="language" component="div" className="error" />
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="passport">Passport</label>
-                    <input type="file" name="passport" onChange={(event) => setFieldValue('passport', event.currentTarget.files[0])} />
-                    <ErrorMessage name="passport" component="div" className="error" />
-                  </div>
                 </div>
+
                 <div className="formTop">
                   <div className="form-group">
+                    <label htmlFor="passport">Passport</label>
+                    <input type="file" name="passport" onChange={(event) => setFieldValue('passport', event.currentTarget.files[0])} accept="image/*"/>
+                    <ErrorMessage name="passport" component="div" className="error" />
+                  </div>
+
+                  <div className="form-group">
                     <label htmlFor="signature">Signature</label>
-                    <input type="file" name="signature" onChange={(event) => setFieldValue('signature', event.currentTarget.files[0])} />
+                    <input type="file" name="signature" onChange={(event) => setFieldValue('signature', event.currentTarget.files[0])} accept="image/*" />
                     <ErrorMessage name="signature" component="div" className="error" />
                   </div>
                 </div>
 
                 <div className="button-container">
-                  <button type="submit" disabled={isSubmitting} className='register_here'>Next</button>
+                  <button type="submit" disabled={isSubmitting} className="register_here">{isSubmitting? 'Submitting please wait...' : "Next"}</button>
                 </div>
               </div>
             </Form>
