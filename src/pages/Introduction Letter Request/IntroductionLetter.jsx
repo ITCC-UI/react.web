@@ -7,6 +7,7 @@ import CloseIcon from "/images/closeButton.png"; // Make sure you have an approp
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import axiosInstance from "../../../API Instances/AxiosIntances";
 
 const IntroductionLetter = () => {
   const [showNewRequest, setShowNewRequest] = useState(false);
@@ -20,11 +21,13 @@ const IntroductionLetter = () => {
     // Fetch the programme ID
     const fetchProgrammeId = async () => {
       try {
-        const response = await axios.get(
-          "https://theegsd.pythonanywhere.com/api/v1/student/programmes/"
+        const response = await axiosInstance.get(
+          "https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/"
         );
         const programmeId = response.data[0]?.id; // Assuming you need the first programme ID
+        console.log(programmeId)
         setProgrammeId(programmeId);
+       
       } catch (error) {
         console.error("Error fetching programme ID", error);
       }
@@ -39,10 +42,10 @@ const IntroductionLetter = () => {
       return;
     }
 
-    const endpoint = `/api/v1/trainings/registrations/${programmeId}/introduction-letter-requests/`;
+    const endpoint = `https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/${programmeId}/introduction-letter-requests/`;
 
     try {
-      const response = await axios.post(endpoint, values);
+      const response = await axiosInstance.post(endpoint, values);
       console.log("Form submitted successfully", response);
     } catch (error) {
       console.error("Error submitting form", error);
@@ -53,8 +56,19 @@ const IntroductionLetter = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    reason: Yup.string().required("Reason is required"),
-    date: Yup.date().required("Date is required"),
+    company_address: Yup.object().shape({
+      building_number: Yup.string().required("Building number is required"),
+      building_name: Yup.string().required("Building name is required"),
+      street: Yup.string().required("Street is required"),
+      area: Yup.string().required("Area is required"),
+      city: Yup.string().required("City is required"),
+      state_or_province: Yup.string().required("State or province is required"),
+      country: Yup.string().required("Country is required"),
+      postal_code: Yup.string().required("Postal code is required"),
+    }),
+    request_message: Yup.string().required("Request message is required"),
+    company_name: Yup.string().required("Company name is required"),
+    address_to: Yup.string().required("Address to is required"),
   });
 
   return (
@@ -72,25 +86,99 @@ const IntroductionLetter = () => {
             <button className="closeButton" onClick={toggleNewRequest}>
               <img src={CloseIcon} alt="Close" />
             </button>
-          </div>
-          <div className="requestContent">
+
+            <div className="requestContent">
             <Formik
-              initialValues={{ reason: "", date: "" }}
+              initialValues={{ 
+                company_address: {
+                  building_number: "",
+                  building_name: "",
+                  street: "",
+                  area: "",
+                  city: "",
+                  state_or_province: "",
+                  country: "",
+                  postal_code: "",
+                },
+                request_message: "",
+                company_name: "",
+                address_to: "",
+              }}
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
               {({ isSubmitting }) => (
                 <Form>
+ <div>
+                    <label htmlFor="company_name">Company Name</label>
+                    <Field type="text" name="company_name" />
+                    <ErrorMessage name="company_name" component="div" />
+                  </div>
+
+
                   <div>
-                    <label htmlFor="reason">Reason</label>
-                    <Field type="text" name="reason" />
-                    <ErrorMessage name="reason" component="div" />
+                    <label htmlFor="address_to">Address To</label>
+                    <Field type="text" name="address_to" />
+                    <ErrorMessage name="address_to" component="div" />
+                  </div>
+
+
+                  <div className="company">
+                    Company Address
                   </div>
                   <div>
-                    <label htmlFor="date">Date</label>
-                    <Field type="date" name="date" />
-                    <ErrorMessage name="date" component="div" />
+                    <label htmlFor="company_address.building_number"></label>
+                    <Field type="text" name="company_address.building_number"  placeholder="Building Number"/>
+                    <ErrorMessage name="company_address.building_number" component="div" />
                   </div>
+
+
+                  <div>
+                    <label htmlFor="company_address.street">Street</label>
+                    <Field type="text" name="company_address.street" placeholder="Street. e.g. Amina Way"/>
+                    <ErrorMessage name="company_address.street" component="div" />
+                  </div>
+
+                  <div>
+                    <label htmlFor="company_address.area">Area</label>
+                    <Field type="text" name="company_address.area" placeholder="Area, e.g. Ojoo"/>
+                    <ErrorMessage name="company_address.area" component="div" />
+                  </div>
+
+                  <div>
+                    <label htmlFor="company_address.building_name">Building Name</label>
+                    <Field type="text" name="company_address.building_name" />
+                    <ErrorMessage name="company_address.building_name" component="div" />
+                  </div>
+                
+                
+                  <div>
+                    <label htmlFor="company_address.city">City</label>
+                    <Field type="text" name="company_address.city" />
+                    <ErrorMessage name="company_address.city" component="div" />
+                  </div>
+                  <div>
+                    <label htmlFor="company_address.state_or_province">State or Province</label>
+                    <Field type="text" name="company_address.state_or_province" />
+                    <ErrorMessage name="company_address.state_or_province" component="div" />
+                  </div>
+                  <div>
+                    <label htmlFor="company_address.country">Country</label>
+                    <Field type="text" name="company_address.country" />
+                    <ErrorMessage name="company_address.country" component="div" />
+                  </div>
+                  <div>
+                    <label htmlFor="company_address.postal_code">Postal Code</label>
+                    <Field type="text" name="company_address.postal_code" />
+                    <ErrorMessage name="company_address.postal_code" component="div" />
+                  </div>
+                  <div>
+                    <label htmlFor="request_message">Request Message</label>
+                    <Field type="text" name="request_message" />
+                    <ErrorMessage name="request_message" component="div" />
+                  </div>
+                 
+                
                   <button type="submit" disabled={isSubmitting}>
                     Submit
                   </button>
@@ -98,6 +186,8 @@ const IntroductionLetter = () => {
               )}
             </Formik>
           </div>
+          </div>
+         
         </div>
       )}
       <main>
