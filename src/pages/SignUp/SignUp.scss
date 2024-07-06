@@ -147,6 +147,7 @@ font-weight: lighter ;
           font-size: 15px;
           color: #434343;
           font-family: "Poppins", sans-serif;
+          background-color: white;
           &::placeholder {
             color: var(--stronger-grey);
             font-size: 15px;
@@ -290,7 +291,7 @@ font-weight: lighter ;
           }
           .login, .reset {
             font-size: 12px;
-            
+
           }
 
           button.createAccount,
