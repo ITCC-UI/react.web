@@ -10,6 +10,7 @@ import "./login.scss";
 import DummySideBar from "../../../components/Sidebar/DummySB";
 import Google from "/images/google.png";
 import SignLogHeader from "../../../components/Header/SignupLoginHead";
+import NetworkStatusIcon from "../../../components/NetworkStatus/Network";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -130,6 +131,7 @@ const Login = () => {
           <div className="main-container">
             <div className="signUpContainer">
               <SignLogHeader/>
+              <NetworkStatusIcon/>
               <div className="signUpForm">
                 <div className="todo">Log In</div>
                 {loginError && (
