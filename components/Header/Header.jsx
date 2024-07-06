@@ -6,6 +6,8 @@ import Chevy from "/images/chevron down.png";
 import './header.scss';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; // Import js-cookie
+import NetworkStatusIcon from '../NetworkStatus/Network';
+import { ToastContainer } from 'react-toastify';
 
 const TopNav = ({ disableReg, toggleVisibility, isVisible }) => {
   const [userName, setUserName] = useState(' ');
@@ -52,6 +54,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible }) => {
         <div className="greet">Welcome</div>
         <div className="date">{new Date().toLocaleDateString()}</div>
       </div>
+      <NetworkStatusIcon/>
       <div className="actionsLog">
         <div className={disableReg}>
           <button onClick={toggleVisibility}>
@@ -71,6 +74,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible }) => {
           <div className="conDetails">
             <div className="name">{userName}</div>
             <div className="matricNum">Matric No: {matricNumber}</div>
+            
             <div className="profileOpt" style={{ display: isDropdownOpen ? 'flex' : 'none' }}>
               <a href="#profile">Profile</a>
               <div className="logout" onClick={LogOut}>Log Out</div>
