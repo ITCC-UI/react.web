@@ -91,7 +91,7 @@ const AccordionS = ({ initialOpenSection, activeClass }) => {
         >
           {/* <a href">Registration</a> */}
           <Link to="/registration-portal">Registration</Link>
-          <Link to="/companies">Browse Companies</Link>
+          <Link to="https://itcc.ui.edu.ng/siwes/dlc/companies" target='_blank'>Browse Companies</Link>
           <Link to="/introduction-letter" className={activeClass}>Introduction Letter</Link>
         </div>
       </div>
