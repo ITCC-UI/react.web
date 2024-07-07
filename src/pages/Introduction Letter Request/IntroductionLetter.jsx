@@ -4,7 +4,7 @@ import SideBar from "../../../components/Sidebar/Sidebar";
 import "./placement.scss";
 import Empty from "/images/empty_dashboard.png";
 import CloseIcon from "/images/closeButton.png"; // Make sure you have an appropriate close icon
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import axiosInstance from "../../../API Instances/AxiosIntances";
@@ -27,7 +27,7 @@ const IntroductionLetter = () => {
         const programmeId = response.data[0]?.id; // Assuming you need the first programme ID
         console.log(programmeId)
         setProgrammeId(programmeId);
-       
+
       } catch (error) {
         console.error("Error fetching programme ID", error);
       }
@@ -88,106 +88,117 @@ const IntroductionLetter = () => {
             </button>
 
             <div className="requestContent">
-            <Formik
-              initialValues={{ 
-                company_address: {
-                  building_number: "",
-                  building_name: "",
-                  street: "",
-                  area: "",
-                  city: "",
-                  state_or_province: "",
-                  country: "",
-                  postal_code: "",
-                },
-                request_message: "",
-                company_name: "",
-                address_to: "",
-              }}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-            >
-              {({ isSubmitting }) => (
-                <Form>
- <div>
-                    <label htmlFor="company_name">Company Name</label>
-                    <Field type="text" name="company_name" />
-                    <ErrorMessage name="company_name" component="div" />
-                  </div>
+              <Formik
+                initialValues={{
+                  company_address: {
+                    building_number: "",
+                    building_name: "",
+                    street: "",
+                    area: "",
+                    city: "",
+                    state_or_province: "",
+                    country: "",
+                    postal_code: "",
+                  },
+                  request_message: "",
+                  company_name: "",
+                  address_to: "",
+                }}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+              >
+                {({ isSubmitting }) => (
+                  <Form>
+                    <div className="companyAddressedTo">
+                      <div className="formInput">
+                        <label htmlFor="company_name">Company Name</label>
+                        <Field type="text" name="company_name"  placeholder="Enter the name of the company,  e.g Firstbank  Plc"/>
+                        <ErrorMessage className="error" name="company_name" component="div" />
+                      </div>
 
 
-                  <div>
-                    <label htmlFor="address_to">Address To</label>
-                    <Field type="text" name="address_to" />
-                    <ErrorMessage name="address_to" component="div" />
-                  </div>
+                      <div className="formInput">
+                        <label htmlFor="address_to">Address To</label>
+                        <Field type="text" name="address_to" placeholder=" Title/Position to address letter to, e.g The Managing Director "/>
+                        <ErrorMessage className="error" name="address_to" component="div" />
+                      </div>
+                    </div>
 
 
-                  <div className="company">
-                    Company Address
-                  </div>
-                  <div>
-                    <label htmlFor="company_address.building_number"></label>
-                    <Field type="text" name="company_address.building_number"  placeholder="Building Number"/>
-                    <ErrorMessage name="company_address.building_number" component="div" />
-                  </div>
+                    <div className="companyDetails">
+                      <div className="company">
+                        Company Address
+                      </div>
+
+                      <div className="formInput buildNo">
+                        <label htmlFor="company_address.building_number"></label>
+                        <Field type="text" name="company_address.building_number" placeholder="Building No : No 24" className="buildNo" />
+                        <ErrorMessage className="error" name="company_address.building_number" component="div" />
+                      </div>
 
 
-                  <div>
-                    <label htmlFor="company_address.street">Street</label>
-                    <Field type="text" name="company_address.street" placeholder="Street. e.g. Amina Way"/>
-                    <ErrorMessage name="company_address.street" component="div" />
-                  </div>
+                      <div className="formInput">
+                        <label htmlFor="company_address.street"></label>
+                        <Field type="text" name="company_address.street" placeholder="Street, e.g UI Road" />
+                        <ErrorMessage className="error" name="company_address.street" component="div" />
+                      </div>
 
-                  <div>
-                    <label htmlFor="company_address.area">Area</label>
-                    <Field type="text" name="company_address.area" placeholder="Area, e.g. Ojoo"/>
-                    <ErrorMessage name="company_address.area" component="div" />
-                  </div>
+                      <div className="formInput">
+                        <label htmlFor="company_address.area"></label>
+                        <Field type="text" name="company_address.area" placeholder="Area, e.g. Ojoo" />
+                        <ErrorMessage className="error" name="company_address.area" component="div" />
+                      </div>
 
-                  <div>
-                    <label htmlFor="company_address.building_name">Building Name</label>
-                    <Field type="text" name="company_address.building_name" />
-                    <ErrorMessage name="company_address.building_name" component="div" />
-                  </div>
-                
-                
-                  <div>
-                    <label htmlFor="company_address.city">City</label>
-                    <Field type="text" name="company_address.city" />
-                    <ErrorMessage name="company_address.city" component="div" />
-                  </div>
-                  <div>
-                    <label htmlFor="company_address.state_or_province">State or Province</label>
-                    <Field type="text" name="company_address.state_or_province" />
-                    <ErrorMessage name="company_address.state_or_province" component="div" />
-                  </div>
-                  <div>
-                    <label htmlFor="company_address.country">Country</label>
-                    <Field type="text" name="company_address.country" />
-                    <ErrorMessage name="company_address.country" component="div" />
-                  </div>
-                  <div>
-                    <label htmlFor="company_address.postal_code">Postal Code</label>
-                    <Field type="text" name="company_address.postal_code" />
-                    <ErrorMessage name="company_address.postal_code" component="div" />
-                  </div>
-                  <div>
-                    <label htmlFor="request_message">Request Message</label>
-                    <Field type="text" name="request_message" />
-                    <ErrorMessage name="request_message" component="div" />
-                  </div>
-                 
-                
-                  <button type="submit" disabled={isSubmitting}>
-                    Submit
-                  </button>
-                </Form>
-              )}
-            </Formik>
+                      {/* <div className="formInput">
+                        <label htmlFor="company_address.building_name"> </label>
+                        <Field type="text" name="company_address.building_name" />
+                        <ErrorMessage className="error" name="company_address.building_name" component="div" />
+                      </div> */}
+
+                    <div className="stateofCompany">
+                    <div className="formInput">
+                        <label htmlFor="company_address.city"></label>
+                        <Field type="text" name="company_address.city" placeholder="City, e.g Ibadan *"/>
+                        <ErrorMessage className="error" name="company_address.city" component="div" />
+                      </div>
+                      <div className="formInput">
+                        <label htmlFor="company_address.state_or_province"></label>
+                        <Field type="text" name="company_address.state_or_province" placeholder="State, e.g Oyo " />
+                        <ErrorMessage className="error" name="company_address.state_or_province" component="div" />
+                      </div>
+                    </div>
+
+
+{/*                     
+                      <div className="formInput">
+                        <label htmlFor="company_address.country">Country</label>
+                        <Field type="text" name="company_address.country" />
+                        <ErrorMessage className="error" name="company_address.country" component="div" />
+                      </div>
+                      <div className="formInput">
+                        <label htmlFor="company_address.postal_code">Postal Code</label>
+                        <Field type="text" name="company_address.postal_code" />
+                        <ErrorMessage className="error" name="company_address.postal_code" component="div" />
+                      </div>
+                      <div className="formInput">
+                        <label htmlFor="request_message">Request Message</label>
+                        <Field type="text" name="request_message" />
+                        <ErrorMessage className="error" name="request_message" component="div" />
+                      </div> */}
+                    </div>
+
+
+
+
+                    <button type="submit" className="submitting" disabled={isSubmitting}>
+                      Submit
+                    </button>
+                  </Form>
+                )}
+              </Formik>
+            </div>
           </div>
-          </div>
-         
+
         </div>
       )}
       <main>
