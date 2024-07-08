@@ -180,10 +180,7 @@ const Login = () => {
             </div>
           </div>
         </main>
-        <div className="barsMobile">
-          <div className="purpleBar"></div>
-          <div className="goldBar"></div>
-        </div>
+  
       </section>
     </div>
   );

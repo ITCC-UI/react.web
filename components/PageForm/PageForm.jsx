@@ -98,7 +98,7 @@ const FormCase = () => {
     <div className={`form-container`} id="newformCase">
       <FormHeader />
       <div className="fillForm">
-        {formError && <div className="error">{formError}</div>}
+        {formError && <div className="formerror">{formError}</div>}
         {isLoading ? (
           <div className="loading-spinner">
             <div className="spinner"></div>

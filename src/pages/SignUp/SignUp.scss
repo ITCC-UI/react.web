@@ -257,8 +257,11 @@ font-weight: lighter ;
 }
 
 @media (max-width: 426px), (max-width: 769px) {
+  .dash_navigatioh{
+    display: none !important;
+  }
   .main-container {
-    margin-bottom: 100px;
+    margin-top: 100px;
     .signUpContainer {
       header {
         h1 {
