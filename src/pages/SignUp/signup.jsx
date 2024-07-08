@@ -18,6 +18,9 @@ const SignUpSchema = Yup.object().shape({
     .matches(/[A-Z]/, 'Password must contain an uppercase letter')
     .matches(/[0-9]/, 'Password must contain a number')
     .required('Password is required'),
+  repeatPassword: Yup.string()
+    .oneOf([Yup.ref('password'), null], ' ')
+    .required(' '),
 });
 
 const getPasswordStrength = (password) => {
@@ -31,8 +34,8 @@ const getPasswordStrength = (password) => {
 const SignUp = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
   const navigate = useNavigate();
-
   const handleSubmit = async (values, { setSubmitting, setStatus }) => {
     try {
       const response = await axios.post('https://theegsd.pythonanywhere.com/api/v1/student/signup/', values);
@@ -54,10 +57,19 @@ const SignUp = () => {
     }
   };
 
-  const handlePasswordChange = (e, setFieldValue) => {
+  const handlePasswordChange = (e, setFieldValue, setFieldTouched, values) => {
     const password = e.target.value;
     setFieldValue('password', password);
     setPasswordStrength(getPasswordStrength(password));
+    setPasswordsMatch(password === values.repeatPassword);
+    setFieldTouched('password', true, false);
+  };
+
+  const handleRepeatPasswordChange = (e, setFieldValue, setFieldTouched, values) => {
+    const repeatPassword = e.target.value;
+    setFieldValue('repeatPassword', repeatPassword);
+    setPasswordsMatch(values.password === repeatPassword);
+    setFieldTouched('repeatPassword', true, false);
   };
 
   return (
@@ -72,42 +84,56 @@ const SignUp = () => {
               <div className="signUpForm">
                 <div className="todo">Create Account</div>
                 <Formik
-                  initialValues={{ email: '', password: '' }}
-                  validationSchema={SignUpSchema}
-                  validateOnChange={true}
-                  validateOnBlur={true}
-                  onSubmit={handleSubmit}
-                >
-                  {({ isSubmitting, status, setFieldValue }) => (
-                    <Form className="formSignUp" id="signUpForm" noValidate>
-                      <div className="email">
-                        <Field
-                          type="email"
-                          name="email"
-                          placeholder="Email"
-                          autoComplete="on"
-                        />
-                        <div className="error">
-                          <ErrorMessage name="email" component="div" />
-                        </div>
-                      </div>
-                      <div className="password">
-                        <Field
-                          type="password"
-                          name="password"
-                          placeholder="Password"
-                          onChange={(e) => handlePasswordChange(e, setFieldValue)}
-                        />
-                        <div className="error">
-                          <ErrorMessage name="password" component="div" />
-                        </div>
-                        <div className="password-strength">
-                          <div className={`bar ${passwordStrength >= 1 ? 'filled' : ''}`}></div>
-                          <div className={`bar ${passwordStrength >= 2 ? 'filled' : ''}`}></div>
-                          <div className={`bar ${passwordStrength >= 3 ? 'filled' : ''}`}></div>
-                        </div>
-                      </div>
-                      <button className="createAccount" type="submit" disabled={isSubmitting}>
+      initialValues={{ email: '', password: '', repeatPassword: '' }}
+      validationSchema={SignUpSchema}
+      validateOnChange={true}
+      validateOnBlur={true}
+      onSubmit={handleSubmit}
+    >
+      {({ isSubmitting, status, setFieldValue, setFieldTouched, values }) => (
+        <Form className="formSignUp" id="signUpForm" noValidate>
+          <div className="email">
+            <Field
+              type="email"
+              name="email"
+              placeholder="Email"
+              autoComplete="on"
+            />
+            <div className="error">
+              <ErrorMessage name="email" component="div" />
+            </div>
+          </div>
+          <div className="password">
+            <Field
+              type="password"
+              name="password"
+              placeholder="Password"
+              onChange={(e) => handlePasswordChange(e, setFieldValue, setFieldTouched, values)}
+            />
+            <div className="error">
+              <ErrorMessage name="password" component="div" />
+            </div>
+            <div className="password-strength">
+              <div className={`bar ${passwordStrength >= 1 ? 'filled' : ''}`}></div>
+              <div className={`bar ${passwordStrength >= 2 ? 'filled' : ''}`}></div>
+              <div className={`bar ${passwordStrength >= 3 ? 'filled' : ''}`}></div>
+            </div>
+          </div>
+          <div className="repeat-password">
+            <Field
+              type="password"
+              name="repeatPassword"
+              placeholder="Repeat Password"
+              onChange={(e) => handleRepeatPasswordChange(e, setFieldValue, setFieldTouched, values)}
+            />
+            <div className="error">
+              <ErrorMessage name="repeatPassword" component="div" />
+            </div>
+            {!passwordsMatch && (
+              <div className="error">Passwords do not match</div>
+            )}
+          </div>
+          <button className="createAccount" type="submit" disabled={isSubmitting}>
                         {isSubmitting ? <PulseLoader size={20} color="green" /> : "Sign Up"}
                       </button>
                       {status && status.error && <div className="error">{status.error}</div>}
@@ -126,7 +152,7 @@ const SignUp = () => {
                       <div className="login">Already have an account? <span><Link to="/login">Login</Link></span></div>
                     </Form>
                   )}
-                </Formik>
+    </Formik>
                 {successMessage && (
                   <div className="success-message">
                     {successMessage}
@@ -137,16 +163,10 @@ const SignUp = () => {
           </div>
         </main>
 
-        <div className="barsMobile">
-          <div className="purpleBar"></div>
-          <div className="goldBar"></div>
-        </div>
+        
       </section>
     </div>
   );
 };
 
 export default SignUp;
-
-
-// HelloHuman123

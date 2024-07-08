@@ -141,13 +141,13 @@ font-weight: lighter ;
         input[type="text"] {
           border: none;
           border-bottom: 1px solid var(--stronger-grey);
-          padding: 7px 1px;
+          padding: 7px;
           transition: all 0.3s ease;
           width: 100%;
-          font-size: 15px;
+          font-size: 16px;
           color: #434343;
           font-family: "Poppins", sans-serif;
-          background-color: white;
+          background-color: white !important;
           &::placeholder {
             color: var(--stronger-grey);
             font-size: 15px;
@@ -159,6 +159,7 @@ font-weight: lighter ;
             outline: none;
             border-bottom: 2px solid var(--stronger-grey);
             caret-color: var(--blue);
+            // background-color: red;
           }
         }
         button.createAccount,

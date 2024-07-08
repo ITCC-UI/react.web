@@ -5,6 +5,7 @@ import './formfiller.scss';
 import Forward from '/images/icon.png';
 import Cookies from 'js-cookie'; // Import js-cookie
 import { PulseLoader } from 'react-spinners';
+import axiosInstance from '../../API Instances/AxiosIntances';
 
 const UserDetails = ({ isVisible, onClose }) => {
   const [userData, setUserData] = useState(null);
@@ -34,7 +35,7 @@ const UserDetails = ({ isVisible, onClose }) => {
           console.log(theID) // Assuming the ID is stored in the first entry's 'id' field
 
           // Use the ID in the request to the second API
-          const response = await axios.get(`https://theegsd.pythonanywhere.com/api/v1/student/programmes/${theID}`, {
+          const response = await axiosInstance.get(`https://theegsd.pythonanywhere.com/api/v1/student/programmes/${theID}`, {
             headers: {
               'Authorization': `Token ${token}`,
               'Content-Type': 'application/json',

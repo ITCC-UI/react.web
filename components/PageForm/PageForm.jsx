@@ -58,8 +58,8 @@ const FormCase = () => {
     session_of_entry: Yup.string().required('Session of entry is required'),
     school_email: Yup.string()
       .email('Invalid email address')
-      .test('is-ui-email', 'Please use your student email ending with .ui.edu.ng', 
-        value => value && value.endsWith('.ui.edu.ng')),
+      // .test('is-ui-email', 'Please use your student email ending with .ui.edu.ng', 
+      //   value => value && value.endsWith('.ui.edu.ng')),
   });
 
   const initialValues = {
@@ -82,8 +82,8 @@ const FormCase = () => {
         setShowForm(false);
         navigate('/register'); // Navigate to dashboard on success
       } else {
-        console.error('Error submitting form:', response);
-        setFormError('There was an error submitting your form. Please try again.');
+        console.error('Error submitting for:', response);
+        setFormError('There wa ahs an error submitting your form. Please try again.');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -175,6 +175,8 @@ const FormCase = () => {
                     <label htmlFor="session_of_entry">Session of Entry</label>
                     <Field as="select" name="session_of_entry">
                       <option value="">Select Session</option>
+                      <option value="2019/2020">2017/2018</option>
+                      <option value="2019/2020">2018/2019</option>
                       <option value="2019/2020">2019/2020</option>
                       <option value="2020/2021">2020/2021</option>
                       <option value="2021/2022">2021/2022</option>
