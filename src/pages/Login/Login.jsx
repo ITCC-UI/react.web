@@ -1,4 +1,3 @@
-// src/components/Login.js
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -11,6 +10,7 @@ import DummySideBar from "../../../components/Sidebar/DummySB";
 import Google from "/images/google.png";
 import SignLogHeader from "../../../components/Header/SignupLoginHead";
 import NetworkStatusIcon from "../../../components/NetworkStatus/Network";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import the icons
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -22,8 +22,14 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
   const [loginError, setLoginError] = useState('');
+  const [networkError, setNetworkError] = useState(''); // State for network error
+  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
   const navigate = useNavigate();
   const endpoint = "https://theegsd.pythonanywhere.com";
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const checkUserDetails = async () => {
     try {
@@ -105,7 +111,9 @@ const Login = () => {
         handleErrorTimeout();
       }
     } catch (error) {
-      if (error.response && error.response.status === 404) {
+      if (!error.response) {
+        setNetworkError('Network error. Please check your internet connection and try again.');
+      } else if (error.response && error.response.status === 404) {
         setLoginError('User not found in the database.');
       } else {
         console.error('Login error:', error);
@@ -120,6 +128,7 @@ const Login = () => {
   const handleErrorTimeout = () => {
     setTimeout(() => {
       setLoginError('');
+      setNetworkError(''); // Clear network error after timeout
     }, 5000); // Set timeout for 5 seconds
   };
 
@@ -140,6 +149,12 @@ const Login = () => {
                     <div className="errorCountdown"></div>
                   </div>
                 )}
+                {networkError && (
+                  <div className="signInError">
+                    {networkError}
+                    <div className="errorCountdown"></div>
+                  </div>
+                )}
                 <Formik
                   initialValues={{ email: '', password: '' }}
                   validationSchema={LoginSchema}
@@ -152,7 +167,17 @@ const Login = () => {
                         <ErrorMessage name="email" component="div" className="error" />
                       </div>
                       <div className="password">
-                        <Field type="password" name="password" placeholder="Password" />
+                        <Field
+                          type={passwordVisible ? "text" : "password"}
+                          name="password"
+                          placeholder="Password"
+                        />
+                        <span
+                          className="password-toggle-icon"
+                          onClick={togglePasswordVisibility}
+                        >
+                          {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                        </span>
                         <ErrorMessage name="password" component="div" className="error" />
                       </div>
                       <button className="signIn" type="submit" disabled={isSubmitting}>
@@ -180,7 +205,6 @@ const Login = () => {
             </div>
           </div>
         </main>
-  
       </section>
     </div>
   );

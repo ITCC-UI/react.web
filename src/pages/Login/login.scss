@@ -265,6 +265,15 @@ font-weight: lighter ;
   }
 }
 
+.password-toggle-icon{
+  position: absolute;
+  // width: ;
+  right: 10px;
+  svg{
+    width: 20px !important;height: 20px;
+  }
+}
+
 @media (max-width: 426px), (max-width: 769px) {
   .main-container {
     margin-bottom: 100px;

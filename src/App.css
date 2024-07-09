@@ -28,14 +28,14 @@ body{
   display: flex;
   justify-content: space-between;
 width: 100%;
-background-color: #ffff !important;
+background-color: #ffff;
 }
 
 
 
 .logo{
   width: 100px;
-  background-color: #faa62c;
+  /* background-color: #faa62c; */
   border-radius: 20px;
   padding: 10px;
   display: flex;

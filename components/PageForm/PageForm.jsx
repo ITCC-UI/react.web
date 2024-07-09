@@ -1,4 +1,3 @@
-// src/components/FormCase.js
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -71,7 +70,7 @@ const FormCase = () => {
     school_email: '',
   };
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting, setStatus }) => {
     setIsLoading(true);
     setFormError('');
     try {
@@ -83,11 +82,17 @@ const FormCase = () => {
         navigate('/register'); // Navigate to dashboard on success
       } else {
         console.error('Error submitting for:', response);
-        setFormError('There wa ahs an error submitting your form. Please try again.');
+        setFormError('There was an error submitting your form. Please try again.');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      setFormError('There was an error submitting your form. Please try again.');
+      if (error.response && error.response.data) {
+        const apiErrors = error.response.data;
+        const errorMessage = Object.values(apiErrors).flat().join(', ');
+        setFormError(errorMessage);
+      } else {
+        setFormError('There was an error submitting your form. Please try again.');
+      }
     } finally {
       setIsLoading(false);
       setSubmitting(false);
@@ -173,14 +178,7 @@ const FormCase = () => {
                   </div>
                   <div className="form-group">
                     <label htmlFor="session_of_entry">Session of Entry</label>
-                    <Field as="select" name="session_of_entry">
-                      <option value="">Select Session</option>
-                      <option value="2019/2020">2017/2018</option>
-                      <option value="2019/2020">2018/2019</option>
-                      <option value="2019/2020">2019/2020</option>
-                      <option value="2020/2021">2020/2021</option>
-                      <option value="2021/2022">2021/2022</option>
-                    </Field>
+                    <Field type="text" name="session_of_entry" placeholder="Session of Entry"/>
                     <ErrorMessage name="session_of_entry" component="div" className="error" />
                   </div>
                   <div className="form-group">
@@ -202,3 +200,4 @@ const FormCase = () => {
 };
 
 export default FormCase;
+ 

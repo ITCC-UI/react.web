@@ -3,10 +3,11 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import DummySideBar from '../../../components/Sidebar/DummySB';
 import { PulseLoader } from 'react-spinners';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import DummySideBar from '../../../components/Sidebar/DummySB';
 import './SignUp.scss';
-import Google from "/images/google.png";
+import Google from '/images/google.png';
 import SignLogHeader from '../../../components/Header/SignupLoginHead';
 
 const SignUpSchema = Yup.object().shape({
@@ -35,9 +36,21 @@ const SignUp = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleRepeatPasswordVisibility = () => {
+    setShowRepeatPassword(!showRepeatPassword);
+  };
+
   const handleSubmit = async (values, { setSubmitting, setStatus }) => {
     try {
+      values.email = values.email.toLowerCase(); // Convert email to lowercase
       const response = await axios.post('https://theegsd.pythonanywhere.com/api/v1/student/signup/', values);
       console.log('Signup successful', response.data);
       setSuccessMessage('Sign up successful! Redirecting to login page...');
@@ -84,56 +97,68 @@ const SignUp = () => {
               <div className="signUpForm">
                 <div className="todo">Create Account</div>
                 <Formik
-      initialValues={{ email: '', password: '', repeatPassword: '' }}
-      validationSchema={SignUpSchema}
-      validateOnChange={true}
-      validateOnBlur={true}
-      onSubmit={handleSubmit}
-    >
-      {({ isSubmitting, status, setFieldValue, setFieldTouched, values }) => (
-        <Form className="formSignUp" id="signUpForm" noValidate>
-          <div className="email">
-            <Field
-              type="email"
-              name="email"
-              placeholder="Email"
-              autoComplete="on"
-            />
-            <div className="error">
-              <ErrorMessage name="email" component="div" />
-            </div>
-          </div>
-          <div className="password">
-            <Field
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={(e) => handlePasswordChange(e, setFieldValue, setFieldTouched, values)}
-            />
-            <div className="error">
-              <ErrorMessage name="password" component="div" />
-            </div>
-            <div className="password-strength">
-              <div className={`bar ${passwordStrength >= 1 ? 'filled' : ''}`}></div>
-              <div className={`bar ${passwordStrength >= 2 ? 'filled' : ''}`}></div>
-              <div className={`bar ${passwordStrength >= 3 ? 'filled' : ''}`}></div>
-            </div>
-          </div>
-          <div className="repeat-password">
-            <Field
-              type="password"
-              name="repeatPassword"
-              placeholder="Repeat Password"
-              onChange={(e) => handleRepeatPasswordChange(e, setFieldValue, setFieldTouched, values)}
-            />
-            <div className="error">
-              <ErrorMessage name="repeatPassword" component="div" />
-            </div>
-            {!passwordsMatch && (
-              <div className="error">Passwords do not match</div>
-            )}
-          </div>
-          <button className="createAccount" type="submit" disabled={isSubmitting}>
+                  initialValues={{ email: '', password: '', repeatPassword: '' }}
+                  validationSchema={SignUpSchema}
+                  validateOnChange={true}
+                  validateOnBlur={true}
+                  onSubmit={handleSubmit}
+                >
+                  {({ isSubmitting, status, setFieldValue, setFieldTouched, values }) => (
+                    <Form className="formSignUp" id="signUpForm" noValidate>
+                      <div className="email">
+                        <Field
+                          type="email"
+                          name="email"
+                          placeholder="Email"
+                          autoComplete="on"
+                        />
+                        <div className="error">
+                          <ErrorMessage name="email" component="div" />
+                        </div>
+                      </div>
+                      <div className="password">
+                        <Field
+                          type={showPassword ? 'text' : 'password'}
+                          name="password"
+                          placeholder="Password"
+                          onChange={(e) => handlePasswordChange(e, setFieldValue, setFieldTouched, values)}
+                        />
+                        <span
+                          className="password-toggle-icon"
+                          onClick={togglePasswordVisibility}
+                        >
+                          {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                        </span>
+                        <div className="error">
+                          <ErrorMessage name="password" component="div" />
+                        </div>
+                        <div className="password-strength">
+                          <div className={`bar ${passwordStrength >= 1 ? 'filled' : ''}`}></div>
+                          <div className={`bar ${passwordStrength >= 2 ? 'filled' : ''}`}></div>
+                          <div className={`bar ${passwordStrength >= 3 ? 'filled' : ''}`}></div>
+                        </div>
+                      </div>
+                      <div className="repeat-password">
+                        <Field
+                          type={showRepeatPassword ? 'text' : 'password'}
+                          name="repeatPassword"
+                          placeholder="Repeat Password"
+                          onChange={(e) => handleRepeatPasswordChange(e, setFieldValue, setFieldTouched, values)}
+                        />
+                        <span
+                          className="password-toggle-icon"
+                          onClick={toggleRepeatPasswordVisibility}
+                        >
+                          {showRepeatPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                        </span>
+                        <div className="error">
+                          <ErrorMessage name="repeatPassword" component="div" />
+                        </div>
+                        {!passwordsMatch && (
+                          <div className="error">Passwords do not match</div>
+                        )}
+                      </div>
+                      <button className="createAccount" type="submit" disabled={isSubmitting}>
                         {isSubmitting ? <PulseLoader size={20} color="green" /> : "Sign Up"}
                       </button>
                       {status && status.error && <div className="error">{status.error}</div>}
@@ -152,7 +177,7 @@ const SignUp = () => {
                       <div className="login">Already have an account? <span><Link to="/login">Login</Link></span></div>
                     </Form>
                   )}
-    </Formik>
+                </Formik>
                 {successMessage && (
                   <div className="success-message">
                     {successMessage}
@@ -162,8 +187,6 @@ const SignUp = () => {
             </div>
           </div>
         </main>
-
-        
       </section>
     </div>
   );
