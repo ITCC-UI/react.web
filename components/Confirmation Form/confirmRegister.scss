@@ -162,7 +162,8 @@ font-size: 15px;
 
 .reviewPage{
     margin: 0 auto;
-    width: 279mm;
+    // width: 279mm;
+    width:90%;
     padding: 0;
     padding-top: 28px;
 
@@ -173,7 +174,9 @@ font-size: 15px;
         font-size: 12px;
         margin: 10px 0 10px 0;
         p{
+            text-transform: uppercase;
             span{
+                text-transform: none;
                 font-weight: 700;
             }
         }
@@ -216,4 +219,27 @@ h2.headings{
         font-weight: 600;
         text-align: center;
     }
+}
+.justLogo{
+    padding: 0;
+}
+.logoHeadType{
+    margin-bottom: 5px;
+    .profile{
+        width: 90px;
+        height: 90px;
+        img{
+            width: inherit;
+            height: inherit;
+        }
+    }
+}
+
+.formButtons{
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
 }

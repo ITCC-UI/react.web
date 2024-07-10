@@ -1,4 +1,4 @@
-import React from 'react';
+import {React,useState} from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Cookies from 'js-cookie';
@@ -47,7 +47,7 @@ const PersonalDetailsSchema = Yup.object().shape({
 const UpdateProfileForm = () => {
   const navigate = useNavigate();
   const token = Cookies.get('token');
-
+  const [apiError, setApiError] = useState(null);
   const handleSubmitPersonalDetails = async (values) => {
     try {
       const formData = new FormData();
@@ -81,14 +81,14 @@ const UpdateProfileForm = () => {
       );
 
       console.log('Response:', response);
-
       if (response.status === 200 || response.status === 201) {
         console.log('Personal details submitted successfully');
-        navigate('/complete-profile2'); // Redirect to success page
+        setApiError(null);
+        navigate('/complete-profile2');
       } else {
         console.error('Unexpected response status:', response.status);
         console.error('Unexpected response data:', response.data);
-        alert('There was an error saving your data');
+        setApiError(response.data);
       }
     } catch (error) {
       console.error('Error in handleSubmitPersonalDetails:');
@@ -96,10 +96,13 @@ const UpdateProfileForm = () => {
         console.error('Response data:', error.response.data);
         console.error('Status code:', error.response.status);
         console.error('Headers:', error.response.headers);
+        setApiError(error.response.data);
       } else if (error.request) {
         console.error('No response received:', error.request);
+        setApiError({ message: 'No response received from the server' });
       } else {
         console.error('Error setting up request:', error.message);
+        setApiError({ message: 'An error occurred while submitting your details' });
       }
       console.error('Error config:', error.config);
     }
@@ -132,6 +135,22 @@ const UpdateProfileForm = () => {
           {({ isSubmitting, setFieldValue }) => (
             <Form id="regForm">
               <div className="section">
+
+              <div className="signInError">
+    {apiError && (
+      <div className="error-message">
+        {/* {typeof apiError === 'string' ? (
+          apiError
+        ) : (
+          <pre>{JSON.stringify(apiError, null, 2)}
+          
+          </pre>
+        )} */}
+
+        {apiError.message}
+      </div>
+    )}
+  </div>
                 <h2>Personal Details</h2>
                 <div className="formTop">
                   <div className="form-group">

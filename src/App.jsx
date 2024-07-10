@@ -21,6 +21,9 @@ import UpdateProfileForm from './pages/Complete Profile/CompleteProfile.jsx';
 import FormHeader from '../components/Header/FormHeader.jsx';
 import Placement from './pages/Placement/Placement.jsx';
 import IntroductionLetter from './pages/Introduction Letter Request/IntroductionLetter.jsx';
+import PrintPreview from '../components/Print Layout/Print.jsx';
+// import PrintPreviewContainer from '../components/Print Layout/PrintPreview.jsx';
+// import RegistrationForm from '../components/Print Form/RegistrationForm.jsx';
 function App() {
 
     return (
@@ -34,6 +37,7 @@ function App() {
        <Route path='/registration-portal' element= {<RegistrationDash/>}></Route>
           <Route path='/dashboard' element={<MainDashboard/>  } />
           <Route path='/placement' element={<Placement/>} />
+          {/* <Route path='/registration_form' element={<RegistrationForm />} /> */}
                
               <Route path='/introduction-letter' element={<IntroductionLetter/>} /> 
                {/* <Route path="/form" element={<UpdateProfile />} /> */}
@@ -41,6 +45,8 @@ function App() {
 {/* <Route path='/complete-profile' element={<CombinedForm/>} /> */}
        <Route path='/complete-profile2' element={<FormCase/>}/>
         <Route path='/complete-profile' element={<UpdateProfileForm/>}/>
+
+        <Route path='/print_page' element={<PrintPreview/>}/>
       <Route path='/reghead' element ={<FormHeader/>}/>
         </Routes>
    
