@@ -85,7 +85,8 @@ const PrintPreview = () => {
         <ProfileHead headings={"Personal Information"} duration={"- 3 months"} />
         <div className="firstRow rowIdea">
           <p>First Name: <span>{submittedData.first_name}</span></p>
-          <p>Other Names: <span>{`${submittedData.middle_name || ''} ${submittedData.last_name}`}</span></p>
+          <p>Middle Name: <span>{`${submittedData.middle_name || ''}`}</span></p>
+          <p>Last Name: <span>{`${submittedData.last_name}`}</span></p>
           <p>Gender: <span>{submittedData.gender}</span></p>
           <p>Date of Birth: <span>{submittedData.dob}</span></p>
         </div>
