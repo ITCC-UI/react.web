@@ -1,14 +1,12 @@
+
+// axiosInstance.js
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://theegsd.pythonanywhere.com/api/v1/', //Base URL for the API
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: 'https://theegsd.pythonanywhere.com/api/v1/',
 });
 
-// Add a request interceptor to include the authorization token
 axiosInstance.interceptors.request.use(
   config => {
     const token = Cookies.get('token');
@@ -18,6 +16,19 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   error => {
+    return Promise.reject(error);
+  }
+);
+
+axiosInstance.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 401) {
+      // Handle token expiration, redirect to login, etc.
+      // Optionally, you can clear the cookie here
+      Cookies.remove('token');
+      window.location.href = '/login';
+    }
     return Promise.reject(error);
   }
 );

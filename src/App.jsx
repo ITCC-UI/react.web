@@ -1,16 +1,22 @@
-// import { AuthProvider } from '../components/RouteProtected/AuthContext.jsx';
 // import { useState } from 'react'
 import './App.css'
 import React from 'react';
-import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Login from './pages/Login/Login.jsx';
 import SignUp from './pages/SignUp/signup.jsx';
 import Dashboard from './pages/DashBoard/Dashboard.jsx';
+import UpdateProfile from '../components/Form/FormData.jsx';
 import RegistrationDash from './pages/Registration Dashboard/Registration.jsx';
+import ConfamForm from '../components/Confirmation Form/ConfamForm.jsx';
 import MainDashboard from './pages/Main Dashboard/MainDash.jsx';
+import PieC from '../Random components/Piechart.jsx';
+import TVariant from '../components/TimelineShow/TimeVariationComp.jsx';
+import CompleteProfile from './pages/Complete Profile/CompleteProfile.jsx';
 import ProtectedRoute from '../components/RouteProtected/ProtectedRoute.jsx';
 import { AuthProvider } from '../components/RouteProtected/AuthContext.jsx';
+import MyForm from '../components/Form/FormData.jsx';
 import FormCase from '../components/PageForm/PageForm.jsx';
+import CombinedForm from './pages/Complete Profile/Combined.jsx';
 import UpdateProfileForm from './pages/Complete Profile/CompleteProfile.jsx';
 import FormHeader from '../components/Header/FormHeader.jsx';
 import Placement from './pages/Placement/Placement.jsx';
@@ -18,34 +24,37 @@ import IntroductionLetter from './pages/Introduction Letter Request/Introduction
 import PrintPreview from '../components/Print Layout/Print.jsx';
 // import PrintPreviewContainer from '../components/Print Layout/PrintPreview.jsx';
 // import RegistrationForm from '../components/Print Form/RegistrationForm.jsx';
-// Import all your components here
-
 function App() {
-  return (
-    <AuthProvider>
+
+    return (
+
       <div className="routes app-container">
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<Navigate to="/login" />} />
+    <Routes>
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path='/register' element={<Dashboard/>}></Route>
+       <Route path='/registration-portal' element= {<RegistrationDash/>}></Route>
+          <Route path='/dashboard' element={<MainDashboard/>  } />
+          <Route path='/placement' element={<Placement/>} />
+          {/* <Route path='/registration_form' element={<RegistrationForm />} /> */}
+               
+              <Route path='/introduction-letter' element={<IntroductionLetter/>} /> 
+               {/* <Route path="/form" element={<UpdateProfile />} /> */}
+          {/* <Route path='/complete-profile' element ={<CompleteProfile />}></Route> */}
+{/* <Route path='/complete-profile' element={<CombinedForm/>} /> */}
+       <Route path='/complete-profile2' element={<FormCase/>}/>
+        <Route path='/complete-profile' element={<UpdateProfileForm/>}/>
 
-          {/* Protected routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route path='/register' element={<Dashboard />} />
-            <Route path='/registration-portal' element={<RegistrationDash />} />
-            <Route path='/dashboard' element={<MainDashboard />} />
-            <Route path='/placement' element={<Placement />} />
-            <Route path='/introduction-letter' element={<IntroductionLetter />} />
-            <Route path='/complete-profile2' element={<FormCase />} />
-            <Route path='/complete-profile' element={<UpdateProfileForm />} />
-            <Route path='/page_print' element={<PrintPreview />} />
-            <Route path='/reghead' element={<FormHeader />} />
-          </Route>
+        <Route path='/page_print' element={<PrintPreview/>}/>
+      <Route path='/reghead' element ={<FormHeader/>}/>
         </Routes>
+   
+
+        
       </div>
-    </AuthProvider>
-  );
+  )
+
 }
 
-export default App;
+export default App
