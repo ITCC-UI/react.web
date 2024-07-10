@@ -82,7 +82,7 @@ const PrintPreview = () => {
           </div>
         </div>
         {/* Personal Information */}
-        <ProfileHead headings={"Personal Information"} duration={"- 3 months"} />
+        <ProfileHead headings={"Personal Information"} duration={` ${submittedData.training_type_duration===12? "3 - ": "6 - "} Months`} />
         <div className="firstRow rowIdea">
           <p>First Name: <span>{submittedData.first_name}</span></p>
           <p>Middle Name: <span>{`${submittedData.middle_name || ''}`}</span></p>
@@ -135,11 +135,11 @@ const PrintPreview = () => {
         </div>
 
         {/* Bank Information - only show if training_duration is 24 */}
-        {submittedData.training_duration === 24 && (
+        {submittedData.training_type_duration === 24 && (
           <>
             <ProfileHead headings={"Bank Information"}/>
             <div className="rowIdea">
-              <p>Bank Name: <span>{submittedData.bank}</span></p>
+              <p>Bank Name: <span>{submittedData.bank_name}</span></p>
               <p>Account Number: <span>{submittedData.bank_account_number}</span></p>
               <p>Bank Sort Code: <span>{submittedData.bank_sort_code}</span></p>
             </div>
