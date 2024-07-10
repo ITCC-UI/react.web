@@ -99,7 +99,7 @@ const DepartmentTrainingCourses = ({ checked }) => {
                       </div>
                     </td>
                     <td>
-                      {!(course.can_register) ? (
+                      {(course.can_register) ? (
                         <NormalButton registerSelf="register active" onButtonClick={() => handleRegisterClick(course)} />
                       ) : (
                         <NormalButton registerSelf="register inactive" disabled />

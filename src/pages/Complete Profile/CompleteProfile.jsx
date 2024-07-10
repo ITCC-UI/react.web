@@ -12,7 +12,7 @@ const FILE_SIZE = 800 * 1024; // 800kb in bytes
 const PersonalDetailsSchema = Yup.object().shape({
   first_name: Yup.string().required('First Name is required'),
   middle_name: Yup.string(),
-  phone_number: Yup.string().required('Phone Number is required'),
+  phone_number: Yup.string().required('Phone Number is required').min(11, "Phone number must be 11 digits").max(11, "Phone number must be 11 digits"),
   last_name: Yup.string().required('Last Name is required'),
   dob: Yup.date().required('Date of Birth is required').test(
     'is-16-years-old',
@@ -108,6 +108,14 @@ const UpdateProfileForm = () => {
     }
   };
 
+  const thisError=typeof apiError === 'string' ? (
+    apiError
+  ) : (
+    <pre>{JSON.stringify(apiError, null, 2)}
+    
+    </pre>
+  )
+
   return (
     <div className="formWrapper">
       <FormHeader />
@@ -136,21 +144,14 @@ const UpdateProfileForm = () => {
             <Form id="regForm">
               <div className="section">
 
-              <div className="signInError">
+              {/* <div className="siginError">
     {apiError && (
       <div className="error-message">
-        {/* {typeof apiError === 'string' ? (
-          apiError
-        ) : (
-          <pre>{JSON.stringify(apiError, null, 2)}
-          
-          </pre>
-        )} */}
-
-        {apiError.message}
+      
+        {console.log(thisError.props)}
       </div>
     )}
-  </div>
+  </div> */}
                 <h2>Personal Details</h2>
                 <div className="formTop">
                   <div className="form-group">

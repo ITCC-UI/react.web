@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import ProfileHead from '../Profile Header/ProfileHeader';
-// import axiosInstance from '../utils/axiosInstance'; // Adjust the path to your axiosInstance
 import Logo from "/images/UI_logo.png";
 import ProfilePic from "/images/profile.png";
 import "../Confirmation Form/confirmRegister.scss";
@@ -11,127 +10,145 @@ import { Link } from 'react-router-dom';
 
 const PrintPreview = () => {
   const [submittedData, setSubmittedData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const printRef = useRef();
 
   useEffect(() => {
-    const fetchProfileData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axiosInstance.get('https://theegsd.pythonanywhere.com/api/v1/student/details/');
-        setSubmittedData(response.data);
-        console.log(response.data)
+        setIsLoading(true);
+        const registrationsResponse = await axiosInstance.get('https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/');
+        const registrationId = registrationsResponse.data[0]?.id;
+        
+        if (!registrationId) {
+          console.error('No registration found');
+          return;
+        }
+  
+        const printoutResponse = await axiosInstance.get(`https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/${registrationId}/form/printout-data/`);
+        
+        setSubmittedData(printoutResponse.data);
+        setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching profile data", error);
+        console.error("Error fetching data", error);
+        setError('Failed to fetch data. Please try again.');
+        setIsLoading(false);
       }
     };
-
-    fetchProfileData();
+  
+    fetchData();
   }, []);
 
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
   });
 
+  if (isLoading) {
+    return <div>Loading, please wait...</div>;
+  }
+  
+  if (error) {
+    return <div>{error}</div>;
+  }
+  
   if (!submittedData) {
-    return <div>Loading please wait...</div>;
+    return <div>No data available.</div>;
   }
 
   return (
     <div className='PrintPreview'>
-        <div className="formButtons">
-<button onClick={handlePrint} className='print-button'>Download form</button>
-<Link to="/dashboard">Proceed to Dashboard</Link>
-</div>
+      <div className="formButtons">
+        <button onClick={handlePrint} className='print_button'>Download form</button>
+        <Link to="/dashboard" className='dash'>Proceed to Dashboard</Link>
+      </div>
       <div ref={printRef} className='reviewPage thisConfirmation'>
+        {/* Form header */}
         <div className="formHeading">
           <h1 className="headings">INDUSTRIAL TRAINING COORDINATING CENTRE</h1>
           <h2 className="headings">UNIVERSITY OF IBADAN, IBADAN.</h2>
         </div>
+        {/* Logo and form type */}
         <div className="logoHeadType">
           <div className="logo justLogo">
             <img src={Logo} className='reviewLogo' alt="University Logo" />
           </div>
           <div className="formType">
-            STUDENT INDUSTRIAL TRAINING REGISTRATION FORM (IT-UI-011)
+            STUDENT INDUSTRIAL TRAINING REGISTRATION FORM<br/>
+            {`${submittedData.session} REGISTRATION FORM (${submittedData.form_code})`}
           </div>
           <div className="profile">
             <img src={submittedData.passport} alt="Profile" />
           </div>
         </div>
+        {/* Personal Information */}
         <ProfileHead headings={"Personal Information"} duration={"- 3 months"} />
         <div className="firstRow rowIdea">
-          <p>Last Name: <span>{`${submittedData.first_name} ${submittedData.middle_name} ${submittedData.last_name}`}</span></p>
-          <p>Other Names: <span>{`${submittedData.first_name} ${submittedData.middle_name} `}</span></p>
-          <p>Sex: <span> {submittedData.current_level}</span></p>
-          <p>Date of Birth: <span>{submittedData.marital_status}</span></p>
+          <p>First Name: <span>{submittedData.first_name}</span></p>
+          <p>Other Names: <span>{`${submittedData.middle_name || ''} ${submittedData.last_name}`}</span></p>
+          <p>Gender: <span>{submittedData.gender}</span></p>
+          <p>Date of Birth: <span>{submittedData.dob}</span></p>
         </div>
-
         <div className="firstRow rowIdea">
-          <p>Phone Number: <span>{`${submittedData.first_name} ${submittedData.middle_name} ${submittedData.last_name}`}</span></p>
-          <p>Marital Status: <span>{`${submittedData.first_name} ${submittedData.middle_name} `}</span></p>
-          <p>Languages other than English: <span>{submittedData.marital_status}</span></p>
+          <p>Phone Number: <span>{submittedData.phone_number}</span></p>
+          <p>Marital Status: <span>{submittedData.marital_status}</span></p>
+          <p>Language(s) other than English: <span>{submittedData.language}</span></p>
         </div>
-
         <div className="firstRow rowIdea">
-          <p>Email: <span>{`${submittedData.first_name} ${submittedData.middle_name} ${submittedData.last_name}`}</span></p>
-          <p>Permanent Home Address: <span>{`${submittedData.first_name} ${submittedData.middle_name} `}</span></p>
-          <p>Nationality: <span> {submittedData.current_level}</span></p>
-          
+          <p>Email: <span className='email'>{submittedData.email}</span></p>
+          <p>Permanent Home Address: <span>{submittedData.home_address}</span></p>
+          <p>Nationality: <span>{submittedData.nationality}</span></p>
         </div>
-
         <div className="firstRow rowIdea">
-          <p>Any Previous work experience?: <span>{`${submittedData.first_name} ${submittedData.middle_name} ${submittedData.last_name}`}</span></p>
-          <p>If yes, Where?: <span>{`${submittedData.first_name} ${submittedData.middle_name} `}</span></p>
-          <p>Any Physical Disabilities?: <span> {submittedData.current_level}</span></p>
-        
+          <p>Previous work experience: <span>{submittedData.previous_company_of_attachment || "No"}</span></p>
+          <p>If Yes, where?: <span>{submittedData.previous_company_of_attachment || "N/A"}</span></p>
+          <p>Disability: <span>{submittedData.disability}</span></p>
         </div>
 
-
-
-
-
-
-
-
-
-
-        <ProfileHead headings={"Department Information"} />
+        {/* Programme Information */}
+        <ProfileHead headings={"Programme Information"} />
         <div className="rowIdea">
-          <p>Matric No: <span>{submittedData.language}</span></p>
-          <p>Session: <span>{submittedData.language}</span></p>
-          <p>Faculty: <span>{submittedData.language}</span></p>
+          <p>Matric Number: <span>{submittedData.matric_number}</span></p>
+          <p>School Email: <span>{submittedData.school_email || "N/A"}</span></p>
+          <p>Faculty: <span>{submittedData.faculty_name}</span></p>
         </div>
-
         <div className="rowIdea">
-          <p>Department: <span>{submittedData.language}</span></p>
-          <p>Level: <span>{submittedData.language}</span></p>
-          <p>Session into the department: <span>{submittedData.language}</span></p>
+          <p>Department: <span>{submittedData.department_name}</span></p>
+          <p>Current Level: <span>{`${submittedData.current_level} Level`}</span></p>
+          <p>Session of entry: <span>{submittedData.session}</span></p>
+        </div>
+        <div className="rowIdea">
+          <p>Course Code: <span>{submittedData.course_code}</span></p>
+          <p>Course Unit: <span>{submittedData.course_unit}</span></p>
         </div>
 
-
-
-
-
-
+        {/* Next of Kin Information */}
         <ProfileHead headings={"Next of Kin Information"} />
         <div className="rowIdea">
-            <p>Name: <span>{submittedData.next_of_kin_name}</span></p>
+          <p>Name: <span>{submittedData.next_of_kin}</span></p>
           <p>Address: <span>{submittedData.next_of_kin_address}</span></p>
-            </div>
-
-            <div className="rowIdea">
-            <p>Relationship: <span>{submittedData.next_of_kin_relationship}</span></p>
-          <p>Phone Number: <span>{submittedData.next_of_kin_phone_number}</span></p>
-     
-            </div>
-
-            <ProfileHead headings={"Bank Information"}/>
+        </div>
         <div className="rowIdea">
-          <p>Bank Name: <span>{submittedData.bank}</span></p>
-          <p>Account Number: <span>{submittedData.bank_account_number}</span></p>
-          <p>Bank Sort Code: <span>{submittedData.bank_sort_code}</span></p>
+          <p>Relationship: <span>{submittedData.next_of_kin_relationship}</span></p>
+          <p>Phone Number: <span>{submittedData.next_of_kin_phone_number}</span></p>
+        </div>
+
+        {/* Bank Information - only show if training_duration is 24 */}
+        {submittedData.training_duration === 24 && (
+          <>
+            <ProfileHead headings={"Bank Information"}/>
+            <div className="rowIdea">
+              <p>Bank Name: <span>{submittedData.bank}</span></p>
+              <p>Account Number: <span>{submittedData.bank_account_number}</span></p>
+              <p>Bank Sort Code: <span>{submittedData.bank_sort_code}</span></p>
+            </div>
+          </>
+        )}
+
+        <div className="signature">
+            <img src={submittedData.signature} className='signature' alt="Signature" />
         </div>
       </div>
-
     </div>
   );
 };

@@ -1,62 +1,32 @@
-// DisplayedComponent.jsx
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useReactToPrint } from 'react-to-print';
-import "./confirmRegister.scss";
+import axiosInstance from '../../API Instances/AxiosIntances';
 import Close from "/images/closeButton.png";
 import Mark from "/images/succesfull circle.svg";
-import ProfileHead from '../Profile Header/ProfileHeader';
-import PrintButton from '../Print/Print';
-import axiosInstance from '../../API Instances/AxiosIntances';
-// import DisplayLayout from './DisplayLayout'; // Import the new component
+import "./confirmRegister.scss";
 
-const DisplayedComponent = ({ onClose, headings, duration, selectedCourse, isSubmitting }) => {
+const DisplayedComponent = ({ onClose, selectedCourse }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submittedData, setSubmittedData] = useState(null);
-  const [viewForm, setViewForm] = useState(false);
   const [banks, setBanks] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const printRef = useRef();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchTrainingData = async () => {
+    const fetchBanks = async () => {
       try {
-        const token = Cookies.get('token');
-        const response = await axiosInstance.get('https://theegsd.pythonanywhere.com/api/v1/trainings/department/trainings/registrations/', {
-          headers: {
-            'Authorization': `Token ${token}`
-          }
-        });
-        console.log("data:", response.data);
+        const response = await axiosInstance.get('https://theegsd.pythonanywhere.com/api/v1/lookups/banks/');
+        setBanks(response.data);
       } catch (error) {
-        console.error('Error fetching training data', error);
+        console.error('Error fetching banks', error);
       }
     };
 
-    fetchTrainingData(); fetchBanks();
+    fetchBanks();
   }, []);
-
-  const fetchBanks = async () => {
-    try {
-      const response = await axiosInstance.get('https://theegsd.pythonanywhere.com/api/v1/lookups/banks/');
-      setBanks(response.data);
-    } catch (error) {
-      console.error('Error fetching banks', error);
-    }
-  };
-
-  // Log selected course data
-  useEffect(() => {
-    if (selectedCourse) {
-      console.log('Selected Course Data:', selectedCourse);
-    }
-  }, [selectedCourse]);
 
   const initialValues = {
     current_level: '',
@@ -75,7 +45,6 @@ const DisplayedComponent = ({ onClose, headings, duration, selectedCourse, isSub
   };
 
   const is400Level = selectedCourse.level === 400;
-  console.log(is400Level)
 
   const validationSchemas = [
     Yup.object({
@@ -97,7 +66,7 @@ const DisplayedComponent = ({ onClose, headings, duration, selectedCourse, isSub
         .min(10, "Number must be more than 10")
         .max(11, "Number must be less than or equal to 11")
         .required("Required"),
-      bank_sort_code: Yup.string().required('Required').min(9, "Bank sort code must be at leat 9 digits"),
+      bank_sort_code: Yup.string().required('Required').min(9, "Bank sort code must be at least 9 digits"),
     }),
   ];
 
@@ -108,12 +77,10 @@ const DisplayedComponent = ({ onClose, headings, duration, selectedCourse, isSub
       actions.setSubmitting(false);
     } else {
       try {
-        console.log('Submitting values:', values);
         const response = await axiosInstance.post('https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/', values);
         if (response.status === 201) {
           setIsSubmitted(true);
           setErrorMessage('');
-          navigate('/dashboard');
         } else {
           console.error('Unexpected response status:', response.status);
           setErrorMessage('An unexpected error occurred. Please try again.');
@@ -136,24 +103,16 @@ const DisplayedComponent = ({ onClose, headings, duration, selectedCourse, isSub
     setCurrentStep(currentStep - 1);
   };
 
-  const handleViewForm = () => {
-    setViewForm(true);
-  };
-
   return (
     <div className="backgroundOverlay">
       <div className='registrationConfirmation'>
         {isSubmitted ? (
-          !viewForm ? (
-            <div className='thisConfirmation cheers'>
-              <img src={Mark} alt="success" />
-              <h2 className="success">Registration Successful!</h2>
-              <p>You have successfully registered for TIT 223</p>
-              <button onClick={handleViewForm} className='viewReg'>View Registration Form</button>
-            </div>
-          ) : (
-            <DisplayLayout printRef={printRef} submittedData={submittedData} />
-          )
+          <div className='thisConfirmation cheers'>
+            <img src={Mark} alt="success" />
+            <h2 className="success">Registration Successful!</h2>
+            <p>You have successfully registered {selectedCourse.course_code}</p>
+            <button onClick={() => navigate('/page_print')} className='viewReg'>View Registration Form</button>
+          </div>
         ) : (
           <Formik
             initialValues={initialValues}
@@ -206,7 +165,6 @@ const DisplayedComponent = ({ onClose, headings, duration, selectedCourse, isSub
                           <option value="">Select Marital Status</option>
                           <option value="single">Single</option>
                           <option value="married">Married</option>
-                          
                         </Field>
                         <ErrorMessage name="marital_status" component="div" className="error" />
                       </div>
@@ -243,23 +201,23 @@ const DisplayedComponent = ({ onClose, headings, duration, selectedCourse, isSub
                     <div className='registration_form'>
                       <div className="details">Next of Kin Information</div>
                       <div className="formInput">
-                        <label htmlFor="next_of_kin">Next of Kin Name</label>
-                        <Field name="next_of_kin" type="text" />
+                        <label htmlFor="next_of_kin">Next of Kin</label>
+                        <Field type="text" name="next_of_kin" />
                         <ErrorMessage name="next_of_kin" component="div" className="error" />
                       </div>
                       <div className="formInput">
                         <label htmlFor="next_of_kin_address">Next of Kin Address</label>
-                        <Field name="next_of_kin_address" type="text" />
+                        <Field type="text" name="next_of_kin_address" />
                         <ErrorMessage name="next_of_kin_address" component="div" className="error" />
                       </div>
                       <div className="formInput">
                         <label htmlFor="next_of_kin_relationship">Next of Kin Relationship</label>
-                        <Field name="next_of_kin_relationship" type="text" />
+                        <Field type="text" name="next_of_kin_relationship" />
                         <ErrorMessage name="next_of_kin_relationship" component="div" className="error" />
                       </div>
                       <div className="formInput">
                         <label htmlFor="next_of_kin_phone_number">Next of Kin Phone Number</label>
-                        <Field name="next_of_kin_phone_number" type="text" />
+                        <Field type="text" name="next_of_kin_phone_number" />
                         <ErrorMessage name="next_of_kin_phone_number" component="div" className="error" />
                       </div>
                     </div>
@@ -271,9 +229,14 @@ const DisplayedComponent = ({ onClose, headings, duration, selectedCourse, isSub
                       >
                         Previous
                       </button>
-                      <button type="submit" disabled={!isValid} className='next-button'>
-                        Next
-                      </button>
+                      <button 
+  type={is400Level ? "button" : "submit"}
+  onClick={is400Level ? () => setCurrentStep(currentStep + 1) : undefined}
+  disabled={!isValid} 
+  className='next-button'
+>
+  {is400Level ? 'Next' : 'Submit'}
+</button>
                     </div>
                   </>
                 )}
@@ -287,19 +250,19 @@ const DisplayedComponent = ({ onClose, headings, duration, selectedCourse, isSub
                         <Field as="select" name="bank">
                           <option value="">Select Bank</option>
                           {banks.map((bank) => (
-                            <option key={bank.id} value={bank.name}>{bank.name}</option>
+                            <option key={bank.id} value={bank.id}>{bank.name}</option>
                           ))}
                         </Field>
                         <ErrorMessage name="bank" component="div" className="error" />
                       </div>
                       <div className="formInput">
                         <label htmlFor="bank_account_number">Bank Account Number</label>
-                        <Field name="bank_account_number" type="text" />
+                        <Field type="text" name="bank_account_number" />
                         <ErrorMessage name="bank_account_number" component="div" className="error" />
                       </div>
                       <div className="formInput">
                         <label htmlFor="bank_sort_code">Bank Sort Code</label>
-                        <Field name="bank_sort_code" type="text" />
+                        <Field type="text" name="bank_sort_code" />
                         <ErrorMessage name="bank_sort_code" component="div" className="error" />
                       </div>
                     </div>

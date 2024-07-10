@@ -95,7 +95,6 @@ const SignUp = () => {
               <SignLogHeader />
 
               <div className="signUpForm">
-              {status && status.error && <div className="error failed">{status.error}</div>}
                 <div className="todo">Create Account</div>
                 <Formik
                   initialValues={{ email: '', password: '', repeatPassword: '' }}
@@ -162,7 +161,7 @@ const SignUp = () => {
                       <button className="createAccount" type="submit" disabled={isSubmitting}>
                         {isSubmitting ? <PulseLoader size={20} color="green" /> : "Sign Up"}
                       </button>
-                 
+                      {status && status.error && <div className="error failed">{status.error}</div>}
 
                       <div className="or">
                         <hr /> <span>or</span>
