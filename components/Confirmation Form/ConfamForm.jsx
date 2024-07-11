@@ -11,6 +11,7 @@ import "./confirmRegister.scss";
 const DisplayedComponent = ({ onClose, selectedCourse }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [registrationId, setRegistrationId] = useState(null);
   const [banks, setBanks] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
@@ -32,6 +33,8 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
     current_level: '',
     marital_status: '',
     disability: '',
+    any_work_experience: '',
+    previous_company_of_attachment: '',
     next_of_kin: '',
     next_of_kin_address: '',
     next_of_kin_relationship: '',
@@ -45,6 +48,8 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
   };
 
   const is400Level = selectedCourse.level === 400;
+  const is6MonthIT = selectedCourse.training_type_duration === 24;
+  const skipPreviousAttachment = false; // Check if user has previous training records
 
   const validationSchemas = [
     Yup.object({
@@ -53,6 +58,10 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
     Yup.object({
       marital_status: Yup.string().required('Required'),
       disability: Yup.string().required('Required'),
+    }),
+    Yup.object({
+      any_work_experience: Yup.string().required('Required'),
+      previous_company_of_attachment: Yup.string().optional(),
     }),
     Yup.object({
       next_of_kin: Yup.string().required('Required'),
@@ -71,8 +80,12 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
   ];
 
   const handleSubmit = async (values, actions) => {
-    if (currentStep < 3 || (currentStep === 3 && is400Level)) {
-      setCurrentStep(currentStep + 1);
+    if (currentStep < 4 || (currentStep === 4 && is6MonthIT)) {
+      let step = 1;
+      if (currentStep == 2 && skipPreviousAttachment)
+        step++;
+
+      setCurrentStep(currentStep + step);
       actions.setTouched({});
       actions.setSubmitting(false);
     } else {
@@ -80,6 +93,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
         const response = await axiosInstance.post('https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/', values);
         if (response.status === 201) {
           setIsSubmitted(true);
+          setRegistrationId(response.data.id);
           setErrorMessage('');
         } else {
           console.error('Unexpected response status:', response.status);
@@ -99,8 +113,11 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
   };
 
   const handlePrevious = (setTouched) => {
+    let step = 1;
+    if (currentStep == 4 && skipPreviousAttachment)
+      step++;
     setTouched({});
-    setCurrentStep(currentStep - 1);
+    setCurrentStep(currentStep - step);
   };
 
   return (
@@ -111,7 +128,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
             <img src={Mark} alt="success" />
             <h2 className="success">Registration Successful!</h2>
             <p>You have successfully registered {selectedCourse.course_code}</p>
-            <button onClick={() => navigate('/page_print')} className='viewReg'>View Registration Form</button>
+            <button onClick={() => navigate(`/page_print/${registrationId}`)} className='viewReg'>View Registration Form</button>
           </div>
         ) : (
           <Formik
@@ -135,6 +152,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                           <option value="400">400 Level</option>
                           <option value="500">500 Level</option>
                           <option value="FNG">FNG</option>
+                          <option value="700">700 Level</option>
                         </Field>
                         <ErrorMessage name="current_level" component="div" className="error" />
                       </div>
@@ -199,6 +217,40 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                   <>
                     <div className="close closer" onClick={onClose}><img src={Close} alt="close" /></div>
                     <div className='registration_form'>
+                      <div className="details">Previous Training</div>
+                      <div className="formInput">
+                        <label htmlFor="any_work_experience">Any Previous Work Experience?</label>
+                        <Field as="select" name="any_work_experience">
+                          <option value="">Select an Option</option>
+                          <option value="none">Yes</option>
+                          <option value="physical">No</option>
+                        </Field>
+                        <ErrorMessage name="any_work_experience" component="div" className="error" />
+                      </div>
+                      <div className="formInput">
+                        <label htmlFor="previous_company_of_attachment">If yes, where?</label>
+                        <Field type="text" name="previous_company_of_attachment"></Field>
+                        <ErrorMessage name="previous_company_of_attachment" component="div" className="error" />
+                      </div>
+                    </div>
+                    <div className='buttonContainer'>
+                      <button
+                        type="button"
+                        onClick={() => handlePrevious(setTouched)}
+                        className='prev-button'
+                      >
+                        Previous
+                      </button>
+                      <button type="submit" disabled={!isValid} className='next-button'>
+                        Next
+                      </button>
+                    </div>
+                  </>
+                )}
+                {currentStep === 4 && (
+                  <>
+                    <div className="close closer" onClick={onClose}><img src={Close} alt="close" /></div>
+                    <div className='registration_form'>
                       <div className="details">Next of Kin Information</div>
                       <div className="formInput">
                         <label htmlFor="next_of_kin">Next of Kin</label>
@@ -230,17 +282,17 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                         Previous
                       </button>
                       <button 
-  type={is400Level ? "button" : "submit"}
-  onClick={is400Level ? () => setCurrentStep(currentStep + 1) : undefined}
+  type={is6MonthIT ? "button" : "submit"}
+  onClick={is6MonthIT ? () => setCurrentStep(currentStep + 1) : undefined}
   disabled={!isValid} 
   className='next-button'
 >
-  {is400Level ? 'Next' : 'Submit'}
+  {is6MonthIT ? 'Next' : 'Submit'}
 </button>
                     </div>
                   </>
                 )}
-                {currentStep === 4 && (
+                {currentStep === 5 && (
                   <>
                     <div className="close closer" onClick={onClose}><img src={Close} alt="close" /></div>
                     <div className='registration_form'>
