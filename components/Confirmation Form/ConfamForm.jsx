@@ -81,7 +81,6 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
 
   const handleSubmit = async (values, actions) => {
     if (currentStep < 4 || (currentStep === 4 && is6MonthIT)) {
-      console.log('not submitting');
       let step = 1;
       if (currentStep == 2 && skipPreviousAttachment)
         step++;
@@ -90,7 +89,6 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
       actions.setTouched({});
       actions.setSubmitting(false);
     } else {
-      console.log('submitting');
       try {
         const response = await axiosInstance.post('https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/', values);
         if (response.status === 201) {
