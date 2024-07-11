@@ -80,7 +80,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
   ];
 
   const handleSubmit = async (values, actions) => {
-    if (currentStep < 4 || (currentStep === 4 && is400Level)) {
+    if (currentStep < 4 || (currentStep === 4 && is6MonthIT)) {
       console.log('not submitting');
       let step = 1;
       if (currentStep == 2 && skipPreviousAttachment)
@@ -284,12 +284,12 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                         Previous
                       </button>
                       <button 
-  type={is400Level ? "button" : "submit"}
-  onClick={is400Level ? () => setCurrentStep(currentStep + 1) : undefined}
+  type={is6MonthIT ? "button" : "submit"}
+  onClick={is6MonthIT ? () => setCurrentStep(currentStep + 1) : undefined}
   disabled={!isValid} 
   className='next-button'
 >
-  {is400Level ? 'Next' : 'Submit'}
+  {is6MonthIT ? 'Next' : 'Submit'}
 </button>
                     </div>
                   </>
