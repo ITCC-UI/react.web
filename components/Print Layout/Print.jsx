@@ -109,7 +109,7 @@ const PrintPreview = () => {
         </div>
         <div className="rowIdea">
           <p>Department: <span>{submittedData.department_name}</span></p>
-          <p>Current Level: <span>{`${submittedData.current_level} Level`}</span></p>
+          <p>Current Level: <span>{`${submittedData.current_level}`}</span></p>
           <p>Session of entry: <span>{submittedData.session}</span></p>
         </div>
         <div className="rowIdea">
