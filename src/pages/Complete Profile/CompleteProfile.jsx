@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import "./thisForm.scss";
 import FormHeader from '../../../components/Header/FormHeader';
 import axiosInstance from '../../../API Instances/AxiosIntances';
+import { Helmet } from 'react-helmet';
 
 const FILE_SIZE = 800 * 1024; // 800kb in bytes
 
@@ -118,6 +119,11 @@ const UpdateProfileForm = () => {
 
   return (
     <div className="formWrapper">
+      <Helmet>
+        <title>
+          ITCC - Update Profile 
+        </title>
+      </Helmet>
       <FormHeader />
       <div className="formCase">
         <Formik

@@ -8,6 +8,7 @@ import { Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import axiosInstance from "../../../API Instances/AxiosIntances";
+import { Helmet } from "react-helmet";
 
 const IntroductionLetter = () => {
   const [showNewRequest, setShowNewRequest] = useState(false);
@@ -73,6 +74,11 @@ const IntroductionLetter = () => {
 
   return (
     <div className="introductionLetter">
+      <Helmet>
+        <title>
+          ITCC - Introduction Letter
+        </title>
+      </Helmet>
       <SideBar
         dashboardClass={"dashy"}
         placementClass={"active-accordion placement filterPlacement"}
