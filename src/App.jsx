@@ -36,8 +36,9 @@ function App() {
           <Route path='/register' element={<Dashboard/>}></Route>
        <Route path='/registration-portal' element= {<RegistrationDash/>}></Route>
           <Route path='/dashboard' element={<MainDashboard/>  } />
+          
           <Route path='/placement' element={<Placement/>} />
-          {/* <Route path='/registration_form' element={<RegistrationForm />} /> */}
+         
                
               <Route path='/introduction-letter' element={<IntroductionLetter/>} /> 
                {/* <Route path="/form" element={<UpdateProfile />} /> */}

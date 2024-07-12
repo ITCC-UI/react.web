@@ -6,6 +6,7 @@ import SideBar from '../../../components/Sidebar/Sidebar';
 import UserForm from '../../../components/Fill Form/FillForm';
 // import MyForm from '../../../components/Form/MyForm';
 import MForm from '../../../components/Form/FormData';
+import { Helmet } from 'react-helmet';
 
 const Dashboard = (dashboardClass, placementClass, disableCover,disableReg) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -44,6 +45,11 @@ const Dashboard = (dashboardClass, placementClass, disableCover,disableReg) => {
 
   return (
     <div className="route-Dash">
+      <Helmet>
+        <title>
+          ITCC - Registration
+        </title>
+      </Helmet>
       <SideBar disableCover="dash_navig" dashboardClass="dashy" placementClass="placement" />
       <div className="overlay"></div>
       

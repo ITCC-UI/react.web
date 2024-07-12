@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { Helmet } from "react-helmet";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import { useNavigate } from 'react-router-dom';
 import { PulseLoader } from 'react-spinners'; // Import the PulseLoader component
@@ -134,6 +135,9 @@ const Login = () => {
 
   return ( 
     <div className="loginPage route-Dash">
+      <Helmet>
+        <title>ITCC - Login</title>
+      </Helmet>
       <DummySideBar />
       <section className="signUp">
         <main>

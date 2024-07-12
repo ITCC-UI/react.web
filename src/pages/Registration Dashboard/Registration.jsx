@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import DisplayedComponent from "../../../components/Confirmation Form/ConfamForm";
 import DepartmentTrainingCourses from "../../../components/Table/Table";
 import axiosInstance from "../../../API Instances/AxiosIntances";
+import { Helmet } from "react-helmet";
 
 const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disableReg, onClose, onButtonClick, authToken }) => {
   const [isDisplayed, setIsDisplayed] = useState(false);
@@ -58,6 +59,9 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
 
   return (
     <>
+    <Helmet>
+      <title> ITCC - Course Registration</title>
+    </Helmet>
  {isDisplayed && <DisplayedComponent onClose={handleClose} selectedCourse={selectedCourse}/>}
     <div className="route-Dash">
       

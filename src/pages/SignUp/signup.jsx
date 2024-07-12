@@ -9,6 +9,7 @@ import DummySideBar from '../../../components/Sidebar/DummySB';
 import './SignUp.scss';
 import Google from '/images/google.png';
 import SignLogHeader from '../../../components/Header/SignupLoginHead';
+import { Helmet } from 'react-helmet';
 
 const SignUpSchema = Yup.object().shape({
   email: Yup.string()
@@ -87,6 +88,11 @@ const SignUp = () => {
 
   return (
     <div className="login route-Dash">
+      <Helmet>
+        <title>
+          ITCC - Sign Up
+        </title>
+      </Helmet>
       <DummySideBar />
       <section className="signUp">
         <main>

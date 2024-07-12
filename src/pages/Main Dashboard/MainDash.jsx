@@ -7,10 +7,15 @@ import DasboardComponents from "./Training Timeline/TrainingTL";
 import Content from "../../../components/Content/Content";
 import TVariant from "../../../components/TimelineShow/TimeVariationComp";
 import Announcement from "../../../components/Announcement/Announcement";
+import { Helmet } from "react-helmet";
 
 const MainDashboard = () => {
     return ( <div className="mainDash route-Dash">
-    
+    <Helmet>
+      <title>
+        ITCC - Dashboard
+      </title>
+    </Helmet>
     <SideBar dashboardClass={"active-accordion dashy"} placementClass={"placement"} init={0}/>  {/*State management for the accordion where 0= first accordion */}
     <main>
     <TopNav disableReg={"registration"}/>
