@@ -22,6 +22,7 @@ import FormHeader from '../components/Header/FormHeader.jsx';
 import Placement from './pages/Placement/Placement.jsx';
 import IntroductionLetter from './pages/Introduction Letter Request/IntroductionLetter.jsx';
 import PrintPreview from '../components/Print Layout/Print.jsx';
+import ErrorPage from './pages/WildCard/WildPage.jsx';
 // import PrintPreviewContainer from '../components/Print Layout/PrintPreview.jsx';
 // import RegistrationForm from '../components/Print Form/RegistrationForm.jsx';
 function App() {
@@ -35,20 +36,20 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path='/register' element={<Dashboard/>}></Route>
        <Route path='/registration-portal' element= {<RegistrationDash/>}></Route>
-          <Route path='/dashboard' element={<MainDashboard/>  } />
+          <Route path='/dashboar' element={<MainDashboard/>  } />
           
           <Route path='/placement' element={<Placement/>} />
          
                
               <Route path='/introduction-letter' element={<IntroductionLetter/>} /> 
-               {/* <Route path="/form" element={<UpdateProfile />} /> */}
-          {/* <Route path='/complete-profile' element ={<CompleteProfile />}></Route> */}
-{/* <Route path='/complete-profile' element={<CombinedForm/>} /> */}
+           
        <Route path='/complete-profile2' element={<FormCase/>}/>
         <Route path='/complete-profile' element={<UpdateProfileForm/>}/>
 
         <Route path='/page_print/:registrationId' element={<PrintPreview/>}/>
       <Route path='/reghead' element ={<FormHeader/>}/>
+
+      <Route path='*' element={<ErrorPage/>}/>
         </Routes>
    
 

@@ -60,6 +60,15 @@ const DepartmentTrainingCourses = ({ checked }) => {
   };
 
   return (
+    <>
+      {selectedCourse && (
+        <DisplayedComponent
+          onClose={() => setSelectedCourse(null)}
+          headings={selectedCourse.title}
+          duration={selectedCourse.training_type_duration}
+          selectedCourse={selectedCourse}
+        />
+      )}
     <section>
       <div className="heading">
         <h2>Department Training Courses</h2>
@@ -113,15 +122,8 @@ const DepartmentTrainingCourses = ({ checked }) => {
         </div>
       </div>
 
-      {selectedCourse && (
-        <DisplayedComponent
-          onClose={() => setSelectedCourse(null)}
-          headings={selectedCourse.title}
-          duration={selectedCourse.training_type_duration}
-          selectedCourse={selectedCourse}
-        />
-      )}
-    </section>
+    
+    </section></>
   );
 };
 

@@ -32,8 +32,7 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
     const fetchTrainingCourses = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axiosInstance.get(
-          "trainings/department/trainings/registrations/",
+        const response = await axiosInstance.get("trainings/department/trainings/registrations/",
           {
             headers: {
               Authorization: `Token ${token}`
@@ -62,10 +61,9 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
     <Helmet>
       <title> ITCC - Course Registration</title>
     </Helmet>
- {isDisplayed && <DisplayedComponent onClose={handleClose} selectedCourse={selectedCourse}/>}
+ {/* {isDisplayed && <DisplayedComponent onClose={handleClose} selectedCourse={selectedCourse}/>} */}
     <div className="route-Dash">
-      
-    <SideBar dashboardClass="dashy" placementClass="placement" disableCover="dash_navig" />
+    <SideBar dashboardClass="dashy" placementClass={"placement"} disableCover="dash_navig" activeR={"activen"} init={0} />
       
       
       <main>

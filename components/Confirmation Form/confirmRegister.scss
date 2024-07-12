@@ -191,8 +191,8 @@ font-size: 15px;
 }
 
 .headings{
-    font-size: 14px;
-    font-family: 'Poppins';
+    font-size: 18px;
+    font-family: 'Poppins' !important;
     font-weight: 700;
     text-align: center;
 
@@ -205,11 +205,11 @@ h2.headings{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .logo, .profile{
-        .reviewLogo{
-            width: 60px;
-        }
-    }
+    // .logo, .profile{
+    //     .reviewLogo{
+    //         width: 60px;
+    //     }
+    // }
     .profile{
         margin-right:10px;
     }

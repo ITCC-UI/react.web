@@ -83,7 +83,7 @@ const IntroductionLetter = () => {
         dashboardClass={"dashy"}
         placementClass={"active-accordion placement filterPlacement"}
         init={0}
-        activer={"activen"}
+        activeI={"activen"}
       />
       {showNewRequest && (
         <div className="newRequestComponent">

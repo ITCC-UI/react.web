@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Chevy from "/images/Chevron Right.png";
 import { Link } from 'react-router-dom';
 
-const AccordionS = ({ initialOpenSection, activeClass }) => {
+const AccordionS = ({ initialOpenSection, activeIntro, activeReg }) => {
   const [openAccordion, setOpenAccordion] = useState(initialOpenSection);
   const contentRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -90,9 +90,9 @@ const AccordionS = ({ initialOpenSection, activeClass }) => {
           }}
         >
           {/* <a href">Registration</a> */}
-          <Link to="/registration-portal">Registration</Link>
+          <Link to="/registration-portal" className={activeReg}>Registration</Link>
           <Link to="https://itcc.ui.edu.ng/siwes/dlc/companies" target='_blank'>Browse Companies</Link>
-          <Link to="/introduction-letter" className={activeClass}>Introduction Letter</Link>
+          <Link to="/introduction-letter" className={activeIntro}>Introduction Letter</Link>
         </div>
       </div>
 
