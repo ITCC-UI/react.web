@@ -215,14 +215,18 @@ padding: 20px;    position: absolute;
     font-weight: lighter;
     display: none;
   }
-  &:hover{
-    .tip{
-      // display: block;
-    }
-  }
-
-  //  margin-top: 50px;
    img{
     width: 16px;
    }
+  }
+
+
+
+
+
+  @media (max-width:430px) {
+    .dash_navigation{
+      display: none;
+    }
+    
   }

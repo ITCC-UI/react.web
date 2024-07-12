@@ -33,7 +33,7 @@ const NetworkStatusIcon = () => {
   }, []);
 
   return (
-    <div>
+    <div className='network'>
       <FontAwesomeIcon
         icon={isOnline ? faWifi : faExclamationTriangle}
         style={{ color: isOnline ? 'green' : 'red', fontSize: '1em' }}
