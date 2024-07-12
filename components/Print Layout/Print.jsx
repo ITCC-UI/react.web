@@ -6,7 +6,7 @@ import Logo from "/images/UI_logo.png";
 import ProfilePic from "/images/profile.png";
 import "../Confirmation Form/confirmRegister.scss";
 import axiosInstance from '../../API Instances/AxiosIntances';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const PrintPreview = () => {
   const [submittedData, setSubmittedData] = useState(null);
@@ -14,18 +14,13 @@ const PrintPreview = () => {
   const [error, setError] = useState(null);
   const printRef = useRef();
 
+  const { registrationId } = useParams()
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const registrationsResponse = await axiosInstance.get('https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/');
-        const registrationId = registrationsResponse.data[0]?.id;
-        
-        if (!registrationId) {
-          console.error('No registration found');
-          return;
-        }
-  
+          
         const printoutResponse = await axiosInstance.get(`https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/${registrationId}/form/printout-data/`);
         
         setSubmittedData(printoutResponse.data);
@@ -74,7 +69,7 @@ const PrintPreview = () => {
             <img src={Logo} className='reviewLogo' alt="University Logo" />
           </div>
           <div className="formType">
-            STUDENT INDUSTRIAL TRAINING REGISTRATION FORM<br/>
+            STUDENT INDUSTRIAL TRAINING REGISTRATION<br/>
             {`${submittedData.session} REGISTRATION FORM (${submittedData.form_code})`}
           </div>
           <div className="profile">
@@ -85,7 +80,7 @@ const PrintPreview = () => {
         <ProfileHead headings={"Personal Information"} duration={` ${submittedData.training_type_duration===12? "3 - ": "6 - "} Months`} />
         <div className="firstRow rowIdea">
           <p>First Name: <span>{submittedData.first_name}</span></p>
-          <p>Middle Name: <span>{`${submittedData.middle_name || ''}`}</span></p>
+          <p>Middle Name: <span>{`${submittedData.middle_name || 'N/A'}`}</span></p>
           <p>Last Name: <span>{`${submittedData.last_name}`}</span></p>
           <p>Gender: <span>{submittedData.gender}</span></p>
           <p>Date of Birth: <span>{submittedData.dob}</span></p>
@@ -101,8 +96,7 @@ const PrintPreview = () => {
           <p>Nationality: <span>{submittedData.nationality}</span></p>
         </div>
         <div className="firstRow rowIdea">
-          <p>Previous work experience: <span>{submittedData.previous_company_of_attachment || "No"}</span></p>
-          <p>If Yes, where?: <span>{submittedData.previous_company_of_attachment || "N/A"}</span></p>
+          <p>Previous work experience: <span>{submittedData.previous_company_of_attachment || "N/A"}</span></p>
           <p>Disability: <span>{submittedData.disability}</span></p>
         </div>
 
@@ -115,7 +109,7 @@ const PrintPreview = () => {
         </div>
         <div className="rowIdea">
           <p>Department: <span>{submittedData.department_name}</span></p>
-          <p>Current Level: <span>{`${submittedData.current_level} Level`}</span></p>
+          <p>Current Level: <span>{`${submittedData.current_level}`}</span></p>
           <p>Session of entry: <span>{submittedData.session}</span></p>
         </div>
         <div className="rowIdea">

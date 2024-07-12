@@ -47,7 +47,7 @@ function App() {
        <Route path='/complete-profile2' element={<FormCase/>}/>
         <Route path='/complete-profile' element={<UpdateProfileForm/>}/>
 
-        <Route path='/page_print' element={<PrintPreview/>}/>
+        <Route path='/page_print/:registrationId' element={<PrintPreview/>}/>
       <Route path='/reghead' element ={<FormHeader/>}/>
         </Routes>
    
