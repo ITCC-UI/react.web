@@ -43,11 +43,10 @@ const IntroductionLetter = () => {
       return;
     }
 
-    const endpoint = `https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/${programmeId}/introduction-letter-requests/`;
-
     try {
-      const response = await axiosInstance.post(endpoint, values);
+      const response = await axiosInstance.post(`https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/${programmeId}/introduction-letter-requests/`, values);
       console.log("Form submitted successfully", response);
+      
     } catch (error) {
       console.error("Error submitting form", error);
     } finally {
@@ -196,8 +195,9 @@ const IntroductionLetter = () => {
 
 
 
-                    <button type="submit" className="submitting" disabled={isSubmitting}>
-                      Submit
+                    <button type="submit" className="submitting">
+                      {isSubmitting? "Submitting ...": "Submit"}
+                      
                     </button>
                   </Form>
                 )}
