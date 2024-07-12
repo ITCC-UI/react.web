@@ -216,9 +216,12 @@ font-weight: lighter ;
   }
 }
 
-@media (max-width: 426px), (max-width: 769px) {
+@media (max-width: 430px), (max-width: 769px) {
   .dash_navigatioh{
     display: none !important;
+  }
+  main{
+    padding-top: 0 !important;
   }
   .main-container {
     margin-top: 100px;
@@ -234,12 +237,13 @@ font-weight: lighter ;
 
         .logo {
           img {
-            width: 40px;
+            width: 100px;
           }
         }
       }
       .signUpForm {
         height: 100vh;
+        width: 100%;
         .todo {
           font-size: 17px;
         }
@@ -252,10 +256,17 @@ font-weight: lighter ;
             &::placeholder {
               font-size: 12px;
             }
+            &:focus{
+              font-size: 12px;
+            }
           }
           .login, .reset {
             font-size: 12px;
-
+span{
+  a{
+    font-weight: 400;
+  }
+}
           }
 
           button.createAccount,
@@ -267,6 +278,14 @@ font-weight: lighter ;
       }
     }
   }
+
+.password-toggle-icon{
+  svg{
+    width: 15px !important;
+    height: 15px;
+    
+  }
+}
 
  .signInWithGoogle{
   .googleSign{
@@ -394,3 +413,4 @@ font-weight: lighter ;
 .failed{
 top: 0;
 }
+

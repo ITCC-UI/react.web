@@ -49,8 +49,9 @@ color: royalblue !important;
     width: 100%;
     background-color: rgba(39, 38, 38, 0.438);
     backdrop-filter: blur(10px);
-    height: 100%;
+    height: fit-content;
     z-index: 5;
+    padding: 50px 0;
   .newRequestHeader{
     
   width: 800px;

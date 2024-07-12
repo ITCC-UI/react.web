@@ -267,9 +267,9 @@ font-weight: lighter ;
 
 .password-toggle-icon{
   position: absolute;
-  // width: ;
   right: 10px;
   svg{
+    opacity: .7;
     width: 20px !important;height: 20px;
   }
 }
@@ -322,6 +322,7 @@ font-weight: lighter ;
   }
 
  .signInWithGoogle{
+  pointer-events: none;
   .googleSign{
     font-size: 13px;
   }
