@@ -14,7 +14,7 @@ const Placement = () => {
     </Helmet>
 <SideBar dashboardClass={" dashy"} placementClass={"placement active-accordion filterPlacement"} init={0}/>  {/*State management for the accordion where 0= first accordion */}
 <main>
-    <TopNav disableReg={"registration disable"}/>
+    <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"}/>
 
     <img src={Empty} alt="Empty" />
 </main>

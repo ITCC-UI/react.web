@@ -6,7 +6,7 @@ const ErrorPage = () => {
     return ( <div className="route-Dash">
         <SideBar dashboardClass="dashy" placementClass="placement"/>
         <main>
-        <TopNav/>
+        <TopNav  disableReg="registration" setVisible="show" regVisible="hide"/>
         <img src={Construction} alt="under contruction" className="conimg" />
         </main>
 

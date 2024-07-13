@@ -208,7 +208,7 @@ const IntroductionLetter = () => {
         </div>
       )}
       <main>
-        <TopNav disableReg={"registration disable"} />
+        <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} />
         <div className="container">
           <div className="topHead">
             <div className="heading">INTRODUCTION LETTERS</div>

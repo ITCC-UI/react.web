@@ -4,16 +4,17 @@ import Pen from "/images/pen.png";
 import Bell from "/images/Notification.png";
 import Chevy from "/images/chevron down.png";
 import './header.scss';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; // Import js-cookie
 import NetworkStatusIcon from '../NetworkStatus/Network';
 import { ToastContainer } from 'react-toastify';
 
-const TopNav = ({ disableReg, toggleVisibility, isVisible }) => {
+const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisible }) => {
   const [userName, setUserName] = useState(' ');
   const [matricNumber, setMatricNumber] = useState(' ');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userImage, setUserImage] = useState(" ");
+  // const [setVisible, setRegLinkVisibility] =useState(fas)
 
   const navigate = useNavigate();
 
@@ -57,10 +58,15 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible }) => {
       <NetworkStatusIcon/>
       <div className="actionsLog">
         <div className={disableReg}>
-          <button onClick={toggleVisibility}>
+          <button onClick={toggleVisibility} className={regVisible}>
             <img src={Pen} alt="Pen" />
             Registration
           </button>
+
+         <button className={setVisible} id='notvisible'>
+         <img src={Pen} alt="Pen" />
+         <Link to="/register">Registration</Link>
+         </button>
         </div>
         <div className="notifications">
           <div className="notice">

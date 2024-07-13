@@ -67,7 +67,7 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
       
       
       <main>
-        <TopNav disableReg="registration disable" />
+        <TopNav disableReg="registration" setVisible={"show"} regVisible={"hide"} />
         <DepartmentTrainingCourses checked={handleDisplay} courses={trainingCourses} onRegister={handleRegister} />
       </main>
     </div>

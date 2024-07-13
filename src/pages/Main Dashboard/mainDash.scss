@@ -50,3 +50,10 @@ border-radius: 12px;
 .announcement{
     border-top: 1px solid rgba(58, 73, 159, 1);
 }
+.show{
+    display: flex !important;
+}
+
+.hide{
+    display: none !important;
+}
