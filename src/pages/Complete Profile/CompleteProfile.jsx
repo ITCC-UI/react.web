@@ -85,7 +85,7 @@ const UpdateProfileForm = () => {
       if (response.status === 200 || response.status === 201) {
         console.log('Personal details submitted successfully');
         setApiError(null);
-        navigate('/complete-profile2');
+        navigate('/ims/complete-profile2');
       } else {
         console.error('Unexpected response status:', response.status);
         console.error('Unexpected response data:', response.data);

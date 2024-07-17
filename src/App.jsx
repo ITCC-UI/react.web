@@ -1,7 +1,7 @@
 // import { useState } from 'react'
 import './App.css'
 import React from 'react';
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Login from './pages/Login/Login.jsx';
 import SignUp from './pages/SignUp/signup.jsx';
 import Dashboard from './pages/DashBoard/Dashboard.jsx';
@@ -31,25 +31,24 @@ function App() {
 
       <div className="routes app-container">
     <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path='/register' element={<Dashboard/>}></Route>
-       <Route path='/registration-portal' element= {<RegistrationDash/>}></Route>
-          <Route path='/dashboar' element={<MainDashboard/>  } />
-          
-          <Route path='/placement' element={<Placement/>} />
+          <Route path="/ims" element={<Login />} />
+          <Route path="/ims/login" element={<Login />} />
+          <Route path="/ims/signup" element={<SignUp />} />
+          <Route path='/ims/register' element={<Dashboard/>}></Route>
+       <Route path='/ims/registration-portal' element= {<RegistrationDash/>}></Route>
+          <Route path='/ims/dashboard' element={<MainDashboard/>  } />
+          <Route path='/ims/placement' element={<Placement/>} />
          
                
-              <Route path='/introduction-letter' element={<IntroductionLetter/>} /> 
+              {/* <Route path='/ims/introduction-letter' element={<IntroductionLetter/>} />  */}
            
-       <Route path='/complete-profile2' element={<FormCase/>}/>
-        <Route path='/complete-profile' element={<UpdateProfileForm/>}/>
+       <Route path='/ims/complete-profile2' element={<FormCase/>}/>
+        <Route path='/ims/complete-profile' element={<UpdateProfileForm/>}/>
 
-        <Route path='/page_print/:registrationId' element={<PrintPreview/>}/>
-      <Route path='/reghead' element ={<FormHeader/>}/>
+        <Route path='/ims/page_print/:registrationId' element={<PrintPreview/>}/>
+      <Route path='/ims/reghead' element ={<FormHeader/>}/>
 
-      <Route path='*' element={<ErrorPage/>}/>
+      <Route path='/ims/*' element={<ErrorPage/>}/>
         </Routes>
    
 

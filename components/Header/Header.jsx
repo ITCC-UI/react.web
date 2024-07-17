@@ -14,13 +14,14 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
   const [matricNumber, setMatricNumber] = useState(' ');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userImage, setUserImage] = useState(" ");
+  const [hasActiveRegistration, setHasActiveRegistration]=useState(false);
   // const [setVisible, setRegLinkVisibility] =useState(fas)
 
   const navigate = useNavigate();
 
   const LogOut = () => {
     Cookies.remove('token'); // Remove token from cookies
-    navigate('/login');
+    navigate('/ims/login');
   }
 
   useEffect(() => {
@@ -42,7 +43,29 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
       }
     };
 
+    // const checkActiveRegistration = async () => {
+    //   try {
+    //     const token = Cookies.get('token'); // Get token from cookies
+    //     const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/trainings/registrations', {
+    //       headers: {
+    //         Authorization: `Token ${token}`
+    //       }
+    //     });
+    //     console.log(response.data)
+    //     response.data.forEach(training => {
+    //       if(training.status ==='ACTIVE'){
+    //         setHasActiveRegistration(true);
+    //         return true;
+    //       }
+    //     });
+    //   } catch (error) {
+    //     console.error('Error checking program registration:', error);
+    //     return false;
+    //   }
+    // };
+
     fetchUserData();
+    // checkActiveRegistration();
   }, []);
 
   const handleDropdownClick = () => {
@@ -63,9 +86,9 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
             Registration
           </button>
 
-         <button className={setVisible} id='notvisible'>
+          <button className={setVisible} id='notvisible'>
          <img src={Pen} alt="Pen" />
-         <Link to="/register">Registration</Link>
+         <Link to="/ims/registration-portal">Registration</Link>
          </button>
         </div>
         <div className="notifications">

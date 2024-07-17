@@ -128,7 +128,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
             <img src={Mark} alt="success" />
             <h2 className="success">Registration Successful!</h2>
             <p>You have successfully registered {selectedCourse.course_code}</p>
-            <button onClick={() => navigate(`/page_print/${registrationId}`)} className='viewReg'>View Registration Form</button>
+            <button onClick={() => navigate(`/ims/page_print/${registrationId}`)} className='viewReg'>View Registration Form</button>
           </div>
         ) : (
           <Formik

@@ -90,9 +90,9 @@ const AccordionS = ({ initialOpenSection, activeIntro, activeReg }) => {
           }}
         >
           {/* <a href">Registration</a> */}
-          <Link to="/registration-portal" className={activeReg}>Registration</Link>
+          <Link to="/ims/registration-portal" className={activeReg}>Registration</Link>
           <Link to="https://itcc.ui.edu.ng/siwes/dlc/companies" target='_blank'>Browse Companies</Link>
-          <Link to="/introduction-letter" className={activeIntro}>Introduction Letter</Link>
+          <Link to="/ims/introduction-letter" className={activeIntro}>Introduction Letter</Link>
         </div>
       </div>
 
@@ -115,9 +115,9 @@ const AccordionS = ({ initialOpenSection, activeIntro, activeReg }) => {
             maxHeight: openAccordion === 1 ? `${contentRefs[1].current?.scrollHeight}px` : '0',
           }}
         >
-          <Link to="/job-reporting-form">Job Reporting Form</Link>
-          <Link to="/daily-logs">Daily logs</Link>
-          <Link to="/new-logbook-request">New Logbook Request</Link>
+          <Link to="/ims/job-reporting-form">Job Reporting Form</Link>
+          <Link to="/ims/daily-logs">Daily logs</Link>
+          <Link to="/ims/new-logbook-request">New Logbook Request</Link>
         </div>
       </div>
 
@@ -140,8 +140,8 @@ const AccordionS = ({ initialOpenSection, activeIntro, activeReg }) => {
             maxHeight: openAccordion === 2 ? `${contentRefs[2].current?.scrollHeight}px` : '0',
           }}
         >
-          <Link to="/submit-training-document">Submission of Training Documents</Link>
-          <Link to="/results">Results</Link>
+          <Link to="/ims/submit-training-document">Submission of Training Documents</Link>
+          <Link to="/ims/results">Results</Link>
         </div>
       </div>
     </div>

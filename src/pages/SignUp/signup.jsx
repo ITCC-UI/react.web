@@ -57,7 +57,7 @@ const SignUp = () => {
       setSuccessMessage('Sign up successful! Redirecting to login page...');
       setTimeout(() => {
         setSuccessMessage('');
-        navigate("/login");
+        navigate("/ims/login");
       }, 5000); // 5000 milliseconds = 5 seconds
     } catch (error) {
       console.error('Signup failed', error);
@@ -180,7 +180,7 @@ const SignUp = () => {
                         </a>
                       </div>
 
-                      <div className="login">Already have an account? <span><Link to="/login">Login</Link></span></div>
+                      <div className="login">Already have an account? <span><Link to="/ims/login">Login</Link></span></div>
                     </Form>
                   )}
                 </Formik>

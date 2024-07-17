@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
       // Handle token expiration, redirect to login, etc.
       // Optionally, you can clear the cookie here
       Cookies.remove('token');
-      window.location.href = '/login';
+      window.location.href = '/ims/login';
     }
     return Promise.reject(error);
   }
