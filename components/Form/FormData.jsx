@@ -25,7 +25,7 @@ const MyForm = ({ isVisible, onClose, formData }) => {
             <div className="faculty">Faculty: <div>{faculty}</div></div>
           </div>
         </div>
-        <Link to="/ims/registration-portal">
+        <Link to="/registration_portal">
           <div className="register_here">Register</div>
         </Link>
       </div>

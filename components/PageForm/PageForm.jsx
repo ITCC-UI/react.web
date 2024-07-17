@@ -79,7 +79,7 @@ const FormCase = () => {
       if (response.status === 201) {
         setSubmittedValues(values);
         setShowForm(false);
-        navigate('/ims/register'); // Navigate to dashboard on success
+        navigate('/register'); // Navigate to dashboard on success
       } else {
         console.error('Error submitting for:', response);
         setFormError('There was an error submitting your form. Please try again.');

@@ -12,7 +12,7 @@ const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, 
 
   const handleLogout = () => {
     Cookies.remove('token'); // Remove the token from cookies
-    navigate('/ims/login'); // Redirect to the login page
+    navigate('/login'); // Redirect to the login page
   };
 
   return (
@@ -28,13 +28,13 @@ const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, 
               </div>
             </div>
             <div className={disableCover}>
-              <Link to="/ims/dashboard">
+              <Link to="/dashboard">
                 <div className={dashboardClass} id="dashboard">
                   <img src={Dashy} alt="Dashboard" />
                   Dashboard
                 </div>
               </Link>
-              <Link to="/ims/placement">
+              <Link to="/placement">
                 <div className={placementClass}>
                   <img src={Document} alt="docs" />
                   Placement

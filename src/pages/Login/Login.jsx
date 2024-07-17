@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Helmet } from "react-helmet";
 import axiosInstance from "../../../API Instances/AxiosIntances";
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { PulseLoader } from 'react-spinners'; // Import the PulseLoader component
 import Cookies from 'js-cookie'; // Import the js-cookie package
 import "./login.scss";
@@ -94,18 +94,18 @@ const Login = () => {
 
             if (isRegisteredForProgram) {
               console.log('User is registered for a program. Redirecting to dashboard.');
-              navigate('/ims/registration-portal');
+              navigate('/dashboard');
             } else {
               console.log('User needs to complete program registration. Redirecting to complete-program-registration page.');
-              navigate('/ims/registration-portal');
+              navigate('/register');
             }
           } else {
             console.log('User needs to complete profile (step 2). Redirecting to complete-profile2 page.');
-            navigate('/ims/complete-profile2');
+            navigate('/complete-profile2');
           }
         } else {
           console.log('User details are incomplete. Redirecting to complete-profile page.');
-          navigate('/ims/complete-profile');
+          navigate('/complete-profile');
         }
       } else {
         setLoginError('Login failed. Unexpected response format.');
@@ -197,11 +197,11 @@ const Login = () => {
                         </a>
                       </div>
                       <div className="login">
-                        Don't have an account? <span><Link to="/ims/signup">Create an Account</Link></span>
+                        Don't have an account? <span><a href="/signup">Create an Account</a></span>
                       </div>
-                      {/* <div className="reset">
+                      <div className="reset">
                         Forgotten Password? <span><a href="password_reset.html">Reset Password</a></span>
-                      </div> */}
+                      </div>
                     </Form>
                   )}
                 </Formik>

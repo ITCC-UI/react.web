@@ -55,7 +55,7 @@ const PrintPreview = () => {
     <div className='PrintPreview'>
       <div className="formButtons">
         <button onClick={handlePrint} className='print_button'>Download form</button>
-        <Link to="/ims/dashboard" className='dash'>Proceed to Dashboard</Link>
+        <Link to="/dashboard" className='dash'>Proceed to Dashboard</Link>
       </div>
       <div ref={printRef} className='reviewPage thisConfirmation'>
         {/* Form header */}
