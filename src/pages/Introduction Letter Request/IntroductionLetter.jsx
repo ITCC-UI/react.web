@@ -6,7 +6,7 @@ import Empty from "/images/empty_dashboard.png";
 import CloseIcon from "/images/closeButton.png"; // Make sure you have an appropriate close icon
 import { Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
-import axios from "axios";
+import { GridLoader } from "react-spinners";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
 
@@ -58,15 +58,15 @@ const IntroductionLetter = () => {
   const validationSchema = Yup.object().shape({
     company_address: Yup.object().shape({
       building_number: Yup.string().required("Building number is required"),
-      building_name: Yup.string().required("Building name is required"),
+      // building_name: Yup.string().required("Building name is required"),
       street: Yup.string().required("Street is required"),
       area: Yup.string().required("Area is required"),
       city: Yup.string().required("City is required"),
       state_or_province: Yup.string().required("State or province is required"),
-      country: Yup.string().required("Country is required"),
-      postal_code: Yup.string().required("Postal code is required"),
+      // country: Yup.string().required("Country is required"),
+      // postal_code: Yup.string().required("Postal code is required"),
     }),
-    request_message: Yup.string().required("Request message is required"),
+    // request_message: Yup.string().required("Request message is required"),
     company_name: Yup.string().required("Company name is required"),
     address_to: Yup.string().required("Address to is required"),
   });
@@ -196,7 +196,7 @@ const IntroductionLetter = () => {
 
 
                     <button type="submit" className="submitting">
-                      {isSubmitting? "Submitting ...": "Submit"}
+                      {isSubmitting? <GridLoader/>: "Submit"}
                       
                     </button>
                   </Form>
@@ -207,7 +207,7 @@ const IntroductionLetter = () => {
 
         </div>
       )}
-      <main>
+      <main className="introLetter">
         <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} />
         <div className="container">
           <div className="topHead">
