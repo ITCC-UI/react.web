@@ -185,7 +185,7 @@ const Login = () => {
                         <ErrorMessage name="password" component="div" className="error" />
                       </div>
                       <button className="signIn" type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? <PulseLoader size={10} color="green"/> : 'Sign In'}
+                        {isSubmitting ? <PulseLoader size={10} color="white"/> : 'Sign In'}
                       </button>
                       <div className="or">
                         <hr/> <span>or</span>

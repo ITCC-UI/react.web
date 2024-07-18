@@ -183,11 +183,11 @@ font-weight: lighter ;
           font-size: 18px;
           transition: background-color 0.3s ease, color 0.3s linear;
 
-          &:hover {
-            background-color: white;
-            color: var(--blue);
-            border: 1px solid var(--blue);
-          }
+          // &:hover {
+          //   background-color: white;
+          //   color: var(--blue);
+          //   border: 1px solid var(--blue);
+          // }
         }
 
         .login,.reset {
@@ -240,6 +240,7 @@ font-weight: lighter ;
   background-color: var(--google-sign-in, #edeaea);
   color: var(--text-black);
   border-radius: 7px;
+  pointer-events: none;
   .googleSign {
     display: flex;
     border-radius: 7px;

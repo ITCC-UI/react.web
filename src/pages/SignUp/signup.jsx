@@ -165,7 +165,7 @@ const SignUp = () => {
                         )}
                       </div>
                       <button className="createAccount" type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? <PulseLoader size={20} color="green" /> : "Sign Up"}
+                        {isSubmitting ? <PulseLoader size={10} color="white" /> : "Sign Up"}
                       </button>
                       {status && status.error && <div className="error failed">{status.error}</div>}
 
