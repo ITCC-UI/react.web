@@ -6,14 +6,15 @@ import Empty from "/images/empty_dashboard.png";
 import CloseIcon from "/images/closeButton.png"; // Make sure you have an appropriate close icon
 import { Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
-import { GridLoader } from "react-spinners";
+import { GridLoader, PulseLoader } from "react-spinners";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
+
 
 const IntroductionLetter = () => {
   const [showNewRequest, setShowNewRequest] = useState(false);
   const [programmeId, setProgrammeId] = useState(null);
-
+const me=5;
   const toggleNewRequest = () => {
     setShowNewRequest(!showNewRequest);
   };
@@ -47,6 +48,7 @@ const IntroductionLetter = () => {
       const response = await axiosInstance.post(`https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/${programmeId}/introduction-letter-requests/`, values);
       console.log("Form submitted successfully", response);
       
+      
     } catch (error) {
       console.error("Error submitting form", error);
     } finally {
@@ -70,6 +72,15 @@ const IntroductionLetter = () => {
     company_name: Yup.string().required("Company name is required"),
     address_to: Yup.string().required("Address to is required"),
   });
+
+function jump() {
+  if (me==5){
+   <CloseIcon/>
+  }
+  else{
+    <Empty/>
+  }
+}
 
   return (
     <div className="introductionLetter">
@@ -196,7 +207,7 @@ const IntroductionLetter = () => {
 
 
                     <button type="submit" className="submitting">
-                      {isSubmitting? <GridLoader/>: "Submit"}
+                      {isSubmitting? <PulseLoader size={10} color="white"/>: "Submit"}
                       
                     </button>
                   </Form>
@@ -216,9 +227,19 @@ const IntroductionLetter = () => {
               + New Request
             </button>
           </div>
-          <div className="image">
-            <img src={Empty} alt="" />
-          </div>
+     
+             <div className="image">
+             {jump}
+             <img src={Empty} alt="" />
+           </div>
+          
+          else{
+            <div> This is me</div>
+          }
+
+    
+        
+         
         </div>
       </main>
     </div>

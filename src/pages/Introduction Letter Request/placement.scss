@@ -120,12 +120,12 @@ border-radius: 8px;
 padding: 20px !important;
 font-size: 16px;
 &:focus{
-  border: 1px solid turquoise;
+  border: 1px solid rgb(7, 142, 129);
   outline: none;
   padding: 20px;
 }
 &::placeholder{
-  padding: 20px;
+  // padding:5px;
   font-family: "Poppins";
   color: rgba(136, 136, 136, 0.53);
   font-size: 16px;
@@ -167,7 +167,12 @@ float: right;
   margin: 0 !important;
 }
 
-
+.submitting{
+  background-color: rgba(0, 0, 128, 1);
+  color: #ffffff;
+  margin-left: 50px;
+  margin-bottom: 20px;
+}
 
 
 
