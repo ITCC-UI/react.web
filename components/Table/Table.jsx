@@ -36,7 +36,7 @@ const DepartmentTrainingCourses = ({ checked }) => {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString('en-UK', {
       year: 'numeric',
-      month: 'short',
+      month: 'numeric',
       day: 'numeric'
     });
     const formattedTime = date.toLocaleTimeString('en-US', {

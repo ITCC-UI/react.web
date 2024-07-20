@@ -21,14 +21,12 @@ section{
 
     table{
         font-family: "Poppins";
-        // width: 894px;
         width: 100%;
-        // transform: scale(.8);
         border-radius: 12px !important; 
         display: flex;
         flex-direction: column;
         margin: 35px auto 0;
-        // padding: 20px;
+
         font-size: 14px;
         box-shadow: 0px 12px 24px 0px rgba(0, 0, 0, 0.1);
         tbody{
@@ -36,11 +34,9 @@ section{
             flex-direction: column;
             align-items: center;
             border: 1px solid rgb(214,214,214,0.6);
-            // padding: 20px;
+  
             border-radius: 12px;
-            // tr{
-            //     // padding: 20px 0;
-            // }
+         
         }
     }
     table,th,td{
@@ -128,4 +124,60 @@ opacity: 0px;
 
 .timer{
     font-size: 10px;
+    font-weight: 600;
+}
+
+
+@media (max-width:430px) {
+    section{
+        width: 99%;
+        table{
+            font-size: 10px;
+           
+        }
+        table,th,td{
+            tr{
+                padding: 15px;
+                padding-top: 30px;
+                &:first-child{
+                    th{
+                       width: 100px;
+                       &:nth-child(4),
+                       &:nth-child(5){
+                        
+                        font-size: 10px;
+                       }
+                       &:nth-child(5){
+                        margin-left: 3px;
+                       }
+                    }
+                }
+               td{
+                &:nth-child(2),
+                &:nth-child(3){
+                    width: 80px;
+                }
+                &:nth-child(4){
+                    // font-size: 8px;
+                    margin-left: 2px;
+                
+                }
+                &:nth-child(5){
+                    margin-left: 5px;
+                   }
+                
+                .eligibility{
+                    padding: 4px 7px;
+                    font-size: 7px;
+                    font-weight: normal;
+
+                }
+                button{
+                    padding: 8px;
+                    font-size: 8px;
+                }
+               }
+            }
+        }
+    }
 }
