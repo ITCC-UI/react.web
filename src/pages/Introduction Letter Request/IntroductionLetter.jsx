@@ -75,6 +75,7 @@ const me=5;
 
 function jump() {
   if (me==5){
+    
    <CloseIcon/>
   }
   else{
@@ -233,9 +234,7 @@ function jump() {
              <img src={Empty} alt="" />
            </div>
           
-          else{
-            <div> This is me</div>
-          }
+       
 
     
         

@@ -80,3 +80,11 @@ header{
 .empty_dash{
   width: 420px;
 }
+
+
+@media (max-width:430px) {
+  .empty_dash{
+    margin-top: 150px;
+    width: 300px;
+  }
+}
