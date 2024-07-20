@@ -5,7 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../API Instances/AxiosIntances';
 import Forward from '/images/icon.png';
 import FormHeader from '../Header/FormHeader';
-import './pageForm.scss';
+import "../../src/pages/Complete Profile/form.scss"
+import { Helmet } from 'react-helmet';
+import { DotLoader } from 'react-spinners';
 
 const FormCase = () => {
   const navigate = useNavigate();
@@ -100,9 +102,14 @@ const FormCase = () => {
   };
 
   return (
-    <div className={`form-container`} id="newformCase">
+    <div className="formWrapper">
+      <Helmet>
+        <title>
+          ITCC - Update Profile
+        </title>
+      </Helmet>
       <FormHeader />
-      <div className="fillForm">
+      <div className="formCase">
         {formError && <div className="formerror">{formError}</div>}
         {isLoading ? (
           <div className="loading-spinner">
@@ -115,8 +122,9 @@ const FormCase = () => {
             onSubmit={handleSubmit}
           >
             {({ isSubmitting, setFieldValue }) => (
-              <Form className="form">
-                <div className="details">Programme Details</div>
+              <Form id='regForm'>
+               <div className="section">
+               <div className="details">Programme Details</div>
                 <div className="formTop">
                   <div className="form-group">
                     <label htmlFor="matric_number">Matric Number</label>
@@ -187,9 +195,12 @@ const FormCase = () => {
                     <ErrorMessage name="school_email" component="div" className="error" />
                   </div>
                 </div>
-                <button type="submit" disabled={isSubmitting} className="register_here">
-                  {isSubmitting ? 'Submitting...' : <><span>Submit</span> <img src={Forward} alt="" /></>}
+              <div className="button-container">
+              <button type="submit" disabled={isSubmitting} className="register_here">
+                  {isSubmitting ? <DotLoader/> : <><span>Submit</span> <img src={Forward} alt="" /></>}
                 </button>
+              </div>
+               </div>
               </Form>
             )}
           </Formik>

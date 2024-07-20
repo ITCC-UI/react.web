@@ -20,3 +20,14 @@ height: 100px;
         }
     }
 }
+@media (max-width:430px) {
+   .headerForm{
+    padding: 10px;
+    .headerContainer{
+        justify-content: space-around;
+        img{
+            position: relative;
+        }
+    }
+   }
+}

@@ -7,6 +7,7 @@ import "./thisForm.scss";
 import FormHeader from '../../../components/Header/FormHeader';
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import { Helmet } from 'react-helmet';
+import { DotLoader } from 'react-spinners';
 
 const FILE_SIZE = 800 * 1024; // 800kb in bytes
 
@@ -150,14 +151,7 @@ const UpdateProfileForm = () => {
             <Form id="regForm">
               <div className="section">
 
-              {/* <div className="siginError">
-    {apiError && (
-      <div className="error-message">
-      
-        {console.log(thisError.props)}
-      </div>
-    )}
-  </div> */}
+            
                 <h2>Personal Details</h2>
                 <div className="formTop">
                   <div className="form-group">
@@ -232,7 +226,7 @@ const UpdateProfileForm = () => {
                 </div>
 
                 <div className="button-container">
-                  <button type="submit" disabled={isSubmitting} className="register_here">{isSubmitting? 'Submitting please wait...' : "Next"}</button>
+                  <button type="submit" disabled={isSubmitting} className="register_here">{isSubmitting? <DotLoader/> : "Next"}</button>
                 </div>
               </div>
             </Form>

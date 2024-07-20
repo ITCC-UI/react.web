@@ -125,5 +125,16 @@ button{
       flex-wrap: wrap;
       gap: 30px;
       margin-bottom: 30px;
+      .form-group{
+        width: 100%;
+        input[type="text"],
+        input[type="date"],
+        select,
+        input[type="email"],
+        input[type="number"],
+        input[type="file"]{
+          width: 100%;
+        }
+      }
     }
   }
