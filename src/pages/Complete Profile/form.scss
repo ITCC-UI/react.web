@@ -119,3 +119,11 @@ button{
       }
     }
   }
+
+  @media (max-width:430px) {
+    .formTop{
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+  }
