@@ -94,7 +94,7 @@ const Login = () => {
 
             if (isRegisteredForProgram) {
               console.log('User is registered for a program. Redirecting to dashboard.');
-              navigate('/dashboard');
+              navigate('/register');
             } else {
               console.log('User needs to complete program registration. Redirecting to complete-program-registration page.');
               navigate('/register');
