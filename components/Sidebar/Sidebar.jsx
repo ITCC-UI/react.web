@@ -28,13 +28,13 @@ const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, 
               </div>
             </div>
             <div className={disableCover}>
-              <Link to="/dashboard">
+              <Link to="/dashboard" className="null">
                 <div className={dashboardClass} id="dashboard">
                   <img src={Dashy} alt="Dashboard" />
                   Dashboard
                 </div>
               </Link>
-              <Link to="/placement">
+              <Link to="/placement" className="null">
                 <div className={placementClass}>
                   <img src={Document} alt="docs" />
                   Placement

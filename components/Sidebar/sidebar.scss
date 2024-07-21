@@ -58,6 +58,8 @@ height: inherit;
     }
     .dashy#dashboard{
         display: flex;
+        pointer-events: none;
+        // cursor: not-allowed;
         align-items: center;
         justify-content: flex-start;
          gap: 20px;
@@ -77,6 +79,12 @@ height: inherit;
         
     }
   }
+
+.null{
+  cursor: not-allowed;
+  pointer-events: none;
+
+}
 .width{
   width: fit-content;
 }
