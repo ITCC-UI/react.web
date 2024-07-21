@@ -185,4 +185,61 @@ float: right;
     width: 100vw;
     margin: 0 auto;
   }
+
+  .container{
+    .image{
+     width: fit-content;
+     img{
+      margin-top: 20px;
+      width: 300px;
+     }
+    }
+  }
+
+  .companyAddressedTo{
+    gap: 20px;
+  }
+  .newRequestComponent{
+    .newRequestHeader{
+      width: 95%;
+      border-radius: 10px;
+      button.closeButton{
+        width: 30px;
+        height: 30px;
+        padding: 0;
+      img{
+        width: 25px;
+        height: 25px;
+      }
+      }
+    }
+  }
+
+.formInput{
+  input[type="text"]{
+    width: 370px;
+    height: 40px;
+    font-size: 14px !important;
+    &::placeholder{
+      font-size: 10px;
+    }
+   }
+}
+
+.companyDetails{
+  font-size: 14px;
+  .stateofCompany{
+    width: 380px;
+    font-size: 14px;
+    // flex-wrap: wrap;
+    flex-direction: column;
+    input[type="text"]{
+      width: 370px;
+    }
+  }
+}
+.submitting{
+  font-size: 14px;
+  
+}
 }
