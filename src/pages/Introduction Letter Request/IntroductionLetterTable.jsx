@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
 import "./introTable.scss"
 import classNames from 'classnames';
+import IconDownload from "/images/Download.png"
 import axiosInstance from '../../../API Instances/AxiosIntances';
+import { PulseLoader } from 'react-spinners';
 
 const IntroductionLetterTable = () => {
   const [letterRequests, setLetterRequests] = useState([]);
@@ -50,6 +52,22 @@ const IntroductionLetterTable = () => {
     // Implement view functionality here
   };
 
+  const handleDownloadClick = async (id) => {
+    try {
+      const response = await axiosInstance.get(`trainings/introduction-letter-requests/${id}/document/`, {
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `introduction_letter_${id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.error("Error downloading document:", error);
+    }
+  };
+
   // Helper function to format date
   const formatDate = (dateString) => {
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -57,7 +75,7 @@ const IntroductionLetterTable = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <PulseLoader/>;
   }
 
   return (
@@ -93,8 +111,14 @@ const IntroductionLetterTable = () => {
                       </div>
                     </td>
                     <td>{formatDate(request.date_created)}</td>
-                    <td>
+                    <td className='down'>
                       <button onClick={() => handleViewClick(request)}>View More</button>
+                      <img 
+                        src={IconDownload} 
+                        alt="download" 
+                        className='downloadIcon' 
+                        onClick={() => handleDownloadClick(request.id)} 
+                      />
                     </td>
                   </tr>
                 );

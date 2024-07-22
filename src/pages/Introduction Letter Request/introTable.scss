@@ -6,6 +6,49 @@ section table tr td, section th tr td, section td tr td{
     width: 150px;
 }
 
+.status{
+    color: #ffff;
+    border-radius: 15px;
+    padding: 5px 0;
+    &.active{
+        color: green;
+        background: rgba(0, 128, 0, 0.1);
+
+    }
+    &.inactive{
+        background: rgba(239, 62, 6, 0.1);
+       color: rgba(239, 62, 6, 1);
+
+        
+    }
+}
+
+.down{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    button{
+        background-color: transparent;
+        color: var(--deep-blue);
+        border-radius: 7px;
+        cursor: pointer;
+        border: var(--deep-blue) 1px solid;
+padding: 10px ;
+text-align: center;
+gap: 8px;
+opacity: 0px;
+&:hover{
+opacity: .8;
+}
+
+    }
+}
+
+.downloadIcon{
+    width: 20px;
+    cursor:pointer;
+}
 @media (max-width:430px) {
     section table tr td, section th tr td, section td tr td{
         width: 120px;
@@ -16,5 +59,10 @@ section table tr td, section th tr td, section td tr td{
         // border: 1px solid red;
         text-wrap: wrap;
         width: fit-content;
+    }
+    .down{
+        button{
+            padding: 8px;
+        }
     }
 }
