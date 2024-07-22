@@ -11,6 +11,7 @@ color: royalblue !important;
 .container{
     width: 100%;
     margin: 0 auto;
+    background-color: #ffffff;
     
 
     .topHead{
@@ -45,6 +46,8 @@ color: royalblue !important;
 
 
 .newRequestComponent{
+  animation: popIn 0.5s ease-out forwards;
+  
     position: absolute;
     top: 0;
     width: 100%;
@@ -59,7 +62,7 @@ color: royalblue !important;
     
   width: 800px;
   min-width: 300px;
-  
+  transition: linear all .4s;
   margin: 0 auto;
   background-color: #ffffff;
   padding-top: 30px;
@@ -72,6 +75,7 @@ color: royalblue !important;
   }
 
   button.closeButton{
+    
     position: absolute;
     top: 10px;
     width: 30px;
@@ -194,6 +198,12 @@ float: right;
       width: 300px;
      }
     }
+    .topHead{
+      .newReq{
+        font-size: 12px;
+        padding: 0.5em 1.1em;
+      }
+    }
   }
 
   .companyAddressedTo{
@@ -201,8 +211,12 @@ float: right;
   }
   .newRequestComponent{
     .newRequestHeader{
+      padding-top: 45px;
       width: 95%;
       border-radius: 10px;
+      .introductionLetter{
+        margin-bottom: 20px;
+      }
       button.closeButton{
         width: 30px;
         height: 30px;
@@ -242,4 +256,35 @@ float: right;
   font-size: 14px;
   
 }
+}
+
+
+
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes popOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  20% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
 }

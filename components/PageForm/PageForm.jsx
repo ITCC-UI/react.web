@@ -7,7 +7,7 @@ import Forward from '/images/icon.png';
 import FormHeader from '../Header/FormHeader';
 import "../../src/pages/Complete Profile/form.scss"
 import { Helmet } from 'react-helmet';
-import { DotLoader } from 'react-spinners';
+import { DotLoader, PulseLoader } from 'react-spinners';
 
 const FormCase = () => {
   const navigate = useNavigate();
@@ -197,7 +197,7 @@ const FormCase = () => {
                 </div>
               <div className="button-container">
               <button type="submit" disabled={isSubmitting} className="register_here">
-                  {isSubmitting ? <DotLoader/> : <><span>Submit</span> <img src={Forward} alt="" /></>}
+                  {isSubmitting ? <PulseLoader size={10}/> : <><span>Submit</span> <img src={Forward} alt="" /></>}
                 </button>
               </div>
                </div>

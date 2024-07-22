@@ -7,7 +7,7 @@ import "./thisForm.scss";
 import FormHeader from '../../../components/Header/FormHeader';
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import { Helmet } from 'react-helmet';
-import { DotLoader } from 'react-spinners';
+import { DotLoader, PulseLoader } from 'react-spinners';
 
 const FILE_SIZE = 800 * 1024; // 800kb in bytes
 
@@ -226,7 +226,7 @@ const UpdateProfileForm = () => {
                 </div>
 
                 <div className="button-container">
-                  <button type="submit" disabled={isSubmitting} className="register_here">{isSubmitting? <DotLoader/> : "Next"}</button>
+                  <button type="submit" disabled={isSubmitting} className="register_here">{isSubmitting? <PulseLoader size={10}/> : "Next"}</button>
                 </div>
               </div>
             </Form>

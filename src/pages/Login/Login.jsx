@@ -97,7 +97,7 @@ const Login = () => {
               navigate('/register');
             } else {
               console.log('User needs to complete program registration. Redirecting to complete-program-registration page.');
-              navigate('/register');
+              navigate('/registration-portal');
             }
           } else {
             console.log('User needs to complete profile (step 2). Redirecting to complete-profile2 page.');
