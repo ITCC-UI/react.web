@@ -7,6 +7,7 @@ import ProfilePic from "/images/profile.png";
 import "../Confirmation Form/confirmRegister.scss";
 import axiosInstance from '../../API Instances/AxiosIntances';
 import { Link, useParams } from 'react-router-dom';
+import { PulseLoader } from 'react-spinners';
 
 const PrintPreview = () => {
   const [submittedData, setSubmittedData] = useState(null);
@@ -40,7 +41,7 @@ const PrintPreview = () => {
   });
 
   if (isLoading) {
-    return <div>Loading, please wait...</div>;
+    return <PulseLoader color='green'/>;
   }
   
   if (error) {
@@ -55,7 +56,7 @@ const PrintPreview = () => {
     <div className='PrintPreview'>
       <div className="formButtons">
         <button onClick={handlePrint} className='print_button'>Download form</button>
-        <Link to="/dashboard" className='dash'>Proceed to Dashboard</Link>
+        <Link to="/registration-portal" className='dash'>Proceed to Dashboard</Link>
       </div>
       <div ref={printRef} className='reviewPage thisConfirmation'>
         {/* Form header */}

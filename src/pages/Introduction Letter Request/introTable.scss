@@ -1,0 +1,18 @@
+.shift{
+    margin-top: 100px;
+}
+
+section table tr td, section th tr td, section td tr td{
+    width: 150px;
+}
+
+@media (max-width:430px) {
+    section table tr td, section th tr td, section td tr td{
+        width: 120px;
+        // font-size: 10px;
+    }
+
+    section table tbody tr:first-child td:first-child{
+        // border: 1px solid red;
+    }
+}

@@ -1,44 +1,25 @@
 import React, { useRef } from 'react';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 const PrintButton = ({ children }) => {
   const componentRef = useRef();
 
-  const handlePrint = () => {
-    const printContent = componentRef.current;
-    const printWindow = window.open('', '', 'height=600,width=800');
-    
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Print</title>
-          <style>
-            ${Array.from(document.styleSheets)
-              .map(styleSheet => {
-                try {
-                  return Array.from(styleSheet.cssRules).map(rule => rule.cssText).join('');
-                } catch (e) {
-                  console.log('Access to stylesheet blocked by CORS policy');
-                  return '';
-                }
-              })
-              .join('\n')}
-          </style>
-        </head>
-        <body>
-          ${printContent.outerHTML}
-          <script>
-            window.onload = function() {
-              window.print();
-              window.onafterprint = function() {
-                window.close();
-              }
-            }
-          </script>
-        </body>
-      </html>
-    `);
-    
-    printWindow.document.close();
+  const handleDownloadPDF = () => {
+    const input = componentRef.current;
+    html2canvas(input)
+      .then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('download.pdf');
+      })
+      .catch(error => {
+        console.error('Error generating PDF: ', error);
+      });
   };
 
   return (
@@ -46,7 +27,7 @@ const PrintButton = ({ children }) => {
       <div ref={componentRef}>
         {children}
       </div>
-      <button onClick={handlePrint}>Print</button>
+      <button onClick={handleDownloadPDF}>Print</button>
     </div>
   );
 };

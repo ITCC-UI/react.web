@@ -12,10 +12,12 @@ color: royalblue !important;
     width: 100%;
     margin: 0 auto;
     background-color: #ffffff;
+    // z-index: 4;
     
 
     .topHead{
-        width: 100%;
+        width: 95%;
+        margin: 0 auto;
         
    display: flex;
    justify-content: space-between;
