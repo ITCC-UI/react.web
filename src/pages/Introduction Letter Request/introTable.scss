@@ -12,7 +12,9 @@ section table tr td, section th tr td, section td tr td{
         // font-size: 10px;
     }
 
-    section table tbody tr:first-child td:first-child{
+    section table tbody tr td:nth-child(5){
         // border: 1px solid red;
+        text-wrap: wrap;
+        width: fit-content;
     }
 }
