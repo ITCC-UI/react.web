@@ -52,7 +52,7 @@ const IntroductionLetterTable = () => {
   const handleDownloadClick = async (id) => {
     setLoadingDownloads(prevState => ({ ...prevState, [id]: true }));
     try {
-      const response = await axiosInstance.get(`/api/v1/trainings/introduction-letter-requests/${id}/document/`, {
+      const response = await axiosInstance.get(`/trainings/introduction-letter-requests/${id}/document/`, {
         responseType: 'blob',
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -114,7 +114,7 @@ const IntroductionLetterTable = () => {
                     <td className='down'>
                       <button onClick={() => handleViewClick(request)}>View More</button>
                       {loadingDownloads[request.id] ? (
-                        <PulseLoader size={10} />
+                        <PulseLoader size={5} color='blue' />
                       ) : (
                         <img 
                           src={IconDownload} 
