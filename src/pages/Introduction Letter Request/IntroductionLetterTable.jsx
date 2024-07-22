@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
-import "./introTable.scss"
+import "./introTable.scss";
 import classNames from 'classnames';
-import IconDownload from "/images/Download.png"
+import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import { PulseLoader } from 'react-spinners';
 
 const IntroductionLetterTable = () => {
   const [letterRequests, setLetterRequests] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loadingDownloads, setLoadingDownloads] = useState({});
 
   const fetchIntroductionLetterRequests = async () => {
     try {
@@ -18,7 +18,6 @@ const IntroductionLetterTable = () => {
 
       if (registrations.length === 0) {
         console.log("No registrations found");
-        setIsLoading(false);
         return;
       }
 
@@ -36,10 +35,8 @@ const IntroductionLetterTable = () => {
       }));
 
       setLetterRequests(processedRequests);
-      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching introduction letter requests:", error);
-      setIsLoading(false);
     }
   };
 
@@ -53,8 +50,9 @@ const IntroductionLetterTable = () => {
   };
 
   const handleDownloadClick = async (id) => {
+    setLoadingDownloads(prevState => ({ ...prevState, [id]: true }));
     try {
-      const response = await axiosInstance.get(`trainings/introduction-letter-requests/${id}/document/`, {
+      const response = await axiosInstance.get(`/api/v1/trainings/introduction-letter-requests/${id}/document/`, {
         responseType: 'blob',
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -65,6 +63,8 @@ const IntroductionLetterTable = () => {
       link.click();
     } catch (error) {
       console.error("Error downloading document:", error);
+    } finally {
+      setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
     }
   };
 
@@ -73,10 +73,6 @@ const IntroductionLetterTable = () => {
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
-
-  if (isLoading) {
-    return <PulseLoader/>;
-  }
 
   return (
     <section className='shift'>
@@ -100,6 +96,10 @@ const IntroductionLetterTable = () => {
                   'active': request.statusClass === 'active',
                   'inactive': request.statusClass !== 'active'
                 });
+                const downloadIconClasses = classNames({
+                  'downloadIcon': true,
+                  'inactive': request.statusClass !== 'active',
+                });
                 return (
                   <tr key={index}>
                     <td>{request.company_name}</td>
@@ -113,12 +113,16 @@ const IntroductionLetterTable = () => {
                     <td>{formatDate(request.date_created)}</td>
                     <td className='down'>
                       <button onClick={() => handleViewClick(request)}>View More</button>
-                      <img 
-                        src={IconDownload} 
-                        alt="download" 
-                        className='downloadIcon' 
-                        onClick={() => handleDownloadClick(request.id)} 
-                      />
+                      {loadingDownloads[request.id] ? (
+                        <PulseLoader size={10} />
+                      ) : (
+                        <img 
+                          src={IconDownload} 
+                          alt="download" 
+                          className={downloadIconClasses}
+                          onClick={() => request.statusClass === 'active' && handleDownloadClick(request.id)} 
+                        />
+                      )}
                     </td>
                   </tr>
                 );
