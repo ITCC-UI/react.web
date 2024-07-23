@@ -6,7 +6,7 @@ const MoreDetails = ({ request, onClose }) => {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    // Activate the sliding animation after the component mounts
+    
     setIsActive(true);
   }, []);
 
@@ -17,7 +17,28 @@ const MoreDetails = ({ request, onClose }) => {
   };
 
   const getApprovalNote = (note) => {
-    return note === "" ? "N/A" : note;
+    return !note ? "N/A" : note;
+  };
+
+  const formatApprovalDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const daySuffix = day % 10 === 1 && day !== 11 ? 'st' : day % 10 === 2 && day !== 12 ? 'nd' : day % 10 === 3 && day !== 13 ? 'rd' : 'th';
+    const options = { month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+    const formattedDate = date.toLocaleDateString('en-US', options);
+    return `${day}${daySuffix} ${formattedDate.replace(',', '')}`;
+  };
+
+  const getStatusClass = (status) => {
+    switch(status) {
+      case 'APPROVED':
+        return 'status approved';
+      case 'REJECTED':
+        return 'status rejected';
+      case 'SUBMITTED':
+      default:
+        return 'status submitted';
+    }
   };
 
   return (
@@ -50,7 +71,7 @@ const MoreDetails = ({ request, onClose }) => {
 
           <div className='compProfile'>
             <div className="details">Approval Status</div>
-            <div className="cDetails status inactive">{request.approval_status}</div>
+            <div className={getStatusClass(request.approval_status)}>{request.approval_status}</div>
           </div>
 
           <div className="compProfile">
@@ -60,7 +81,7 @@ const MoreDetails = ({ request, onClose }) => {
 
           <div className="compProfile">
             <div className="details">Approval Date</div>
-            <div className="cDetails">{new Date(request.date_of_approval).toLocaleString()}</div>
+            <div className="cDetails">{formatApprovalDate(request.date_of_approval)}</div>
           </div>
           
         </div>
