@@ -33,12 +33,24 @@ const IntroductionLetterTable = () => {
       
       const processedRequests = requests.map(request => ({
         ...request,
-        statusClass: request.approval_status === "APPROVED" ? "active" : "inactive",
+        statusClass: getStatusClass(request.approval_status),
       }));
 
       setLetterRequests(processedRequests);
     } catch (error) {
       console.error("Error fetching introduction letter requests:", error);
+    }
+  };
+
+  const getStatusClass = (status) => {
+    switch(status) {
+      case 'APPROVED':
+        return 'approved';
+      case 'REJECTED':
+        return 'rejected';
+      case 'SUBMITTED':
+      default:
+        return 'submitted';
     }
   };
 
@@ -95,12 +107,13 @@ const IntroductionLetterTable = () => {
               {letterRequests.map((request, index) => {
                 const statusClasses = classNames({
                   'status': true,
-                  'active': request.statusClass === 'active',
-                  'inactive': request.statusClass !== 'active'
+                  'approved': request.statusClass === 'approved',
+                  'rejected': request.statusClass === 'rejected',
+                  'submitted': request.statusClass === 'submitted',
                 });
                 const downloadIconClasses = classNames({
                   'downloadIcon': true,
-                  'inactive': request.statusClass !== 'active',
+                  'inactive': request.statusClass !== 'approved',
                 });
                 return (
                   <tr key={index}>
@@ -122,7 +135,7 @@ const IntroductionLetterTable = () => {
                           src={IconDownload} 
                           alt="download" 
                           className={downloadIconClasses}
-                          onClick={() => request.statusClass === 'active' && handleDownloadClick(request.id)} 
+                          onClick={() => request.statusClass === 'approved' && handleDownloadClick(request.id)} 
                         />
                       )}
                     </td>
