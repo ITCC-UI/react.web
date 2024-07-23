@@ -5,10 +5,12 @@ import classNames from 'classnames';
 import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import { PulseLoader } from 'react-spinners';
+import MoreDetails from '../../../components/View More/MoreDetails';
 
 const IntroductionLetterTable = () => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
+  const [selectedRequest, setSelectedRequest] = useState(null);
 
   const fetchIntroductionLetterRequests = async () => {
     try {
@@ -46,7 +48,7 @@ const IntroductionLetterTable = () => {
 
   const handleViewClick = (request) => {
     console.log('Selected Request:', request);
-    // Implement view functionality here
+    setSelectedRequest(request);
   };
 
   const handleDownloadClick = async (id) => {
@@ -58,7 +60,7 @@ const IntroductionLetterTable = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `introduction_letter_${id}.pdf`);
+      link.setAttribute('download', `introduction_letter.pdf`);
       document.body.appendChild(link);
       link.click();
     } catch (error) {
@@ -129,6 +131,12 @@ const IntroductionLetterTable = () => {
               })}
             </tbody>
           </table>
+          {selectedRequest && (
+            <MoreDetails
+              request={selectedRequest}
+              onClose={() => setSelectedRequest(null)}
+            />
+          )}
         </div>
       </div>
     </section>

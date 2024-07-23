@@ -15,7 +15,7 @@ const IntroductionLetter = () => {
   const [showNewRequest, setShowNewRequest] = useState(false);
   const [programmeId, setProgrammeId] = useState(null);
   const [letterRequests, setLetterRequests] = useState([]);
-  // const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const toggleNewRequest = () => {
     setShowNewRequest(!showNewRequest);
@@ -71,14 +71,16 @@ const IntroductionLetter = () => {
 
   const validationSchema = Yup.object().shape({
     company_address: Yup.object().shape({
-      building_number: Yup.string().required("Building number is required"),
+      building_number: Yup.string(),
+      // .required("Building number is required"),
       street: Yup.string().required("Street is required"),
-      area: Yup.string().required("Area is required"),
+      area: Yup.string(),
+      // .required("Area is required"),
       city: Yup.string().required("City is required"),
       state_or_province: Yup.string().required("State or province is required"),
     }),
     company_name: Yup.string().required("Company name is required"),
-    address_to: Yup.string().required("Address to is required"),
+    address_to: Yup.string().required("Addressee is required"),
   });
 
   // if (isLoading) {
