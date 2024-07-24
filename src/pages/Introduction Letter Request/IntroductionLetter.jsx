@@ -177,7 +177,7 @@ const IntroductionLetter = () => {
                       </div>
                     </div>
                     <button type="submit" className="submitting">
-                      {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
+                      {isSubmitting ? <Spin size={10} color="white" /> : "Submit"}
                     </button>
                   </Form>
                 )}

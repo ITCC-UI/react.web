@@ -5,7 +5,7 @@ import "./introTable.scss";
 import classNames from 'classnames';
 import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
-import { PulseLoader } from 'react-spinners';
+import { RingLoader } from 'react-spinners';
 import MoreDetails from '../../../components/View More/MoreDetails';
 
 
@@ -134,7 +134,7 @@ const IntroductionLetterTable = () => {
                     <td className='down'>
                       <button onClick={() => handleViewClick(request)}>View More</button>
                       {loadingDownloads[request.id] ? (
-                        <PulseLoader size={5} color='blue' />
+                        <RingLoader size={20} color='blue' />
                       ) : (
                         <img 
                           src={IconDownload} 
