@@ -47,7 +47,7 @@ const Sidebar = ({ accordions }) => {
               <AccordionDetails>
                 <List>
                   {accordion.links.map((link, idx) => (
-                    <ListItem button key={idx} component="a" href={link.href}>
+                    <ListItem button key={idx} component="a" href={link.href} target={link.target}>
                       <ListItemText primary={link.label} />
                     </ListItem>
                   ))}

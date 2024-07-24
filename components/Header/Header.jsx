@@ -51,21 +51,21 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
 
   const accordions = [
     {
-      title: "Accordion 1",
+      title: "Pre-Training",
       links: [
-        { label: "Link 1", href: "#" },
-        { label: "Link 2", href: "#" },
+        { label: "Registration", href: "/registration-portal" },
+        { label: "Browse Companies", href: "https://itcc.ui.edu.ng/siwes/dlc/companies", target:"_blank" },
       ],
     },
     {
-      title: "Accordion 2",
+      title: "Training",
       links: [
         { label: "Link A", href: "#" },
         { label: "Link B", href: "#" },
       ],
     },
     {
-      title: "Accordion 3",
+      title: "Post-Training",
       links: [
         { label: "Link X", href: "#" },
         { label: "Link Y", href: "#" },
