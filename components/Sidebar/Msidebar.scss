@@ -55,17 +55,19 @@ overflow-y: scroll;
 .logoutContainer{
     position: fixed;
     bottom: 0;
-    // width: fit-content;
-    width: 200px;
+    width: fit-content;
+    // width: 200px;
     margin-bottom: 10px;
+    margin-left: 20px;
     .logOut{
         // position: fixed;
         font-size: 10px;
         width: fit-content;
         margin: 0 auto;
-        border: 1px solid rgb(255, 255, 255);
+        border: 1px solid #fff;
+        border-radius: 10px;
         text-align: center;
-        padding:5px 10px;
+        padding:7px 14px;
         display: flex;
         align-items: center;
         justify-content: center;
