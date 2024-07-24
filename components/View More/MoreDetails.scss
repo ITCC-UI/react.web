@@ -1,6 +1,9 @@
 .more-details-modal {
     position: fixed;
     overflow-y: scroll;
+    scrollbar-width: 0;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
     top: 0;
     right: 0;
     width: 400px;
@@ -10,6 +13,10 @@
     transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
     z-index: 3;
+    &::-webkit-scrollbar {
+      display: none;  /* Safari and Chrome */
+      
+    }
   }
   
   .more-details-modal.active {

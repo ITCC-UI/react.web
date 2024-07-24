@@ -7,7 +7,7 @@ import './header.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; // Import js-cookie
 import NetworkStatusIcon from '../NetworkStatus/Network';
-import { ToastContainer } from 'react-toastify';
+import Sidebar from '../Sidebar/MobileSideBar';
 
 const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisible }) => {
   const [userName, setUserName] = useState(' ');
@@ -49,8 +49,33 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const accordions = [
+    {
+      title: "Accordion 1",
+      links: [
+        { label: "Link 1", href: "#" },
+        { label: "Link 2", href: "#" },
+      ],
+    },
+    {
+      title: "Accordion 2",
+      links: [
+        { label: "Link A", href: "#" },
+        { label: "Link B", href: "#" },
+      ],
+    },
+    {
+      title: "Accordion 3",
+      links: [
+        { label: "Link X", href: "#" },
+        { label: "Link Y", href: "#" },
+      ],
+    },
+  ];
+
   return (
     <nav className="topNav">
+            <Sidebar accordions={accordions}/>
       <div className="greetDate">
         <div className="greet">Welcome</div>
         <div className="date">{new Date().toLocaleDateString()}</div>

@@ -66,7 +66,7 @@ const MoreDetails = ({ request, onClose }) => {
 
           <div className='compProfile'>
             <div className="details">Date of Request</div>
-            <div className="cDetails">{new Date(request.date_created).toLocaleString()}</div>
+            <div className="cDetails">{formatApprovalDate(request.date_created)}</div>
           </div>
 
           <div className='compProfile'>
