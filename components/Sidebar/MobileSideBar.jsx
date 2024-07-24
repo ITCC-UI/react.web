@@ -42,7 +42,7 @@ const Sidebar = ({ accordions }) => {
               onChange={handleAccordionChange(index)}
             >
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography>{accordion.title}</Typography>
+                <Typography classes={accordion.class}>{accordion.title}</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <List>

@@ -58,7 +58,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
       ],
     },
     {
-      title: "Training",
+      title: "Training", class:"disable",
       links: [
         { label: "Link A", href: "#" },
         { label: "Link B", href: "#" },

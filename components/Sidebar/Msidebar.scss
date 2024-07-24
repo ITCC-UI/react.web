@@ -1,7 +1,9 @@
 .Sidebar{
     display: none;
 }
-
+.disable{
+    pointer-events: none;
+}
 @media (max-width:430px) {
     .Sidebar{
         display: block;
