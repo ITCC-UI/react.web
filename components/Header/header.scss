@@ -208,7 +208,7 @@ main{
                 display: flex;
                 align-items: center;
                 button{
-                    padding: 10px 18px;
+                    padding: 10px 13px;
                     font-size: 12px;
                     align-items: center;
                     img{
@@ -221,6 +221,30 @@ main{
                         width: 30px;
                         height: 30px;
                     }
+                }
+            }
+        }
+    }
+ }
+
+ @media (max-width:376px) {
+    main .topNav{
+        padding: 8px;
+        .greetDate{
+            .greet{
+                font-size: 11px;
+            }
+            .date{
+                font-size: 9px;
+            }
+        }
+
+        .actionsLog{
+            gap:12px;
+            .registration{
+                button{
+                    font-size: 11px;
+                    padding: 10px 12px;
                 }
             }
         }

@@ -31,7 +31,7 @@
     padding: 10px;
     margin: 10px;
     width: 450px;
-
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -105,7 +105,7 @@
     input[type="email"], select {
       &:focus {
         // z-index: 3;
-        scale: 1.1;
+        scale: 1.05;
         background-color: #ffff;
         border: 1px solid rgba(121, 116, 126, 1);
         
@@ -185,6 +185,7 @@
   @media (max-width:430px) {
     .fillForm{
       width: 90%;
+      
     }
 
     .back-button{

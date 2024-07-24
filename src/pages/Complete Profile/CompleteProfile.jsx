@@ -226,7 +226,7 @@ const UpdateProfileForm = () => {
                 </div>
 
                 <div className="button-container">
-                  <button type="submit" disabled={isSubmitting} className="register_here">{isSubmitting? <PulseLoader size={10}/> : "Next"}</button>
+                  <button type="submit" disabled={isSubmitting} className="register_here">{isSubmitting? <PulseLoader size={10} color='white'/> : "Next"}</button>
                 </div>
               </div>
             </Form>

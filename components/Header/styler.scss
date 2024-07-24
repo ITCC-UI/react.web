@@ -31,3 +31,29 @@ height: 100px;
     }
    }
 }
+
+@media (max-width:376px) {
+    .headerForm{
+        padding: 5px;
+        .headerContainer{
+            justify-content: space-between;
+            padding: 0 10px;
+            font-size: 25px;
+            img{
+                width: 60px;
+            }
+        }
+    }
+}
+
+
+@media (max-width:321px) {
+    .headerForm{
+        .headerContainer{
+            font-size: 22px;
+            img{
+                width: 50px;
+            }
+        }
+    }
+}
