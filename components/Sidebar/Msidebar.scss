@@ -48,6 +48,10 @@ overflow-y: scroll;
     }
 }
 
+button:focus, button:focus-visible{
+    outline: none !important;
+}
+
 
 .logoContainer{
     width: fit-content;
