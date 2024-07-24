@@ -51,6 +51,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
 
   const accordions = [
     {
+      disabled: false,
       title: "Pre-Training",
       links: [
         { label: "Registration", href: "/registration-portal" },
@@ -59,6 +60,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
       ],
     },
     {
+      disabled: true,
       title: "Training", class:"disable",
       links: [
         { label: "Link A", href: "#" },
@@ -66,6 +68,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
       ],
     },
     {
+      disabled: true,
       title: "Post-Training",
       links: [
         { label: "Link X", href: "#" },

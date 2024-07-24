@@ -3,6 +3,10 @@ import { CssBaseline, Drawer, IconButton, List, ListItem, ListItemText, Accordio
 import MenuIcon from "@mui/icons-material/Menu";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import './Msidebar.scss';
+import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie'
+import LogOutIcon from "/images/Logout.png"
+import Logo from "/images/UI_logo.png"
 
 const Sidebar = ({ accordions }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -15,6 +19,11 @@ const Sidebar = ({ accordions }) => {
   const handleAccordionChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+const navigate=useNavigate();
+  const LogOut=()=>{
+  Cookies.remove("token")
+  navigate("/login")
+  }
 
   return (
     <div className="Sidebar">
@@ -35,14 +44,18 @@ const Sidebar = ({ accordions }) => {
         className="drawer"
       >
         <List>
+          <div className="logoContainer">
+            <img src={Logo} alt="Logo" />
+          </div>
           {accordions.map((accordion, index) => (
             <Accordion
               key={index}
               expanded={expanded === index}
               onChange={handleAccordionChange(index)}
             >
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography classes={accordion.class}>{accordion.title}</Typography>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}
+              disabled={accordion.disabled}>
+                <Typography>{accordion.title}</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <List>
@@ -55,6 +68,9 @@ const Sidebar = ({ accordions }) => {
               </AccordionDetails>
             </Accordion>
           ))}
+         <div className="logoutContainer">
+         <div className="logOut" onClick={LogOut}> <img src={LogOutIcon} alt="LogOut" /> Log Out</div>
+         </div>
         </List>
       </Drawer>
     </div>

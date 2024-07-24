@@ -4,6 +4,82 @@
 .disable{
     pointer-events: none;
 }
+
+.css-1086bdv-MuiPaper-root-MuiAccordion-root{
+    box-shadow: none !important;
+}
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+background-color: rgba(0, 0, 128, 1) !important;
+color: #ffff !important;
+overflow-y: scroll;
+
+
+&::before{
+    content: " ";
+    background-color: rgba(250, 166, 44, 1);
+    width: 10px;
+    height: inherit;
+    position: fixed;
+    z-index: 1;
+}
+}
+
+.css-1086bdv-MuiPaper-root-MuiAccordion-root{
+    background-color:transparent !important;
+    color: #ffff !important;
+    padding-left: 5px;
+    // fill: red !important;
+}
+.css-10hburv-MuiTypography-root{
+    font-size: .7rem !important;
+}
+
+.css-ahj2mt-MuiTypography-root{
+    font-size: .8rem !important;
+}
+
+.css-i4bv87-MuiSvgIcon-root{
+    fill: white !important;
+}
+
+
+
+.logoContainer{
+    width: fit-content;
+    margin: 30px auto;
+    img{
+        width: 90px;
+    }
+}
+
+.logoutContainer{
+    position: fixed;
+    bottom: 0;
+    // width: fit-content;
+    width: 200px;
+    margin-bottom: 10px;
+    .logOut{
+        // position: fixed;
+        font-size: 10px;
+        width: fit-content;
+        margin: 0 auto;
+        border: 1px solid rgb(255, 255, 255);
+        text-align: center;
+        padding:5px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all .4s linear;
+        img{
+            width: 15px;
+        }
+    
+        &:hover{
+            gap: 15px;
+        }
+    }
+}
 @media (max-width:430px) {
     .Sidebar{
         display: block;
