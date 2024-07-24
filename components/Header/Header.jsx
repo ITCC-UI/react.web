@@ -55,6 +55,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
       links: [
         { label: "Registration", href: "/registration-portal" },
         { label: "Browse Companies", href: "https://itcc.ui.edu.ng/siwes/dlc/companies", target:"_blank" },
+        { label: "Introduction Letter", href: "/introduction-letter",},
       ],
     },
     {

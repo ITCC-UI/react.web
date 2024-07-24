@@ -94,6 +94,7 @@ const IntroductionLetterTable = () => {
 
   return (
     <section className='shift'>
+      
       <div className="mainBody">
         <div className="containerCourse">
           <table>
