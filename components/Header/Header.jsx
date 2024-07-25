@@ -94,7 +94,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
 
          <button className={setVisible} id='notvisible'>
          <img src={Pen} alt="Pen" />
-         <Link to="/register">Registration</Link>
+         <Link to="/registration-portal">Registration</Link>
          </button>
         </div>
         <div className="notifications">

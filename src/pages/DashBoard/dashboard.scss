@@ -2,3 +2,22 @@
     opacity: .5;
     pointer-events: none;
 }
+
+.register_above{
+    background-color: rgb(230, 151, 5);
+    padding: 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-family: "Poppins";
+    text-align: center;
+    line-height: 30px;
+    margin-top: 20px;
+}
+@media (max-width:430px) {
+    .register_above{
+    padding: 5px;
+    width: 320px;
+        text-wrap: wrap;
+        font-size: small;
+    }
+}

@@ -56,6 +56,7 @@ const Dashboard = (dashboardClass, placementClass, disableCover,disableReg) => {
       <main>
       <TopNav toggleVisibility={toggleVisibility} isVisible={isVisible} disableReg="registration" setVisible="hide" regVisible="show"/>
         <img src={Empty} alt="Empty dashboard" className="empty_dash" />
+        <p className='register_above'> You have no registration record yet. <br/>Click the "Registration" Button above to confirm your registration before proceeding.</p>
       </main>
       <UserForm isVisible={isVisible} onClose={() => setIsVisible(false)} onSubmit={handleSubmit} />
       {formData && <MForm isVisible={!isVisible} onClose={() => setIsVisible(false)} formData={formData} />}
