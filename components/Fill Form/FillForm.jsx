@@ -113,7 +113,7 @@ const UserDetails = ({ isVisible, onClose }) => {
                   Cancel
                 </button>
                 <Link to='/registration-portal'>
-                  <button className="register_here" onClick={onClose}>
+                  <button className="register_here confam" onClick={onClose}>
                     Confirm
                   </button>
                 </Link>

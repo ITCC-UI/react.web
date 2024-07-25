@@ -154,6 +154,7 @@
     margin-top: 40px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
   
   .back-button, .register_here {
@@ -178,7 +179,9 @@
     background-color:rgb(0, 119, 255) !important;
   }
 
-
+.confam{
+  margin-top: 0 !important;
+}
  
 
 
