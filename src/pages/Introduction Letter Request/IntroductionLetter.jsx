@@ -16,7 +16,8 @@ const IntroductionLetter = () => {
   const [showNewRequest, setShowNewRequest] = useState(false);
   const [programmeId, setProgrammeId] = useState(null);
   const [letterRequests, setLetterRequests] = useState([]);
-  // const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
 
   const toggleNewRequest = () => {
     setShowNewRequest(!showNewRequest);
@@ -61,9 +62,17 @@ const IntroductionLetter = () => {
       console.log(`Submitting form for programme ID: ${programmeId}`);
       const response = await axiosInstance.post(`/trainings/registrations/${programmeId}/introduction-letter-requests/`, values);
       console.log("Form submitted successfully", response);
-      fetchIntroductionLetterRequests(programmeId);
+      setSubmissionStatus("success");
+      setTimeout(() => {
+        setSubmissionStatus("");
+        fetchIntroductionLetterRequests(programmeId);
+      }, 3000);
     } catch (error) {
       console.error("Error submitting form", error);
+      setSubmissionStatus("failure");
+      setTimeout(() => {
+        setSubmissionStatus("");
+      }, 3000);
     } finally {
       setSubmitting(false);
       toggleNewRequest();
@@ -73,10 +82,8 @@ const IntroductionLetter = () => {
   const validationSchema = Yup.object().shape({
     company_address: Yup.object().shape({
       building_number: Yup.string(),
-      // .required("Building number is required"),
       street: Yup.string().required("Street is required"),
       area: Yup.string(),
-      // .required("Area is required"),
       city: Yup.string().required("City is required"),
       state_or_province: Yup.string().required("State or province is required"),
     }),
@@ -84,16 +91,11 @@ const IntroductionLetter = () => {
     address_to: Yup.string().required("Addressee is required"),
   });
 
-  
-  
-
-
   return (
     <div className="introductionLetter">
       <Helmet>
         <title>ITCC - Introduction Letter</title>
       </Helmet>
-
 
       <SideBar
         dashboardClass={"dashy"}
@@ -130,7 +132,7 @@ const IntroductionLetter = () => {
               >
                 {({ isSubmitting }) => (
                   <Form>
-                  <div className="companyAddressedTo">
+                    <div className="companyAddressedTo">
                       <div className="formInput">
                         <label htmlFor="company_name">Company Name</label>
                         <Field type="text" name="company_name" placeholder="Enter the name of the company, e.g Firstbank Plc" />
@@ -173,7 +175,7 @@ const IntroductionLetter = () => {
                       </div>
                     </div>
                     <button type="submit" className="submitting">
-                      {isSubmitting ? <Spin size={10} color="white" /> : "Submit"}
+                      {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
                     </button>
                   </Form>
                 )}
@@ -192,12 +194,26 @@ const IntroductionLetter = () => {
             </button>
           </div>
         </div>
-        {letterRequests.length === 0 ? (
+        {isLoading ? (
+          <div className="loader">
+            <GridLoader size={15} color={"#123abc"} />
+          </div>
+        ) : letterRequests.length === 0 ? (
           <div className="image">
             <img src={Empty} alt="Empty" />
           </div>
         ) : (
           <IntroductionLetterTable letterRequests={letterRequests} />
+        )}
+        {submissionStatus === "success" && (
+          <div className="submissionStatus success">
+            Form submitted successfully! Reload the page.
+          </div>
+        )}
+        {submissionStatus === "failure" && (
+          <div className="submissionStatus failure">
+            Error submitting form. Please try again.
+          </div>
         )}
       </main>
     </div>
