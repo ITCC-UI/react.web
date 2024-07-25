@@ -219,7 +219,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                     <div className='registration_form'>
                       <div className="details">Previous Training</div>
                       <div className="formInput">
-                        <label htmlFor="any_work_experience">Any Previous Work Experience?</label>
+                        <label htmlFor="any_work_experience">Previous Attachment Work Experience?</label>
                         <Field as="select" name="any_work_experience">
                           <option value="">Select an Option</option>
                           <option value="none">Yes</option>
@@ -253,7 +253,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                     <div className='registration_form'>
                       <div className="details">Next of Kin Information</div>
                       <div className="formInput">
-                        <label htmlFor="next_of_kin">Next of Kin</label>
+                        <label htmlFor="next_of_kin">Name of Next of Kin</label>
                         <Field type="text" name="next_of_kin" />
                         <ErrorMessage name="next_of_kin" component="div" className="error" />
                       </div>

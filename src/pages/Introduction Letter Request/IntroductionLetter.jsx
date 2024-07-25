@@ -16,7 +16,7 @@ const IntroductionLetter = () => {
   const [showNewRequest, setShowNewRequest] = useState(false);
   const [programmeId, setProgrammeId] = useState(null);
   const [letterRequests, setLetterRequests] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
   const toggleNewRequest = () => {
     setShowNewRequest(!showNewRequest);
@@ -83,10 +83,6 @@ const IntroductionLetter = () => {
     company_name: Yup.string().required("Company name is required"),
     address_to: Yup.string().required("Addressee is required"),
   });
-
-  // if (isLoading) {
-  //   return <GridLoader size={15} color={"#123abc"} />;
-  // }
 
   
   

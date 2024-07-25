@@ -58,7 +58,7 @@ const DepartmentTrainingCourses = ({ checked }) => {
   };
 
   const handleRegisterClick = (course) => {
-    console.log('Selected Course:', course);
+    // console.log('Selected Course:', course);
     setSelectedCourse(course);
   };
 

@@ -204,6 +204,22 @@ main{
 
         .actionsLog{
             gap: 15px;
+            .profileDetails{
+                .image{
+                    img{
+                            width: 30px;
+                            height: 30px;
+                    }
+                }
+                .conDetails{
+                    .name{
+                        font-size: 13px;
+                    }
+                    .matricNum{
+                        font-size: 8px;
+                    }
+                }
+            }
             .registration{
                 display: flex;
                 align-items: center;
