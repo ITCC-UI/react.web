@@ -41,12 +41,6 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
         );
         const courses = response.data;
 
-        // Process courses data if needed (e.g., set 'active' class based on status)
-        // const processedCourses = courses.map(course => ({
-        //   ...course,
-        //   activeClass: course.registration_status === "ACTIVE" ? "active" : "inactive"
-        // }));
-
         setTrainingCourses(courses);
       } catch (error) {
         console.error("Error fetching training courses:", error);
@@ -61,7 +55,7 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
     <Helmet>
       <title> ITCC - Course Registration</title>
     </Helmet>
- {/* {isDisplayed && <DisplayedComponent onClose={handleClose} selectedCourse={selectedCourse}/>} */}
+ {isDisplayed && <DisplayedComponent onClose={handleClose} selectedCourse={selectedCourse}/>}
     <div className="route-Dash">
     <SideBar dashboardClass="dashy" placementClass={"placement"} disableCover="dash_navig" activeR={"activen"} init={0} />
       

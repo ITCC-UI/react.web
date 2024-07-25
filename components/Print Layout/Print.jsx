@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import ProfileHead from '../Profile Header/ProfileHeader';
-import Logo from "/images/UI_logo.png";
+import Logo from "/images/UI_Print.png";
 import ProfilePic from "/images/profile.png";
 import "../Confirmation Form/confirmRegister.scss";
 import axiosInstance from '../../API Instances/AxiosIntances';
