@@ -23,6 +23,7 @@ import Placement from './pages/Placement/Placement.jsx';
 import IntroductionLetter from './pages/Introduction Letter Request/IntroductionLetter.jsx';
 import PrintPreview from '../components/Print Layout/Print.jsx';
 import ErrorPage from './pages/WildCard/WildPage.jsx';
+import Auth from "./Auth.jsx"
 // import PrintPreviewContainer from '../components/Print Layout/PrintPreview.jsx';
 // import RegistrationForm from '../components/Print Form/RegistrationForm.jsx';
 function App() {
@@ -34,22 +35,22 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path='/register' element={<Dashboard/>}></Route>
-       <Route path='/registration-portal' element= {<RegistrationDash/>}></Route>
-          <Route path='/dashboar' element={<MainDashboard/>  } />
+          <Route path='/register' element={<Auth><Dashboard/></Auth>}></Route>
+       <Route path='/registration-portal' element= {<Auth><RegistrationDash/></Auth>}></Route>
+          <Route path='/dashboar' element={<Auth><MainDashboard/></Auth>  } />
           
-          <Route path='/placement' element={<Placement/>} />
+          <Route path='/placement' element={<Auth><Placement/></Auth>} />
          
                
-              <Route path='/introduction-letter' element={<IntroductionLetter/>} /> 
+              <Route path='/introduction-letter' element={<Auth><IntroductionLetter/></Auth>} /> 
            
-       <Route path='/complete-profile2' element={<FormCase/>}/>
-        <Route path='/complete-profile' element={<UpdateProfileForm/>}/>
+       <Route path='/complete-profile2' element={<Auth><FormCase/></Auth>}/>
+        <Route path='/complete-profile' element={<Auth><UpdateProfileForm/></Auth>}/>
 
-        <Route path='/page_print/:registrationId' element={<PrintPreview/>}/>
-      <Route path='/reghead' element ={<FormHeader/>}/>
+        <Route path='/page_print/:registrationId' element={<Auth><PrintPreview/></Auth>}/>
+      
 
-      <Route path='*' element={<ErrorPage/>}/>
+      <Route path='*' element={<Auth><ErrorPage/></Auth>}/>
         </Routes>
    
 

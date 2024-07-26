@@ -1,5 +1,3 @@
-
-// axiosInstance.js
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -25,7 +23,6 @@ axiosInstance.interceptors.response.use(
   error => {
     if (error.response.status === 401) {
       // Handle token expiration, redirect to login, etc.
-      // Optionally, you can clear the cookie here
       Cookies.remove('token');
       window.location.href = '/login';
     }

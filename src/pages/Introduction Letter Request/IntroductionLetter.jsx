@@ -66,13 +66,13 @@ const IntroductionLetter = () => {
       setTimeout(() => {
         setSubmissionStatus("");
         window.location.reload(); // Auto refresh the page
-      }, 1000);
+      }, 500);
     } catch (error) {
       console.error("Error submitting form", error);
       setSubmissionStatus("failure");
       setTimeout(() => {
         setSubmissionStatus("");
-      }, 1000);
+      }, 500);
     } finally {
       setSubmitting(false);
       toggleNewRequest();
