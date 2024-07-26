@@ -50,7 +50,7 @@ function App() {
         <Route path='/page_print/:registrationId' element={<Auth><PrintPreview/></Auth>}/>
       
 
-      <Route path='*' element={<ErrorPage/>}/>
+      <Route path='*' element={<Auth><ErrorPage/></Auth>}/>
         </Routes>
    
 
