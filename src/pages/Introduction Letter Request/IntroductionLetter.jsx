@@ -65,14 +65,14 @@ const IntroductionLetter = () => {
       setSubmissionStatus("success");
       setTimeout(() => {
         setSubmissionStatus("");
-        fetchIntroductionLetterRequests(programmeId);
-      }, 3000);
+        window.location.reload(); // Auto refresh the page
+      }, 1000);
     } catch (error) {
       console.error("Error submitting form", error);
       setSubmissionStatus("failure");
       setTimeout(() => {
         setSubmissionStatus("");
-      }, 3000);
+      }, 1000);
     } finally {
       setSubmitting(false);
       toggleNewRequest();

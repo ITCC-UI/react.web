@@ -10,6 +10,16 @@ section{
   .mainBody{
     width: 100%;
   }
+  .containerCourse{
+    height: 450px;
+    overflow-y: scroll;
+    -ms-overflow-style: none; 
+  scrollbar-width: none;
+&::-webkit-scrollbar{
+    display: none;
+    scrollbar-width: 0;
+}
+  }
     .heading{
         margin: 0 auto;
         h2{
