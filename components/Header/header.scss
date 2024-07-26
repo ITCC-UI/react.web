@@ -4,7 +4,7 @@
 main{
     display: flex;
     flex-direction: column;
-    width:100vw;
+    // width:100vw;
     justify-content: center;
     align-items: center;
     padding-top:150px ;
@@ -191,7 +191,9 @@ main{
  }
 
  @media (max-width:430px) {
-    main .topNav{
+    main{
+width: 100vw    ;
+     .topNav{
         padding: 10px;
         .greetDate{
             .greet{
@@ -240,7 +242,7 @@ main{
                 }
             }
         }
-    }
+    }}
  }
 
  @media (max-width:376px) {
