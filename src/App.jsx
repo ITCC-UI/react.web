@@ -29,32 +29,21 @@ import Auth from "./Auth.jsx"
 function App() {
 
     return (
-
       <div className="routes app-container">
-    <Routes>
+        <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path='/register' element={<Auth><Dashboard/></Auth>}></Route>
-       <Route path='/registration-portal' element= {<Auth><RegistrationDash/></Auth>}></Route>
+          <Route path='/registration-portal' element= {<Auth><RegistrationDash/></Auth>}></Route>
           <Route path='/dashboar' element={<Auth><MainDashboard/></Auth>  } />
-          
-          <Route path='/placement' element={<Auth><Placement/></Auth>} />
-         
-               
-              <Route path='/introduction-letter' element={<Auth><IntroductionLetter/></Auth>} /> 
-           
-       <Route path='/complete-profile2' element={<Auth><FormCase/></Auth>}/>
-        <Route path='/complete-profile' element={<Auth><UpdateProfileForm/></Auth>}/>
-
-        <Route path='/page_print/:registrationId' element={<Auth><PrintPreview/></Auth>}/>
-      
-
-      <Route path='*' element={<Auth><ErrorPage/></Auth>}/>
-        </Routes>
-   
-
-        
+          <Route path='/placement' element={<Auth><Placement/></Auth>} />               
+          <Route path='/introduction-letter' element={<Auth><IntroductionLetter/></Auth>} /> 
+          <Route path='/complete-profile2' element={<Auth><FormCase/></Auth>}/>
+          <Route path='/complete-profile' element={<Auth><UpdateProfileForm/></Auth>}/>
+          <Route path='/page_print/:registrationId' element={<Auth><PrintPreview/></Auth>}/>
+          <Route path='*' element={<Auth><ErrorPage/></Auth>}/>
+        </Routes>        
       </div>
   )
 
