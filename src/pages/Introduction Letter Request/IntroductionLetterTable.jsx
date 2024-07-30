@@ -20,20 +20,20 @@ const IntroductionLetterTable = () => {
     try {
       const registrationResponse = await axiosInstance.get("trainings/registrations/");
       const registrations = registrationResponse.data;
-      console.log("Fetched registrations:", registrations);
+      //console.log("Fetched registrations:", registrations);
 
       if (registrations.length === 0) {
-        console.log("No registrations found");
+        //console.log("No registrations found");
         return;
       }
 
       // Use the ID of the first registration
       const id = registrations[0].id;
-      console.log("Using Registration ID:", id);
+      //console.log("Using Registration ID:", id);
 
       const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests/`);
       const requests = requestsResponse.data;
-      console.log("Fetched requests:", requests);
+      //console.log("Fetched requests:", requests);
       
       const processedRequests = requests.map(request => ({
         ...request,
@@ -42,7 +42,7 @@ const IntroductionLetterTable = () => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      console.error("Error fetching introduction letter requests:", error);
+      //console.error("Error fetching introduction letter requests:", error);
     }
   };
 
@@ -63,7 +63,7 @@ const IntroductionLetterTable = () => {
   }, []);
 
   const handleViewClick = (request) => {
-    console.log('Selected Request:', request);
+    //console.log('Selected Request:', request);
     setSelectedRequest(request);
   };
 
@@ -80,7 +80,7 @@ const IntroductionLetterTable = () => {
       document.body.appendChild(link);
       link.click();
     } catch (error) {
-      console.error("Error downloading document:", error);
+      //console.error("Error downloading document:", error);
     } finally {
       setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
     }

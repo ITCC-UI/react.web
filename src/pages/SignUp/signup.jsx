@@ -54,14 +54,14 @@ const SignUp = () => {
     try {
       values.email = values.email.toLowerCase(); // Convert email to lowercase
       const response = await axios.post('https://theegsd.pythonanywhere.com/api/v1/student/signup/', values);
-      console.log('Signup successful', response.data);
+      //console.log('Signup successful', response.data);
       setSuccessMessage('Sign up successful! Redirecting to login page...');
       setTimeout(() => {
         setSuccessMessage('');
         navigate("/login");
       }, 5000); // 5000 milliseconds = 5 seconds
     } catch (error) {
-      console.error('Signup failed', error);
+      //console.error('Signup failed', error);
       if (error.response && error.response.data && error.response.data.email) {
         setErrorMessage('User already exists.');
       } else {

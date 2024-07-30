@@ -28,22 +28,22 @@ const IntroductionLetter = () => {
       const response = await axiosInstance.get("trainings/registrations/");
       const id = response.data[0].id;
       setProgrammeId(id);
-      console.log("Programme ID:", id);
+      //console.log("Programme ID:", id);
       fetchIntroductionLetterRequests(id);
     } catch (error) {
-      console.error("Error fetching programme ID:", error);
+      //console.error("Error fetching programme ID:", error);
       setIsLoading(false);
     }
   };
 
   const fetchIntroductionLetterRequests = async (id) => {
     try {
-      console.log("Fetching introduction letters for programme ID:", id);
+      //console.log("Fetching introduction letters for programme ID:", id);
       const response = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests/`);
       setLetterRequests(response.data);
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching introduction letter requests:", error);
+      //console.error("Error fetching introduction letter requests:", error);
       setIsLoading(false);
     }
   };
@@ -54,21 +54,21 @@ const IntroductionLetter = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     if (!programmeId) {
-      console.error("Programme ID not available");
+      //console.error("Programme ID not available");
       return;
     }
 
     try {
-      console.log(`Submitting form for programme ID: ${programmeId}`);
+      //console.log(`Submitting form for programme ID: ${programmeId}`);
       const response = await axiosInstance.post(`/trainings/registrations/${programmeId}/introduction-letter-requests/`, values);
-      console.log("Form submitted successfully", response);
+      //console.log("Form submitted successfully", response);
       setSubmissionStatus("success");
       setTimeout(() => {
         setSubmissionStatus("");
         window.location.reload(); // Auto refresh the page
       }, 500);
     } catch (error) {
-      console.error("Error submitting form", error);
+      //console.error("Error submitting form", error);
       setSubmissionStatus("failure");
       setTimeout(() => {
         setSubmissionStatus("");

@@ -40,7 +40,7 @@ const Login = () => {
       }
       return false;
     } catch (error) {
-      console.error('Error fetching user details:', error);
+      //console.error('Error fetching user details:', error);
       return false;
     }
   };
@@ -53,7 +53,7 @@ const Login = () => {
       }
       return false;
     } catch (error) {
-      console.error('Error checking program completion:', error);
+      //console.error('Error checking program completion:', error);
       return false;
     }
   };
@@ -61,13 +61,13 @@ const Login = () => {
   const checkProgramRegistration = async () => {
     try {
       const response = await axiosInstance.get('/trainings/registrations');
-      console.log(response.data)
+      //console.log(response.data)
       if (response.data && response.data.length > 0) {
         return true;
       }
       return false;
     } catch (error) {
-      console.error('Error checking program registration:', error);
+      //console.error('Error checking program registration:', error);
       return false;
     }
   };
@@ -79,32 +79,32 @@ const Login = () => {
         const token = response.data.token;
         // Set cookie with 1-day expiry
         Cookies.set('token', token, { expires: 1 });
-        console.log('Login successful, token:', token);
+        //console.log('Login successful, token:', token);
 
         const isProfileComplete = await checkUserDetails();
-        console.log('isProfileComplete:', isProfileComplete);
+        //console.log('isProfileComplete:', isProfileComplete);
 
         if (isProfileComplete) {
           const isProgramComplete = await checkProgramCompletion();
-          console.log('isProgramComplete:', isProgramComplete);
+          //console.log('isProgramComplete:', isProgramComplete);
 
           if (isProgramComplete) {
             const isRegisteredForProgram = await checkProgramRegistration();
-            console.log('isRegisteredForProgram:', isRegisteredForProgram);
+            //console.log('isRegisteredForProgram:', isRegisteredForProgram);
 
             if (isRegisteredForProgram) {
-              console.log('User is registered for a program. Redirecting to dashboard.');
+              //console.log('User is registered for a program. Redirecting to dashboard.');
               navigate('/registration-portal');
             } else {
-              console.log('User needs to complete program registration. Redirecting to complete-program-registration page.');
+              //console.log('User needs to complete program registration. Redirecting to complete-program-registration page.');
               navigate('/register');
             }
           } else {
-            console.log('User needs to complete profile (step 2). Redirecting to complete-profile2 page.');
+            //console.log('User needs to complete profile (step 2). Redirecting to complete-profile2 page.');
             navigate('/complete-profile2');
           }
         } else {
-          console.log('User details are incomplete. Redirecting to complete-profile page.');
+          //console.log('User details are incomplete. Redirecting to complete-profile page.');
           navigate('/complete-profile');
         }
       } else {
@@ -117,7 +117,7 @@ const Login = () => {
       } else if (error.response && error.response.status === 404) {
         setLoginError('User not found in the database.');
       } else {
-        console.error('Login error:', error);
+        //console.error('Login error:', error);
         setLoginError('Invalid email or password!');
       }
       handleErrorTimeout();
