@@ -12,7 +12,8 @@
     right: 0;
     left: 0;
     margin: 0 auto;
-    display: flex;top: 0;
+    display: flex;
+    top: 0;
     align-items: center;
     justify-content: center;
     position: fixed;
@@ -24,82 +25,89 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-  }
-.thisConfirmation{
+}
+
+.thisConfirmation {
     height: fit-content;
     padding: 10px 20px;
     background-color: #ffff;
-.registration_form{
-    padding-bottom: 10px;
-    height: fit-content;
-    
-        p{
+
+    .registration_form {
+        padding-bottom: 10px;
+        height: fit-content;
+
+        p {
             font-family: "Poppins";
             font-size: 16px;
             font-weight: 400;
             margin-bottom: 30px;
         }
-    
-    .formInput{
-        display: flex;
-        flex-direction: column;
-        margin: 5px 0;
-        margin-bottom: 20px;
-        .error{
-            bottom: -6px;
-         right: 0;
-            z-index: 1;
-        }
-        label {
-            position: absolute;
-            z-index: 2;
-            font-size: 12px;
-            left: 5px;
-            top: -10px;
-            background: rgba(254, 247, 255, 1);
-          }
-          input[type="text"],
-          input[type="email"],
-          input[type="number"],
-          select {
-            width: 300px;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #f2f2f2;
-            font-size: 14px;
-            color: #333;
-            outline: none;
-            transition: all ease-in-out .2s;
-            margin-bottom: 10px;
-            
-          }
-          input[type="text"],
-          input[type="number"],
-          input[type="email"], select {
-            &:focus {
-              // z-index: 3;
-              scale: 1.1;
-              background-color: #ffff;
-              border: 1px solid rgba(121, 116, 126, 1);
-              
+
+        .formInput {
+            display: flex;
+            flex-direction: column;
+            margin: 5px 0;
+            margin-bottom: 20px;
+
+            .error {
+                bottom: -6px;
+                right: 0;
+                z-index: 1;
             }
 
-            input[type=number]::-webkit-outer-spin-button,
-             input[type=number]::-webkit-inner-spin-button{
-                    -webkit-appearance: none;
-                    // appearance: none;
-                    
+            label {
+                position: absolute;
+                z-index: 2;
+                font-size: 12px;
+                left: 5px;
+                top: -10px;
+                background: rgba(254, 247, 255, 1);
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="number"],
+            select {
+                width: 300px;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                background-color: #f2f2f2;
+                font-size: 14px;
+                color: #333;
+                outline: none;
+                transition: all ease-in-out .2s;
+                margin-bottom: 10px;
+
+            }
+
+            input[type="text"],
+            input[type="number"],
+            input[type="email"],
+            select {
+                &:focus {
+                    // z-index: 3;
+                    scale: 1.1;
+                    background-color: #ffff;
+                    border: 1px solid rgba(121, 116, 126, 1);
+
                 }
 
-               
+                input[type=number]::-webkit-outer-spin-button,
+                input[type=number]::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                    // appearance: none;
+
+                }
+
+
             }
-          }
+        }
     }
 }
 
 
-.thisForm{
+.thisForm {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -110,23 +118,26 @@
     padding-bottom: 50px;
 }
 
-.buttonContainer{
+.buttonContainer {
     display: flex;
     gap: 20px;
-    button{
+
+    button {
         width: 120px;
         height: 40px;
         font-size: 12px;
         color: white;
     }
-    button.next-button{
+
+    button.next-button {
         background: rgba(0, 0, 128, 1);
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
     }
-    button.prev-button{
+
+    button.prev-button {
         background-color: rgb(255, 149, 0);
 
     }
@@ -134,7 +145,7 @@
 
 
 
-.cheers{
+.cheers {
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -144,39 +155,43 @@
     padding: 30px;
     width: 100%;
     margin: 0 auto;
-    .success{
-font-size: 27px;
+
+    .success {
+        font-size: 27px;
     }
 
-    p{
+    p {
         font-size: 13px;
         font-weight: 400;
     }
-    .viewReg{
+
+    .viewReg {
         background: rgba(0, 0, 128, 1);
-color: #ffffff;
-font-size: 15px;
-      
+        color: #ffffff;
+        font-size: 15px;
+
     }
 }
 
-.reviewPage{
+.reviewPage {
     margin: 0 auto;
     // width: 279mm;
-    width:90%;
+    width: 90%;
     padding: 0;
     padding-top: 28px;
 
-    .rowIdea{
+    .rowIdea {
         display: flex;
-        padding: 10px ;
+        padding: 10px;
         justify-content: space-between;
         font-size: 12px;
         margin: 10px 0 10px 0;
-        p{
+
+        p {
             text-transform: uppercase;
-            span{
-                
+
+            span {
+
                 font-weight: 700;
             }
         }
@@ -185,81 +200,84 @@ font-size: 15px;
 }
 
 
-.closer{
+.closer {
     // top:0px;
-    right: 30px;   
+    right: 30px;
 }
 
-.headings{
+.headings {
     font-size: 18px;
     font-family: 'Poppins' !important;
     font-weight: 700;
     text-align: center;
 
 }
-h2.headings{
+
+h2.headings {
     font-weight: 600;
 }
 
-.logoHeadType{
+.logoHeadType {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    // .logo, .profile{
-    //     .reviewLogo{
-    //         width: 60px;
-    //     }
-    // }
-    .profile{
-        margin-right:10px;
+
+
+    .profile {
+        margin-right: 10px;
     }
 
-    .formType{
-        width:379px;
+    .formType {
+        width: 379px;
         font-size: 14px;
         font-weight: 600;
         text-align: center;
     }
 }
-.justLogo{
+
+.justLogo {
     padding: 0;
 }
-.logoHeadType{
+
+.logoHeadType {
     margin-bottom: 5px;
-    .profile{
+
+    .profile {
         width: 90px;
         height: 90px;
-        img{
+
+        img {
             width: inherit;
             height: inherit;
         }
     }
 }
 
-.formButtons{
+.formButtons {
     width: 90%;
     margin: 10px auto;
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
-    .print_button{
+
+    .print_button {
         background-color: rgba(0, 0, 128, 1);
         color: #f2f2f2;
     }
 
-    .dash{
+    .dash {
         background-color: rgb(11, 77, 77);
         padding: 10px;
-    color: #f2f2f2;
-    border-radius: 10px;
+        color: #f2f2f2;
+        border-radius: 10px;
     }
 
 }
 
-.signature{
+.signature {
     width: 100px;
-    // height: 200px;
+
     float: right;
     margin: 20px auto;
 }
@@ -268,42 +286,82 @@ h2.headings{
 
 @media (max-width:430px) {
 
-    .thisForm{
+    .thisForm {
         padding: 30px;
         padding-top: 50px;
         padding-bottom: 30px;
     }
 
-    .close{
+    .close {
         width: 15px;
         height: 15px;
-        img{
+
+        img {
             width: 20px;
         }
     }
 
-    .cheers{
+    .cheers {
         padding: 20px;
-       
-        img{
+
+        img {
             width: 5rem;
         }
-        .success{
+
+        .success {
             font-size: 1rem;
         }
-        .viewReg{
+
+        .viewReg {
             font-size: 12px;
         }
     }
 
-    .formButtons{
-        .print_button{
+    .formButtons {
+        .print_button {
             font-size: 12px;
             padding: 10px;
         }
-        .dash{
+
+        .dash {
             font-size: 12px;
         }
     }
 
+    .formHeading {
+        .headings {
+            font-size: 12px;
+        }
+
+        h2.headings {
+            font-size: 10px;
+        }
+
+        
+    }
+    .logoHeadType {
+        align-items: center;
+        justify-content: center;
+        img {
+            width: 50px !important;
+            height: 50px !important;
+        }
+        .profile{
+            height: initial;
+            width: initial;
+        }
+        .formType {
+           font-size: 10px;
+        }
+    }
+
+    .reviewPage{
+        width: 95%;
+        .rowIdea{
+            font-size: 6px;
+        }
+    }
+    .headingx{
+        font-size: 10px !important;
+    }
 }

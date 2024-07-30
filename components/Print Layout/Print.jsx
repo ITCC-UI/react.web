@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import ProfileHead from '../Profile Header/ProfileHeader';
 import Logo from "/images/UI_Print.png";
-import ProfilePic from "/images/profile.png";
 import "../Confirmation Form/confirmRegister.scss";
 import axiosInstance from '../../API Instances/AxiosIntances';
 import { Link, useParams } from 'react-router-dom';
@@ -22,7 +21,7 @@ const PrintPreview = () => {
       try {
         setIsLoading(true);
           
-        const printoutResponse = await axiosInstance.get(`https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/${registrationId}/form/printout-data/`);
+        const printoutResponse = await axiosInstance.get(`/trainings/registrations/${registrationId}/form/printout-data/`);
         
         setSubmittedData(printoutResponse.data);
         setIsLoading(false);
