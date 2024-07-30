@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import "./table.scss";
 import classNames from 'classnames';
 import axiosInstance from '../../API Instances/AxiosIntances';
@@ -9,6 +10,7 @@ import DisplayedComponent from '../Confirmation Form/ConfamForm';
 const DepartmentTrainingCourses = ({ checked }) => {
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const navigate = useNavigate();
 
   const fetchTrainingCourses = async () => {
     try {
@@ -18,7 +20,8 @@ const DepartmentTrainingCourses = ({ checked }) => {
       const processedCourses = courses.map(course => ({
         ...course,
         activeClass: course.registration_status === "ACTIVE" ? "active" : "inactive",
-        canRegister: course.can_register === "true"
+        canRegister: course.can_register === "true",
+        already_registered: course.student_training === null ? false : true
       }));
 
       setCourses(processedCourses);
@@ -110,6 +113,8 @@ const DepartmentTrainingCourses = ({ checked }) => {
                     <td>
                       {(course.can_register) ? (
                         <NormalButton registerSelf="register active" onButtonClick={() => handleRegisterClick(course)} />
+                      ) : (course.already_registered) ? (
+                        <NormalButton registerSelf="register active" onButtonClick={() => navigate(`/page_print/${course.student_training}`)} buttonText="Reprint" />
                       ) : (
                         <NormalButton registerSelf="register inactive" disabled />
                       )}
