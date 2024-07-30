@@ -127,7 +127,7 @@ const DepartmentTrainingCourses = ({ checked }) => {
         </div>
       </div>
 
-      <div className="register_above">
+      <div className="register_above mobile">
         Scroll horizontally to see more
       </div>
 

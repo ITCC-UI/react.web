@@ -99,7 +99,7 @@ const IntroductionLetter = () => {
 
       <SideBar
         dashboardClass={"dashy"}
-        placementClass={"placement filterPlacement"} //active-accordion class
+        placementClass={"placement"} //active-accordion and filterPlacement class
         init={0}
         activeI={"activen"}
       />

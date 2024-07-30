@@ -57,6 +57,9 @@ header{
   }
 }
 
+.mobile{
+  display: none;
+}
 
 .route-Dash{
   display: flex;
@@ -86,5 +89,8 @@ header{
   .empty_dash{
     margin-top: 150px;
     width: 300px;
+  }
+  .mobile{
+    display: block;
   }
 }
