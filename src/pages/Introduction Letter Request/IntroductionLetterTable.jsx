@@ -157,6 +157,10 @@ const IntroductionLetterTable = () => {
           )}
         </div>
       </div>
+    
+      <div className="register_above">
+        Scroll horizontally to see more
+      </div>
     </section>
   );
 };

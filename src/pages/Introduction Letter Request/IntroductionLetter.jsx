@@ -99,7 +99,7 @@ const IntroductionLetter = () => {
 
       <SideBar
         dashboardClass={"dashy"}
-        placementClass={"active-accordion placement filterPlacement"}
+        placementClass={"placement filterPlacement"} //active-accordion class
         init={0}
         activeI={"activen"}
       />
@@ -215,7 +215,10 @@ const IntroductionLetter = () => {
             Error submitting form. Please try again.
           </div>
         )}
+        
+     
       </main>
+      
     </div>
   );
 };

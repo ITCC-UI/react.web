@@ -116,8 +116,9 @@ opacity: 0px;
  .ineligible{
     // color: red !important;
     color:wheat;
-    background-color: rgb(173, 173, 173);
+    background: rgba(239, 62, 6, .2);
     // background: rgba(239, 62, 6, 0.1);
+    color: rgba(239, 62, 6);
  }
  .denied{
     pointer-events: none;
@@ -142,52 +143,67 @@ opacity: 0px;
     section{
         width: 99%;
         table{
+            width: 600px;
             font-size: 10px;
            
         }
-        table,th,td{
-            tr{
-                padding: 15px;
-                padding-top: 30px;
-                &:first-child{
-                    th{
-                       width: 100px;
-                       &:nth-child(4),
-                       &:nth-child(5){
+        // table,th,td{
+        //     tr{
+        //         padding: 15px;
+        //         padding-top: 30px;
+        //         &:first-child{
+        //             th{
+        //                width: 100px;
+        //                &:nth-child(4),
+        //                &:nth-child(5){
                         
-                        font-size: 10px;
-                       }
-                       &:nth-child(5){
-                        margin-left: 3px;
-                       }
-                    }
-                }
-               td{
-                &:nth-child(2),
-                &:nth-child(3){
-                    width: 80px;
-                }
-                &:nth-child(4){
-                    // font-size: 8px;
-                    margin-left: 2px;
+        //                 font-size: 10px;
+        //                }
+        //                &:nth-child(5){
+        //                 margin-left: 3px;
+        //                }
+        //             }
+        //         }
+        //        td{
+        //         &:nth-child(2),
+        //         &:nth-child(3){
+        //             width: 80px;
+        //         }
+        //         &:nth-child(4){
+        //             // font-size: 8px;
+        //             margin-left: 2px;
                 
-                }
-                &:nth-child(5){
-                    margin-left: 5px;
-                   }
+        //         }
+        //         &:nth-child(5){
+        //             margin-left: 5px;
+        //            }
                 
-                .eligibility{
-                    padding: 4px 7px;
-                    font-size: 7px;
-                    font-weight: normal;
+        //         .eligibility{
+        //             padding: 4px 7px;
+        //             font-size: 7px;
+        //             font-weight: normal;
 
-                }
-                button{
-                    padding: 8px;
-                    font-size: 8px;
-                }
-               }
-            }
-        }
+        //         }
+        //         button{
+        //             padding: 8px;
+        //             font-size: 8px;
+        //         }
+        //        }
+        //     }
+        // }
+    }
+    section table tr td .eligibility, section th tr td .eligibility, section td tr td .eligibility{
+        padding: 2px;
+        font-size: 10px;
+    }
+
+    .ineligible{
+        font-size: 9px;
+        padding: 2px 5px;
+        margin: 0 5px !important;
+    }
+    .eligible{
+        margin: 0 auto;
+        padding:  5px !important;
     }
 }
