@@ -54,37 +54,37 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
       disabled: false,
       title: "Pre-Training",
       links: [
-        { label: "Registration", href: "/registration-portal" },
-        { label: "Browse Companies", href: "https://itcc.ui.edu.ng/siwes/dlc/companies", target:"_blank" },
-        { label: "Introduction Letter", href: "/introduction-letter",},
+        { label: "Registration", to: "/registration-portal" },
+        { label: "Browse Companies", to: "https://itcc.ui.edu.ng/siwes/dlc/companies", target: "_blank" },
+        { label: "Introduction Letter", to: "/introduction-letter" },
       ],
     },
     {
       disabled: true,
-      title: "Training", class:"disable",
+      title: "Training",
       links: [
-        { label: "Link A", href: "#" },
-        { label: "Link B", href: "#" },
+        { label: "Link A", to: "#" },
+        { label: "Link B", to: "#" },
       ],
     },
     {
       disabled: true,
       title: "Post-Training",
       links: [
-        { label: "Link X", href: "#" },
-        { label: "Link Y", href: "#" },
+        { label: "Link X", to: "#" },
+        { label: "Link Y", to: "#" },
       ],
     },
   ];
 
   return (
     <nav className="topNav">
-            <Sidebar accordions={accordions}/>
+      <Sidebar accordions={accordions} />
       <div className="greetDate">
         <div className="greet">Welcome</div>
         <div className="date">{new Date().toLocaleDateString()}</div>
       </div>
-      <NetworkStatusIcon/>
+      <NetworkStatusIcon />
       <div className="actionsLog">
         <div className={disableReg}>
           <button onClick={toggleVisibility} className={regVisible}>
@@ -92,10 +92,10 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
             Registration
           </button>
 
-         <button className={setVisible} id='notvisible'>
-         <img src={Pen} alt="Pen" />
-         <Link to="/registration-portal">Registration</Link>
-         </button>
+          <button className={setVisible} id='notvisible'>
+            <img src={Pen} alt="Pen" />
+            <Link to="/registration-portal">Registration</Link>
+          </button>
         </div>
         <div className="notifications">
           <div className="notice">
@@ -109,9 +109,9 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
           <div className="conDetails">
             <div className="name">{userName}</div>
             <div className="matricNum">Matric No: {matricNumber}</div>
-            
+
             <div className="profileOpt" style={{ display: isDropdownOpen ? 'flex' : 'none' }}>
-              <a href="#profile">Profile</a>
+              <Link to="#profile">Profile</Link>
               <div className="logout" onClick={LogOut}>Log Out</div>
             </div>
           </div>
