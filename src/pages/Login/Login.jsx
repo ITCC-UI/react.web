@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Helmet } from "react-helmet";
 import axiosInstance from "../../../API Instances/AxiosIntances";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PulseLoader } from 'react-spinners'; // Import the PulseLoader component
 import Cookies from 'js-cookie'; // Import the js-cookie package
 import "./login.scss";
@@ -197,10 +197,10 @@ const Login = () => {
                         </a>
                       </div>
                       <div className="login">
-                        Don't have an account? <span><a href="/signup">Create an Account</a></span>
+                        Don't have an account? <span><Link to="/signup">Create an Account</Link></span>
                       </div>
                       <div className="reset">
-                        Forgotten Password? <span><a href="password_reset.html">Reset Password</a></span>
+                        Forgotten Password? <span><Link to="password_reset.html">Reset Password</Link></span>
                       </div>
                     </Form>
                   )}
