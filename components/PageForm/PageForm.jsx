@@ -7,7 +7,7 @@ import Forward from '/images/icon.png';
 import FormHeader from '../Header/FormHeader';
 import "../../src/pages/Complete Profile/form.scss"
 import { Helmet } from 'react-helmet';
-import {PulseLoader } from 'react-spinners';
+import { PulseLoader } from 'react-spinners';
 
 const FormCase = () => {
   const navigate = useNavigate();
@@ -22,6 +22,10 @@ const FormCase = () => {
   useEffect(() => {
     fetchFacultyData();
     fetchProgrammeType();
+    const savedValues = JSON.parse(localStorage.getItem('formValues'));
+    if (savedValues) {
+      setFormValues(savedValues);
+    }
   }, []);
 
   const fetchFacultyData = async () => {
@@ -72,6 +76,8 @@ const FormCase = () => {
     school_email: '',
   };
 
+  const [formValues, setFormValues] = useState(initialValues);
+
   const handleSubmit = async (values, { setSubmitting, setStatus }) => {
     setIsLoading(true);
     setFormError('');
@@ -82,23 +88,34 @@ const FormCase = () => {
         setSubmittedValues(values);
         setShowForm(false);
         navigate('/register');
+        localStorage.removeItem('formValues');
       } else {
-        console.error('Error submitting for:', response);
+        console.error('Error submitting form:', response);
         setFormError('There was an error submitting your form. Please try again.');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      if (error.response && error.response.data) {
+      if (error.response && error.response.status === 500) {
+        setFormError('An unexpected error occured. Please try again.');
+      } else if (error.response && error.response.data) {
         const apiErrors = error.response.data;
         const errorMessage = Object.values(apiErrors).flat().join(', ');
         setFormError(errorMessage);
       } else {
         setFormError('There was an error submitting your form. Please try again.');
       }
+      setTimeout(() => {
+        setFormError('');
+      }, 5000); // 5000 milliseconds = 5 seconds
     } finally {
       setIsLoading(false);
       setSubmitting(false);
     }
+  };
+
+  const handleFormChange = (values) => {
+    setFormValues(values);
+    localStorage.setItem('formValues', JSON.stringify(values));
   };
 
   return (
@@ -117,11 +134,12 @@ const FormCase = () => {
           </div>
         ) : (
           <Formik
-            initialValues={initialValues}
+            initialValues={formValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
+            enableReinitialize
           >
-            {({ isSubmitting, setFieldValue }) => (
+            {({ isSubmitting, setFieldValue, values }) => (
               <Form id='regForm'>
                <div className="section">
                <div className="details">Programme Details</div>
@@ -141,6 +159,7 @@ const FormCase = () => {
                         setFieldValue('faculty', e.target.value);
                         setFieldValue('department', '');
                         fetchDepartmentData(e.target.value);
+                        handleFormChange({ ...values, faculty: e.target.value, department: '' });
                       }}
                     >
                       <option value="">Select Faculty</option>
@@ -155,7 +174,7 @@ const FormCase = () => {
 
                   <div className="form-group">
                     <label htmlFor="department">Department</label>
-                    <Field as="select" name="department">
+                    <Field as="select" name="department" onChange={(e) => handleFormChange({ ...values, department: e.target.value })}>
                       <option value="" name="department">
                         Select Department
                       </option>
@@ -172,7 +191,7 @@ const FormCase = () => {
                 <div className="formTop">
                   <div className="form-group">
                     <label htmlFor="programme_type">Programme Type</label>
-                    <Field as="select" name="programme_type">
+                    <Field as="select" name="programme_type" onChange={(e) => handleFormChange({ ...values, programme_type: e.target.value })}>
                       <option value="" name="programme_type">
                         Programme Type
                       </option>
@@ -186,12 +205,12 @@ const FormCase = () => {
                   </div>
                   <div className="form-group">
                     <label htmlFor="session_of_entry">Session of Entry</label>
-                    <Field type="text" name="session_of_entry" placeholder="Session of Entry"/>
+                    <Field type="text" name="session_of_entry" placeholder="Session of Entry" onChange={(e) => handleFormChange({ ...values, session_of_entry: e.target.value })}/>
                     <ErrorMessage name="session_of_entry" component="div" className="error" />
                   </div>
                   <div className="form-group">
                     <label htmlFor="school_email">School Email</label>
-                    <Field name="school_email" type="email" placeholder="studentid@stu.ui.edu.ng" />
+                    <Field name="school_email" type="email" placeholder="studentid@stu.ui.edu.ng" onChange={(e) => handleFormChange({ ...values, school_email: e.target.value })}/>
                     <ErrorMessage name="school_email" component="div" className="error" />
                   </div>
                 </div>
@@ -211,4 +230,3 @@ const FormCase = () => {
 };
 
 export default FormCase;
- 

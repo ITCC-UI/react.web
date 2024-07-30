@@ -35,6 +35,7 @@ const getPasswordStrength = (password) => {
 
 const SignUp = () => {
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -62,10 +63,13 @@ const SignUp = () => {
     } catch (error) {
       console.error('Signup failed', error);
       if (error.response && error.response.data && error.response.data.email) {
-        setStatus({ error: 'User already exists.' });
+        setErrorMessage('User already exists.');
       } else {
-        setStatus({ error: 'Signup failed. Please try again.' });
+        setErrorMessage('Signup failed. Please try again.');
       }
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 5000); // 5000 milliseconds = 5 seconds
     } finally {
       setSubmitting(false);
     }
@@ -102,6 +106,11 @@ const SignUp = () => {
 
               <div className="signUpForm">
                 <div className="todo">Create Account</div>
+                {errorMessage && (
+                  <div className="error-message">
+                    {errorMessage}
+                  </div>
+                )}
                 <Formik
                   initialValues={{ email: '', password: '', repeatPassword: '' }}
                   validationSchema={SignUpSchema}
@@ -167,7 +176,6 @@ const SignUp = () => {
                       <button className="createAccount" type="submit" disabled={isSubmitting}>
                         {isSubmitting ? <PulseLoader size={10} color="white" /> : "Sign Up"}
                       </button>
-                      {status && status.error && <div className="error failed">{status.error}</div>}
 
                       <div className="or">
                         <hr /> <span>or</span>
