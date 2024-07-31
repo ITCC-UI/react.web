@@ -205,7 +205,7 @@ const FormCase = () => {
                   </div>
                   <div className="form-group">
                     <label htmlFor="session_of_entry">Session of Entry</label>
-                    <Field type="text" name="session_of_entry" placeholder="Session of Entry" onChange={(e) => handleFormChange({ ...values, session_of_entry: e.target.value })}/>
+                    <Field type="text" name="session_of_entry" placeholder="2018/2019" onChange={(e) => handleFormChange({ ...values, session_of_entry: e.target.value })}/>
                     <ErrorMessage name="session_of_entry" component="div" className="error" />
                   </div>
                   <div className="form-group">

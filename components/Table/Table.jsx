@@ -4,7 +4,6 @@ import "./table.scss";
 import classNames from 'classnames';
 import axiosInstance from '../../API Instances/AxiosIntances';
 import NormalButton from '../Normal Button/NormalButton';
-// import DisplayedComponent from '../DisplayedComponent/DisplayedComponent';
 import DisplayedComponent from '../Confirmation Form/ConfamForm';
 
 const DepartmentTrainingCourses = ({ checked }) => {
@@ -58,7 +57,6 @@ const DepartmentTrainingCourses = ({ checked }) => {
   };
 
   const handleRegisterClick = (course) => {
-    // console.log('Selected Course:', course);
     setSelectedCourse(course);
   };
 
@@ -72,67 +70,69 @@ const DepartmentTrainingCourses = ({ checked }) => {
           selectedCourse={selectedCourse}
         />
       )}
-    <section>
-      <div className="heading">
-        <h2>Department Training Courses</h2>
-      </div>
-
-      <div className="mainBody">
-        <div className="containerCourse">
-          <table>
-            <thead>
-              <tr>
-                <th>Course Code</th>
-                <th>Level</th>
-                <th>Duration</th>
-                <th>Registration <br /> Start Date</th>
-                <th>Registration <br /> End Date</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {courses.map((course, index) => {
-                const activeClasses = classNames({
-                  'eligibility': true,
-                  'eligible': course.activeClass === 'active',
-                  'ineligible': course.activeClass !== 'active'
-                });
-                return (
-                  <tr key={index}>
-                    <td>{course.course_code} <br /> {course.course_unit} units</td>
-                    <td>{course.level}</td>
-                    <td>{course.training_type_duration} - Weeks</td>
-                    <td>{formatDate(course.registration_start_date)}</td>
-                    <td>{formatDate(course.registration_end_date)}</td>
-                    <td>
-                      <div className={activeClasses}>
-                        {course.registration_status}
-                      </div>
-                    </td>
-                    <td>
-                      {(course.can_register) ? (
-                        <NormalButton registerSelf="register active" onButtonClick={() => handleRegisterClick(course)} />
-                      ) : (course.already_registered) ? (
-                        <NormalButton registerSelf="register active" onButtonClick={() => navigate(`/page_print/${course.student_training}`)} buttonText="Reprint" />
-                      ) : (
-                        <NormalButton registerSelf="register inactive" disabled />
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+      <section>
+        <div className="heading">
+          <h2>Department Training Courses</h2>
         </div>
-      </div>
 
-      <div className="register_above mobile">
-        Scroll horizontally to see more
-      </div>
+        <div className="mainBody">
+          <div className="containerCourse">
+            <table>
+              <thead>
+                <tr>
+                  <th>Course Code</th>
+                  <th>Level</th>
+                  <th>Duration</th>
+                  <th>Registration <br /> Start Date</th>
+                  <th>Registration <br /> End Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {courses.map((course, index) => {
+                  const activeClasses = classNames({
+                    'eligibility': true,
+                    'eligible': course.activeClass === 'active',
+                    'ineligible': course.activeClass !== 'active'
+                  });
+                  return (
+                    <tr key={index}>
+                      <td>
+                        {course.course_code} <br />
+                        {course.course_unit === 0 ? "N/A" : `${course.course_unit} units`}
+                      </td>
+                      <td>{course.level}</td>
+                      <td>{course.training_type_duration} - Weeks</td>
+                      <td>{formatDate(course.registration_start_date)}</td>
+                      <td>{formatDate(course.registration_end_date)}</td>
+                      <td>
+                        <div className={activeClasses}>
+                          {course.registration_status}
+                        </div>
+                      </td>
+                      <td>
+                        {course.can_register ? (
+                          <NormalButton registerSelf="register active" onButtonClick={() => handleRegisterClick(course)} />
+                        ) : course.already_registered ? (
+                          <NormalButton registerSelf="register active" onButtonClick={() => navigate(`/page_print/${course.student_training}`)} buttonText="Reprint" />
+                        ) : (
+                          <NormalButton registerSelf="register inactive" disabled />
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-    
-    </section></>
+        <div className="register_above mobile">
+          Scroll horizontally to see more
+        </div>
+      </section>
+    </>
   );
 };
 
