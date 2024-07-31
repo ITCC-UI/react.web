@@ -237,3 +237,11 @@ padding: 20px;    position: absolute;
     }
     
   }
+
+  @media (min-height:900px) {
+    .sidebarBlue{
+      .sideNavContainer{
+        height: 120vh;
+      }
+    }
+  }

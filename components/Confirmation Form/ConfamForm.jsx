@@ -7,6 +7,7 @@ import axiosInstance from '../../API Instances/AxiosIntances';
 import Close from "/images/closeButton.png";
 import Mark from "/images/succesfull circle.svg";
 import "./confirmRegister.scss";
+import PulseLoader from "react-spinners/PulseLoader"; // Import PulseLoader
 
 const DisplayedComponent = ({ onClose, selectedCourse }) => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -14,6 +15,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
   const [registrationId, setRegistrationId] = useState(null);
   const [banks, setBanks] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission status
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -89,6 +91,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
       actions.setTouched({});
       actions.setSubmitting(false);
     } else {
+      setIsSubmitting(true); // Set submitting state to true
       try {
         const response = await axiosInstance.post('https://theegsd.pythonanywhere.com/api/v1/trainings/registrations/', values);
         if (response.status === 201) {
@@ -108,6 +111,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
           setErrorMessage('An error occurred while submitting the form. Please check your internet connection and try again.');
         }
       }
+      setIsSubmitting(false); // Set submitting state back to false
       actions.setSubmitting(false);
     }
   };
@@ -123,7 +127,11 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
   return (
     <div className="backgroundOverlay">
       <div className='registrationConfirmation'>
-        {isSubmitted ? (
+        {isSubmitting ? (
+          <div className="loadingOverlay">
+            <PulseLoader color="white" loading={isSubmitting} size={10} />
+          </div>
+        ) : isSubmitted ? (
           <div className='thisConfirmation cheers'>
             <img src={Mark} alt="success" />
             <h2 className="success">Registration Successful!</h2>
@@ -332,7 +340,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                     </div>
                   </>
                 )}
-              </Form>
+             </Form>
             )}
           </Formik>
         )}

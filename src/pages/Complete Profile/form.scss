@@ -141,3 +141,12 @@ button{
       }
     }
   }
+
+  .formerror{
+    // display: b;
+    width: fit-content;
+    padding: 10px 20px;
+    background-color: red;
+    color: white;
+    border: 1px solid red;
+  }
