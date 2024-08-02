@@ -200,7 +200,7 @@ const Login = () => {
                         Don't have an account? <span><Link to="/signup">Create an Account</Link></span>
                       </div>
                       <div className="reset">
-                        Forgotten Password? <span><Link to="password_reset.html">Reset Password</Link></span>
+                        Forgotten Password? <span><Link to="/password_reset">Reset Password</Link></span>
                       </div>
                     </Form>
                   )}

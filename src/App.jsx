@@ -24,6 +24,8 @@ import IntroductionLetter from './pages/Introduction Letter Request/Introduction
 import PrintPreview from '../components/Print Layout/Print.jsx';
 import ErrorPage from './pages/WildCard/WildPage.jsx';
 import Auth from "./Auth.jsx"
+import UpdatePassword from './pages/Password Reset/reset_password.jsx';
+import ResetPassword from './pages/Password Reset/NewPassword.jsx';
 // import PrintPreviewContainer from '../components/Print Layout/PrintPreview.jsx';
 // import RegistrationForm from '../components/Print Form/RegistrationForm.jsx';
 function App() {
@@ -32,6 +34,8 @@ function App() {
       <div className="routes app-container">
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path='/password_reset' element={<UpdatePassword/>} />
+          <Route path='/new-password' element={<ResetPassword/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path='/register' element={<Auth><Dashboard/></Auth>}></Route>
