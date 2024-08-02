@@ -87,7 +87,7 @@ const ResetPassword = () => {
 
               <div className="signUpForm">
                 <div className="todo">Reset Password</div>
-                {errorMessage && <div className="error-message">{errorMessage}</div>}
+                {errorMessage && <div className="signInError">{errorMessage}</div>}
                 {successMessage && <div className="success-message">{successMessage}</div>}
                 <Formik
                   initialValues={{ password: '', repeatPassword: '' }}

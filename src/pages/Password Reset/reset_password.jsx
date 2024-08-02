@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -24,18 +24,30 @@ const RequestPasswordReset = () => {
       const response = await axios.post('/api/v1/account/reset-password/', { email: values.email });
       setSuccessMessage('A password reset link has been sent to your email.');
     } catch (error) {
-      setErrorMessage('Failed to send reset link. Please try again.');
+      if (error.response && error.response.status === 404) { // Assuming 404 is returned for no user found
+        setErrorMessage('No such user found with this email.');
+      } else {
+        setErrorMessage('Failed to send reset link. Please try again.');
+      }
     } finally {
       setSubmitting(false);
     }
   };
 
+  useEffect(() => {
+    let timer;
+    if (errorMessage) {
+      timer = setTimeout(() => {
+        setErrorMessage('');
+      }, 5000);
+    }
+    return () => clearTimeout(timer);
+  }, [errorMessage]);
+
   return (
     <div className="login route-Dash">
       <Helmet>
-        <title>
-          ITCC - Request Password Reset
-        </title>
+        <title>ITCC - Request Password Reset</title>
       </Helmet>
       <DummySideBar />
       <section className="signUp">
@@ -47,7 +59,7 @@ const RequestPasswordReset = () => {
               <div className="signUpForm">
                 <div className="todo">Request Password Reset</div>
                 {successMessage && <div className="success-message">{successMessage}</div>}
-                {errorMessage && <div className="error-message">{errorMessage}</div>}
+                {errorMessage && <div className="signInError">{errorMessage}</div>}
                 <Formik
                   initialValues={{ email: '' }}
                   validationSchema={RequestPasswordResetSchema}
