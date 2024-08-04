@@ -114,7 +114,7 @@ const PrintPreview = () => {
         </div>
         <div className="rowIdea">
           <p>Course Code: <span>{submittedData.course_code}</span></p>
-          <p>Course Unit: <span>{submittedData.course_unit}</span></p>
+          <p>Course Unit: <span>{submittedData.course_unit==0? "N/A": submittedData.course_unit}</span></p>
         </div>
 
         {/* Next of Kin Information */}
