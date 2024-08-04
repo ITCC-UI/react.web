@@ -70,7 +70,7 @@ const PrintPreview = () => {
           </div>
           <div className="formType">
             STUDENT INDUSTRIAL TRAINING REGISTRATION<br/>
-            {`${submittedData.session} REGISTRATION FORM (${submittedData.form_code})`}
+            {`${submittedData.training_session} REGISTRATION FORM (${submittedData.form_code})`}
           </div>
           <div className="profile">
             <img src={submittedData.passport} alt="Profile" />
@@ -110,7 +110,7 @@ const PrintPreview = () => {
         <div className="rowIdea">
           <p>Department: <span>{submittedData.department_name}</span></p>
           <p>Current Level: <span>{`${submittedData.current_level}`}</span></p>
-          <p>Session of entry: <span>{submittedData.session}</span></p>
+          <p>Session of entry: <span>{submittedData.session_of_entry}</span></p>
         </div>
         <div className="rowIdea">
           <p>Course Code: <span>{submittedData.course_code}</span></p>
