@@ -36,7 +36,7 @@ const ResetPassword = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await axios.patch(`/api/v1/account/reset-password/${token}/`, {
+      const response = await axios.patch(`/api/v1/account/complete-password-reset/${token}/`, {
         password: values.password,
       });
       setSuccessMessage('Password reset successfully! Redirecting to login page...');

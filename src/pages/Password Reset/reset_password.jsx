@@ -21,9 +21,10 @@ const RequestPasswordReset = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await axios.post('/api/v1/account/reset-password/', { email: values.email });
+      const response = await axios.post('/api/v1/account/initiate-password-reset/', { email: values.email });
       setSuccessMessage('A password reset link has been sent to your email.');
     } catch (error) {
+      
       if (error.response && error.response.status === 404) { // Assuming 404 is returned for no user found
         setErrorMessage('No such user found with this email.');
       } else {
@@ -43,6 +44,16 @@ const RequestPasswordReset = () => {
     }
     return () => clearTimeout(timer);
   }, [errorMessage]);
+
+  useEffect(()=>{
+    let timer;
+    if(successMessage){
+      timer = setTimeout(()=>{
+      setSuccessMessage('');
+    }, 5000);
+    }
+  })
+
 
   return (
     <div className="login route-Dash">
