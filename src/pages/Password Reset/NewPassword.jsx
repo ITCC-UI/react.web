@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import axiosInstance from "../../../API Instances/AxiosIntances";
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { PulseLoader } from 'react-spinners';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import DummySideBar from '../../../components/Sidebar/DummySB';
@@ -28,25 +28,40 @@ const ResetPassword = () => {
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+  
   const navigate = useNavigate();
-  const { token } = useParams(); // Get token from URL
+  const location = useLocation();
+
+  // Extract the token from the query parameters
+  const token = new URLSearchParams(location.search).get('token');
+
+  // console.log('Token:', token); // This will log the token to the console
+
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleRepeatPasswordVisibility = () => setShowRepeatPassword(!showRepeatPassword);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await axios.patch(`/api/v1/account/complete-password-reset/${token}/`, {
-        password: values.password,
+      const response = await axiosInstance.patch(`/account/complete-password-reset`, {
+        token, // Include the token from the URL
+        new_password: values.password, // Use the correct key for the new password
       });
+  
+      // console.log('Response:', response); // Log the response
+  
       setSuccessMessage('Password reset successfully! Redirecting to login page...');
       setTimeout(() => navigate('/login'), 5000);
     } catch (error) {
-      setErrorMessage('Failed to reset password. Please try again.');
+      // console.error('Error:', error.response?.data || error.message); // Log the error details
+      setErrorMessage(error.response?.data?.message || 'Failed to reset password. Please try again.');
     } finally {
       setSubmitting(false);
     }
   };
+
+  
+  
 
   const handlePasswordChange = (e, setFieldValue, setFieldTouched, values) => {
     const password = e.target.value;
@@ -141,6 +156,14 @@ const ResetPassword = () => {
                       <button className="createAccount" type="submit" disabled={isSubmitting}>
                         {isSubmitting ? <PulseLoader size={10} color="white" /> : "Reset Password"}
                       </button>
+                      <div className="login">
+                        Remember your login details? <span><Link to="/login">Login</Link></span>
+                      </div>
+                      <div className="reset">
+                        Forgotten Password? <span><Link to="/password_reset">Reset Password</Link></span>
+                      </div>
+
+                      
                     </Form>
                   )}
                 </Formik>

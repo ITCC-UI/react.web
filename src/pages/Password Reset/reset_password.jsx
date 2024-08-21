@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
+import axiosInstance from "../../../API Instances/AxiosIntances";
 import { PulseLoader } from 'react-spinners';
 import { Helmet } from 'react-helmet';
 import DummySideBar from '../../../components/Sidebar/DummySB';
@@ -21,7 +21,7 @@ const RequestPasswordReset = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await axios.post('/api/v1/account/initiate-password-reset/', { email: values.email });
+      const response = await axiosInstance.post('/account/initiate-password-reset/', { email: values.email });
       setSuccessMessage('A password reset link has been sent to your email.');
     } catch (error) {
       
@@ -52,7 +52,8 @@ const RequestPasswordReset = () => {
       setSuccessMessage('');
     }, 5000);
     }
-  })
+    return () => clearTimeout(timer);
+  }, [successMessage])
 
 
   return (
