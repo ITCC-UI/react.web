@@ -197,14 +197,14 @@ const Placement=() => {
           </div>
           {isLoading ? (
             <div className="loader">
-              <GridLoader size={15} color={"#123abc"} />
+              <PulseLoader size={15} color={"#123abc"} />
             </div>
-          ) : setLetterRequests.length === 0 ? (
+          ) : Placement.length === 0 ? (
             <div className="image">
               <img src={Empty} alt="Empty" />
             </div>
           ) : (
-            <IntroductionLetterTable letterRequests={setLetterRequests} />
+            <IntroductionLetterTable letterRequests={Placement} />
           )}
           {submissionStatus === "success" && (
             <div className="submissionStatus success">
