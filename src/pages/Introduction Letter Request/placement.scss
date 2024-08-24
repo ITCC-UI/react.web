@@ -55,7 +55,7 @@ color: royalblue !important;
     width: 100%;
     background-color: rgba(39, 38, 38, 0.438);
     backdrop-filter: blur(10px);
-    height: fit-content;
+    height: 100%;
     z-index: 5;
     padding: 100px 0;
     align-items: center;
@@ -212,6 +212,7 @@ float: right;
     gap: 20px;
   }
   .newRequestComponent{
+    height: fit-content;
     .newRequestHeader{
       padding-top: 45px;
       width: 95%;

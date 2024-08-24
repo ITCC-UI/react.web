@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TopNav from "../../../components/Header/Header";
 import SideBar from "../../../components/Sidebar/Sidebar";
-import Sidebar from "../../../components/Sidebar/MobileSideBar";
 import "./placement.scss";
 import Empty from "/images/empty_dashboard.png";
 import CloseIcon from "/images/closeButton.png";
