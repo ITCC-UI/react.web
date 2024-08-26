@@ -31,9 +31,9 @@ const IntroductionLetterTable = () => {
       const id = registrations[0].id;
       //console.log("Using Registration ID:", id);
 
-      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests/`);
+      const requestsResponse = await axiosInstance.get(`/trainings/placement-requests/registrations/${id}/`);
       const requests = requestsResponse.data;
-      //console.log("Fetched requests:", requests);
+      console.log("Fetched requests:", requests);
       
       const processedRequests = requests.map(request => ({
         ...request,
@@ -63,7 +63,7 @@ const IntroductionLetterTable = () => {
   }, []);
 
   const handleViewClick = (request) => {
-    //console.log('Selected Request:', request);
+    console.log('Selected Request:', request);
     setSelectedRequest(request);
   };
 
@@ -101,10 +101,10 @@ const IntroductionLetterTable = () => {
             <thead>
               <tr>
                 <th>Company Name</th>
-                <th>Addressed To</th>
-                <th>State</th>
+                <th>Date of Request</th>
+                <th>Date of Approval</th>
                 <th>Status</th>
-                <th>Date</th>
+                <th>Request Letter</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -123,17 +123,15 @@ const IntroductionLetterTable = () => {
                 return (
                   <tr key={index}>
                     <td>{request.company_name}</td>
-                    <td>{request.address_to}</td>
-                    <td>{request.company_address.state_or_province}</td>
+                    <td>{formatDate(request.date_created)}</td>
+                    <td>{formatDate(request.date_created)}</td>
+                    
                     <td>
                       <div className={statusClasses}>
                         {request.approval_status}
                       </div>
                     </td>
-                    <td>{formatDate(request.date_created)}</td>
-                    <td className='down'>
-                      <button onClick={() => handleViewClick(request)}>View More</button>
-                      {loadingDownloads[request.id] ? (
+                    <td> {loadingDownloads[request.id] ? (
                         <RingLoader size={20} color='blue' />
                       ) : (
                         <img 
@@ -142,7 +140,11 @@ const IntroductionLetterTable = () => {
                           className={downloadIconClasses}
                           onClick={() => request.statusClass === 'approved' && handleDownloadClick(request.id)} 
                         />
-                      )}
+                      )}</td>
+                
+                    <td className='down'>
+                      <button onClick={() => handleViewClick(request)}>View More</button>
+                     
                     </td>
                   </tr>
                 );

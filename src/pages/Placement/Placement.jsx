@@ -10,10 +10,256 @@ import { GridLoader, PulseLoader } from "react-spinners";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
 import IntroductionLetterTable from "./IntroductionLetterTable";
+import PlacementDisplay from "./PlacementRequest";
 
 
 
 const Placement=() => {
+  const [showNewRequest, setShowNewRequest] = useState(false);
+  const [id, setProgrammeId] = useState(null);
+  const [Placement, setLetterRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
+
+  const toggleNewRequest = () => {
+    setShowNewRequest(!showNewRequest);
+  };
+
+  const fetchProgrammeId = async () => {
+    try {
+      const response = await axiosInstance.get("trainings/registrations/");
+      const id = response.data[0].id;
+      setProgrammeId(id);
+      console.log("Programme ID:", id);
+      fetchIntroductionLetterRequests(id);
+    } catch (error) {
+      //console.error("Error fetching programme ID:", error);
+      setIsLoading(false);
+    }
+  };
+
+  // const fetchIntroductionLetterRequests = async (id) => {
+  //   try {
+  //     console.log("Fetching introduction letters for programme ID:", id);
+  //     const response = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests/`);
+  //     setLetterRequests(response.data);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     //console.error("Error fetching introduction letter requests:", error);
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  useEffect(() => {
+    fetchProgrammeId();
+  }, []);
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    // if (!programmeId) {
+    //   //console.error("Programme ID not available");
+    //   return;
+    // }
+
+    try {
+      console.log(`Submitting form for programme ID: ${id}`);
+      const response = await axiosInstance.post(`/trainings/placement-requests/registrations/${id}/`, values);
+      console.log("Form submitted successfully", response);
+      setSubmissionStatus("success");
+      setTimeout(() => {
+        setSubmissionStatus("");
+        window.location.reload(); // Auto refresh the page
+      }, 500);
+    } catch (error) {
+      //console.error("Error submitting form", error);
+      setSubmissionStatus("failure");
+      setTimeout(() => {
+        setSubmissionStatus("");
+      }, 500);
+    } finally {
+      setSubmitting(false);
+      toggleNewRequest();
+    }
+  };
+
+  const validationSchema = Yup.object().shape({
+    request_message:Yup.string().required("A message is required")  });
+   
+  const [activeDisplay, setActiveDisplay] = useState(null);
+const handleButtonClick = (component)=>{
+  setActiveDisplay(component)
+};
+    return (
+      <div className="introductionLetter">
+        <Helmet>
+          <title>ITCC - Introduction Letter</title>
+        </Helmet>
+  
+        <SideBar
+          dashboardClass={"dashy"}
+          placementClass={"placement active-accordion filterPlacement"} //active-accordion and filterPlacement class
+          init={0}
+          activeI={0} //activen
+        />
+{/* 
+   
+
+      {/* <ComponentB/> */}
+      {showNewRequest && (
+          <div className="newRequestComponent">
+            <div className="newRequestHeader">
+              <div className="introductionLetter">Request for Placement</div>
+              <button className="closeButton" onClick={toggleNewRequest}>
+                <img src={CloseIcon} alt="Close" />
+              </button>
+              <div className="requestContent">
+                <Formik
+                  initialValues={{
+                   
+                    request_message: "",
+              
+                  }}
+                  validationSchema={validationSchema}
+                  onSubmit={handleSubmit}
+                >
+                  {({ isSubmitting }) => (
+                    <Form>
+                      
+                      <div className="companyDetails">
+                        
+                        
+                       
+                        <div className="formInput">
+                          <label htmlFor="request_message"></label>
+                          <Field type="text" name="request_message" placeholder="Type your message to support your request" />
+                          <ErrorMessage className="error" name="request_message" component="div" />
+                        </div>
+                      
+                      </div>
+                      <button type="submit" className="submitting">
+                        {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
+                      </button>
+                    </Form>
+                  )}
+                </Formik>
+              </div>
+            </div>
+          </div>
+        )}
+        <main className="introLetter">
+          <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} />
+          <div className="navuttons">
+<div onClick={()=> handleButtonClick("A")}> Button A</div>
+        </div> 
+      
+          <ComponentA showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest}/>
+       
+        </main>
+      </div>
+    );
+  };
+
+  const ComponentA=({showNewRequest, toggleNewRequest})=> {
+    
+    const [id, setProgrammeId] = useState(null);
+    const [Placement, setLetterRequests] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
+  
+
+  
+    const fetchProgrammeId = async () => {
+      try {
+        const response = await axiosInstance.get("trainings/registrations/");
+        const id = response.data[0].id;
+        setProgrammeId(id);
+        console.log("This Programme ID:", id);
+        fetchIntroductionLetterRequests(id);
+      } catch (error) {
+        //console.error("Error fetching programme ID:", error);
+        setIsLoading(false);
+      }
+    };
+  
+    const fetchIntroductionLetterRequests = async (id) => {
+      try {
+        console.log("Fetching introduction letters for programme ID:", id);
+        const response = await axiosInstance.get(`trainings/placement-requests/registrations/${id}/`);
+        setLetterRequests(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        //console.error("Error fetching introduction letter requests:", error);
+        setIsLoading(false);
+      }
+    };
+  
+    useEffect(() => {
+      fetchProgrammeId();
+    }, []);
+  
+    const handleSubmit = async (values, { setSubmitting }) => {
+      if (!programmeId) {
+        //console.error("Programme ID not available");
+        return;
+      }
+  
+      try {
+        //console.log(`Submitting form for programme ID: ${programmeId}`);
+        const response = await axiosInstance.post(`/trainings/registrations/${programmeId}/introduction-letter-requests/`, values);
+        //console.log("Form submitted successfully", response);
+        setSubmissionStatus("success");
+        setTimeout(() => {
+          setSubmissionStatus("");
+          window.location.reload(); // Auto refresh the page
+        }, 500);
+      } catch (error) {
+        //console.error("Error submitting form", error);
+        setSubmissionStatus("failure");
+        setTimeout(() => {
+          setSubmissionStatus("");
+        }, 500);
+      } finally {
+        setSubmitting(false);
+        toggleNewRequest();
+      }
+    };
+  
+  
+    
+    return(<>
+    <div className="container">
+            <div className="topHead">
+              <div className="heading">PLACEMENT</div>
+              <button className="newReq" onClick={toggleNewRequest}>
+                + New Request
+              </button>
+            </div>
+          </div>
+          {isLoading ? (
+            <div className="loader">
+              <PulseLoader size={15} color={"#123abc"} />
+            </div>
+          ) : Placement.length === 0 ? (
+            <div className="image">
+              <img src={Empty} alt="Empty" />
+            </div>
+          ) : (
+            <IntroductionLetterTable letterRequests={Placement} />
+          )}
+          {submissionStatus === "success" && (
+            <div className="submissionStatus success">
+              Form submitted successfully! Reload the page.
+            </div>
+          )}
+          {submissionStatus === "failure" && (
+            <div className="submissionStatus failure">
+              Error submitting form. Please try again.
+            </div>
+          )}
+  </>)
+  }
+
+
+  const ComponentB=()=> {
     const [showNewRequest, setShowNewRequest] = useState(false);
     const [programmeId, setProgrammeId] = useState(null);
     const [Placement, setLetterRequests] = useState([]);
@@ -91,20 +337,9 @@ const Placement=() => {
       company_name: Yup.string().required("Company name is required"),
       address_to: Yup.string().required("Addressee is required"),
     });
-  
-    return (
-      <div className="introductionLetter">
-        <Helmet>
-          <title>ITCC - Introduction Letter</title>
-        </Helmet>
-  
-        <SideBar
-          dashboardClass={"dashy"}
-          placementClass={"placement active-accordion filterPlacement"} //active-accordion and filterPlacement class
-          init={0}
-          activeI={0} //activen
-        />
-        {showNewRequest && (
+    
+    return(<>
+     {showNewRequest && (
           <div className="newRequestComponent">
             <div className="newRequestHeader">
               <div className="introductionLetter">Request for Introduction Letter</div>
@@ -219,10 +454,32 @@ const Placement=() => {
           
        
         </main>
-        
-      </div>
-    );
-  };
+  </>)
+  }
+
+// const Placement = ()=>{
+//   const [activeDisplay, setActiveDisplay] = useState(null);
+// const handleButtonClick = (component)=>{
+//   setActiveDisplay(component)
+// };
+//   return (
+//   <div>
+//     <div onClick={()=> handleButtonClick("A")}>Button A</div>
+//     <button onClick={()=> handleButtonClick("B")}>Button B</button>
+//     <button onClick={()=> handleButtonClick("C")}>Button C</button>
+//     <button onClick={()=> handleButtonClick("D")}>Button D</button>
+  
+//   <div>
+//     {activeDisplay ==="A" && <PlacementDisplay/>}
+//     {/* {activeDisplay ==="B" && <PlacementDisplay/>}
+//     {activeDisplay ==="C" && <PlacementDisplay/>}
+//     {activeDisplay ==="D" && <PlacementDisplay/>} */}
+//   </div>
+  
+//   </div>
+  
+//   )
+// }
   
   
 export default Placement;
