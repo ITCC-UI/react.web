@@ -59,9 +59,9 @@ const MoreDetails = ({ request, onClose }) => {
 
           <div className='compProfile'>
             <div className="details">Company Address</div>
-            <div className="cDetails">
+            {/**<div className="cDetails">
               {request.company_address.building_number} {request.company_address.building_name} {request.company_address.street}, {request.company_address.state_or_province}
-            </div>
+            </div>**/}
           </div>
 
           <div className='compProfile'>

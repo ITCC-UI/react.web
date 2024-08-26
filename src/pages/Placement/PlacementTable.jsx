@@ -11,16 +11,16 @@ import MoreDetails from '../../../components/View More/MoreDetails';
 
 
 
-const IntroductionLetterTable = () => {
+const PlacementTable = () => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
 
-  const fetchIntroductionLetterRequests = async () => {
+  const fetchPlacementLetter = async () => {
     try {
       const registrationResponse = await axiosInstance.get("trainings/registrations/");
       const registrations = registrationResponse.data;
-      //console.log("Fetched registrations:", registrations);
+      console.log("Fetched registrations:", registrations);
 
       if (registrations.length === 0) {
         //console.log("No registrations found");
@@ -31,7 +31,7 @@ const IntroductionLetterTable = () => {
       const id = registrations[0].id;
       //console.log("Using Registration ID:", id);
 
-      const requestsResponse = await axiosInstance.get(`/trainings/placement-requests/registrations/${id}/`);
+      const requestsResponse = await axiosInstance.get(`/trainings/placements/registrations/${id}/`);
       const requests = requestsResponse.data;
       console.log("Fetched requests:", requests);
       
@@ -48,42 +48,40 @@ const IntroductionLetterTable = () => {
 
   const getStatusClass = (status) => {
     switch(status) {
-      case 'APPROVED':
+      case 'ACTIVE':
         return 'approved';
-      case 'REJECTED':
+      case 'DISCONTINED':
+        default:
         return 'rejected';
-      case 'SUBMITTED':
-      default:
-        return 'submitted';
     }
   };
 
   useEffect(() => {
-    fetchIntroductionLetterRequests();
+    fetchPlacementLetter();
   }, []);
 
   const handleViewClick = (request) => {
-    console.log('Selected Request:', request);
+    // console.log('Selected Request:', request);
     setSelectedRequest(request);
   };
 
   const handleDownloadClick = async (id) => {
     setLoadingDownloads(prevState => ({ ...prevState, [id]: true }));
-    try {
-      const response = await axiosInstance.get(`/trainings/introduction-letter-requests/${id}/document/`, {
-        responseType: 'blob',
-      });
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `introduction_letter.pdf`);
-      document.body.appendChild(link);
-      link.click();
-    } catch (error) {
+    // try {
+    //   const response = await axiosInstance.get(`/trainings/introduction-letter-requests/${id}/document/`, {
+    //     responseType: 'blob',
+    //   });
+    //   const url = window.URL.createObjectURL(new Blob([response.data]));
+    //   const link = document.createElement('a');
+    //   link.href = url;
+    //   link.setAttribute('download', `introduction_letter.pdf`);
+    //   document.body.appendChild(link);
+    //   link.click();
+    // } catch (error) {
       //console.error("Error downloading document:", error);
-    } finally {
-      setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
-    }
+    // } finally {
+    //   setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
+    // }
   };
 
   // Helper function to format date
@@ -101,10 +99,10 @@ const IntroductionLetterTable = () => {
             <thead>
               <tr>
                 <th>Company Name</th>
-                <th>Date of Request</th>
-                <th>Date of Approval</th>
+                <th>Company Supervisor</th>
+                <th>Start Date</th>
+                <th>End Date</th>
                 <th>Status</th>
-                <th>Request Letter</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -114,7 +112,7 @@ const IntroductionLetterTable = () => {
                   'status': true,
                   'approved': request.statusClass === 'approved',
                   'rejected': request.statusClass === 'rejected',
-                  'submitted': request.statusClass === 'submitted',
+                 
                 });
                 const downloadIconClasses = classNames({
                   'downloadIcon': true,
@@ -123,6 +121,7 @@ const IntroductionLetterTable = () => {
                 return (
                   <tr key={index}>
                     <td>{request.company_name}</td>
+                    <td>{request.company_supervisor}</td>
                     <td>{formatDate(request.date_created)}</td>
                     <td>{formatDate(request.date_created)}</td>
                     
@@ -167,4 +166,4 @@ const IntroductionLetterTable = () => {
   );
 };
 
-export default IntroductionLetterTable;
+export default PlacementTable;

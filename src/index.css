@@ -70,3 +70,10 @@ button:focus-visible {
 .network{
   display: none;
 }
+
+.navButtons{
+  display: flex;
+  gap: 20px;
+  border: 1px solid red;
+}
+
