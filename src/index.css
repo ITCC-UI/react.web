@@ -74,6 +74,25 @@ button:focus-visible {
 .navButtons{
   display: flex;
   gap: 20px;
-  border: 1px solid red;
+
 }
 
+.shift_button {
+  padding: 10px 20px;
+  background-color: #f1f1f1;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+
+}
+
+.shift_button:hover {
+  background-color: #ddd;
+}
+
+.shift_button.active {
+  border-bottom: 2px solid #007bff;;
+
+  font-weight: bold;
+}

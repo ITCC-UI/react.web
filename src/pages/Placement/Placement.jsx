@@ -52,7 +52,7 @@ const Placement = () => {
     }
   }; 
   
-  const [activeDisplay, setActiveDisplay] = useState("A");
+  const [activeDisplay, setActiveDisplay] = useState("placement");
   const handleButtonClick = (component) => {
     setActiveDisplay(component)
   };
@@ -124,12 +124,12 @@ const Placement = () => {
       <main className="introLetter">
         <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} />
         <div className="navButtons">
-          <div className="shift_button" onClick={() => handleButtonClick("A")}> Button A</div>
-          <div className="shift_button" onClick={() => handleButtonClick("B")}> Button B</div>
+          <div className={activeDisplay === "placement" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placement")}> Placement</div>
+          <div className={activeDisplay==="placementRequest" ? "shift_button active": "shift_button"} onClick={() => handleButtonClick("placementRequest")}> Placement Requests</div>
         </div>
 
-        {activeDisplay === "A" && <PlacementComponent showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest} />}
-        {activeDisplay === "B" && <ActivePlacement />}
+        {activeDisplay === "placementRequest" && <PlacementComponent showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest} />}
+        {activeDisplay === "placement" && <ActivePlacement />}
 
 
       </main>
