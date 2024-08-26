@@ -11,6 +11,7 @@ import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
 import IntroductionLetterTable from "./IntroductionLetterTable";
 import PlacementDisplay from "./PlacementRequest";
+import PlacementComponent from "./PlacementComponent"
 
 
 
@@ -151,112 +152,14 @@ const handleButtonClick = (component)=>{
 <div onClick={()=> handleButtonClick("A")}> Button A</div>
         </div> 
       
-          <ComponentA showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest}/>
+          <PlacementComponent showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest}/>
        
         </main>
       </div>
     );
   };
 
-  const ComponentA=({showNewRequest, toggleNewRequest})=> {
-    
-    const [id, setProgrammeId] = useState(null);
-    const [Placement, setLetterRequests] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
-  
-
-  
-    const fetchProgrammeId = async () => {
-      try {
-        const response = await axiosInstance.get("trainings/registrations/");
-        const id = response.data[0].id;
-        setProgrammeId(id);
-        console.log("This Programme ID:", id);
-        fetchIntroductionLetterRequests(id);
-      } catch (error) {
-        //console.error("Error fetching programme ID:", error);
-        setIsLoading(false);
-      }
-    };
-  
-    const fetchIntroductionLetterRequests = async (id) => {
-      try {
-        console.log("Fetching introduction letters for programme ID:", id);
-        const response = await axiosInstance.get(`trainings/placement-requests/registrations/${id}/`);
-        setLetterRequests(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        //console.error("Error fetching introduction letter requests:", error);
-        setIsLoading(false);
-      }
-    };
-  
-    useEffect(() => {
-      fetchProgrammeId();
-    }, []);
-  
-    const handleSubmit = async (values, { setSubmitting }) => {
-      if (!programmeId) {
-        //console.error("Programme ID not available");
-        return;
-      }
-  
-      try {
-        //console.log(`Submitting form for programme ID: ${programmeId}`);
-        const response = await axiosInstance.post(`/trainings/registrations/${programmeId}/introduction-letter-requests/`, values);
-        //console.log("Form submitted successfully", response);
-        setSubmissionStatus("success");
-        setTimeout(() => {
-          setSubmissionStatus("");
-          window.location.reload(); // Auto refresh the page
-        }, 500);
-      } catch (error) {
-        //console.error("Error submitting form", error);
-        setSubmissionStatus("failure");
-        setTimeout(() => {
-          setSubmissionStatus("");
-        }, 500);
-      } finally {
-        setSubmitting(false);
-        toggleNewRequest();
-      }
-    };
-  
-  
-    
-    return(<>
-    <div className="container">
-            <div className="topHead">
-              <div className="heading">PLACEMENT</div>
-              <button className="newReq" onClick={toggleNewRequest}>
-                + New Request
-              </button>
-            </div>
-          </div>
-          {isLoading ? (
-            <div className="loader">
-              <PulseLoader size={15} color={"#123abc"} />
-            </div>
-          ) : Placement.length === 0 ? (
-            <div className="image">
-              <img src={Empty} alt="Empty" />
-            </div>
-          ) : (
-            <IntroductionLetterTable letterRequests={Placement} />
-          )}
-          {submissionStatus === "success" && (
-            <div className="submissionStatus success">
-              Form submitted successfully! Reload the page.
-            </div>
-          )}
-          {submissionStatus === "failure" && (
-            <div className="submissionStatus failure">
-              Error submitting form. Please try again.
-            </div>
-          )}
-  </>)
-  }
+ 
 
 
   const ComponentB=()=> {
