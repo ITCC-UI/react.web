@@ -17,6 +17,7 @@ const IntroductionLetter = () => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
+  const [noProgrammeId, setNoProgrammeId] = useState(false); // State for no Programme ID
 
   const toggleNewRequest = () => {
     setShowNewRequest(!showNewRequest);
@@ -25,24 +26,25 @@ const IntroductionLetter = () => {
   const fetchProgrammeId = async () => {
     try {
       const response = await axiosInstance.get("trainings/registrations/");
-      const id = response.data[0].id;
-      setProgrammeId(id);
-      //console.log("Programme ID:", id);
-      fetchIntroductionLetterRequests(id);
+      if (response.data.length > 0) {
+        const id = response.data[0].id;
+        setProgrammeId(id);
+        fetchIntroductionLetterRequests(id);
+      } else {
+        setNoProgrammeId(true); // Set state when no Programme ID is found
+        setIsLoading(false);
+      }
     } catch (error) {
-      //console.error("Error fetching programme ID:", error);
       setIsLoading(false);
     }
   };
 
   const fetchIntroductionLetterRequests = async (id) => {
     try {
-      //console.log("Fetching introduction letters for programme ID:", id);
       const response = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests/`);
       setLetterRequests(response.data);
       setIsLoading(false);
     } catch (error) {
-      //console.error("Error fetching introduction letter requests:", error);
       setIsLoading(false);
     }
   };
@@ -53,21 +55,18 @@ const IntroductionLetter = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     if (!programmeId) {
-      //console.error("Programme ID not available");
+      console.error("Programme ID not available");
       return;
     }
 
     try {
-      //console.log(`Submitting form for programme ID: ${programmeId}`);
       const response = await axiosInstance.post(`/trainings/registrations/${programmeId}/introduction-letter-requests/`, values);
-      //console.log("Form submitted successfully", response);
       setSubmissionStatus("success");
       setTimeout(() => {
         setSubmissionStatus("");
         window.location.reload(); // Auto refresh the page
       }, 500);
     } catch (error) {
-      //console.error("Error submitting form", error);
       setSubmissionStatus("failure");
       setTimeout(() => {
         setSubmissionStatus("");
@@ -188,14 +187,22 @@ const IntroductionLetter = () => {
         <div className="container">
           <div className="topHead">
             <div className="heading">INTRODUCTION LETTERS</div>
-            <button className="newReq" onClick={toggleNewRequest}>
-              + New Request
-            </button>
+            {/* Conditionally render the New Request button only if programmeId exists */}
+            {programmeId && (
+              <button className="newReq" onClick={toggleNewRequest}>
+                + New Request
+              </button>
+            )}
           </div>
         </div>
         {isLoading ? (
           <div className="loader">
             <GridLoader size={15} color={"#123abc"} />
+          </div>
+        ) : noProgrammeId ? (
+          <div className="noProgrammeId register_above">
+            <p>You are not registered for a Programme. <br/> You are not eligible to request an introduction letter at this time. <br/>  <br/>
+            Proceed to the registration page to register for you industrial training.</p>
           </div>
         ) : letterRequests.length === 0 ? (
           <div className="image">
@@ -214,10 +221,7 @@ const IntroductionLetter = () => {
             Error submitting form. Please try again.
           </div>
         )}
-        
-     
       </main>
-      
     </div>
   );
 };

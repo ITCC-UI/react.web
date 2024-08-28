@@ -70,7 +70,7 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
             <div className="loader">
               <PulseLoader size={15} color={"#123abc"} />
             </div>
-          ) : Placement.lngth === 0 ? (
+          ) : Placement.length === 0 ? (
             <div className="image">
               <img src={Empty} alt="Empty" />
             </div>

@@ -29,8 +29,32 @@ const Placement = () => {
     setShowNewRequest(!showNewRequest);
   };
 
+  const fetchProgrammeId = async () => {
+    try {
+      const response = await axiosInstance.get("trainings/registrations/");
+      if (response.data.length > 0) {
+        const id = response.data[0].id;
+        setProgrammeId(id);
+        console.log("This Programme ID:", id);
+        fetchIntroductionLetterRequests(id);
+        fetchPlacementRequests(id);
+      } else {
+        setNoProgrammeId(true); // Set state when no Programme ID is found
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error fetching programme ID:", error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProgrammeId();  // Fetch the ID when the component mounts
+  }, []);
+
   const toggleAcceptanceRequest =()=>{
-    setShowNewAcceptanceRequest(!showNewAcceptanceRequest)
+    setShowNewAcceptanceRequest(!showNewAcceptanceRequest);
+    console.log("It workerd")
   }
 
 
@@ -58,6 +82,29 @@ const Placement = () => {
     }
   }; 
   
+
+  const handlePlacementRequestsSubmit = async (values, { setSubmitting }) => {
+
+    try {
+      console.log(`Submitting form for programme ID: ${id}`);
+      const response = await axiosInstance.post(`/trainings/placement-requests/registrations/${id}/`, values);
+      console.log("Form submitted successfully", response);
+      setSubmissionStatus("success");
+      setTimeout(() => {
+        setSubmissionStatus("");
+        window.location.reload(); // Auto refresh the page
+      }, 500);
+    } catch (error) {
+      console.error("Error submitting form", error);
+      setSubmissionStatus("failure");
+      setTimeout(() => {
+        setSubmissionStatus("");
+      }, 500);
+    } finally {
+      setSubmitting(false);
+      toggleNewRequest();
+    }
+  }; 
 
   // Component display
   const [activeDisplay, setActiveDisplay] = useState("placement");
@@ -103,7 +150,7 @@ const Placement = () => {
 
                 }}
                 validationSchema={validationSchema}
-                onSubmit={handleSubmit}
+                onSubmit={handlePlacementRequestsSubmit}
               >
                 {({ isSubmitting }) => (
                   <Form className="placement_form">
@@ -114,7 +161,7 @@ const Placement = () => {
 
                       <div className="formInput">
                         <label htmlFor="request_message"></label>
-                        <Field type="text" name="request_message" className="placement_letter" placeholder="Type your message to support your request" />
+                        <Field as="textarea" name="request_message" className="placement_letter" placeholder="Type your message to support your request" />
                         <ErrorMessage className="error" name="request_message" component="div" />
                       </div>
 
@@ -133,7 +180,7 @@ const Placement = () => {
 {showNewAcceptanceRequest && (
         <div className="newRequestComponent">
           <div className="newRequestHeader">
-            <div className="introductionLetter">Request for cement</div>
+            <div className="introductionLetter">Submission of Acceptance Letter</div>
             <button className="closeButton" onClick={toggleAcceptanceRequest}>
               <img src={CloseIcon} alt="Close" />
             </button>
@@ -156,7 +203,7 @@ const Placement = () => {
 
                       <div className="formInput">
                         <label htmlFor="request_message"></label>
-                        <Field type="text" name="request_message" placeholder="Type your message to support your request" />
+                        <Field type="text"  name="request_message" placeholder="Type your message to support your request" />
                         <ErrorMessage className="error" name="request_message" component="div" />
                       </div>
 
@@ -188,7 +235,7 @@ const Placement = () => {
 
         {activeDisplay === "placementRequest" && <PlacementComponent showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest} />}
         {activeDisplay === "placement" && <ActivePlacement />}
-        {activeDisplay === "placementAcceptance" && <PlacementAcceptance showNewAcceptanceRequest={showNewAcceptanceRequest} toggleAcceptanceRequest={toggleAcceptanceRequest} />}
+        {activeDisplay === "placementAcceptance" && <PlacementAcceptance showNewAcceptanceRequest={showNewAcceptanceRequest} toggleNewAcceptanceRequest={toggleAcceptanceRequest} />}
         {activeDisplay === "placementChange" && <PlacementChange showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest} />}
 
 
