@@ -14,7 +14,9 @@ const FILE_SIZE = 800 * 1024; // 800kb in bytes
 const PersonalDetailsSchema = Yup.object().shape({
   first_name: Yup.string().required('First Name is required'),
   middle_name: Yup.string(),
-  phone_number: Yup.string().required('Phone Number is required').min(11, "Phone number must be 11 digits").max(11, "Phone number must be 11 digits"),
+  phone_number: Yup.string()
+  .matches(/^0[0-9]{10}$/, `Phone number is not in a correct format. \n It must start with '0' and be exactly 11 digits.`)
+  .required('Phone Number is required'),
   last_name: Yup.string().required('Last Name is required'),
   dob: Yup.date().required('Date of Birth is required').test(
     'is-16-years-old',
@@ -157,30 +159,50 @@ const UpdateProfileForm = () => {
                   <div className="form-group">
                     <label htmlFor="first_name">First Name</label>
                     <Field type="text" name="first_name" placeholder="First Name" />
-                    <ErrorMessage name="first_name" component="div" className="error" />
+                    <ErrorMessage name="first_name" component="div" className="profile_error" />
                   </div>
                   <div className="form-group">
                     <label htmlFor="last_name">Last Name</label>
                     <Field type="text" name="last_name" placeholder="Last Name" />
-                    <ErrorMessage name="last_name" component="div" className="error" />
+                    <ErrorMessage name="last_name" component="div" className="profile_error" />
                   </div>
                   <div className="form-group">
                     <label htmlFor="middle_name">Middle Name</label>
                     <Field type="text" name="middle_name" placeholder="Middle Name" />
-                    <ErrorMessage name="middle_name" component="div" className="error" />
+                    <ErrorMessage name="middle_name" component="div" className="profile_error" />
                   </div>
                 </div>
 
                 <div className="formTop">
-                  <div className="form-group">
-                    <label htmlFor="phone_number">Phone Number</label>
-                    <Field type="text" name="phone_number" placeholder="Mobile Number" />
-                    <ErrorMessage name="phone_number" component="div" className="error" />
-                  </div>
+                <div className="form-group">
+  <label htmlFor="phone_number">Phone Number</label>
+  <Field
+    type="tel"
+    name="phone_number"
+    placeholder="Mobile Number"
+    onKeyPress={(e) => {
+      if (!/^[0-9]$/.test(e.key)) {
+        e.preventDefault();
+      }
+    }}
+  />
+  <ErrorMessage name="phone_number">
+  {(msg) => (
+    <div className="profile_error">
+      {msg.split('\n').map((line, index) => (
+        <React.Fragment key={index}>
+          {line}
+          {index < msg.split('\n').length - 1 && <br />}
+        </React.Fragment>
+      ))}
+    </div>
+  )}
+</ErrorMessage>
+</div>
                   <div className="form-group">
                     <label htmlFor="dob">Date of Birth</label>
                     <Field type="date" name="dob" />
-                    <ErrorMessage name="dob" component="div" className="error" />
+                    <ErrorMessage name="dob" component="div" className="profile_error" />
                   </div>
                   <div className="form-group">
                     <label htmlFor="gender">Gender</label>
@@ -189,7 +211,7 @@ const UpdateProfileForm = () => {
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </Field>
-                    <ErrorMessage name="gender" component="div" className="error" />
+                    <ErrorMessage name="gender" component="div" className="profile_error" />
                   </div>
                 </div>
 
@@ -197,17 +219,17 @@ const UpdateProfileForm = () => {
                   <div className="form-group">
                     <label htmlFor="nationality">Nationality</label>
                     <Field type="text" name="nationality" placeholder="Nationality" />
-                    <ErrorMessage name="nationality" component="div" className="error" />
+                    <ErrorMessage name="nationality" component="div" className="profile_error" />
                   </div>
                   <div className="form-group">
                     <label htmlFor="address">Home Address</label>
                     <Field type="text" name="address" placeholder="Home Address" />
-                    <ErrorMessage name="address" component="div" className="error" />
+                    <ErrorMessage name="address" component="div" className="profile_error" />
                   </div>
                   <div className="form-group">
                     <label htmlFor="language">Language(s) other than English</label>
                     <Field type="text" name="language" placeholder="Language" />
-                    <ErrorMessage name="language" component="div" className="error" />
+                    <ErrorMessage name="language" component="div" className="profile_error" />
                   </div>
                 </div>
 
@@ -215,13 +237,13 @@ const UpdateProfileForm = () => {
                   <div className="form-group">
                     <label htmlFor="passport">Passport</label>
                     <input type="file" name="passport" onChange={(event) => setFieldValue('passport', event.currentTarget.files[0])} accept="image/*"/>
-                    <ErrorMessage name="passport" component="div" className="error" />
+                    <ErrorMessage name="passport" component="div" className="profile_error" />
                   </div>
 
                   <div className="form-group">
                     <label htmlFor="signature">Signature</label>
                     <input type="file" name="signature" onChange={(event) => setFieldValue('signature', event.currentTarget.files[0])} accept="image/*" />
-                    <ErrorMessage name="signature" component="div" className="error" />
+                    <ErrorMessage name="signature" component="div" className="profile_error" />
                   </div>
                 </div>
 

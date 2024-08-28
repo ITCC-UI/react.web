@@ -69,7 +69,9 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
       next_of_kin: Yup.string().required('Required'),
       next_of_kin_address: Yup.string().required('Required'),
       next_of_kin_relationship: Yup.string().required('Required'),
-      next_of_kin_phone_number: Yup.number().required('Required').typeError('Must be a number').min(11, "Phone number too short"),
+      next_of_kin_phone_number: Yup.string()
+        .matches(/^0[0-9]{10}$/, `Phone number is not in a correct format. \nIt must start with '0' and be exactly 11 digits.`)
+        .required('Phone Number is required'),
     }),
     Yup.object({
       bank: Yup.string().required('Required'),
@@ -77,7 +79,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
         .min(10, "Number must be more than 10")
         .max(11, "Number must be less than or equal to 11")
         .required("Required"),
-      bank_sort_code: Yup.string().required('Required').min(9, "Bank sort code must be at least 9 digits"),
+      bank_sort_code: Yup.string().required('Bank sort code is Required').min(9, "Bank sort code must be at least 9 digits"),
     }),
   ];
 
@@ -277,8 +279,28 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                       </div>
                       <div className="formInput">
                         <label htmlFor="next_of_kin_phone_number">Next of Kin Phone Number</label>
-                        <Field type="text" name="next_of_kin_phone_number" />
-                        <ErrorMessage name="next_of_kin_phone_number" component="div" className="error" />
+                        <Field
+                          type="tel"
+                          name="next_of_kin_phone_number"
+                          
+                          onKeyPress={(e) => {
+                            if (!/^[0-9]$/.test(e.key)) {
+                              e.preventDefault();
+                            }
+                          }}
+                        />
+                        <ErrorMessage name="next_of_kin_phone_number" className="error" component="div">
+                          {(msg) => (
+                            <div className="error" component="div">
+                              {msg.split('\n').map((line, index) => (
+                                <React.Fragment key={index}>
+                                  {line}
+                                  {index < msg.split('\n').length - 1 && <br />}
+                                </React.Fragment>
+                              ))}
+                            </div>
+                          )}
+                        </ErrorMessage>
                       </div>
                     </div>
                     <div className='buttonContainer'>
@@ -289,14 +311,14 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                       >
                         Previous
                       </button>
-                      <button 
-  type={is6MonthIT ? "button" : "submit"}
-  onClick={is6MonthIT ? () => setCurrentStep(currentStep + 1) : undefined}
-  disabled={!isValid} 
-  className='next-button'
->
-  {is6MonthIT ? 'Next' : 'Submit'}
-</button>
+                      <button
+                        type={is6MonthIT ? "button" : "submit"}
+                        onClick={is6MonthIT ? () => setCurrentStep(currentStep + 1) : undefined}
+                        disabled={!isValid}
+                        className='next-button'
+                      >
+                        {is6MonthIT ? 'Next' : 'Submit'}
+                      </button>
                     </div>
                   </>
                 )}
@@ -315,15 +337,60 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                         </Field>
                         <ErrorMessage name="bank" component="div" className="error" />
                       </div>
+
+
+                      
+
+
+
                       <div className="formInput">
                         <label htmlFor="bank_account_number">Bank Account Number</label>
-                        <Field type="text" name="bank_account_number" />
-                        <ErrorMessage name="bank_account_number" component="div" className="error" />
+                        <Field
+                          type="tel"
+                          name="bank_account_number"
+                          onKeyPress={(e) => {
+                            if (!/^[0-9]$/.test(e.key)) {
+                              e.preventDefault();
+                            }
+                          }}
+                        />
+                         
+                         <ErrorMessage name="bank_account_number" className="error" component="div">
+                          {(msg) => (
+                            <div className="error" component="div">
+                              {msg.split('\n').map((line, index) => (
+                                <React.Fragment key={index}>
+                                  {line}
+                                  {index < msg.split('\n').length - 1 && <br />}
+                                </React.Fragment>
+                              ))}
+                            </div>
+                          )}
+                        </ErrorMessage>
                       </div>
                       <div className="formInput">
                         <label htmlFor="bank_sort_code">Bank Sort Code</label>
-                        <Field type="text" name="bank_sort_code" />
-                        <ErrorMessage name="bank_sort_code" component="div" className="error" />
+                        <Field
+                          type="tel"
+                          name="bank_sort_code"
+                          onKeyPress={(e) => {
+                            if (!/^[0-9]$/.test(e.key)) {
+                              e.preventDefault();
+                            }
+                          }}
+                        />
+                        <ErrorMessage name="bank_sort_code" className="error" component="div">
+                          {(msg) => (
+                            <div className="error" component="div">
+                              {msg.split('\n').map((line, index) => (
+                                <React.Fragment key={index}>
+                                  {line}
+                                  {index < msg.split('\n').length - 1 && <br />}
+                                </React.Fragment>
+                              ))}
+                            </div>
+                          )}
+                        </ErrorMessage>
                       </div>
                     </div>
                     <div className='buttonContainer'>
@@ -340,7 +407,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                     </div>
                   </>
                 )}
-             </Form>
+              </Form>
             )}
           </Formik>
         )}
