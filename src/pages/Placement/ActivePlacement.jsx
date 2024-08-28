@@ -56,39 +56,13 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
       fetchProgrammeId();
     }, []);
   
-    // const handleSubmit = async (values, { setSubmitting }) => {
-    //   if (!id) {
-    //     //console.error("Programme ID not available");
-    //     return;
-    //   }
-  
-    //   try {
-    //     //console.log(`Submitting form for programme ID: ${programmeId}`);
-    //     const response = await axiosInstance.post(`/trainings/registrations/${programmeId}/introduction-letter-requests/`, values);
-    //     //console.log("Form submitted successfully", response);
-    //     setSubmissionStatus("success");
-    //     setTimeout(() => {
-    //       setSubmissionStatus("");
-    //       window.location.reload(); // Auto refresh the page
-    //     }, 500);
-    //   } catch (error) {
-    //     //console.error("Error submitting form", error);
-    //     setSubmissionStatus("failure");
-    //     setTimeout(() => {
-    //       setSubmissionStatus("");
-    //     }, 500);
-    //   } finally {
-    //     setSubmitting(false);
-    //     toggleNewRequest();
-    //   }
-    // };
-  
+   
   
     
     return(<>
     <div className="container">
             <div className="topHead">
-              <div className="heading">PLACEMENT</div>
+            
           
             </div>
           </div>

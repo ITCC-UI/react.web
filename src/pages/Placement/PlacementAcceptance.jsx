@@ -2,9 +2,9 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { PulseLoader } from "react-spinners";
 import Empty from "/images/empty_dashboard.png";
-import PlacementTable from "./PlacementReqTable";
+import PlacementAcceptanceTable from "./PlacementAcceptanceTable";
 import axiosInstance from "../../../API Instances/AxiosIntances";
-const PlacementComponent=({showNewRequest, toggleNewRequest})=> {
+const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest})=> {
     
     const [id, setProgrammeId] = useState(null);
     const [Placement, setLetterRequests] = useState([]);
@@ -79,18 +79,18 @@ const PlacementComponent=({showNewRequest, toggleNewRequest})=> {
         }, 500);
       } finally {
         setSubmitting(false);
-        toggleNewRequest();
+        toggleNewAcceptanceRequest();
       }
     };
   
   
     
     return(<>
-    <div className="container">
+    <div className="container lifting">
             <div className="topHead place">
               
-              <button className="newReq" onClick={toggleNewRequest}>
-                + New Request
+              <button className="newReq" onClick={toggleNewAcceptanceRequest}>
+                + New Submission
               </button>
             </div>
           </div>
@@ -103,7 +103,7 @@ const PlacementComponent=({showNewRequest, toggleNewRequest})=> {
               <img src={Empty} alt="Empty" />
             </div>
           ) : (
-            <PlacementTable letterRequests={Placement} />
+            <PlacementAcceptanceTable letterRequests={Placement} />
           )}
           {submissionStatus === "success" && (
             <div className="submissionStatus success">
@@ -118,4 +118,4 @@ const PlacementComponent=({showNewRequest, toggleNewRequest})=> {
   </>)
   }
 
-  export default PlacementComponent;
+  export default PlacementAcceptance;

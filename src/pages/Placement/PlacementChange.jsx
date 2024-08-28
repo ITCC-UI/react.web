@@ -4,7 +4,7 @@ import { PulseLoader } from "react-spinners";
 import Empty from "/images/empty_dashboard.png";
 import PlacementTable from "./PlacementReqTable";
 import axiosInstance from "../../../API Instances/AxiosIntances";
-const PlacementComponent=({showNewRequest, toggleNewRequest})=> {
+const PlacementChange=({showNewRequest, toggleNewRequest})=> {
     
     const [id, setProgrammeId] = useState(null);
     const [Placement, setLetterRequests] = useState([]);
@@ -90,7 +90,7 @@ const PlacementComponent=({showNewRequest, toggleNewRequest})=> {
             <div className="topHead place">
               
               <button className="newReq" onClick={toggleNewRequest}>
-                + New Request
+                + New Submission
               </button>
             </div>
           </div>
@@ -118,4 +118,4 @@ const PlacementComponent=({showNewRequest, toggleNewRequest})=> {
   </>)
   }
 
-  export default PlacementComponent;
+  export default PlacementChange;
