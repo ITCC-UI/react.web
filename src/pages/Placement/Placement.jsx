@@ -19,13 +19,20 @@ import FullScreenSuccessMessage from "./Successful/Successful";
 
 
 const Placement = () => {
+
+  const [acceptanceSubmissionStatus, setAcceptanceSubmissionStatus] = useState("");
+  const [acceptanceSuccessMessage, setAcceptanceSuccessMessage] = useState("");
+  const [showAcceptanceSuccessful, setShowAcceptanceSuccessful] = useState(false);
+
+  const [placementSubmissionStatus, setPlacementSubmissionStatus] = useState("");
+  const [placementSuccessMessage, setPlacementSuccessMessage] = useState("");
+  const [showPlacementSuccessful, setShowPlacementSuccessful] = useState(false);
+
+
   const [showNewRequest, setShowNewRequest] = useState(false);
   const [showNewAcceptanceRequest, setShowNewAcceptanceRequest] = useState(false);
   const [id, setProgrammeId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
-  const [showSuccessful, setShowSuccessful] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
   const toggleNewRequest = () => {
     setShowNewRequest(!showNewRequest);
   };
@@ -61,58 +68,50 @@ const Placement = () => {
 
   const handleAcceptanceRequest = async (values, { setSubmitting }) => {
     try {
-      console.log(`Submitting form for programme ID: ${id}`);
       const response = await axiosInstance.post(`/trainings/acceptance-letters/registrations/${id}/`, values);
-      console.log("Form submitted successfully", response);
-      setSubmissionStatus("success");
+      setAcceptanceSubmissionStatus("success");
+      setAcceptanceSuccessMessage("Your Acceptance Letter has been submitted successfully!");
+      setShowAcceptanceSuccessful(true);
       setTimeout(() => {
-        setSubmissionStatus("");
-        setShowSuccessful(false);
-        window.location.reload(); // Auto refresh the page
+        setAcceptanceSubmissionStatus("");
+        setShowAcceptanceSuccessful(false);
+        window.location.reload();
       }, 2000);
     } catch (error) {
-      console.error("Error submitting form", error); // Log the error
-      console.log("Error details:", {
-        message: error.message,
-        response: error.response ? error.response.data : "No response",
-        stack: error.stack,
-      });
-      setSubmissionStatus("failure");
+      console.error("Error submitting acceptance form", error);
+      setAcceptanceSubmissionStatus("failure");
       setTimeout(() => {
-        setSubmissionStatus("");
+        setAcceptanceSubmissionStatus("");
       }, 500);
     } finally {
       setSubmitting(false);
-      toggleNewRequest();
+      toggleAcceptanceRequest();
     }
   };
   
   
 
   const handlePlacementRequestsSubmit = async (values, { setSubmitting }) => {
-
     try {
-      console.log(`Submitting form for programme ID: ${id}`);
       const response = await axiosInstance.post(`/trainings/placement-requests/registrations/${id}/`, values);
-      console.log("Form submitted successfully", response);
-      setSubmissionStatus("success");
-      setSuccessMessage("Your form has been submitted successfully!");
-      setShowSuccessful(true);
+      setPlacementSubmissionStatus("success");
+      setPlacementSuccessMessage("Your Placement Request has been submitted successfully!");
+      setShowPlacementSuccessful(true);
       setTimeout(() => {
-        setShowSuccessful(false);
-        window.location.reload(); // Auto refresh the page
-      }, 5000); // Show success message for 3 seconds
+        setShowPlacementSuccessful(false);
+        window.location.reload();
+      }, 5000);
     } catch (error) {
-      console.error("Error submitting form", error);
-      setSubmissionStatus("failure");
+      console.error("Error submitting placement request form", error);
+      setPlacementSubmissionStatus("failure");
       setTimeout(() => {
-        setSubmissionStatus("");
+        setPlacementSubmissionStatus("");
       }, 500);
     } finally {
       setSubmitting(false);
       toggleNewRequest();
     }
-  }; 
+  };
 
   // Component display
   const [activeDisplay, setActiveDisplay] = useState("placement");
@@ -124,7 +123,10 @@ const Placement = () => {
   
   const validationSchema = Yup.object().shape({
     request_message: Yup.string().required("A message is required")
+    // sometthin: Yup.string().required
   });
+
+
 
   const acceptanceLetterSchema = Yup.object().shape({
     letter_type: Yup.string()
@@ -174,6 +176,7 @@ const Placement = () => {
                 initialValues={{
 
                   request_message: "",
+                  someting: ""
 
                 }}
                 validationSchema={validationSchema}
@@ -204,60 +207,75 @@ const Placement = () => {
         </div>
       )}
 
-      {/*  */}
+      
 
-{showNewAcceptanceRequest && (
-        <div className="newRequestComponent">
-          <div className="newRequestHeader">
-            <div className="introductionLetter">Submission of Acceptance Letter</div>
-            <button className="closeButton" onClick={toggleAcceptanceRequest}>
-              <img src={CloseIcon} alt="Close" />
-            </button>
-            <div className="requestContent">
-            <Formik
-              initialValues={{
-                letter_type: '',
-                letter: '',
-                company_name: '',
-                company_address: '',
-                company_contact_name: '',
-                company_contact_email: '',
-                company_contact_phone: '',
-              }}
-              validationSchema={validationSchema}
-              onSubmit={handleAcceptanceRequest}
-            >
-                {({ isSubmitting }) => (
-                   <Form>
-                   <div className="companyDetails">
-                     <div className="formInput">
-                       <label htmlFor="letter_type">Letter Type</label>
-                       <Field as="select" name="letter_type">
-                         <option value="">Select Letter Type</option>
-                         <option value="UNDERTAKEN">UNDERTAKEN</option>
-                         <option value="ACCEPTANCE_LETTER">ACCEPTANCE LETTER</option>
-                       </Field>
-                       <ErrorMessage className="error" name="letter_type" component="div" />
-                     </div>
- 
-                     {/* ... other form fields remain the same ... */}
- 
-                   </div>
-                   <button type="submit" className="submitting">
-                     {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
-                   </button>
-                 </Form>
-                )}
-              </Formik>
-            </div>
-          </div>
-        </div>
-      )}
-      <FullScreenSuccessMessage 
-        isOpen={showSuccessful}
-        message={successMessage}
-        onClose={() => setShowSuccessful(false)}
-      />
+      {showNewAcceptanceRequest && (
+  <div className="newRequestComponent">
+    <div className="newRequestHeader">
+      <div className="introductionLetter">Submission of Acceptance Letter</div>
+      <button className="closeButton" onClick={toggleAcceptanceRequest}>
+        <img src={CloseIcon} alt="Close" />
+      </button>
+      <div className="requestContent">
+        <Formik
+          initialValues={{
+            letter_type: '',
+            letter: '',
+            company_name: '',
+            company_address: '',
+            company_contact_name: '',
+            company_contact_email: '',
+            company_contact_phone: '',
+          }}
+          validationSchema={acceptanceLetterSchema} // Ensure this is correct
+          onSubmit={handleAcceptanceRequest}  // Correctly pass the onSubmit function
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <div className="companyDetails">
+                <div className="formInput">
+                  <label htmlFor="letter_type">Letter Type</label>
+                  <Field as="select" name="letter_type">
+                    <option value="">Select Letter Type</option>
+                    <option value="UNDERTAKEN">UNDERTAKEN</option>
+                    <option value="ACCEPTANCE_LETTER">ACCEPTANCE LETTER</option>
+                  </Field>
+                  <ErrorMessage className="error" name="letter_type" component="div" />
+                </div>
+                {/* Add other fields here */}
+
+                <div className="companyDetails">
+                  <div className="formInput">
+                    <label htmlFor="letter">Letter </label>
+                    <Field as="input" name="letter">
+                    
+                    </Field>
+                    <ErrorMessage className="error" name="letter" component="div" />
+                  </div>
+                </div>
+              </div>
+              <button type="submit" className="submitting"> 
+                {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </div>
+  </div>
+)}
+
+<FullScreenSuccessMessage 
+      isOpen={showAcceptanceSuccessful}
+      message={acceptanceSuccessMessage}
+      onClose={() => setShowAcceptanceSuccessful(false)}
+    />
+    <FullScreenSuccessMessage 
+      isOpen={showPlacementSuccessful}
+      message={placementSuccessMessage}
+      onClose={() => setShowPlacementSuccessful(false)}
+    />
+
 
       <main className="introLetter">
         <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} />
