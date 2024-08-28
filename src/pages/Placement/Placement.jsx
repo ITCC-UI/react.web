@@ -8,8 +8,8 @@ import * as Yup from "yup";
 import { GridLoader, PulseLoader } from "react-spinners";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
-import IntroductionLetterTable from "./PlacementReqTable";
-import PlacementDisplay from "./PlacementRequest";
+// import IntroductionLetterTable from "./PlacementReqTable";
+// import PlacementDisplay from "./PlacementRequest";
 import PlacementComponent from "./PlacementComponent"
 import ActivePlacement from "./ActivePlacement";
 import PlacementAcceptance from "./PlacementAcceptance";
@@ -37,10 +37,10 @@ const Placement = () => {
         const id = response.data[0].id;
         setProgrammeId(id);
         console.log("This Programme ID:", id);
-        fetchIntroductionLetterRequests(id);
-        fetchPlacementRequests(id);
+        // fetchIntroductionLetterRequests(id);
+        // fetchPlacementRequests(id);
       } else {
-        setNoProgrammeId(true); // Set state when no Programme ID is found
+        // setNoProgrammeId(true); // Set state when no Programme ID is found
         setIsLoading(false);
       }
     } catch (error) {
@@ -55,16 +55,14 @@ const Placement = () => {
 
   const toggleAcceptanceRequest =()=>{
     setShowNewAcceptanceRequest(!showNewAcceptanceRequest);
-    console.log("It workerd")
+    
   }
 
 
-  const handleSubmit = async (values, { setSubmitting }) => {
-
-
+  const handleAcceptanceRequest = async (values, { setSubmitting }) => {
     try {
       console.log(`Submitting form for programme ID: ${id}`);
-      const response = await axiosInstance.post(`/trainings/placement-requests/registrations/${id}/`, values);
+      const response = await axiosInstance.post(`/trainings/acceptance-letters/registrations/${id}/`, values);
       console.log("Form submitted successfully", response);
       setSubmissionStatus("success");
       setTimeout(() => {
@@ -73,7 +71,12 @@ const Placement = () => {
         window.location.reload(); // Auto refresh the page
       }, 2000);
     } catch (error) {
-      //console.error("Error submitting form", error);
+      console.error("Error submitting form", error); // Log the error
+      console.log("Error details:", {
+        message: error.message,
+        response: error.response ? error.response.data : "No response",
+        stack: error.stack,
+      });
       setSubmissionStatus("failure");
       setTimeout(() => {
         setSubmissionStatus("");
@@ -82,7 +85,8 @@ const Placement = () => {
       setSubmitting(false);
       toggleNewRequest();
     }
-  }; 
+  };
+  
   
 
   const handlePlacementRequestsSubmit = async (values, { setSubmitting }) => {
@@ -97,7 +101,7 @@ const Placement = () => {
       setTimeout(() => {
         setShowSuccessful(false);
         window.location.reload(); // Auto refresh the page
-      }, 3000); // Show success message for 3 seconds
+      }, 5000); // Show success message for 3 seconds
     } catch (error) {
       console.error("Error submitting form", error);
       setSubmissionStatus("failure");
@@ -122,6 +126,25 @@ const Placement = () => {
     request_message: Yup.string().required("A message is required")
   });
 
+  const acceptanceLetterSchema = Yup.object().shape({
+    letter_type: Yup.string()
+      .oneOf(['UNDERTAKEN'], 'Invalid letter type')
+      .required('Letter type is required'),
+    letter: Yup.string()
+      .required('Letter content is required'),
+    company_name: Yup.string()
+      .required('Company name is required'),
+    company_address: Yup.string()
+      .required('Company address is required'),
+    company_contact_name: Yup.string()
+      .required('Company contact name is required'),
+    company_contact_email: Yup.string()
+      .email('Invalid email')
+      .required('Company contact email is required'),
+    company_contact_phone: Yup.string()
+      .required('Company contact phone is required'),
+  });
+  
 
   return (
     <div className="introductionLetter">
@@ -181,6 +204,8 @@ const Placement = () => {
         </div>
       )}
 
+      {/*  */}
+
 {showNewAcceptanceRequest && (
         <div className="newRequestComponent">
           <div className="newRequestHeader">
@@ -189,33 +214,39 @@ const Placement = () => {
               <img src={CloseIcon} alt="Close" />
             </button>
             <div className="requestContent">
-              <Formik
-                initialValues={{
-
-                  request_message: "",
-
-                }}
-                validationSchema={validationSchema}
-                onSubmit={handlePlacementRequestsSubmit}
-              >
+            <Formik
+              initialValues={{
+                letter_type: '',
+                letter: '',
+                company_name: '',
+                company_address: '',
+                company_contact_name: '',
+                company_contact_email: '',
+                company_contact_phone: '',
+              }}
+              validationSchema={validationSchema}
+              onSubmit={handleAcceptanceRequest}
+            >
                 {({ isSubmitting }) => (
-                  <Form>
-
-                    <div className="companyDetails">
-
-
-
-                      <div className="formInput">
-                        <label htmlFor="request_message"></label>
-                        <Field type="text"  name="request_message" placeholder="Type your message to support your request" />
-                        <ErrorMessage className="error" name="request_message" component="div" />
-                      </div>
-
-                    </div>
-                    <button type="submit" className="submitting">
-                      {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
-                    </button>
-                  </Form>
+                   <Form>
+                   <div className="companyDetails">
+                     <div className="formInput">
+                       <label htmlFor="letter_type">Letter Type</label>
+                       <Field as="select" name="letter_type">
+                         <option value="">Select Letter Type</option>
+                         <option value="UNDERTAKEN">UNDERTAKEN</option>
+                         <option value="ACCEPTANCE_LETTER">ACCEPTANCE LETTER</option>
+                       </Field>
+                       <ErrorMessage className="error" name="letter_type" component="div" />
+                     </div>
+ 
+                     {/* ... other form fields remain the same ... */}
+ 
+                   </div>
+                   <button type="submit" className="submitting">
+                     {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
+                   </button>
+                 </Form>
                 )}
               </Formik>
             </div>

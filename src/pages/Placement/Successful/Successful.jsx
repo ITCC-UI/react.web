@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import './FullScreenSuccessMessage.scss';
 
-// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
+
 Modal.setAppElement('#root');
 
 const FullScreenSuccessMessage = ({ isOpen, message, onClose }) => {

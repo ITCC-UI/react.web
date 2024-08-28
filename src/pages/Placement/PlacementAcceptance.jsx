@@ -11,19 +11,24 @@ const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest
     const [PlacementLetter, setPlacementRequests]= useState([])
     const [isLoading, setIsLoading] = useState(true);
     const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
-  
+    const [noProgrammeId, setNoProgrammeId] = useState(false); // State for no Programme ID
 
   
     const fetchProgrammeId = async () => {
       try {
         const response = await axiosInstance.get("trainings/registrations/");
-        const id = response.data[0].id;
-        setProgrammeId(id);
-        console.log("This Programme ID:", id);
-        fetchIntroductionLetterRequests(id);
-        fetchPlacementRequests(id);
+        if (response.data.length > 0) {
+          const id = response.data[0].id;
+          setProgrammeId(id);
+          console.log("This Programme ID:", id);
+          fetchIntroductionLetterRequests(id);
+          fetchPlacementRequests(id);
+        } else {
+          setNoProgrammeId(true); // Set state when no Programme ID is found
+          setIsLoading(false);
+        }
       } catch (error) {
-        //console.error("Error fetching programme ID:", error);
+        console.error("Error fetching programme ID:", error);
         setIsLoading(false);
       }
     };
@@ -31,7 +36,7 @@ const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest
     const fetchIntroductionLetterRequests = async (id) => {
       try {
         // console.log("Fetching introduction letters for programme ID:", id);
-        const response = await axiosInstance.get(`trainings/placement-requests/registrations/${id}/`);
+        const response = await axiosInstance.get(`trainings/acceptance-letters/registrations/${id}/`);
         setLetterRequests(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -55,50 +60,32 @@ const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest
     useEffect(() => {
       fetchProgrammeId();
     }, []);
-  
-    const handleSubmit = async (values, { setSubmitting }) => {
-      if (!id) {
-        //console.error("Programme ID not available");
-        return;
-      }
-  
-      try {
-        //console.log(`Submitting form for programme ID: ${programmeId}`);
-        const response = await axiosInstance.post(`/trainings/registrations/${programmeId}/introduction-letter-requests/`, values);
-        //console.log("Form submitted successfully", response);
-        setSubmissionStatus("success");
-        setTimeout(() => {
-          setSubmissionStatus("");
-          window.location.reload(); // Auto refresh the page
-        }, 500);
-      } catch (error) {
-        //console.error("Error submitting form", error);
-        setSubmissionStatus("failure");
-        setTimeout(() => {
-          setSubmissionStatus("");
-        }, 500);
-      } finally {
-        setSubmitting(false);
-        toggleNewAcceptanceRequest();
-      }
-    };
+
   
   
     
     return(<>
-    <div className="container lifting">
+    <div className="container">
             <div className="topHead place">
               
-              <button className="newReq" onClick={toggleNewAcceptanceRequest}>
+             {id && (<button className="newReq" onClick={toggleNewAcceptanceRequest}>
                 + New Submission
-              </button>
+              </button>)}
             </div>
           </div>
           {isLoading ? (
             <div className="loader">
               <PulseLoader size={15} color={"#123abc"} />
             </div>
-          ) : Placement.length === 0 ? (
+          ) : 
+          noProgrammeId ? (
+            <div className="noProgrammeId register_above">
+              <p>You are not eligible to request a placement letter at this time. <br/>
+            <br/>  You need to make a registration before proceeding</p>
+            </div>
+          )
+          :
+          Placement.length === 0 ? (
             <div className="image">
               <img src={Empty} alt="Empty" />
             </div>

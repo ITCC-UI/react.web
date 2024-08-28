@@ -91,7 +91,7 @@ const PlacementAcceptanceTable = () => {
   };
 
   return (
-    <section className='shift'>
+    <section className='shift placement_table'>
       
       <div className="mainBody">
         <div className="containerCourse">
