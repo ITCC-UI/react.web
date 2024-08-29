@@ -78,13 +78,13 @@ const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest
               <PulseLoader size={15} color={"#123abc"} />
             </div>
           ) : 
-          // noProgrammeId ? (
-          //   <div className="noProgrammeId register_above">
-          //     <p>You are not eligible to request a placement letter at this time. <br/>
-          //   <br/>  You need to make a registration before proceeding</p>
-          //   </div>
-          // )
-          // :
+          noProgrammeId ? (
+            <div className="noProgrammeId register_above">
+              <p>You are not eligible to request a placement letter at this time. <br/>
+            <br/>  You need to make a registration before proceeding</p>
+            </div>
+          )
+          :
           Placement.length === 0 ? (
             <div className="image">
               <img src={Empty} alt="Empty" />
