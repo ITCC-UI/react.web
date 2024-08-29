@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import './MoreDetails.scss'; // Import relevant styles
-import Close from "/images/closeButton.png"
+import './MoreDetails.scss';
+import { X } from 'lucide-react';
 
 const MoreDetails = ({ request, onClose }) => {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    
     setIsActive(true);
   }, []);
 
   const handleClose = () => {
-    // Deactivate the sliding animation before closing
     setIsActive(false);
-    setTimeout(onClose, 300); // Match the duration of the CSS transition
+    setTimeout(onClose, 300);
   };
 
   const getApprovalNote = (note) => {
@@ -21,6 +19,7 @@ const MoreDetails = ({ request, onClose }) => {
   };
 
   const formatApprovalDate = (dateString) => {
+    if (!dateString) return null;
     const date = new Date(dateString);
     const day = date.getDate();
     const daySuffix = day % 10 === 1 && day !== 11 ? 'st' : day % 10 === 2 && day !== 12 ? 'nd' : day % 10 === 3 && day !== 13 ? 'rd' : 'th';
@@ -44,7 +43,9 @@ const MoreDetails = ({ request, onClose }) => {
   return (
     <>
       <div className={`more-details-modal ${isActive ? 'active' : ''}`}>
-        <div onClick={handleClose} className='closeView'><img src={Close} alt="Close" /></div>
+        <div onClick={handleClose} className='closeView'>
+          <X size={24} />
+        </div>
         <div className="more-details-content">
           <h2 className='approval'>More Details</h2>
           <div className="compProfile">
@@ -59,9 +60,9 @@ const MoreDetails = ({ request, onClose }) => {
 
           <div className='compProfile'>
             <div className="details">Company Address</div>
-            {/**<div className="cDetails">
+            <div className="cDetails">
               {request.company_address.building_number} {request.company_address.building_name} {request.company_address.street}, {request.company_address.state_or_province}
-            </div>**/}
+            </div>
           </div>
 
           <div className='compProfile'>
@@ -79,10 +80,12 @@ const MoreDetails = ({ request, onClose }) => {
             <div className="cDetails">{getApprovalNote(request.approval_note)}</div>
           </div>
 
-          <div className="compProfile">
-            <div className="details">Approval Date</div>
-            <div className="cDetails">{formatApprovalDate(request.date_of_approval)}</div>
-          </div>
+          {request.date_of_approval && (
+            <div className="compProfile">
+              <div className="details">Approval Date</div>
+              <div className="cDetails">{formatApprovalDate(request.date_of_approval)}</div>
+            </div>
+          )}
           
         </div>
       </div>

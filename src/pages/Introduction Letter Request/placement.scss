@@ -128,7 +128,7 @@ color: royalblue !important;
       }
     }
 
-    input[type="text"], select, textarea, input[type="tel"]{
+    input[type="text"], select, textarea, input[type="tel"], input[type="file"]{
       width: 100% !important;
     }
     select{
@@ -147,7 +147,7 @@ color: royalblue !important;
     font-size: 14px;
    
   }
-  input[type="text"], textarea, select, input[type="tel"]{
+  input[type="text"], textarea, select, input[type="tel"], input[type="file"]{
     width: 700px;
     height: 45px;
     background: rgba(249, 249, 250, 1);
@@ -381,4 +381,16 @@ margin-left: 0;
   .newRequestComponent .newRequestHeader .introductionLetter{
     font-size: 1rem;
   }
+}
+
+input[type="file"]{
+// display: none;
+&::after{
+content: "HHHH";
+display: flex;
+position: absolute;
+top: 0;
+z-index: 100;
+border: 1px solid red;
+}
 }

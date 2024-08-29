@@ -10,14 +10,21 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
   const [Placement, setLetterRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [submissionStatus, setSubmissionStatus] = useState("");
+  const [noProgrammeId, setNoProgrammeId] = useState(false); // State for no Programme ID
 
   const fetchProgrammeId = async () => {
     try {
       const response = await axiosInstance.get("trainings/registrations/");
-      const id = response.data[0].id;
-      setProgrammeId(id);
-      console.log("This Programme ID:", id);
-      fetchChangeOfPlacementRequests(id);
+      if (response.data.length > 0) {
+        const id = response.data[0].id;
+        setProgrammeId(id);
+        console.log("This Programme ID:", id);
+        fetchChangeOfPlacementRequests(id);
+        // fetchPlacementRequests(id);
+      } else {
+        setNoProgrammeId(true); // Set state when no Programme ID is found
+        setIsLoading(false);
+      }
     } catch (error) {
       console.error("Error fetching programme ID:", error);
       setIsLoading(false);
@@ -76,6 +83,12 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
       {isLoading ? (
         <div className="loader">
           <PulseLoader size={15} color={"#123abc"} />
+        </div>
+      ) :
+      noProgrammeId ? (
+        <div className="noProgrammeId register_above">
+          <p>You are not eligible to request for a change of placement at this time. <br/>
+        <br/>  You need to make a registration before proceeding</p>
         </div>
       ) : Placement.length === 0 ? (
         <div className="image">

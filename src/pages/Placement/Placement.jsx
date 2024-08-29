@@ -37,10 +37,19 @@ const Placement = () => {
   const [changeOfPlacementRequest, setNewChangeRequest] = useState(false)
   const [id, setProgrammeId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
   const toggleNewRequest = () => {
     setShowNewRequest(!showNewRequest);
   };
 
+  const toggleNewPlacementReq=()=>{
+    setNewChangeRequest (!changeOfPlacementRequest)
+  }
+
+  const toggleAcceptanceRequest = () => {
+    setShowNewAcceptanceRequest(!showNewAcceptanceRequest);
+
+  }
   const fetchProgrammeId = async () => {
     try {
       const response = await axiosInstance.get("trainings/registrations/");
@@ -64,14 +73,6 @@ const Placement = () => {
     fetchProgrammeId();  // Fetch the ID when the component mounts
   }, []);
 
-  const toggleAcceptanceRequest = () => {
-    setShowNewAcceptanceRequest(!showNewAcceptanceRequest);
-
-  }
-
-  const toggleChangeOfPlacementRequest = () => {
-    setNewChangeRequest(!changeOfPlacementRequest);
-  };
   
 
   const handleAcceptanceRequest = async (values, { setSubmitting }) => {
@@ -333,14 +334,14 @@ const Placement = () => {
       {changeOfPlacementRequest && (
         <div className="newRequestComponent">
           <div className="newRequestHeader">
-            <div className="introductionLetter">Submission of Acceptance Letter</div>
-            <button className="closeButton" onClick={toggleAcceptanceRequest}>
+            <div className="introductionLetter">Change of Placement Letter</div>
+            <button className="closeButton" onClick={toggleNewPlacementReq}>
               <img src={CloseIcon} alt="Close" />
             </button>
             <div className="requestContent">
               <Formik
                 initialValues={{
-                  letter_type: '',
+                  // letter_type: '',
                   letter: null,
                   company_name: '',
                   company_address: {
@@ -358,7 +359,7 @@ const Placement = () => {
                   company_contact_phone: '',
                 }}
                 validationSchema={acceptanceLetterSchema} // Ensure this is correct
-                onSubmit={handleAcceptanceRequest}  // Correctly pass the onSubmit function
+                onSubmit={handleChangeOfPlacementRequest}  // Correctly pass the onSubmit function
               >
                 {({ isSubmitting, setFieldValue }) => (
                   <Form encType="multipart/form-data">
@@ -386,7 +387,7 @@ const Placement = () => {
                         <ErrorMessage className="error" name="company_contact_phone" component="div" />
                       </div>
 
-                      <div className="formInput">
+                      {/* <div className="formInput">
                         <label htmlFor="letter_type">Letter Type</label>
                         <Field as="select" name="letter_type">
                           <option value="">Select Letter Type</option>
@@ -394,7 +395,7 @@ const Placement = () => {
                           <option value="ACCEPTANCE_LETTER">ACCEPTANCE LETTER</option>
                         </Field>
                         <ErrorMessage className="error" name="letter_type" component="div" />
-                      </div>
+                      </div> */}
 
                       <div className="formInput">
             <label htmlFor="letter">Letter</label>
@@ -646,7 +647,7 @@ const Placement = () => {
         {activeDisplay === "placementRequest" && <PlacementComponent showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest} />}
         {activeDisplay === "placement" && <ActivePlacement />}
         {activeDisplay === "placementAcceptance" && <PlacementAcceptance showNewAcceptanceRequest={showNewAcceptanceRequest} toggleNewAcceptanceRequest={toggleAcceptanceRequest} />}
-        {activeDisplay === "placementChange" && <PlacementChange showPlacementReq={showNewRequest} togglePlacementChangeRequest={toggleNewRequest} />}
+        {activeDisplay === "placementChange" && <PlacementChange showPlacementReq={showNewRequest} togglePlacementChangeRequest={toggleNewPlacementReq} />}
 
 
       </main>
