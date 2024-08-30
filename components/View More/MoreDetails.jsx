@@ -50,24 +50,20 @@ const MoreDetails = ({ request, onClose }) => {
           <h2 className='approval'>More Details</h2>
           <div className="compProfile">
             <div className='details'>Company Name</div>
-            <div className="cDetails">{request.company_name}</div>
+            <div className="cDetails">{(request.company_name !==null? "Placement not yet assigned": request.company_name )}</div>
           </div>
 
-          <div className='compProfile'>
-            <div className="details">Addressed To</div>
-            <div className="cDetails">{request.address_to}</div>
-          </div>
 
-          <div className='compProfile'>
-            <div className="details">Company Address</div>
-            <div className="cDetails">
-              {request.company_address.building_number} {request.company_address.building_name} {request.company_address.street}, {request.company_address.state_or_province}
-            </div>
-          </div>
 
           <div className='compProfile'>
             <div className="details">Date of Request</div>
             <div className="cDetails">{formatApprovalDate(request.date_created)}</div>
+          </div>
+
+
+          <div className='compProfile'>
+            <div className="details">Date of Approval</div>
+            <div className="cDetails">{request.date_of_approval===null? "Pending Approval ": formatApprovalDate(request.date_of_approval)}</div>
           </div>
 
           <div className='compProfile'>

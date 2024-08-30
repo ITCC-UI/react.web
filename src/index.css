@@ -107,3 +107,20 @@ text-transform: uppercase;
   border-bottom: 2px solid var(--Primary-blue, #000080);
   
 }
+
+@media (max-width:430px) {
+  .navButtons{
+    /* border: 1px solid red; */
+    width: 90%;
+    overflow-x: scroll;
+    overflow-wrap: break-word;
+    gap: 10px;
+  }
+
+  .shift_button{
+    width: 180px;
+    padding: 10px;
+    font-size: 12px;
+    text-wrap: nowrap;
+  }
+}

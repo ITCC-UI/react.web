@@ -397,7 +397,7 @@ const Placement = () => {
                         <ErrorMessage className="error" name="letter_type" component="div" />
                       </div> */}
 
-                      <div className="formInput">
+                      <div className="formInput move-left">
             <label htmlFor="letter">Letter</label>
             <input
               id="letter"

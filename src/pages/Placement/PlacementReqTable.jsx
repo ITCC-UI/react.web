@@ -122,7 +122,7 @@ const PlacementRequest = () => {
                 });
                 return (
                   <tr key={index}>
-                    <td>{request.company_name}</td>
+                    <td>{(request.company_name !==null? "Placement not yet assigned": request.company_name )}</td>
                     <td>{formatDate(request.date_created)}</td>
                     <td>{formatDate(request.date_created)}</td>
                     
