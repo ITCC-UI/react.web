@@ -33,7 +33,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
 
   const fetchChangeOfPlacementRequests = async (id) => {
     try {
-      const response = await axiosInstance.get(`trainings/change-of-placements/${id}/`);
+      const response = await axiosInstance.get(`trainings/change-of-placements/registrations/${id}/`);
       setLetterRequests(response.data);
       setIsLoading(false);
     } catch (error) {

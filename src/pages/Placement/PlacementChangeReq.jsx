@@ -31,7 +31,7 @@ const PlacementChangeReq = () => {
       const id = registrations[0].id;
       //console.log("Using Registration ID:", id);
 
-      const requestsResponse = await axiosInstance.get(`trainings/change-of-placements/${id}`);
+      const requestsResponse = await axiosInstance.get(`/change-of-placements/registrations/${id}`);
       const requests = requestsResponse.data;
       console.log("Fetched requests:", requests);
       
