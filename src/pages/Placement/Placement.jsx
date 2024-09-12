@@ -290,7 +290,7 @@ const Placement = () => {
         <div className="newRequestComponent">
           <div className="newRequestHeader ">
             <div className="introductionLetter">Request for Placement</div>
-            <button className="closeButton" onClick={toggleNewRequest}>
+            <button className="closeButton" onClick={toggleNewRequest} >
               <img src={CloseIcon} alt="Close" />
             </button>
             <div className="requestContent">
@@ -533,8 +533,8 @@ const Placement = () => {
                         <label htmlFor="letter_type">Letter Type</label>
                         <Field as="select" name="letter_type">
                           <option value="">Select Letter Type</option>
-                          <option value="UNDERTAKEN">UNDERTAKEN</option>
-                          <option value="ACCEPTANCE_LETTER">ACCEPTANCE LETTER</option>
+                          <option value="UNDERTAKING  ">UNDERTAKING</option>
+                          <option value="ACCEPTANCE">ACCEPTANCE LETTER</option>
                         </Field>
                         <ErrorMessage className="error" name="letter_type" component="div" />
                       </div>
@@ -545,6 +545,7 @@ const Placement = () => {
               id="letter"
               name="letter"
               type="file"
+              accept="pdf"
               onChange={(event) => {
                 setFieldValue("letter", event.currentTarget.files[0]);
                 // setFile(event.currentTarget.files[0]);

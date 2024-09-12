@@ -3,16 +3,15 @@ import "../../../components/Table/table.scss";
 // import MobileSideBar from '../../../components/Sidebar/MobileSideBar';
 import "./introTable.scss";
 import classNames from 'classnames';
-import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
-import { RingLoader } from 'react-spinners';
-import MoreDetails from '../../../components/View More/MoreDetails';
+import MoreDetails from '../../../components/View More/MoreDetailsAcceptance';
 
 
 
 
 const PlacementAcceptanceTable = () => {
   const [letterRequests, setLetterRequests] = useState([]);
+  const [letterType, checkLetterType] = useState([])
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
 
@@ -34,24 +33,36 @@ const PlacementAcceptanceTable = () => {
       const requestsResponse = await axiosInstance.get(`/trainings/acceptance-letters/registrations/${id}`);
       const requests = requestsResponse.data;
       console.log("Fetched requests:", requests);
-      
+
+
       const processedRequests = requests.map(request => ({
         ...request,
         statusClass: getStatusClass(request.approval_status),
       }));
-
+      const processedRequestsLetter = requests.map(request => ({
+        ...request,
+        statusClass: getStatusClass(request.letter_type),
+      }));
       setLetterRequests(processedRequests);
+      checkLetterType(processedRequestsLetter)
     } catch (error) {
       //console.error("Error fetching introduction letter requests:", error);
     }
   };
 
+
   const getStatusClass = (status) => {
-    switch(status) {
+    switch (status) {
       case 'ACTIVE':
         return 'approved';
+      case 'SUBMITTED':
+        return 'submitted';
+      case 'UNDERTAKING':
+        return 'undertaking';
+      case 'ACCEPTANCE':
+        return 'acceptance';
       case 'DISCONTINED':
-        default:
+      default:
         return 'rejected';
     }
   };
@@ -78,7 +89,7 @@ const PlacementAcceptanceTable = () => {
     //   document.body.appendChild(link);
     //   link.click();
     // } catch (error) {
-      //console.error("Error downloading document:", error);
+    //console.error("Error downloading document:", error);
     // } finally {
     //   setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
     // }
@@ -92,62 +103,64 @@ const PlacementAcceptanceTable = () => {
 
   return (
     <section className='shift placement_table'>
-      
+
       <div className="mainBody">
         <div className="containerCourse">
           <table>
             <thead>
               <tr>
                 <th>Company Name</th>
-                <th>Company Supervisor</th>
-                <th>Start Date</th>
-                <th>End Date</th>
+                <th>Contact Name</th>
+                <th>Type of Letter</th>
+                <th>Date of Submission</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {letterRequests.map((request, index) => {
-                const statusClasses = classNames({
-                  'status': true,
-                  'approved': request.statusClass === 'approved',
-                  'rejected': request.statusClass === 'rejected',
-                 
-                });
-                const downloadIconClasses = classNames({
-                  'downloadIcon': true,
-                  'inactive': request.statusClass !== 'approved',
-                });
-                return (
-                  <tr key={index}>
-                    <td>{request.company_name}</td>
-                    <td>{request.company_supervisor}</td>
-                    <td>{formatDate(request.date_created)}</td>
-                    <td>{formatDate(request.date_created)}</td>
-                    
-                    <td>
-                      <div className={statusClasses}>
-                        {request.approval_status}
-                      </div>
-                    </td>
-                    <td> {loadingDownloads[request.id] ? (
-                        <RingLoader size={20} color='blue' />
-                      ) : (
-                        <img 
-                          src={IconDownload} 
-                          alt="download" 
-                          className={downloadIconClasses}
-                          onClick={() => request.statusClass === 'approved' && handleDownloadClick(request.id)} 
-                        />
-                      )}</td>
-                
-                    <td className='down'>
-                      <button onClick={() => handleViewClick(request)}>View More</button>
-                     
-                    </td>
-                  </tr>
-                );
-              })}
+            {
+  letterRequests.map((request, index) => {
+    const statusClasses = classNames({
+      'status': true,
+      'approved': request.statusClass === 'approved',
+      'rejected': request.statusClass === 'rejected',
+      'submitted': request.statusClass === 'submitted'
+    });
+
+    // You don't need to loop over `letterType` here, just handle `letter_type` in `request`.
+    const letterClasses = classNames({
+      'status': true,
+      'undertaken': request.letter_type==='UNDERTAKING',
+      'undertaking': request.letter_type === 'UNDERTAKEN', // Assuming letter type directly from `request`
+      'acceptance': request.letter_type === 'ACCEPTANCE'
+      
+    });
+
+    return (
+      <tr key={`${index}`}> {/* Use index or a stable unique identifier */}
+        <td>{request.company_name}</td>
+        <td>{request.company_contact_name}</td>
+        <td>
+          <div className={letterClasses}>
+            {request.letter_type}
+          </div>
+        </td>
+        <td>{formatDate(request.date_created)}</td>
+
+        <td>
+          <div className={statusClasses}>
+            {request.approval_status}
+          </div>
+        </td>
+
+        <td className='down'>
+          <button onClick={() => handleViewClick(request)}>View More</button>
+        </td>
+      </tr>
+    );
+  })
+}
+
             </tbody>
           </table>
           {selectedRequest && (
@@ -158,7 +171,7 @@ const PlacementAcceptanceTable = () => {
           )}
         </div>
       </div>
-    
+
       <div className="register_above mobile">
         Scroll horizontally to see more
       </div>
