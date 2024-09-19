@@ -30,13 +30,15 @@ const MoreDetails = ({ request, onClose }) => {
 
   const getStatusClass = (status) => {
     switch(status) {
-      case 'APPROVED':
-        return 'status approved';
-      case 'REJECTED':
+      case 'ACCEPTANCE':
+        return 'status rejected';
+      case 'UNDERTAKEN':
         return 'status rejected';
       case 'SUBMITTED':
-      default:
         return 'status submitted';
+      case 'null':
+        default:
+        return 'status ';
     }
   };
 
@@ -81,8 +83,9 @@ const MoreDetails = ({ request, onClose }) => {
 
 <div className="compProfile">
   <div className="details">Type of Letter</div>
-  <div className="cDetails letter_type">
+  <div className={`cDetails ${getStatusClass(getStatusClass)}`}>
     {request.letter_type}
+    {console.log(request.letter_type)}
   </div>
 </div>
 

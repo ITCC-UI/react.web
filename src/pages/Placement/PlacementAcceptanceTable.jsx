@@ -22,7 +22,7 @@ const PlacementAcceptanceTable = () => {
       console.log("Fetched registrations:", registrations);
 
       if (registrations.length === 0) {
-        //console.log("No registrations found");
+        console.log("No registrations found");
         return;
       }
 

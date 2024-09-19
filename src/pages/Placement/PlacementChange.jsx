@@ -76,7 +76,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
       <div className="container">
         <div className="topHead place">
           <button className="newReq" onClick={togglePlacementChangeRequest}>
-            + New Submission
+            + New Request
           </button>
         </div>
       </div>

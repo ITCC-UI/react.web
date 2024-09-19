@@ -10,6 +10,8 @@ import { GridLoader, PulseLoader } from "react-spinners";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
 import IntroductionLetterTable from "./IntroductionLetterTable";
+import FormikComboboxInput from "./ComboBox";
+import StatesComboBox from "./ComboBoxStates";
 
 const IntroductionLetter = () => {
   const [showNewRequest, setShowNewRequest] = useState(false);
@@ -89,6 +91,25 @@ const IntroductionLetter = () => {
     address_to: Yup.string().required("Addressee is required"),
   });
 
+
+  const addressOptions=[
+    "The Managing Director",
+    "The Human Resources Manager",
+    "The Chief Executive Officer",
+    "The Hiring Manager",
+    "The Internship Coordinator"
+  ]
+
+  const statesOfNigeria = [
+    "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", 
+    "Benue", "Borno", "Cross River", "Delta", "Ebonyi", "Edo", 
+    "Ekiti", "Enugu", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", 
+    "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", 
+    "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", 
+    "Sokoto", "Taraba", "Yobe", "Zamfara", "Federal Capital Territory (FCT)"
+  ];
+  
+
   return (
     <div className="introductionLetter">
       <Helmet>
@@ -138,7 +159,12 @@ const IntroductionLetter = () => {
                       </div>
                       <div className="formInput">
                         <label htmlFor="address_to">Address To</label>
-                        <Field type="text" name="address_to" placeholder="Title/Position to address letter to, e.g The Managing Director" />
+                        <FormikComboboxInput
+              name="address_to"
+              options={addressOptions}
+              placeholder="Title/Position to address letter to, e.g The Managing Director"
+              className="combo"
+            />
                         <ErrorMessage className="error" name="address_to" component="div" />
                       </div>
                     </div>
@@ -167,7 +193,13 @@ const IntroductionLetter = () => {
                         </div>
                         <div className="formInput">
                           <label htmlFor="company_address.state_or_province"></label>
-                          <Field type="text" name="company_address.state_or_province" placeholder="State, e.g Oyo" />
+                          <StatesComboBox
+              name="company_address.state_or_province"
+              options={statesOfNigeria}
+              placeholder="E.g. Ibadan  "
+              className="combo"
+              
+            />
                           <ErrorMessage className="error" name="company_address.state_or_province" component="div" />
                         </div>
                       </div>
@@ -188,11 +220,12 @@ const IntroductionLetter = () => {
           <div className="topHead">
             <div className="heading">INTRODUCTION LETTERS</div>
             {/* Conditionally render the New Request button only if programmeId exists */}
-            {programmeId && (
-              <button className="newReq" onClick={toggleNewRequest}>
-                + New Request
-              </button>
-            )}
+              {programmeId && letterRequests.length === 0  && (
+        <button className="newReq" onClick={toggleNewRequest}>
+          + New Request
+        </button>
+      )}
+      
           </div>
         </div>
         {isLoading ? (
@@ -204,13 +237,22 @@ const IntroductionLetter = () => {
             <p>You are not registered for a Programme. <br/> You are not eligible to request an introduction letter at this time. <br/>  <br/>
             Proceed to the registration page to register for you industrial training.</p>
           </div>
+
+          
         ) : letterRequests.length === 0 ? (
           <div className="image">
             <img src={Empty} alt="Empty" />
           </div>
         ) : (
+
           <IntroductionLetterTable letterRequests={letterRequests} />
         )}
+        
+        {programmeId && letterRequests.length === 1 && (
+        <div className="register_above p-2 bg-yellow-100 text-yellow-800 rounded">
+         Request limit exceeded
+        </div>
+      )}
         {submissionStatus === "success" && (
           <div className="submissionStatus success">
             Form submitted successfully! Reload the page.

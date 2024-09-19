@@ -15,6 +15,7 @@ import ActivePlacement from "./ActivePlacement";
 import PlacementAcceptance from "./PlacementAcceptance";
 import PlacementChange from "./PlacementChange";
 import FullScreenSuccessMessage from "./Successful/Successful";
+import StatesComboBox from "./ComboBoxStates";
 
 
 
@@ -77,20 +78,20 @@ const Placement = () => {
 
   const handleAcceptanceRequest = async (values, { setSubmitting }) => {
     try {
-      const formData = new FormData();
-      const formattedAddress = formatAddress(values.company_address);
-      // Append all form fields to formData
-      Object.keys(values).forEach(key => {
-        if (key === 'letter') {
-          formData.append(key, file);
-        } else if (key === 'company_address') {
-          formData.append(key, formattedAddress);
-        } else {
-          formData.append(key, values[key]);
-        }
-      });
+      // const formData = new FormData();
+      // const formattedAddress = formatAddress(values.company_address);
+      // // Append all form fields to formData
+      // Object.keys(values).forEach(key => {
+      //   if (key === 'letter') {
+      //     formData.append(key, file);
+      //   } else if (key === 'company_address') {
+      //     formData.append(key, formattedAddress);
+      //   } else {
+      //     formData.append(key, values[key]);
+      //   }
+      // });
   
-      const response = await axiosInstance.post(`/trainings/acceptance-letters/registrations/${id}/`, formData, {
+      const response = await axiosInstance.post(`/trainings/acceptance-letters/registrations/${id}/`, values, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -114,6 +115,16 @@ const Placement = () => {
       toggleAcceptanceRequest();
     }
   };
+
+
+  const statesOfNigeria = [
+    "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", 
+    "Benue", "Borno", "Cross River", "Delta", "Ebonyi", "Edo", 
+    "Ekiti", "Enugu", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", 
+    "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", 
+    "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", 
+    "Sokoto", "Taraba", "Yobe", "Zamfara", "Federal Capital Territory (FCT)"
+  ];
 
 
 
@@ -238,17 +249,18 @@ const Placement = () => {
 
   const acceptanceLetterSchema = Yup.object().shape({
     letter_type: Yup.string()
-      .oneOf(['UNDERTAKEN', 'ACCEPTANCE_LETTER'], 'Invalid letter type')
+      .oneOf(['UNDERTAKING', 'ACCEPTANCE'], 'Invalid letter type')
       .required('Letter type is required'),
     company_name: Yup.string()
       .required('Company name is required'),
-      company_address: Yup.object().shape({
-        building_number: Yup.string(),
-        street: Yup.string().required("Street is required"),
-        area: Yup.string(),
-        city: Yup.string().required("City is required"),
-        state_or_province: Yup.string().required("State or province is required"),
-      }),
+      company_address_building_number: Yup.string(),
+      company_address_building_name: Yup.string(),
+      company_address_street: Yup.string(),
+      company_address_area: Yup.string(),
+      company_address_city: Yup.string(),
+      company_address_state_or_province: Yup.string(),
+
+
     company_contact_name: Yup.string()
       .required('Company contact name is required'),
     company_contact_email: Yup.string()
@@ -334,7 +346,7 @@ const Placement = () => {
       {changeOfPlacementRequest && (
         <div className="newRequestComponent">
           <div className="newRequestHeader">
-            <div className="introductionLetter">Change of Placement Letter</div>
+            <div className="introductionLetter"> Change of Placement Request</div>
             <button className="closeButton" onClick={toggleNewPlacementReq}>
               <img src={CloseIcon} alt="Close" />
             </button>
@@ -486,16 +498,14 @@ const Placement = () => {
                   letter_type: '',
                   letter: null,
                   company_name: '',
-                  company_address: {
-                    building_number: "",
-                    building_name: "",
-                    street: "",
-                    area: "",
-                    city: "",
-                    state_or_province: "",
-                    country: "",
-                    postal_code: "",
-                  },
+                  company_address_building_number: "",
+                  company_address_building_name: "",
+                  company_address_street: "",
+                  company_address_area: "",
+                  company_address_city: "",
+                  company_address_state_or_province: "",
+                  company_address_country: "",
+                  company_address_postal_code: "",
                   company_contact_name: '',
                   company_contact_email: '',
                   company_contact_phone: '',
@@ -533,7 +543,7 @@ const Placement = () => {
                         <label htmlFor="letter_type">Letter Type</label>
                         <Field as="select" name="letter_type">
                           <option value="">Select Letter Type</option>
-                          <option value="UNDERTAKING  ">UNDERTAKING</option>
+                          <option value="UNDERTAKING">UNDERTAKING</option>
                           <option value="ACCEPTANCE">ACCEPTANCE LETTER</option>
                         </Field>
                         <ErrorMessage className="error" name="letter_type" component="div" />
@@ -545,7 +555,7 @@ const Placement = () => {
               id="letter"
               name="letter"
               type="file"
-              accept="pdf"
+              accept=".pdf, image/*"
               onChange={(event) => {
                 setFieldValue("letter", event.currentTarget.files[0]);
                 // setFile(event.currentTarget.files[0]);
@@ -557,30 +567,36 @@ const Placement = () => {
  <div className="companyDetails">
                       <div className="company">Company Address</div>
                       <div className="formInput buildNo">
-                        <label htmlFor="company_address.building_number"></label>
-                        <Field type="text" name="company_address.building_number" placeholder="Building No : No 24" className="buildNo" />
-                        <ErrorMessage className="error" name="company_address.building_number" component="div" />
+                        <label htmlFor="company_address_building_number"></label>
+                        <Field type="text" name="company_address_building_number" placeholder="Building No : No 24" className="buildNo" />
+                        <ErrorMessage className="error" name="company_address_building_number" component="div" />
                       </div>
                       <div className="formInput">
-                        <label htmlFor="company_address.street"></label>
-                        <Field type="text" name="company_address.street" placeholder="Street, e.g UI Road" />
-                        <ErrorMessage className="error" name="company_address.street" component="div" />
+                        <label htmlFor="company_address_street"></label>
+                        <Field type="text" name="company_address_street" placeholder="Street, e.g UI Road" />
+                        <ErrorMessage className="error" name="company_address_street" component="div" />
                       </div>
                       <div className="formInput">
                         <label htmlFor="company_address.area"></label>
-                        <Field type="text" name="company_address.area" placeholder="Area, e.g. Ojoo" />
-                        <ErrorMessage className="error" name="company_address.area" component="div" />
+                        <Field type="text" name="company_address_area" placeholder="Area, e.g. Ojoo" />
+                        <ErrorMessage className="error" name="company_address-area" component="div" />
                       </div>
                       <div className="stateofCompany">
                         <div className="formInput">
-                          <label htmlFor="company_address.city"></label>
-                          <Field type="text" name="company_address.city" placeholder="City, e.g Ibadan *" />
-                          <ErrorMessage className="error" name="company_address.city" component="div" />
+                          <label htmlFor="company_address_city"></label>
+                          <Field type="text" name="company_address_city" placeholder="City, e.g Ibadan *" />
+                          <ErrorMessage className="error" name="company_address_city" component="div" />
                         </div>
                         <div className="formInput">
-                          <label htmlFor="company_address.state_or_province"></label>
-                          <Field type="text" name="company_address.state_or_province" placeholder="State, e.g Oyo" />
-                          <ErrorMessage className="error" name="company_address.state_or_province" component="div" />
+                          <label htmlFor="company_address_state_or_province"></label>
+                          <StatesComboBox
+              name="company_address_state_or_province"
+              options={statesOfNigeria}
+              placeholder="E.g Ibadan"
+              className="combo"
+              
+            />
+                          <ErrorMessage className="error" name="company_address_state_or_province" component="div" />
                         </div>
                       </div>
                     </div>
@@ -609,7 +625,7 @@ const Placement = () => {
                     </button>
                   </Form>
                 )}
-              </Formik>
+              </Formik>   
             </div>
           </div>
         </div>
@@ -639,10 +655,10 @@ const Placement = () => {
           Placement
         </div>
         <div className="navButtons">
-          <div className={activeDisplay === "placement" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placement")}> Placement</div>
+          <div className={activeDisplay === "placement" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placement")}>Change Placement</div>
           <div className={activeDisplay === "placementRequest" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placementRequest")}> Placement Requests</div>
           <div className={activeDisplay === "placementAcceptance" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placementAcceptance")}> Acceptance Letter</div>
-          <div className={activeDisplay === "placementChange" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placementChange")}> Request for Change of Placement</div>
+          <div className={activeDisplay === "placementChange" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placementChange")}>Change Placement Request</div>
         </div>
 
         {activeDisplay === "placementRequest" && <PlacementComponent showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest} />}
