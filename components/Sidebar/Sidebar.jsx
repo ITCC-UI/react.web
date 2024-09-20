@@ -7,7 +7,7 @@ import AccordionS from "../Accordion/Accordion";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, activeR }) => {
+const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, activeR, activeL }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -34,14 +34,14 @@ const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, 
                   Dashboard
                 </div>
               </Link>
-              <Link to="/placement" className="null">
+              <Link to="/placement">
                 <div className={placementClass}>
                                     <img src={Document} alt="docs" />
                   Placement
                 </div>
               </Link>
               {/* Accordion Goes here */}
-              <AccordionS initialOpenSection={init} activeIntro={activeI} activeReg={activeR}/>
+              <AccordionS initialOpenSection={init} activeIntro={activeI} activeReg={activeR} activeDailyLog={activeL}/>
               {/* Accordion Ends here */}
             </div>
             <div className="logout_button" onClick={handleLogout}>
