@@ -3,6 +3,7 @@
 }
 
 
+
 .activen{
 color: royalblue !important;
     background-color: white;
@@ -55,7 +56,7 @@ color: royalblue !important;
     width: 100%;
     background-color: rgba(39, 38, 38, 0.438);
     backdrop-filter: blur(10px);
-    height: fit-content;
+    height: 100%;
     z-index: 5;
     padding: 100px 0;
     align-items: center;
@@ -104,8 +105,37 @@ color: royalblue !important;
   // border: 1px solid rgb(0, 255, 119);
   height: fit-content;
   gap: 50px
+}
 
+.warp_contents{
+  font-family: "Inter";
+  height: 290px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  
+  width: 720px;
+  gap: 0;
+  margin: 0 auto;
+  margin-top: 30px; 
 
+  .formInput{
+    
+    width: 320px;
+    label{
+      &::after{
+        content: "*";
+        color: red;
+        margin-left: 3px;
+      }
+    }
+
+    input[type="text"], select, textarea, input[type="tel"], input[type="file"]{
+      width: 100% !important;
+    }
+    select{
+      padding: 0 20px !important;
+    }
+  }
 }
 
 .formInput{
@@ -116,8 +146,9 @@ color: royalblue !important;
   margin: 0 auto;
   label{
     font-size: 14px;
+   
   }
-  input[type="text"]{
+  input[type="text"], textarea, select, input[type="tel"], input[type="file"], .combo{
     width: 700px;
     height: 45px;
     background: rgba(249, 249, 250, 1);
@@ -156,7 +187,7 @@ font-size: 16px;
     // justify-content: space;
     gap: 30px;
     align-items: stretch;
-    input[type="text"]{
+    input[type="text"], .combo{
       width: 330px;
     }
   }
@@ -180,6 +211,26 @@ float: right;
   margin-bottom: 20px;
 }
 
+textarea.placement_letter{
+  height: 400px !important;
+  resize: none;
+  font-size: 20px;
+  font-family: "inter";
+//  &:focus{
+//  font-size: 90px;
+//  }
+ }
+
+.submit_placement_request{
+width: 80%;
+margin-left: 0;
+}
+
+.placement_form{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 
 @media (max-width:430px) {
@@ -212,6 +263,7 @@ float: right;
     gap: 20px;
   }
   .newRequestComponent{
+    height: fit-content;
     .newRequestHeader{
       padding-top: 45px;
       width: 95%;
@@ -233,7 +285,7 @@ float: right;
 
 .formInput{
   width: 90%;
-  input[type="text"]{
+  input[type="text"], textarea, select, .combo{
     width: 100%;
     height: 40px;
     font-size: 14px !important;
@@ -247,7 +299,7 @@ float: right;
 }
 .companyDetails{
   font-size: 14px;
-  width: 100%;
+  width: 95%;
   .stateofCompany{
     width: 100%;
     font-size: 14px;
@@ -259,16 +311,48 @@ float: right;
   }
 }
 .company{
-  margin-left: 10px;
+  margin-left: 20px;
 }
 .submitting{
   font-size: 14px;
   
 }
+
+.warp_contents{
+  width: 90%;
+  height: auto;
+}
+}
+
+.lists{
+  position: absolute;
+  top: 45px;
+  z-index: 1;
+  background-color: rgb(182, 182, 182);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 2px;
+  width: fit-content;
+}
+
+.lists.states{
+  height: 150px;
+  overflow-y: scroll;
+  width: 250px;
 }
 
 
-
+.cursor-pointer{
+  cursor: pointer;
+  padding: 2px;
+  transition: .2s linear all;
+  &:hover{
+    background-color: white;
+    color: grey;
+  }
+}
 
 @keyframes popIn {
   0% {
@@ -330,4 +414,12 @@ float: right;
   .newRequestComponent .newRequestHeader .introductionLetter{
     font-size: 1rem;
   }
+}
+
+
+
+
+.move-left{
+ margin: 0;
+ margin-left: 15px;
 }

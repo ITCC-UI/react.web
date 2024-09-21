@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TopNav from "../../../components/Header/Header";
 import SideBar from "../../../components/Sidebar/Sidebar";
-import Sidebar from "../../../components/Sidebar/MobileSideBar";
 import "./placement.scss";
 import Empty from "/images/empty_dashboard.png";
 import CloseIcon from "/images/closeButton.png";
@@ -11,6 +10,8 @@ import { GridLoader, PulseLoader } from "react-spinners";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
 import IntroductionLetterTable from "./IntroductionLetterTable";
+import FormikComboboxInput from "./ComboBox";
+import StatesComboBox from "./ComboBoxStates";
 
 const IntroductionLetter = () => {
   const [showNewRequest, setShowNewRequest] = useState(false);
@@ -18,6 +19,7 @@ const IntroductionLetter = () => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
+  const [noProgrammeId, setNoProgrammeId] = useState(false); // State for no Programme ID
 
   const toggleNewRequest = () => {
     setShowNewRequest(!showNewRequest);
@@ -26,24 +28,25 @@ const IntroductionLetter = () => {
   const fetchProgrammeId = async () => {
     try {
       const response = await axiosInstance.get("trainings/registrations/");
-      const id = response.data[0].id;
-      setProgrammeId(id);
-      //console.log("Programme ID:", id);
-      fetchIntroductionLetterRequests(id);
+      if (response.data.length > 0) {
+        const id = response.data[0].id;
+        setProgrammeId(id);
+        fetchIntroductionLetterRequests(id);
+      } else {
+        setNoProgrammeId(true); // Set state when no Programme ID is found
+        setIsLoading(false);
+      }
     } catch (error) {
-      //console.error("Error fetching programme ID:", error);
       setIsLoading(false);
     }
   };
 
   const fetchIntroductionLetterRequests = async (id) => {
     try {
-      //console.log("Fetching introduction letters for programme ID:", id);
       const response = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests/`);
       setLetterRequests(response.data);
       setIsLoading(false);
     } catch (error) {
-      //console.error("Error fetching introduction letter requests:", error);
       setIsLoading(false);
     }
   };
@@ -54,21 +57,18 @@ const IntroductionLetter = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     if (!programmeId) {
-      //console.error("Programme ID not available");
+      console.error("Programme ID not available");
       return;
     }
 
     try {
-      //console.log(`Submitting form for programme ID: ${programmeId}`);
       const response = await axiosInstance.post(`/trainings/registrations/${programmeId}/introduction-letter-requests/`, values);
-      //console.log("Form submitted successfully", response);
       setSubmissionStatus("success");
       setTimeout(() => {
         setSubmissionStatus("");
         window.location.reload(); // Auto refresh the page
       }, 500);
     } catch (error) {
-      //console.error("Error submitting form", error);
       setSubmissionStatus("failure");
       setTimeout(() => {
         setSubmissionStatus("");
@@ -90,6 +90,25 @@ const IntroductionLetter = () => {
     company_name: Yup.string().required("Company name is required"),
     address_to: Yup.string().required("Addressee is required"),
   });
+
+
+  const addressOptions=[
+    "The Managing Director",
+    "The Human Resources Manager",
+    "The Chief Executive Officer",
+    "The Hiring Manager",
+    "The Internship Coordinator"
+  ]
+
+  const statesOfNigeria = [
+    "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", 
+    "Benue", "Borno", "Cross River", "Delta", "Ebonyi", "Edo", 
+    "Ekiti", "Enugu", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", 
+    "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", 
+    "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", 
+    "Sokoto", "Taraba", "Yobe", "Zamfara", "Federal Capital Territory (FCT)"
+  ];
+  
 
   return (
     <div className="introductionLetter">
@@ -140,7 +159,12 @@ const IntroductionLetter = () => {
                       </div>
                       <div className="formInput">
                         <label htmlFor="address_to">Address To</label>
-                        <Field type="text" name="address_to" placeholder="Title/Position to address letter to, e.g The Managing Director" />
+                        <FormikComboboxInput
+              name="address_to"
+              options={addressOptions}
+              placeholder="Title/Position to address letter to, e.g The Managing Director"
+              className="combo"
+            />
                         <ErrorMessage className="error" name="address_to" component="div" />
                       </div>
                     </div>
@@ -169,7 +193,13 @@ const IntroductionLetter = () => {
                         </div>
                         <div className="formInput">
                           <label htmlFor="company_address.state_or_province"></label>
-                          <Field type="text" name="company_address.state_or_province" placeholder="State, e.g Oyo" />
+                          <StatesComboBox
+              name="company_address.state_or_province"
+              options={statesOfNigeria}
+              placeholder="E.g. Ibadan  "
+              className="combo"
+              
+            />
                           <ErrorMessage className="error" name="company_address.state_or_province" component="div" />
                         </div>
                       </div>
@@ -189,22 +219,40 @@ const IntroductionLetter = () => {
         <div className="container">
           <div className="topHead">
             <div className="heading">INTRODUCTION LETTERS</div>
-            <button className="newReq" onClick={toggleNewRequest}>
-              + New Request
-            </button>
+            {/* Conditionally render the New Request button only if programmeId exists */}
+              {programmeId && letterRequests.length === 0  && (
+        <button className="newReq" onClick={toggleNewRequest}>
+          + New Request
+        </button>
+      )}
+      
           </div>
         </div>
         {isLoading ? (
           <div className="loader">
             <GridLoader size={15} color={"#123abc"} />
           </div>
+        ) : noProgrammeId ? (
+          <div className="noProgrammeId register_above">
+            <p>You are not registered for a Programme. <br/> You are not eligible to request an introduction letter at this time. <br/>  <br/>
+            Proceed to the registration page to register for you industrial training.</p>
+          </div>
+
+          
         ) : letterRequests.length === 0 ? (
           <div className="image">
             <img src={Empty} alt="Empty" />
           </div>
         ) : (
+
           <IntroductionLetterTable letterRequests={letterRequests} />
         )}
+        
+        {programmeId && letterRequests.length === 1 && (
+        <div className="register_above p-2 bg-yellow-100 text-yellow-800 rounded">
+         Request limit exceeded
+        </div>
+      )}
         {submissionStatus === "success" && (
           <div className="submissionStatus success">
             Form submitted successfully! Reload the page.
@@ -215,10 +263,7 @@ const IntroductionLetter = () => {
             Error submitting form. Please try again.
           </div>
         )}
-        
-     
       </main>
-      
     </div>
   );
 };

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Pen from "/images/pen.png";
 import Bell from "/images/Notification.png";
 import Chevy from "/images/chevron down.png";
+import { PulseLoader } from 'react-spinners';
 import './header.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; // Import js-cookie

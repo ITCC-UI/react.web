@@ -30,13 +30,15 @@ const MoreDetails = ({ request, onClose }) => {
 
   const getStatusClass = (status) => {
     switch(status) {
-      case 'APPROVED':
-        return 'status approved';
-      case 'REJECTED':
+      case 'ACCEPTANCE':
+        return 'status rejected';
+      case 'UNDERTAKEN':
         return 'status rejected';
       case 'SUBMITTED':
-      default:
         return 'status submitted';
+      case 'null':
+        default:
+        return 'status ';
     }
   };
 
@@ -50,24 +52,52 @@ const MoreDetails = ({ request, onClose }) => {
           <h2 className='approval'>More Details</h2>
           <div className="compProfile">
             <div className='details'>Company Name</div>
-            <div className="cDetails">{(request.company_name !==null? "Placement not yet assigned": request.company_name )}</div>
+            <div className="cDetails">{(request.company_name ===null? "Placement not yet assigned": request.company_name )}</div>
           </div>
 
+          <div className="compProfile">
+            <div className="details"> Company Address</div>
+            <div className="cDetails">{request.company_address.street} {request.company_address.state_or_province}, {request.company_address.city}, {request.company_address.country}</div>
+          </div>
 
+<div className="compProfile">
+  <div className="details"> Company Name</div>
+  <div className="cDetails">
+    {request.company_contact_name}
+  </div>
+</div>
+
+<div className="compProfile">
+  <div className="details"> Contact Email</div>
+  <div className="cDetails">
+    {request.company_contact_email}
+  </div>
+</div>
+
+<div className="compProfile">
+  <div className="details"> Contact Phone Number</div>
+  <div className="cDetails">
+    {request.company_contact_phone}
+  </div>
+</div>
+
+<div className="compProfile">
+  <div className="details">Type of Letter</div>
+  <div className={`cDetails ${getStatusClass(getStatusClass)}`}>
+    {request.letter_type}
+    {console.log(request.letter_type)}
+  </div>
+</div>
 
           <div className='compProfile'>
-            <div className="details">Date of Request</div>
+            <div className="details">Date of Submission</div>
             <div className="cDetails">{formatApprovalDate(request.date_created)}</div>
           </div>
 
 
-          <div className='compProfile'>
-            <div className="details">Date of Approval</div>
-            <div className="cDetails">{request.date_of_approval===null? "Pending Approval ": formatApprovalDate(request.date_of_approval)}</div>
-          </div>
 
           <div className='compProfile'>
-            <div className="details">Approval Status</div>
+            <div className="details">Status</div>
             <div className={getStatusClass(request.approval_status)}>{request.approval_status}</div>
           </div>
 
@@ -84,6 +114,7 @@ const MoreDetails = ({ request, onClose }) => {
           )}
           
         </div>
+
       </div>
       <div className="modal-overlay" onClick={handleClose}></div>
     </>

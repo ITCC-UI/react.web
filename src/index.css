@@ -70,3 +70,57 @@ button:focus-visible {
 .network{
   display: none;
 }
+
+.navButtons{
+  display: flex;
+  gap: 50px;
+  margin-bottom: 15px;
+
+}
+
+.shift_button {
+  padding: 10px 20px;
+  
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--50p-black, #00000080);
+transition: all .1s linear;
+
+}
+.placement-head{
+align-self: start;
+margin-left: 50px;
+font-weight: 600;
+text-transform: uppercase;
+}
+.shift_button:hover {
+  background-color: #f5f5f5;
+}
+
+.lifting{
+  z-index: 2;
+}
+.shift_button.active {
+  /* border-bottom: 2px solid #007bff; */
+  color: #000080;
+  border-bottom: 2px solid var(--Primary-blue, #000080);
+  
+}
+
+@media (max-width:430px) {
+  .navButtons{
+    /* border: 1px solid red; */
+    width: 90%;
+    overflow-x: scroll;
+    overflow-wrap: break-word;
+    gap: 10px;
+  }
+
+  .shift_button{
+    width: 180px;
+    padding: 10px;
+    font-size: 12px;
+    text-wrap: nowrap;
+  }
+}

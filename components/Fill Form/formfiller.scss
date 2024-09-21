@@ -87,6 +87,7 @@
     input[type="text"],
     input[type="email"],
     input[type="number"],
+    input[type="tel"],
     input[type="file"],
     input[type="date"],
     select {
@@ -117,7 +118,7 @@
     }
   }
   
-  .error {
+  .error, .profile_error {
     color: red;
     font-size: 10px;
     padding: 3px 4px;
