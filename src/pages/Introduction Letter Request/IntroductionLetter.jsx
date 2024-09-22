@@ -248,7 +248,7 @@ const IntroductionLetter = () => {
           <IntroductionLetterTable letterRequests={letterRequests} />
         )}
         
-        {programmeId && letterRequests.length === 1 && (
+        {programmeId && letterRequests.length === 5 && (
         <div className="register_above p-2 bg-yellow-100 text-yellow-800 rounded">
          Request limit exceeded
         </div>

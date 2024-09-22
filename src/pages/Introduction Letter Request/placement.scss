@@ -154,7 +154,7 @@ color: royalblue !important;
     background: rgba(249, 249, 250, 1);
 border: none;
 border-radius: 8px;
-padding: 20px !important;
+
 font-size: 16px;
 &:focus{
   border: 1px solid rgb(7, 142, 129);
@@ -225,6 +225,10 @@ textarea.placement_letter{
 width: 80%;
 margin-left: 0;
 }
+.combo{
+  padding: 20px !important;
+}
+
 
 .placement_form{
   display: flex;
