@@ -75,9 +75,11 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
     <>
       <div className="container">
         <div className="topHead place">
-          <button className="newReq" onClick={togglePlacementChangeRequest}>
+      {  noProgrammeId ? ( <button className="newReq" onClick={togglePlacementChangeRequest} disabled="true">
             + New Request
-          </button>
+          </button>): ( <button className="newReq" onClick={togglePlacementChangeRequest}>
+            + New Request
+          </button>)}
         </div>
       </div>
       {isLoading ? (

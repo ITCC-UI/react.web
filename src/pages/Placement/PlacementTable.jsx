@@ -31,7 +31,7 @@ const PlacementTable = () => {
       const id = registrations[0].id;
       //console.log("Using Registration ID:", id);
 
-      const requestsResponse = await axiosInstance.get(`/trainings/placements/registrations/${id}/current`);
+      const requestsResponse = await axiosInstance.get(`/trainings/placements/registrations/${id}`);
       const requests = requestsResponse.data;
       console.log("Fetched requests:", requests);
       
@@ -42,7 +42,7 @@ const PlacementTable = () => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      //console.error("Error fetching introduction letter requests:", error);
+      console.error("Error fetching introduction letter requests:", error);
     }
   };
 

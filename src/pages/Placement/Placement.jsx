@@ -456,23 +456,6 @@ const Placement = () => {
 
 
 
-                    <div className="companyDetails">
-                      {/* <div className="formInput">
-                  <label htmlFor="letter_type">
-                  
-              Type</label>
-                  <Field as="select" name="letter_type">
-                    <option value="">Select Letter Type</option>
-                    <option value="UNDERTAKEN">UNDERTAKEN</option>
-                    <option value="ACCEPTANCE_LETTER">ACCEPTANCE LETTER</option>
-                  </Field>
-                  <ErrorMessage className="error" name="letter_type" component="div" />
-                </div> */}
-                      {/* Add other fields here */}
-
-
-
-                    </div>
                     <button type="submit" className="submitting">
                       {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
                     </button>
@@ -655,7 +638,7 @@ const Placement = () => {
           Placement
         </div>
         <div className="navButtons">
-          <div className={activeDisplay === "placement" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placement")}>Change Placement</div>
+          <div className={activeDisplay === "placement" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placement")}>Placement</div>
           <div className={activeDisplay === "placementRequest" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placementRequest")}> Placement Requests</div>
           <div className={activeDisplay === "placementAcceptance" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placementAcceptance")}> Acceptance Letter</div>
           <div className={activeDisplay === "placementChange" ? "shift_button active" : "shift_button"} onClick={() => handleButtonClick("placementChange")}>Change Placement Request</div>

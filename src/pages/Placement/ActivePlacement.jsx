@@ -19,11 +19,12 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
         const response = await axiosInstance.get("trainings/registrations/");
         const id = response.data[0].id;
         setProgrammeId(id);
-        console.log("This Programme ID:", id);
+        // console.log("This Programme ID:", id);
         // fetchIntroductionLetterRequests(id);
         // fetchPlacementRequests(id);
+        setIsLoading(false);
       } catch (error) {
-        //console.error("Error fetching programme ID:", error);
+        // console.error("Error fetching programme ID:", error);
         setIsLoading(false);
       }
     };
@@ -70,6 +71,7 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
             <div className="loader">
               <PulseLoader size={15} color={"#123abc"} />
             </div>
+            
           ) : Placement.length === 0 ? (
             <div className="image">
               <img src={Empty} alt="Empty" />
