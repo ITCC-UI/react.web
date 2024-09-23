@@ -16,7 +16,7 @@ import PlacementAcceptance from "./PlacementAcceptance";
 import PlacementChange from "./PlacementChange";
 import FullScreenSuccessMessage from "./Successful/Successful";
 import StatesComboBox from "./ComboBoxStates";
-
+import FullScreenFailureMessage from "./Failed/FullScreenFailureMessage";
 
 
 const Placement = () => {
@@ -24,14 +24,18 @@ const Placement = () => {
   const [acceptanceSubmissionStatus, setAcceptanceSubmissionStatus] = useState("");
   const [acceptanceSuccessMessage, setAcceptanceSuccessMessage] = useState("");
   const [showAcceptanceSuccessful, setShowAcceptanceSuccessful] = useState(false);
+  const [showAcceptanceFailure, setShowAcceptanceFailure] = useState(false);
 
   const [placementSubmissionStatus, setPlacementSubmissionStatus] = useState("");
   const [placementSuccessMessage, setPlacementSuccessMessage] = useState("");
   const [showPlacementSuccessful, setShowPlacementSuccessful] = useState(false);
+  const [showPlacementFailure, setShowPlacementFailure] = useState(false);
 
   const [changeOfPlacement, setChangeofPlacement] = useState("");
   const [changeOfPlacementSuccessMessage, setPlacementChangeSuccessMessage] = useState("");
   const [showChangeOfPlacementSuccessful, setShowChangeOfPlacementSuccessful] = useState(false);
+  const [showChangeOfPlacementFailure, setShowChangeOfPlacementFailure] = useState(false);
+
 
   const [showNewRequest, setShowNewRequest] = useState(false);
   const [showNewAcceptanceRequest, setShowNewAcceptanceRequest] = useState(false);
@@ -78,18 +82,6 @@ const Placement = () => {
 
   const handleAcceptanceRequest = async (values, { setSubmitting }) => {
     try {
-      // const formData = new FormData();
-      // const formattedAddress = formatAddress(values.company_address);
-      // // Append all form fields to formData
-      // Object.keys(values).forEach(key => {
-      //   if (key === 'letter') {
-      //     formData.append(key, file);
-      //   } else if (key === 'company_address') {
-      //     formData.append(key, formattedAddress);
-      //   } else {
-      //     formData.append(key, values[key]);
-      //   }
-      // });
   
       const response = await axiosInstance.post(`/trainings/acceptance-letters/registrations/${id}/`, values, {
         headers: {
@@ -106,10 +98,10 @@ const Placement = () => {
       }, 2000);
     } catch (error) {
       console.error("Error submitting acceptance form", error);
-      setAcceptanceSubmissionStatus("failure");
+      setShowAcceptanceFailure(true)
       setTimeout(() => {
-        setAcceptanceSubmissionStatus("");
-      }, 500);
+        setShowAcceptanceFailure(true);
+      }, 5000);
     } finally {
       setSubmitting(false);
       toggleAcceptanceRequest();
@@ -140,10 +132,10 @@ const Placement = () => {
       }, 5000);
     } catch (error) {
       console.error("Error submitting placement request form", error);
-      setPlacementSubmissionStatus("failure");
+      setShowAcceptanceFailure(true)
       setTimeout(() => {
-        setPlacementSubmissionStatus("");
-      }, 500);
+        setShowAcceptanceFailure(false)
+      }, 5000);
     } finally {
       setSubmitting(false);
       toggleNewRequest();
@@ -179,10 +171,10 @@ const Placement = () => {
       }, 2000);
     } catch (error) {
       console.error("Error submitting change of placement request", error);
-      setChangeofPlacement("failure");
+      setShowAcceptanceFailure(true)
       setTimeout(() => {
-        setChangeofPlacement("");
-      }, 500);
+        setShowAcceptanceFailure(false)
+      }, 5000);
     } finally {
       setSubmitting(false);
       toggleChangeOfPlacementRequest();
@@ -619,17 +611,39 @@ const Placement = () => {
         message={acceptanceSuccessMessage}
         onClose={() => setShowAcceptanceSuccessful(false)}
       />
+
+<FullScreenFailureMessage
+        isOpen={showAcceptanceFailure}
+        message="Failed to submit acceptance form. Please try again."
+        onClose={() => setShowAcceptanceFailure(false)}
+      />
+
+
       <FullScreenSuccessMessage
         isOpen={showPlacementSuccessful}
         message={placementSuccessMessage}
         onClose={() => setShowPlacementSuccessful(false)}
       />
+
+<FullScreenFailureMessage
+        isOpen={showPlacementFailure}
+        message="Failed to submit placement request. Please try again."
+        onClose={() => setShowPlacementFailure(false)}
+      />
+
+
+
       <FullScreenSuccessMessage
   isOpen={showChangeOfPlacementSuccessful}
   message={changeOfPlacementSuccessMessage}
   onClose={() => setShowChangeOfPlacementSuccessful(false)}
 />
 
+<FullScreenFailureMessage
+        isOpen={showChangeOfPlacementFailure}
+        message="Failed to submit change of placement request. Please try again."
+        onClose={() => setShowChangeOfPlacementFailure(false)}
+      />
 
       <main className="introLetter">
         <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} />
