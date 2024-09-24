@@ -27,6 +27,7 @@ import Auth from "./Auth.jsx"
 import UpdatePassword from './pages/Password Reset/reset_password.jsx';
 import ResetPassword from './pages/Password Reset/NewPassword.jsx';
 import DailyLogs from './pages/Logs/logs.jsx';
+import MoreDetails from '../components/View More/MoreDetailsAcceptance.jsx';
 // import PrintPreviewContainer from '../components/Print Layout/PrintPreview.jsx';
 // import RegistrationForm from '../components/Print Form/RegistrationForm.jsx';
 function App() {
@@ -49,6 +50,8 @@ function App() {
           <Route path='/page_print/:registrationId' element={<Auth><PrintPreview/></Auth>}/>
           <Route path='*' element={<Auth><ErrorPage/></Auth>}/>
           <Route path='/logs' element={<DailyLogs />} />
+          <Route path='/details' element={<MoreDetails />} />
+          
         </Routes>        
       </div>
   )

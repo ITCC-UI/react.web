@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import { RingLoader } from 'react-spinners';
-import MoreDetails from '../../../components/View More/MoreDetails';
+import MoreDetails from '../../../components/View More/MoreDetailsPlacementChange';
 
 
 
@@ -31,7 +31,7 @@ const PlacementChangeReq = () => {
       const id = registrations[0].id;
       //console.log("Using Registration ID:", id);
 
-      const requestsResponse = await axiosInstance.get(`/change-of-placements/registrations/${id}`);
+      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests/`);
       const requests = requestsResponse.data;
       console.log("Fetched requests:", requests);
       
@@ -100,11 +100,11 @@ const PlacementChangeReq = () => {
           <table>
             <thead>
               <tr>
-                <th>Company Name</th>
-                <th>Date of Request</th>
-                <th>Date of Approval</th>
+                <th>Current Company</th>
+                <th>Submission Date</th>
+                <th>Approval Date</th>
                 <th>Status</th>
-                <th>Request Letter</th>
+                <th>Desired Company</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -124,7 +124,7 @@ const PlacementChangeReq = () => {
                   <tr key={index}>
                     <td>{request.company_name}</td>
                     <td>{formatDate(request.date_created)}</td>
-                    <td>{formatDate(request.date_created)}</td>
+                    <td>{formatDate(request.date_last_modified)}</td>
                     
                     <td>
                       <div className={statusClasses}>

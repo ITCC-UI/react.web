@@ -1,0 +1,149 @@
+.more-details-modal {
+    position: fixed;
+    overflow-y: scroll;
+    scrollbar-width: 0;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100%;
+    background: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 3;
+    &::-webkit-scrollbar {
+      display: none;  /* Safari and Chrome */
+      
+    }
+  }
+  
+  .more-details-modal.active {
+    transform: translateX(0);
+  }
+  
+  .more-details-content {
+    padding: 20px;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 2;
+  }
+  
+
+
+.closeView{
+    position: absolute;
+    right: 30px;
+    top: 20px;
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 4;
+cursor: pointer;
+img{
+    width: 30px;
+}
+}
+
+.approval{
+    font-family: Poppins;
+font-size: 14px;
+font-weight: 400;
+line-height: 24px;
+color: rgba(0, 0, 128, 1);
+border-bottom: 2px solid rgba(0, 0, 128, 1);
+width: fit-content;
+padding: 0 10px 0 10px;margin-bottom: 30px;
+}
+
+.change{
+  color: black;
+  border: none;
+  margin: 40px auto;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+
+}
+.designed{
+  padding-bottom: 50px;
+}
+
+.compProfile{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 8px;
+    margin-bottom: 20px;
+.details{
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(39, 38, 38, 0.815);
+    text-transform: uppercase;
+    margin-bottom: 0;
+    .cDetails{
+        font-family: Poppins;
+font-size: 16px;
+font-weight: 400;
+padding: 10px !important;
+
+}
+
+
+
+  }
+
+
+
+  .placementHeader{
+    font-weight: 600;
+    margin-bottom: 40px;
+font-family: 'Poppins';
+  }
+
+      @media (max-width:430px) {
+        .more-details-modal{
+          width: 80vw;
+        }
+
+      .compProfile{
+        .details{
+          font-size: 12px;
+         }
+         .cDetails{
+          font-size: 13px;
+         }
+      }
+
+      .status{
+        font-size: 12px;
+        width: fit-content;
+      }
+    }}
+
+
+    .changePlacement{
+    color: white;
+    background-color: #000080;
+    font-weight: 500;
+    font-family: "Poppins";
+    margin: 0 20px;
+    ;
+    }
+
+    .reason{
+      font-size: 14px !important;
+      text-transform: capitalize !important;
+      text-align: center !important;
+      margin: 0 auto !important;
+    }
