@@ -131,7 +131,7 @@ const PlacementChangeReq = () => {
                         {request.approval_status}
                       </div>
                     </td>
-                    <td> {loadingDownloads[request.id] ? (
+                    {/* <td> {loadingDownloads[request.id] ? (
                         <RingLoader size={20} color='blue' />
                       ) : (
                         <img 
@@ -140,7 +140,10 @@ const PlacementChangeReq = () => {
                           className={downloadIconClasses}
                           onClick={() => request.statusClass === 'approved' && handleDownloadClick(request.id)} 
                         />
-                      )}</td>
+                      )}</td> */}
+                      <td>
+                        {request.company_name}
+                      </td>
                 
                     <td className='down'>
                       <button onClick={() => handleViewClick(request)}>View More</button>

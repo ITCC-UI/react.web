@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './ChangeMoreDetails.scss';
 import { X } from 'lucide-react';
-import { Formik } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from "yup"
 import { set } from 'react-hook-form';
 
@@ -156,7 +156,38 @@ const MoreDetails = ({ request, onClose }) => {
           
           <div className="compProfile">
             <div className='details reason'>Enter Your Reasons for  Requesting for a Change</div>
-            <div className="cDetails">{(request.company_name !==null? "Placement not yet assigned": request.company_name )}</div>
+            
+
+            <Formik
+                initialValues={{
+
+                  request_message: "",
+                  
+
+                }}
+                validationSchema={validationSchema}
+                onSubmit={handlePlacementRequestsSubmit}
+              >
+                {({ isSubmitting }) => (
+                  <Form className="placement_form">
+
+                    <div className="companyDetails">
+
+
+
+                      <div className="formInput">
+                        <label htmlFor="request_message"></label>
+                        <Field as="textarea" name="request_message" className="placement_letter" placeholder="Type your message to support your request" />
+                        <ErrorMessage className="error" name="request_message" component="div" />
+                      </div>
+
+                    </div>
+                    <button type="submit" className="submitting submit_placement_request">
+                      {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
+                    </button>
+                  </Form>
+                )}
+              </Formik>
           </div>
 
 
@@ -166,7 +197,7 @@ const MoreDetails = ({ request, onClose }) => {
         </div>
 
 
-        <button className='changePlacement' onClick={openChangeChoice}> Change Plement</button>
+        <button className='changePlacement' onClick={openChangeChoice}> Request for Change</button>
       </div>
     )
 

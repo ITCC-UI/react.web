@@ -8,8 +8,6 @@ import * as Yup from "yup";
 import { GridLoader, PulseLoader } from "react-spinners";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
-// import IntroductionLetterTable from "./PlacementReqTable";
-// import PlacementDisplay from "./PlacementRequest";
 import PlacementComponent from "./PlacementComponent"
 import ActivePlacement from "./ActivePlacement";
 import PlacementAcceptance from "./PlacementAcceptance";
@@ -219,11 +217,10 @@ const Placement = () => {
     company_contact_name: Yup.string()
       .required('Company contact name is required'),
     company_contact_email: Yup.string()
-      .email('Invalid email')
-      .required('Company contact email is required'),
+      .email('Invalid email'),
+      // .required('Company contact email is required'),
       company_contact_phone: Yup.string()
-      .matches(phoneRegExp, 'Phone number is not valid')
-      .required('Company contact phone is required').min(11, "Phone number must be more than 10"),
+      .matches(phoneRegExp, 'Phone number is not valid').min(11, "Phone number must be more than 10"),
 
       letter: Yup.mixed()
       .required('A file is required')
@@ -245,7 +242,7 @@ const Placement = () => {
       .required('Letter type is required'),
     company_name: Yup.string()
       .required('Company name is required'),
-      company_address_building_number: Yup.string(),
+      company_address_building_number: Yup.string().required("Company address is required"),
       company_address_building_name: Yup.string(),
       company_address_street: Yup.string(),
       company_address_area: Yup.string(),
@@ -256,11 +253,10 @@ const Placement = () => {
     company_contact_name: Yup.string()
       .required('Company contact name is required'),
     company_contact_email: Yup.string()
-      .email('Invalid email')
-      .required('Company contact email is required'),
+      .email('Invalid email'),
+      // .required('Company contact email is required'),
       company_contact_phone: Yup.string()
-      .matches(phoneRegExp, 'Phone number is not valid')
-      .required('Company contact phone is required').min(11, "Phone number must be more than 10"),
+      .matches(phoneRegExp, 'Phone number is not valid').min(11, "Phone number must be more than 10"),
 
       letter: Yup.mixed()
       .required('A file is required')
@@ -317,7 +313,7 @@ const Placement = () => {
 
                       <div className="formInput">
                         <label htmlFor="request_message"></label>
-                        <Field as="textarea" name="request_message" className="placement_letter" placeholder="Type your message to support your request" />
+                        <Field as="textarea" name="request_message" className="placement_letter" placeholder="Type your message to support your request with State and City (location) of choice" />
                         <ErrorMessage className="error" name="request_message" component="div" />
                       </div>
 
@@ -362,31 +358,31 @@ const Placement = () => {
                   company_contact_email: '',
                   company_contact_phone: '',
                 }}
-                validationSchema={acceptanceLetterSchema} // Ensure this is correct
+                validationSchema={changeOfPlacementSchema} // Ensure this is correct
                 onSubmit={handleChangeOfPlacementRequest}  // Correctly pass the onSubmit function
               >
                 {({ isSubmitting, setFieldValue }) => (
                   <Form encType="multipart/form-data">
                     <div className="companyAddressedTo warp_contents">
                       <div className="formInput">
-                        <label htmlFor="company_name">Company's Name</label>
+                        <label htmlFor="company_name">Company's Name<p>*</p> </label>
                         <Field type="text" name="company_name" placeholder="Enter the name of the company " />
                         <ErrorMessage className="error" name="company_name" component="div" />
                       </div>
                       <div className="formInput">
-                        <label htmlFor="company_contact_name">Company's Contact Name</label>
+                        <label htmlFor="company_contact_name">Signatory<p>*</p></label>
                         <Field type="text" name="company_contact_name" placeholder="e.g Engr O.A Opadare" />
                         <ErrorMessage className="error" name="company_contact_name" component="div" />
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="company_contact_email">Company Email</label>
+                        <label htmlFor="company_contact_email">Company Email<p>*</p></label>
                         <Field type="text" name="company_contact_email" placeholder="Enter the company’s email" />
                         <ErrorMessage className="error" name="company_contact_email" component="div" />
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="company_contact_phone">Company Contact Phone</label>
+                        <label htmlFor="company_contact_phone">Company Contact Phone<p>*</p></label>
                         <Field type="tel" name="company_contact_phone" placeholder="e.g 08066641912" />
                         <ErrorMessage className="error" name="company_contact_phone" component="div" />
                       </div>
@@ -416,10 +412,10 @@ const Placement = () => {
           </div>
                     </div>
  <div className="companyDetails">
-                      <div className="company">Company Address</div>
+                      <div className="company">Company's Address<p>*</p></div>
                       <div className="formInput buildNo">
                         <label htmlFor="company_address.building_number"></label>
-                        <Field type="text" name="company_address.building_number" placeholder="Building No : No 24" className="buildNo" />
+                        <Field type="text" name="company_address.building_number" placeholder="Building No : No 24 <p>*</p>" className="buildNo" />
                         <ErrorMessage className="error" name="company_address.building_number" component="div" />
                       </div>
                       <div className="formInput">
@@ -492,12 +488,12 @@ const Placement = () => {
                   <Form encType="multipart/form-data">
                     <div className="companyAddressedTo warp_contents">
                       <div className="formInput">
-                        <label htmlFor="company_name">Company's Name</label>
+                        <label htmlFor="company_name">Company's Name <p>*</p></label>
                         <Field type="text" name="company_name" placeholder="Enter the name of the company " />
                         <ErrorMessage className="error" name="company_name" component="div" />
                       </div>
                       <div className="formInput">
-                        <label htmlFor="company_contact_name">Company's Contact Name</label>
+                        <label htmlFor="company_contact_name">Signatory Position <p>*</p></label>
                         <Field type="text" name="company_contact_name" placeholder="e.g Engr O.A Opadare" />
                         <ErrorMessage className="error" name="company_contact_name" component="div" />
                       </div>
@@ -509,13 +505,13 @@ const Placement = () => {
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="company_contact_phone">Company Contact Phone</label>
+                        <label htmlFor="company_contact_phone">Signatory Phone Number</label>
                         <Field type="tel" name="company_contact_phone" placeholder="e.g 08066641912" />
                         <ErrorMessage className="error" name="company_contact_phone" component="div" />
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="letter_type">Letter Type</label>
+                        <label htmlFor="letter_type">Letter Type <p>*</p></label>
                         <Field as="select" name="letter_type">
                           <option value="">Select Letter Type</option>
                           <option value="UNDERTAKING">UNDERTAKING</option>
@@ -525,7 +521,7 @@ const Placement = () => {
                       </div>
 
                       <div className="formInput">
-            <label htmlFor="letter">Letter</label>
+            <label htmlFor="letter">Letter <p>*</p></label>
             <input
               id="letter"
               name="letter"
@@ -567,7 +563,7 @@ const Placement = () => {
                           <StatesComboBox
               name="company_address_state_or_province"
               options={statesOfNigeria}
-              placeholder="E.g Ibadan"
+              placeholder="E.g Oyo"
               className="combo"
               
             />
@@ -579,18 +575,7 @@ const Placement = () => {
 
 
                     <div className="companyDetails">
-                      {/* <div className="formInput">
-                  <label htmlFor="letter_type">
                   
-              Type</label>
-                  <Field as="select" name="letter_type">
-                    <option value="">Select Letter Type</option>
-                    <option value="UNDERTAKEN">UNDERTAKEN</option>
-                    <option value="ACCEPTANCE_LETTER">ACCEPTANCE LETTER</option>
-                  </Field>
-                  <ErrorMessage className="error" name="letter_type" component="div" />
-                </div> */}
-                      {/* Add other fields here */}
 
 
 
@@ -659,7 +644,7 @@ const Placement = () => {
         </div>
 
         {activeDisplay === "placementRequest" && <PlacementComponent showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest} />}
-        {activeDisplay === "placement" && <ActivePlacement />}
+        {activeDisplay === "placement" && <ActivePlacement toggleNewRequest={toggleNewPlacementReq}/>}
         {activeDisplay === "placementAcceptance" && <PlacementAcceptance showNewAcceptanceRequest={showNewAcceptanceRequest} toggleNewAcceptanceRequest={toggleAcceptanceRequest} />}
         {activeDisplay === "placementChange" && <PlacementChange showPlacementReq={showNewRequest} togglePlacementChangeRequest={toggleNewPlacementReq} />}
 

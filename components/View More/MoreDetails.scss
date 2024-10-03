@@ -110,3 +110,23 @@ padding: 10px !important;
         width: fit-content;
       }
     }}
+
+
+    .download{
+      
+      width: 150px;
+      background-color: #000080;
+      color: white;
+padding: 10px 0;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+border-radius: 7px;
+flex-direction: row;text-align: center;
+
+    }
+
+    .invert{
+      filter: invert(1) 
+    }

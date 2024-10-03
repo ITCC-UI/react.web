@@ -1,39 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
-// import MobileSideBar from '../../../components/Sidebar/MobileSideBar';
 import "./introTable.scss";
 import classNames from 'classnames';
 import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import { RingLoader } from 'react-spinners';
 import MoreDetails from '../../../components/View More/MoreDetails';
-
-
-
+import { Search } from 'lucide-react';
 
 const PlacementRequest = () => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filter, setFilter] = useState('all');
 
   const fetchIntroductionLetterRequests = async () => {
     try {
       const registrationResponse = await axiosInstance.get("trainings/registrations/");
       const registrations = registrationResponse.data;
-      //console.log("Fetched registrations:", registrations);
 
       if (registrations.length === 0) {
-        //console.log("No registrations found");
         return;
       }
 
-      // Use the ID of the first registration
       const id = registrations[0].id;
-      //console.log("Using Registration ID:", id);
 
       const requestsResponse = await axiosInstance.get(`/trainings/placement-requests/registrations/${id}/`);
       const requests = requestsResponse.data;
-      // console.log("Fetched requests:", requests);
       
       const processedRequests = requests.map(request => ({
         ...request,
@@ -42,7 +36,7 @@ const PlacementRequest = () => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      //console.error("Error fetching introduction letter requests:", error);
+      console.error("Error fetching introduction letter requests:", error);
     }
   };
 
@@ -70,46 +64,79 @@ const PlacementRequest = () => {
   const handleDownloadClick = async (id) => {
     setLoadingDownloads(prevState => ({ ...prevState, [id]: true }));
     try {
-      const response = await axiosInstance.get(`/trainings/introduction-letter-requests/${id}/document/`, {
+      const response = await axiosInstance.get(`/trainings/placement-requests/${id}/document/`, {
         responseType: 'blob',
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `introduction_letter.pdf`);
+      link.setAttribute('download', `placement.pdf`);
       document.body.appendChild(link);
       link.click();
     } catch (error) {
-      //console.error("Error downloading document:", error);
+      console.error("Error downloading document:", error);
     } finally {
       setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
     }
   };
 
-  // Helper function to format date
   const formatDate = (dateString) => {
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
+  const filteredRequests = letterRequests.filter((request) => {
+    const matchesSearch = Object.values(request).some(
+      (value) => 
+        value && 
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    const matchesFilter = 
+      filter === 'all' || 
+      request.approval_status.toLowerCase() === filter.toLowerCase();
+    return matchesSearch && matchesFilter;
+  });
+
   return (
     <section className='shift placement_table'>
-      
       <div className="mainBody">
         <div className="containerCourse">
+          <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 rounded-lg">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            </div>
+            <div>
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">All</option>
+                <option value="approved">Approved</option>
+                <option value="submitted">Submitted</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
           <table>
             <thead>
               <tr>
-                <th>Company Name</th>
                 <th>Date of Request</th>
                 <th>Date of Approval</th>
                 <th>Status</th>
-                <th>Request Letter</th>
+                <th>Approved Company</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {letterRequests.map((request, index) => {
+              {filteredRequests.map((request, index) => {
                 const statusClasses = classNames({
                   'status': true,
                   'approved': request.statusClass === 'approved',
@@ -122,29 +149,16 @@ const PlacementRequest = () => {
                 });
                 return (
                   <tr key={index}>
-                    <td>{(request.company_name !==null? "Placement not yet assigned": request.company_name )}</td>
                     <td>{formatDate(request.date_created)}</td>
-                    <td>{formatDate(request.date_created)}</td>
-                    
+                    <td>{(formatDate(request.date_approved)=="Invalid Date"?"-----":formatDate(request.date_approved))}</td>
                     <td>
                       <div className={statusClasses}>
                         {request.approval_status}
                       </div>
                     </td>
-                    <td> {loadingDownloads[request.id] ? (
-                        <RingLoader size={20} color='blue' />
-                      ) : (
-                        <img 
-                          src={IconDownload} 
-                          alt="download" 
-                          className={downloadIconClasses}
-                          onClick={() => request.statusClass === 'approved' && handleDownloadClick(request.id)} 
-                        />
-                      )}</td>
-                
+                    <td>{(request.company_name !==null? "-----": request.company_name )}</td>
                     <td className='down'>
                       <button onClick={() => handleViewClick(request)}>View More</button>
-                     
                     </td>
                   </tr>
                 );
@@ -159,7 +173,6 @@ const PlacementRequest = () => {
           )}
         </div>
       </div>
-    
       <div className="register_above mobile">
         Scroll horizontally to see more
       </div>
