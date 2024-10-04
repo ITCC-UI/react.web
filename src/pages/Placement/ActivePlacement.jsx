@@ -13,7 +13,8 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
     const [PlacementLetter, setPlacementRequests]= useState([])
     const [isLoading, setIsLoading] = useState(true);
     const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
-  
+    const [addressOptions, setAdressOptions]= useState([])
+  const [statesOfNigeria, setNewState] =useState([])
 
   
     const fetchProgrammeId = async () => {
@@ -58,7 +59,7 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
               <PulseLoader size={15} color={"#123abc"} />
             </div>
             
-          ) : Placement.length !== 0 ? (
+          ) : Placement.length === 0 ? (
             <div className="image">
               <img src={Empty} alt="Empty" />
             </div>

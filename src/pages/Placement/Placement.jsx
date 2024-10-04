@@ -40,6 +40,8 @@ const Placement = () => {
   const [changeOfPlacementRequest, setNewChangeRequest] = useState(false)
   const [id, setProgrammeId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [addressOptions, setAdressOptions]= useState([])
+  const [statesOfNigeria, setNewState] =useState([])
 
   const toggleNewRequest = () => {
     setShowNewRequest(!showNewRequest);
@@ -107,14 +109,47 @@ const Placement = () => {
   };
 
 
-  const statesOfNigeria = [
-    "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", 
-    "Benue", "Borno", "Cross River", "Delta", "Ebonyi", "Edo", 
-    "Ekiti", "Enugu", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", 
-    "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", 
-    "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", 
-    "Sokoto", "Taraba", "Yobe", "Zamfara", "Federal Capital Territory (FCT)"
-  ];
+  const type="ADDRESSEE"
+const fetchAddressee =()=>{
+  axiosInstance.get(`/option-types/${type}/options`)
+  .then(titles =>{
+    const addressee=titles.data.map(title=>title.name)
+    // console.log(addressee)
+    setAdressOptions(addressee)
+    // titleIsLoading(false)
+  })
+
+  .catch(error=>{
+    console.log(error)
+    // titleIsLoading(false)
+  })
+}
+
+const fetchStates =()=>{
+  axiosInstance.get(`/states`)
+  .then(states =>{
+    const newStates=states.data.map(state=>state.name)
+    // console.log(newStates)
+    setNewState(newStates)
+    // stateIsLoading(false)
+  })
+
+  .catch(error=>{
+    console.log(error)
+    
+  })
+}
+
+
+useEffect(()=>{
+  fetchAddressee()
+}, [])
+
+useEffect(()=>{
+  fetchStates()
+}, [])
+
+
 
 
 
@@ -215,7 +250,7 @@ const Placement = () => {
         state_or_province: Yup.string().required("State or province is required"),
       }),
     company_contact_name: Yup.string()
-      .required('Company contact name is required'),
+      .required('Signatory position is required'),
     company_contact_email: Yup.string()
       .email('Invalid email'),
       // .required('Company contact email is required'),
@@ -247,16 +282,16 @@ const Placement = () => {
       company_address_street: Yup.string(),
       company_address_area: Yup.string(),
       company_address_city: Yup.string(),
-      company_address_state_or_province: Yup.string(),
+      company_address_state_or_province: Yup.string().required("Company's State is required"),
 
 
     company_contact_name: Yup.string()
-      .required('Company contact name is required'),
+      .required('Signatory Position is required'),
     company_contact_email: Yup.string()
       .email('Invalid email'),
       // .required('Company contact email is required'),
       company_contact_phone: Yup.string()
-      .matches(phoneRegExp, 'Phone number is not valid').min(11, "Phone number must be more than 10"),
+      .matches(phoneRegExp, "Signatory's phone number is not valid").min(11, "Phone number must be more than 10"),
 
       letter: Yup.mixed()
       .required('A file is required')
@@ -370,35 +405,26 @@ const Placement = () => {
                         <ErrorMessage className="error" name="company_name" component="div" />
                       </div>
                       <div className="formInput">
-                        <label htmlFor="company_contact_name">Signatory<p>*</p></label>
+                        <label htmlFor="company_contact_name">Signatory Positon <p>*</p></label>
                         <Field type="text" name="company_contact_name" placeholder="e.g Engr O.A Opadare" />
                         <ErrorMessage className="error" name="company_contact_name" component="div" />
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="company_contact_email">Company Email<p>*</p></label>
+                        <label htmlFor="company_contact_email">Company Email </label>
                         <Field type="text" name="company_contact_email" placeholder="Enter the company’s email" />
                         <ErrorMessage className="error" name="company_contact_email" component="div" />
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="company_contact_phone">Company Contact Phone<p>*</p></label>
+                        <label htmlFor="company_contact_phone">Signatory Phone Number</label>
                         <Field type="tel" name="company_contact_phone" placeholder="e.g 08066641912" />
                         <ErrorMessage className="error" name="company_contact_phone" component="div" />
                       </div>
 
-                      {/* <div className="formInput">
-                        <label htmlFor="letter_type">Letter Type</label>
-                        <Field as="select" name="letter_type">
-                          <option value="">Select Letter Type</option>
-                          <option value="UNDERTAKEN">UNDERTAKEN</option>
-                          <option value="ACCEPTANCE_LETTER">ACCEPTANCE LETTER</option>
-                        </Field>
-                        <ErrorMessage className="error" name="letter_type" component="div" />
-                      </div> */}
 
                       <div className="formInput move-left">
-            <label htmlFor="letter">Letter</label>
+            <label htmlFor="letter">Letter <p>*</p></label>
             <input
               id="letter"
               name="letter"
@@ -415,7 +441,7 @@ const Placement = () => {
                       <div className="company">Company's Address<p>*</p></div>
                       <div className="formInput buildNo">
                         <label htmlFor="company_address.building_number"></label>
-                        <Field type="text" name="company_address.building_number" placeholder="Building No : No 24 <p>*</p>" className="buildNo" />
+                        <Field type="text" name="company_address.building_number" placeholder="Building No : No 24" className="buildNo" />
                         <ErrorMessage className="error" name="company_address.building_number" component="div" />
                       </div>
                       <div className="formInput">
@@ -436,7 +462,13 @@ const Placement = () => {
                         </div>
                         <div className="formInput">
                           <label htmlFor="company_address.state_or_province"></label>
-                          <Field type="text" name="company_address.state_or_province" placeholder="State, e.g Oyo" />
+                          <StatesComboBox
+              name="company_address.state_or_province"
+              options={statesOfNigeria}
+              placeholder="E.g. Oyo  "
+              className="combo"
+              
+            />
                           <ErrorMessage className="error" name="company_address.state_or_province" component="div" />
                         </div>
                       </div>

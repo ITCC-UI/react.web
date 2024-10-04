@@ -5,7 +5,8 @@ import "./introTable.scss";
 import classNames from 'classnames';
 import axiosInstance from '../../../API Instances/AxiosIntances';
 // import MoreDetails from '../../../components/View More/MoreDetails';
-import MoreDetails from './MoreDetailsPlacement';
+// import MoreDetails from './MoreDetailsPlacement';
+import MoreDetails from '../../../components/View More/MoreDetails';
 
 
 
@@ -30,8 +31,8 @@ const PlacementTable = () => {
       const id = registrations[0].id;
       //console.log("Using Registration ID:", id);
 
-      // const requestsResponse = await axiosInstance.get(`/trainings/placements/registrations/${id}`);
-      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests`)
+      const requestsResponse = await axiosInstance.get(`/trainings/placements/registrations/${id}`);
+      // const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests`)
       const requests = requestsResponse.data;
       console.log("Fetched requests:", requests);
       

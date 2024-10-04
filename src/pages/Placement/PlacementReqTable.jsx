@@ -4,8 +4,7 @@ import "./introTable.scss";
 import classNames from 'classnames';
 import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
-import { RingLoader } from 'react-spinners';
-import MoreDetails from '../../../components/View More/MoreDetails';
+import MoreDetails from './MoreDetailsPlacement';
 import { Search } from 'lucide-react';
 
 const PlacementRequest = () => {
@@ -101,24 +100,25 @@ const PlacementRequest = () => {
     <section className='shift placement_table'>
       <div className="mainBody">
         <div className="containerCourse">
-          <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 rounded-lg">
+          <div className="search-bar">
             <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Search Here"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+             
             </div>
-            <div>
+            <div className='filter'>
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="pyro"
               >
-                <option value="all">All</option>
+                <option value="all">Filter</option>
                 <option value="approved">Approved</option>
                 <option value="submitted">Submitted</option>
                 <option value="rejected">Rejected</option>

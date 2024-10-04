@@ -39,6 +39,9 @@ gap: 8px;
 opacity: 0px;
 &:hover{
 opacity: .8;
+.this{
+    display: block;
+}
 }
 
     }
@@ -64,4 +67,73 @@ opacity: .8;
             padding: 8px;
         }
     }
+}
+
+.this{
+    display: none;
+    border-radius: 5px;
+    position: absolute;
+    width: 120px;
+    
+    left: -3px;
+    margin-top: 10px;
+    background-color: white;
+    .that{
+        padding: 10px 5px;
+        
+        &:hover{
+            background-color: rgb(172, 172, 172);
+            
+        };
+
+        a{
+            padding: 10px 5px;
+            color: inherit;
+        }
+    }
+}
+
+
+.search-bar{
+    width: 100%;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #F3EFEF;
+    .relative{
+    
+        display: flex;
+        border: 1px solid black;
+        width: 250px;
+        background-color: #F3EFEF;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border-radius: 12px;
+        input{
+            height: 42px;
+            background-color: #F3EFEF;
+            outline:none;
+            inset: none;
+            width: 180px;
+            border: none;
+          &::placeholder{
+            font-size: 14px;
+          }
+        }
+    }
+
+    .filter{
+        border: 1px solid pink;
+        .pyro{
+border: 1px solid red;
+&:visited{
+    border: 1px solid green;
+}
+        }
+        options{
+            border: 1px solid red;
+        }
+    }
+
 }

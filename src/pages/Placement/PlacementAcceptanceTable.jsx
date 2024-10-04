@@ -5,6 +5,7 @@ import "./introTable.scss";
 import classNames from 'classnames';
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import MoreDetails from '../../../components/View More/MoreDetailsAcceptance';
+import { Link } from 'react-router-dom';
 
 
 
@@ -153,8 +154,19 @@ const PlacementAcceptanceTable = () => {
           </div>
         </td>
 
-        <td className='down'>
+        {/* <td className='down'>
           <button onClick={() => handleViewClick(request)}>View More</button>
+        </td> */}
+
+        <td className="down">
+       <button>
+       Actions 
+
+       <div className="this">
+        <div className="that" onClick={()=>handleViewClick(request)}>View Request</div>
+        <div className="that"><Link to="#" target='_blank'>View Letter</Link></div>
+       </div>
+       </button>
         </td>
       </tr>
     );

@@ -83,7 +83,7 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
         <br/>  You need to make a registration before proceeding</p>
         </div>
       )
-       : placement.length === 0 ? (
+       : placement.length !== 0 ? (
         <div className="image">
           <img src={Empty} alt="Empty" />
         </div>
