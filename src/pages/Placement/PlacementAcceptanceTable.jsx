@@ -181,8 +181,7 @@ const PlacementAcceptanceTable = () => {
     
     const letterClasses = classNames({
       'status': true,
-      'undertaken': request.letter_type==='UNDERTAKING',
-      'undertaking': request.letter_type === 'UNDERTAKEN', // Assuming letter type directly from `request`
+      'undertaking': request.letter_type==='UNDERTAKING',
       'acceptance': request.letter_type === 'ACCEPTANCE'
       
     });
