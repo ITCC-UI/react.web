@@ -4,8 +4,8 @@ import "../../../components/Table/table.scss";
 import "./introTable.scss";
 import classNames from 'classnames';
 import axiosInstance from '../../../API Instances/AxiosIntances';
-// import MoreDetails from '../../../components/View More/MoreDetails';
-// import MoreDetails from './MoreDetailsPlacement';
+import Filter from '/images/Filter.png'
+import { Search } from 'lucide-react';
 import MoreDetails from '../../../components/View More/MoreDetails';
 
 
@@ -15,6 +15,9 @@ const PlacementTable = () => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
+const [searchTerm, setSearchTerm]= useState('')
+const [filter, setFilter] =useState('all')
+
 
   const fetchPlacementLetter = async () => {
     try {
@@ -79,11 +82,58 @@ const PlacementTable = () => {
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
+  const filteredRequests = letterRequests.filter((request) => {
+    const matchesSearch = Object.values(request).some(
+      (value) => 
+        value && 
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    const matchesFilter = 
+      filter === 'all' || 
+      request.approval_status.toLowerCase() === filter.toLowerCase();
+    return matchesSearch && matchesFilter;
+  });
+
+
   return (
     <section className='shift placement_table'>
       
       <div className="mainBody">
         <div className="containerCourse">
+
+        <div className="search-bar">
+            <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
+              <input
+                type="text"
+                placeholder="Search Here"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                
+              />
+             
+            </div>
+            <div className='filter'>
+            <img src={Filter} alt="Hey" className='image-filter' />
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className="pyro"
+              >
+                
+                {/* <option value="all" disabled>Filter</option> */}
+                <option value="default" disabled selected hidden>
+      Select a status
+      
+    </option>
+
+                <option value="all"> All </option>
+                <option value="approved">Approved</option>
+                <option value="submitted">Submitted</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
           <table>
             <thead>
               <tr>
@@ -96,7 +146,7 @@ const PlacementTable = () => {
               </tr>
             </thead>
             <tbody>
-              {letterRequests.map((request, index) => {
+              {filteredRequests.map((request, index) => {
                 const statusClasses = classNames({
                   'status': true,
                   'status_table': true,
