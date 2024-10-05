@@ -124,16 +124,41 @@ opacity: .8;
     }
 
     .filter{
-        border: 1px solid pink;
+        select{
+            width: 120px;
+            height: 38px;
+            display: flex;
+            padding: 10px;
+            align-items: center;
+            background-color: #0000001A;
+            font-family: 'Poppins';
+            font-weight: 400;
+            font-size: 14px;
+            border-radius: 7px;
+    
+            &:active{
+                border: none;
+                outline-offset: none;
+            }
+            &:focus-visible{
+                outline: none;
+            }
+            appearance: none;
+        }
+
+        .image-filter{
+            position: absolute;
+            left: 90px;
+            top: 12px;
+            width: 15px;
+        }
         .pyro{
-border: 1px solid red;
-&:visited{
-    border: 1px solid green;
-}
+            border: none;
+       
         }
-        options{
-            border: 1px solid red;
-        }
+
+        
+        
     }
 
 }

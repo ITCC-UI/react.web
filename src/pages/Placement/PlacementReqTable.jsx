@@ -6,6 +6,7 @@ import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import MoreDetails from './MoreDetailsPlacement';
 import { Search } from 'lucide-react';
+import Filter from "/images/Filter.png"
 
 const PlacementRequest = () => {
   const [letterRequests, setLetterRequests] = useState([]);
@@ -108,17 +109,25 @@ const PlacementRequest = () => {
                 placeholder="Search Here"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                
               />
              
             </div>
             <div className='filter'>
+            <img src={Filter} alt="Hey" className='image-filter' />
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
                 className="pyro"
               >
-                <option value="all">Filter</option>
+                
+                {/* <option value="all" disabled>Filter</option> */}
+                <option value="default" disabled selected hidden>
+      Select a status
+      
+    </option>
+
+                <option value="all"> All </option>
                 <option value="approved">Approved</option>
                 <option value="submitted">Submitted</option>
                 <option value="rejected">Rejected</option>
