@@ -28,6 +28,8 @@ import UpdatePassword from './pages/Password Reset/reset_password.jsx';
 import ResetPassword from './pages/Password Reset/NewPassword.jsx';
 import DailyLogs from './pages/Logs/logs.jsx';
 import MoreDetails from '../components/View More/MoreDetailsAcceptance.jsx';
+import ChangePlacementForm from '../components/View More/NewForm.jsx';
+import MultiStepForm from '../components/View More/NewForm.jsx';
 // import PrintPreviewContainer from '../components/Print Layout/PrintPreview.jsx';
 // import RegistrationForm from '../components/Print Form/RegistrationForm.jsx';
 function App() {
@@ -51,6 +53,7 @@ function App() {
           <Route path='*' element={<Auth><ErrorPage/></Auth>}/>
           <Route path='/logs' element={<DailyLogs />} />
           <Route path='/details' element={<MoreDetails />} />
+          <Route path='/form' element={<MultiStepForm/>}></Route>
           
         </Routes>        
       </div>

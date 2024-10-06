@@ -189,17 +189,17 @@ useEffect(()=>{
         }
       });
   
-      const response = await axiosInstance.post(`/trainings/change-of-placement/registrations/${id}/`, formData, {
+      const response = await axiosInstance.post(`/trainings/change-of-placements/registrations/${id}/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
       setChangeofPlacement("success");
       setPlacementChangeSuccessMessage("Your change of placement has been submitted successfully!");
-      setShowPlacementChangeSuccessful(true);
+      setShowPlacementSuccessful(true);
       setTimeout(() => {
         setChangeofPlacement("");
-        setShowPlacementChangeSuccessful(false);
+        setShowPlacementSuccessful(false);
         window.location.reload();
       }, 2000);
     } catch (error) {
@@ -209,8 +209,8 @@ useEffect(()=>{
         setShowAcceptanceFailure(false)
       }, 5000);
     } finally {
-      setSubmitting(false);
-      toggleChangeOfPlacementRequest();
+      setSubmitting(true );
+      // toggleChangeOfPlacementRequest();
     }
   };
   
@@ -240,6 +240,9 @@ useEffect(()=>{
     // letter_type: Yup.string()
     //   .oneOf(['UNDERTAKEN', 'ACCEPTANCE_LETTER'], 'Invalid letter type')
     //   .required('Letter type is required'),
+   
+   initial_placement: Yup.string().required(),
+   request_message:Yup.string().required("Request message is required"),
     company_name: Yup.string()
       .required('Company name is required'),
       company_address: Yup.object().shape({
@@ -378,6 +381,8 @@ useEffect(()=>{
                 initialValues={{
                   // letter_type: '',
                   letter: null,
+                  initial_placement:'',
+                  request_message:" ",
                   company_name: '',
                   company_address: {
                     building_number: "",

@@ -93,7 +93,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
           <p>You are not eligible to request for a change of placement at this time. <br/>
         <br/>  You need to make a registration before proceeding</p>
         </div>
-      ) : Placement.length === 1 ? (
+      ) : Placement.length !== 0 ? (
         <div className="image">
           <img src={Empty} alt="Empty" />
         </div>

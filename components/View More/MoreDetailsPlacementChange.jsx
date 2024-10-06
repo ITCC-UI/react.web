@@ -3,7 +3,7 @@ import './ChangeMoreDetails.scss';
 import { X } from 'lucide-react';
 import { Formik, Form } from 'formik';
 import * as Yup from "yup"
-import { set } from 'react-hook-form';
+import ChangePlacementForm from './NewForm';
 
 const MoreDetails = ({ request, onClose }) => {
   const [isActive, setIsActive] = useState(false);
@@ -20,7 +20,7 @@ const MoreDetails = ({ request, onClose }) => {
   const handleChange=()=>{
     console.log("It worked")
       setChange(true)
-      setIsActive(false)
+      // setIsActive(false)
   }
 
   const openChangeChoice = () =>{
@@ -147,58 +147,7 @@ const MoreDetails = ({ request, onClose }) => {
       
 
     {changeActive  &&(
-        <div className={`more-details-modal ${changeActive ? 'active' : ''}`}>
-        <div onClick={handleClose} className='closeView'>
-          <X size={24} />
-        </div>
-        <div className="more-details-content">
-          <h2 className='approval change'>Reason for Change</h2>
-          
-          <div className="compProfile">
-            <div className='details reason'>Enter Your Reasons for  Requesting for a Change</div>
-            
-
-            <Formik
-                initialValues={{
-
-                  request_message: "",
-                  
-
-                }}
-                validationSchema={validationSchema}
-                onSubmit={handlePlacementRequestsSubmit}
-              >
-                {({ isSubmitting }) => (
-                  <Form className="placement_form">
-
-                    <div className="companyDetails">
-
-
-
-                      <div className="formInput">
-                        <label htmlFor="request_message"></label>
-                        <Field as="textarea" name="request_message" className="placement_letter" placeholder="Type your message to support your request" />
-                        <ErrorMessage className="error" name="request_message" component="div" />
-                      </div>
-
-                    </div>
-                    <button type="submit" className="submitting submit_placement_request">
-                      {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
-                    </button>
-                  </Form>
-                )}
-              </Formik>
-          </div>
-
-
-
-        
-          
-        </div>
-
-
-        <button className='changePlacement' onClick={openChangeChoice}> Request for Change</button>
-      </div>
+      <ChangePlacementForm/>
     )
 
     }
