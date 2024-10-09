@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Chevy from "/images/Chevron Right.png";
 import { Link } from 'react-router-dom';
 
-const AccordionS = ({ initialOpenSection, activeIntro, activeReg }) => {
+const AccordionS = ({ initialOpenSection, activeIntro, activeReg, activeDailyLog }) => {
   const [openAccordion, setOpenAccordion] = useState(initialOpenSection);
   const contentRefs = [useRef(null), useRef(null), useRef(null)];
 
@@ -116,7 +116,7 @@ const AccordionS = ({ initialOpenSection, activeIntro, activeReg }) => {
           }}
         >
           <Link to="/job-reporting-form">Job Reporting Form</Link>
-          <Link to="/daily-logs">Daily logs</Link>
+          <Link to="/daily-logs" className={activeDailyLog}>Daily logs</Link>
           <Link to="/new-logbook-request">New Logbook Request</Link>
         </div>
       </div>

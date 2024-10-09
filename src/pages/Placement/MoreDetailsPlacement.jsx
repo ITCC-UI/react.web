@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import './MoreDetails.scss';
+// import './MoreDetails.scss';
 import { X } from 'lucide-react';
+import IconDownload from "/images/Download.png";
 const MoreDetails = ({ request, onClose }) => {
   const [isActive, setIsActive] = useState(false);
+  const [loadingDownloads, setLoadingDownloads] = useState({});
 
   useEffect(() => {
     setIsActive(true);
@@ -12,6 +14,29 @@ const MoreDetails = ({ request, onClose }) => {
     setIsActive(false);
     setTimeout(onClose, 300);
   };
+
+
+  
+
+  const handleDownloadClick = async (id) => {
+    setLoadingDownloads(prevState => ({ ...prevState, [id]: true }));
+    try {
+      const response = await axiosInstance.get(`/trainings/introduction-letter-requests/${id}/document/`, {
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `introduction_letter.pdf`);
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      //console.error("Error downloading document:", error);
+    } finally {
+      setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
+    }
+  };
+
 
   const getApprovalNote = (note) => {
     return !note ? "N/A" : note;
@@ -39,8 +64,11 @@ const MoreDetails = ({ request, onClose }) => {
     }
   };
 
+
+
   return (
     <>
+    
       <div className={`more-details-modal ${isActive ? 'active' : ''}`}>
         <div onClick={handleClose} className='closeView'>
           <X size={24} />
@@ -81,6 +109,22 @@ const MoreDetails = ({ request, onClose }) => {
               <div className="cDetails">{formatApprovalDate(request.date_of_approval)}</div>
             </div>
           )}
+
+          {request.approval_status==="APPROVED"?
+            <div> {loadingDownloads[request.id] ? (
+                        <RingLoader size={20} color='blue' />
+                      ) : (
+                        <div className='download'>Download
+                        <img 
+                          src={IconDownload} 
+                          alt="download" 
+                          className="invert downloadIcon approved"
+                          // onClick={() => request.statusClass === 'approved' && handleDownloadClick(request.id)} 
+                        />
+
+                        </div>
+                      )}</div>: <div></div>
+                    }
           
         </div>
       </div>

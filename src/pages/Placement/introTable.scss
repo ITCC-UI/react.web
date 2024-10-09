@@ -7,7 +7,7 @@ section table tr td, section th tr td, section td tr td{
 }
 
 .status {
-    padding: 5px 10px;
+    padding: 5px !important;
     border-radius: 30px;
     text-align: center;
   
@@ -39,6 +39,9 @@ gap: 8px;
 opacity: 0px;
 &:hover{
 opacity: .8;
+.this{
+    display: block;
+}
 }
 
     }
@@ -64,4 +67,98 @@ opacity: .8;
             padding: 8px;
         }
     }
+}
+
+.this{
+    display: none;
+    border-radius: 5px;
+    position: absolute;
+    width: 120px;
+    
+    left: -3px;
+    margin-top: 10px;
+    background-color: white;
+    .that{
+        padding: 10px 5px;
+        
+        &:hover{
+            background-color: rgb(172, 172, 172);
+            
+        };
+
+        a{
+            padding: 10px 5px;
+            color: inherit;
+        }
+    }
+}
+
+
+.search-bar{
+    width: 100%;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #F3EFEF;
+    .relative{
+    
+        display: flex;
+        border: 1px solid black;
+        width: 250px;
+        background-color: #F3EFEF;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border-radius: 12px;
+        input{
+            height: 42px;
+            background-color: #F3EFEF;
+            outline:none;
+            inset: none;
+            width: 180px;
+            border: none;
+          &::placeholder{
+            font-size: 14px;
+          }
+        }
+    }
+
+    .filter{
+        select{
+            width: 120px;
+            height: 38px;
+            display: flex;
+            padding: 10px;
+            align-items: center;
+            background-color: #0000001A;
+            font-family: 'Poppins';
+            font-weight: 400;
+            font-size: 14px;
+            border-radius: 7px;
+    
+            &:active{
+                border: none;
+                outline-offset: none;
+            }
+            &:focus-visible{
+                outline: none;
+            }
+            appearance: none;
+        }
+
+        .image-filter{
+            position: absolute;
+            left: 90px;
+            top: 12px;
+            width: 15px;
+        }
+        .pyro{
+            border: none;
+       
+        }
+
+        
+        
+    }
+
 }

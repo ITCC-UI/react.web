@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; // Import js-cookie
 import NetworkStatusIcon from '../NetworkStatus/Network';
 import Sidebar from '../Sidebar/MobileSideBar';
+import axiosInstance from '../../API Instances/AxiosIntances';
 
 const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisible }) => {
   const [userName, setUserName] = useState(' ');
@@ -27,12 +28,9 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = Cookies.get('token'); // Get token from cookies
-        const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/student/details', {
-          headers: {
-            Authorization: `Token ${token}`
-          }
-        });
+     
+
+        const response = await axiosInstance.get('/student/details')
 
         const { matric_number, passport, first_name, last_name } = response.data;
         setMatricNumber(matric_number);

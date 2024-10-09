@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
-// import MobileSideBar from '../../../components/Sidebar/MobileSideBar';
 import "./introTable.scss";
 import classNames from 'classnames';
-import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
-import { RingLoader } from 'react-spinners';
-import MoreDetails from '../../../components/View More/MoreDetails';
-
+import MoreDetails from '../../../components/View More/MoreDetailsPlacementChange';
+import { Search } from 'lucide-react';
+import Filter from "/images/Filter.png"
 
 
 
@@ -15,6 +13,8 @@ const PlacementChangeReq = () => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filter, setFilter] = useState('all');
 
   const fetchIntroductionLetterRequests = async () => {
     try {
@@ -31,7 +31,7 @@ const PlacementChangeReq = () => {
       const id = registrations[0].id;
       //console.log("Using Registration ID:", id);
 
-      const requestsResponse = await axiosInstance.get(`/change-of-placements/registrations/${id}`);
+      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests/`);
       const requests = requestsResponse.data;
       console.log("Fetched requests:", requests);
       
@@ -92,24 +92,77 @@ const PlacementChangeReq = () => {
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
+
+
+  const filteredRequests = letterRequests.filter((request) => {
+    const matchesSearch = Object.values(request).some(
+      (value) => 
+        value && 
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    const matchesFilter = 
+      filter === 'all' || 
+      request.approval_status.toLowerCase() === filter.toLowerCase();
+    return matchesSearch && matchesFilter;
+  });
+
+
+
+
+
   return (
     <section className='shift placement_table'>
       
       <div className="mainBody">
         <div className="containerCourse">
+
+
+        <div className="search-bar">
+            <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
+              <input
+                type="text"
+                placeholder="Search Here"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                
+              />
+             
+            </div>
+            <div className='filter'>
+            <img src={Filter} alt="Hey" className='image-filter' />
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className="pyro"
+              >
+                
+                {/* <option value="all" disabled>Filter</option> */}
+                <option value="default" disabled selected hidden>
+      Select a status
+      
+    </option>
+
+                <option value="all"> All </option>
+                <option value="approved">Approved</option>
+                <option value="submitted">Submitted</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
           <table>
             <thead>
               <tr>
-                <th>Company Name</th>
-                <th>Date of Request</th>
-                <th>Date of Approval</th>
+                <th>Current Company</th>
+                <th>Submission Date</th>
+                <th>Approval Date</th>
                 <th>Status</th>
-                <th>Request Letter</th>
+                <th>Desired Company</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {letterRequests.map((request, index) => {
+              {filteredRequests.map((request, index) => {
                 const statusClasses = classNames({
                   'status': true,
                   'approved': request.statusClass === 'approved',
@@ -124,14 +177,14 @@ const PlacementChangeReq = () => {
                   <tr key={index}>
                     <td>{request.company_name}</td>
                     <td>{formatDate(request.date_created)}</td>
-                    <td>{formatDate(request.date_created)}</td>
+                    <td>{formatDate(request.date_last_modified)}</td>
                     
                     <td>
                       <div className={statusClasses}>
                         {request.approval_status}
                       </div>
                     </td>
-                    <td> {loadingDownloads[request.id] ? (
+                    {/* <td> {loadingDownloads[request.id] ? (
                         <RingLoader size={20} color='blue' />
                       ) : (
                         <img 
@@ -140,7 +193,10 @@ const PlacementChangeReq = () => {
                           className={downloadIconClasses}
                           onClick={() => request.statusClass === 'approved' && handleDownloadClick(request.id)} 
                         />
-                      )}</td>
+                      )}</td> */}
+                      <td>
+                        {request.company_name}
+                      </td>
                 
                     <td className='down'>
                       <button onClick={() => handleViewClick(request)}>View More</button>

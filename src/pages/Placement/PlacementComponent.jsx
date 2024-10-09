@@ -59,30 +59,6 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
     fetchProgrammeId();
   }, []);
 
-  // const handleSubmit = async (values, { setSubmitting }) => {
-  //   if (!programmeId) {
-  //     console.error("Programme ID not available");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axiosInstance.post(`http://trainings/placement-requests/registrations/${id}`, values);
-  //     setSubmissionStatus("success");
-  //     setTimeout(() => {
-  //       setSubmissionStatus("");
-  //       window.location.reload(); // Auto refresh the page
-  //     }, 500);
-  //   } catch (error) {
-  //     console.error("Error submitting form", error);
-  //     setSubmissionStatus("failure");
-  //     setTimeout(() => {
-  //       setSubmissionStatus("");
-  //     }, 500);
-  //   } finally {
-  //     setSubmitting(false);
-  //     toggleNewRequest();
-  //   }
-  // };
 
   return (
     <>

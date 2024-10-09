@@ -122,10 +122,9 @@ color: royalblue !important;
     
     width: 320px;
     label{
-      &::after{
-        content: "*";
+      p{
         color: red;
-        margin-left: 3px;
+        display: inline-block;
       }
     }
 
@@ -152,9 +151,10 @@ color: royalblue !important;
     width: 700px;
     height: 45px;
     background: rgba(249, 249, 250, 1);
-border: none;
-border-radius: 8px;
-padding: 20px !important;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+
 font-size: 16px;
 &:focus{
   border: 1px solid rgb(7, 142, 129);
@@ -168,6 +168,9 @@ font-size: 16px;
   font-size: 16px;
 
 }
+input[required]:valid + label{
+  display:none;
+}
   }
 }
 
@@ -179,7 +182,13 @@ font-size: 16px;
   flex-direction: column;
   gap: 20px;
   margin-bottom: 50px;
-
+.company{
+    p{
+      color: red;
+      display: inline-block;
+    
+  }
+}
   .stateofCompany{
     // border: 1px solid red;
     display: flex;
@@ -225,6 +234,12 @@ textarea.placement_letter{
 width: 80%;
 margin-left: 0;
 }
+.combo{
+  padding: 20px !important;
+  height: 45px;
+  overflow-y: auto;
+}
+
 
 .placement_form{
   display: flex;
@@ -287,7 +302,6 @@ margin-left: 0;
   width: 90%;
   input[type="text"], textarea, select, .combo{
     width: 100%;
-    height: 40px;
     font-size: 14px !important;
     &::placeholder{
       font-size: 10px;
@@ -312,6 +326,7 @@ margin-left: 0;
 }
 .company{
   margin-left: 20px;
+  
 }
 .submitting{
   font-size: 14px;
@@ -328,13 +343,15 @@ margin-left: 0;
   position: absolute;
   top: 45px;
   z-index: 1;
-  background-color: rgb(182, 182, 182);
+  background-color: rgb(112, 109, 109);
   color: #fff;
   display: flex;
   flex-direction: column;
   gap: 5px;
   padding: 10px 2px;
   width: fit-content;
+  height: 210px;
+  overflow-y: auto;
 }
 
 .lists.states{

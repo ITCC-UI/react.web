@@ -20,6 +20,9 @@ const IntroductionLetter = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
   const [noProgrammeId, setNoProgrammeId] = useState(false); // State for no Programme ID
+  const [loading, titleIsLoading] =useState(false)
+  const [addressOptions, setAdressOptions]= useState([])
+  const [statesOfNigeria, setNewState] =useState([])
 
   const toggleNewRequest = () => {
     setShowNewRequest(!showNewRequest);
@@ -85,29 +88,54 @@ const IntroductionLetter = () => {
       street: Yup.string().required("Street is required"),
       area: Yup.string(),
       city: Yup.string().required("City is required"),
-      state_or_province: Yup.string().required("State or province is required"),
+      state_or_province_id: Yup.string().required("State or province is required"),
     }),
     company_name: Yup.string().required("Company name is required"),
     address_to: Yup.string().required("Addressee is required"),
   });
 
+const type="ADDRESSEE"
+const fetchAddressee =()=>{
+  axiosInstance.get(`/option-types/${type}/options`)
+  .then(titles =>{
+    const addressee=titles.data.map(title=>title.name)
+    // console.log(addressee)
+    setAdressOptions(addressee)
+    titleIsLoading(false)
+  })
 
-  const addressOptions=[
-    "The Managing Director",
-    "The Human Resources Manager",
-    "The Chief Executive Officer",
-    "The Hiring Manager",
-    "The Internship Coordinator"
-  ]
+  .catch(error=>{
+    console.log(error)
+    titleIsLoading(false)
+  })
+}
 
-  const statesOfNigeria = [
-    "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", 
-    "Benue", "Borno", "Cross River", "Delta", "Ebonyi", "Edo", 
-    "Ekiti", "Enugu", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", 
-    "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", 
-    "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", 
-    "Sokoto", "Taraba", "Yobe", "Zamfara", "Federal Capital Territory (FCT)"
-  ];
+const fetchStates =()=>{
+  axiosInstance.get(`/states`)
+  .then(states =>{
+    const newStates=states.data.map(state=>state.name)
+    // console.log(newStates)
+    setNewState(newStates)
+    // stateIsLoading(false)
+  })
+
+  .catch(error=>{
+    console.log(error)
+    
+  })
+}
+
+
+useEffect(()=>{
+  fetchAddressee()
+}, [])
+
+useEffect(()=>{
+  fetchStates()
+}, [])
+  
+
+
   
 
   return (
@@ -138,7 +166,7 @@ const IntroductionLetter = () => {
                     street: "",
                     area: "",
                     city: "",
-                    state_or_province: "",
+                    state_or_province_id: "",
                     country: "",
                     postal_code: "",
                   },
@@ -192,15 +220,15 @@ const IntroductionLetter = () => {
                           <ErrorMessage className="error" name="company_address.city" component="div" />
                         </div>
                         <div className="formInput">
-                          <label htmlFor="company_address.state_or_province"></label>
+                          <label htmlFor="company_address.state_or_province_id"></label>
                           <StatesComboBox
-              name="company_address.state_or_province"
+              name="company_address.state_or_province_id"
               options={statesOfNigeria}
-              placeholder="E.g. Ibadan  "
+              placeholder="State, e.g. Oyo  "
               className="combo"
               
             />
-                          <ErrorMessage className="error" name="company_address.state_or_province" component="div" />
+                          <ErrorMessage className="error" name="company_address.state_or_province_id" component="div" />
                         </div>
                       </div>
                     </div>
@@ -219,8 +247,8 @@ const IntroductionLetter = () => {
         <div className="container">
           <div className="topHead">
             <div className="heading">INTRODUCTION LETTERS</div>
-            {/* Conditionally render the New Request button only if programmeId exists */}
-              {programmeId && letterRequests.length === 0  && (
+            {/* Conditionallrender the New Request button only if programmeId exists */}
+              {programmeId  &&   (
         <button className="newReq" onClick={toggleNewRequest}>
           + New Request
         </button>
@@ -248,11 +276,11 @@ const IntroductionLetter = () => {
           <IntroductionLetterTable letterRequests={letterRequests} />
         )}
         
-        {programmeId && letterRequests.length === 1 && (
+        {/* {programmeId && letterRequests.length === 5 && (
         <div className="register_above p-2 bg-yellow-100 text-yellow-800 rounded">
          Request limit exceeded
         </div>
-      )}
+      )} */}
         {submissionStatus === "success" && (
           <div className="submissionStatus success">
             Form submitted successfully! Reload the page.

@@ -5,6 +5,12 @@ const axiosInstance = axios.create({
   baseURL: 'https://theegsd.pythonanywhere.com/api/v1/',
 });
 
+
+// const axiosInstance = axios.create({
+//   baseURL: 'http://192.168.177.206:7000/api/v1/',
+// });
+
+
 axiosInstance.interceptors.request.use(
   config => {
     const token = Cookies.get('token');

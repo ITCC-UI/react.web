@@ -36,6 +36,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
       const response = await axiosInstance.get(`trainings/change-of-placements/registrations/${id}/`);
       setLetterRequests(response.data);
       setIsLoading(false);
+      console.log(response.data)
     } catch (error) {
       console.error("Error fetching change of placement requests:", error);
       setIsLoading(false);
@@ -75,9 +76,11 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
     <>
       <div className="container">
         <div className="topHead place">
-          <button className="newReq" onClick={togglePlacementChangeRequest}>
+      {  noProgrammeId ? ( <button className="newReq" onClick={togglePlacementChangeRequest} disabled="true">
             + New Request
-          </button>
+          </button>): ( <button className="newReq" onClick={togglePlacementChangeRequest}>
+            + New Request
+          </button>)}
         </div>
       </div>
       {isLoading ? (
@@ -90,7 +93,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
           <p>You are not eligible to request for a change of placement at this time. <br/>
         <br/>  You need to make a registration before proceeding</p>
         </div>
-      ) : Placement.length === 0 ? (
+      ) : Placement.length !== 0 ? (
         <div className="image">
           <img src={Empty} alt="Empty" />
         </div>

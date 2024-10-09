@@ -79,7 +79,7 @@ const Login = () => {
         const token = response.data.token;
         // Set cookie with 1-day expiry
         Cookies.set('token', token, { expires: 1 });
-        //console.log('Login successful, token:', token);
+        console.log('Login successful, token:', token);
 
         const isProfileComplete = await checkUserDetails();
         //console.log('isProfileComplete:', isProfileComplete);

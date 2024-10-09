@@ -64,6 +64,20 @@ border-bottom: 2px solid rgba(0, 0, 128, 1);
 width: fit-content;
 padding: 0 10px 0 10px;margin-bottom: 30px;
 }
+
+.change{
+  color: black;
+  border: none;
+  margin: 40px auto;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+
+}
+.designed{
+  padding-bottom: 50px;
+}
+
 .compProfile{
     display: flex;
     flex-direction: column;
@@ -86,10 +100,16 @@ padding: 10px !important;
 }
 
 
+
   }
 
 
 
+  .placementHeader{
+    font-weight: 600;
+    margin-bottom: 40px;
+font-family: 'Poppins';
+  }
 
       @media (max-width:430px) {
         .more-details-modal{
@@ -112,21 +132,23 @@ padding: 10px !important;
     }}
 
 
-    .download{
-      
-      width: 150px;
-      background-color: #000080;
-      color: white;
-padding: 10px 0;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 10px;
-border-radius: 7px;
-flex-direction: row;text-align: center;
-
+    .changePlacement{
+    color: white;
+    background-color: #000080;
+    font-weight: 500;
+    font-family: "Poppins";
+    margin: 0 20px;
+    ;
     }
 
-    .invert{
-      filter: invert(1) 
+    .reason{
+      font-size: 14px !important;
+      text-transform: capitalize !important;
+      text-align: center !important;
+      margin: 0 auto !important;
+    }
+
+
+    .absolute{
+      position: absolute;
     }

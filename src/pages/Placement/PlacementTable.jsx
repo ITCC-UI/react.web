@@ -3,9 +3,9 @@ import "../../../components/Table/table.scss";
 // import MobileSideBar from '../../../components/Sidebar/MobileSideBar';
 import "./introTable.scss";
 import classNames from 'classnames';
-import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
-import { RingLoader } from 'react-spinners';
+import Filter from '/images/Filter.png'
+import { Search } from 'lucide-react';
 import MoreDetails from '../../../components/View More/MoreDetails';
 
 
@@ -15,6 +15,9 @@ const PlacementTable = () => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
+const [searchTerm, setSearchTerm]= useState('')
+const [filter, setFilter] =useState('all')
+
 
   const fetchPlacementLetter = async () => {
     try {
@@ -31,7 +34,8 @@ const PlacementTable = () => {
       const id = registrations[0].id;
       //console.log("Using Registration ID:", id);
 
-      const requestsResponse = await axiosInstance.get(`/trainings/placements/registrations/${id}/current`);
+      const requestsResponse = await axiosInstance.get(`/trainings/placements/registrations/${id}`);
+      // const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests`)
       const requests = requestsResponse.data;
       console.log("Fetched requests:", requests);
       
@@ -42,7 +46,7 @@ const PlacementTable = () => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      //console.error("Error fetching introduction letter requests:", error);
+      console.error("Error fetching introduction letter requests:", error);
     }
   };
 
@@ -51,6 +55,8 @@ const PlacementTable = () => {
       case 'ACTIVE':
         return 'approved';
       case 'DISCONTINED':
+        return 'rejected'
+        
         default:
         return 'rejected';
     }
@@ -67,21 +73,7 @@ const PlacementTable = () => {
 
   const handleDownloadClick = async (id) => {
     setLoadingDownloads(prevState => ({ ...prevState, [id]: true }));
-    // try {
-    //   const response = await axiosInstance.get(`/trainings/introduction-letter-requests/${id}/document/`, {
-    //     responseType: 'blob',
-    //   });
-    //   const url = window.URL.createObjectURL(new Blob([response.data]));
-    //   const link = document.createElement('a');
-    //   link.href = url;
-    //   link.setAttribute('download', `introduction_letter.pdf`);
-    //   document.body.appendChild(link);
-    //   link.click();
-    // } catch (error) {
-      //console.error("Error downloading document:", error);
-    // } finally {
-    //   setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
-    // }
+
   };
 
   // Helper function to format date
@@ -90,11 +82,58 @@ const PlacementTable = () => {
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
+  const filteredRequests = letterRequests.filter((request) => {
+    const matchesSearch = Object.values(request).some(
+      (value) => 
+        value && 
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    const matchesFilter = 
+      filter === 'all' || 
+      request.approval_status.toLowerCase() === filter.toLowerCase();
+    return matchesSearch && matchesFilter;
+  });
+
+
   return (
-    <section className='shift'>
+    <section className='shift placement_table'>
       
       <div className="mainBody">
         <div className="containerCourse">
+
+        <div className="search-bar">
+            <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
+              <input
+                type="text"
+                placeholder="Search Here"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                
+              />
+             
+            </div>
+            <div className='filter'>
+            <img src={Filter} alt="Hey" className='image-filter' />
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className="pyro"
+              >
+                
+                {/* <option value="all" disabled>Filter</option> */}
+                <option value="default" disabled selected hidden>
+      Select a status
+      
+    </option>
+
+                <option value="all"> All </option>
+                <option value="approved">Approved</option>
+                <option value="submitted">Submitted</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
           <table>
             <thead>
               <tr>
@@ -107,9 +146,10 @@ const PlacementTable = () => {
               </tr>
             </thead>
             <tbody>
-              {letterRequests.map((request, index) => {
+              {filteredRequests.map((request, index) => {
                 const statusClasses = classNames({
                   'status': true,
+                  'status_table': true,
                   'approved': request.statusClass === 'approved',
                   'rejected': request.statusClass === 'rejected',
                  
@@ -120,31 +160,24 @@ const PlacementTable = () => {
                 });
                 return (
                   <tr key={index}>
-                    <td>{request.company_name}</td>
-                    <td>{request.company_supervisor}</td>
-                    <td>{formatDate(request.date_created)}</td>
-                    <td>{formatDate(request.date_created)}</td>
+                    <td className='placement_content'>{request.company_name}</td>
+                    <td className='placement_content'>{request.company_supervisor}</td>
+                    <td className='placement_content'>{formatDate(request.date_created)}</td>
+                    <td className='placement_content'>{formatDate(request.date_created)}</td>
                     
-                    <td>
+                   
+        
+                 <td className='placement_content'>
                       <div className={statusClasses}>
                         {request.approval_status}
                       </div>
                     </td>
-                    <td> {loadingDownloads[request.id] ? (
-                        <RingLoader size={20} color='blue' />
-                      ) : (
-                        <img 
-                          src={IconDownload} 
-                          alt="download" 
-                          className={downloadIconClasses}
-                          onClick={() => request.statusClass === 'approved' && handleDownloadClick(request.id)} 
-                        />
-                      )}</td>
-                
-                    <td className='down'>
+                    <td className='down placement_content'>
                       <button onClick={() => handleViewClick(request)}>View More</button>
                      
                     </td>
+
+                    
                   </tr>
                 );
               })}
@@ -156,6 +189,7 @@ const PlacementTable = () => {
               onClose={() => setSelectedRequest(null)}
             />
           )}
+          
         </div>
       </div>
     
