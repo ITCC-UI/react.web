@@ -15,6 +15,7 @@ import PlacementChange from "./PlacementChange";
 import FullScreenSuccessMessage from "./Successful/Successful";
 import StatesComboBox from "./ComboBoxStates";
 import FullScreenFailureMessage from "./Failed/FullScreenFailureMessage";
+import MultiStepForm from "../../../components/View More/NewForm";
 
 
 const Placement = () => {
@@ -370,126 +371,8 @@ useEffect(()=>{
 
 
       {changeOfPlacementRequest && (
-        <div className="newRequestComponent">
-          <div className="newRequestHeader">
-            <div className="introductionLetter"> Change of Placement Request</div>
-            <button className="closeButton" onClick={toggleNewPlacementReq}>
-              <img src={CloseIcon} alt="Close" />
-            </button>
-            <div className="requestContent">
-              <Formik
-                initialValues={{
-                  // letter_type: '',
-                  letter: null,
-                  initial_placement:'',
-                  request_message:" ",
-                  company_name: '',
-                  company_address: {
-                    building_number: "",
-                    building_name: "",
-                    street: "",
-                    area: "",
-                    city: "",
-                    state_or_province: "",
-                    country: "",
-                    postal_code: "",
-                  },
-                  company_contact_name: '',
-                  company_contact_email: '',
-                  company_contact_phone: '',
-                }}
-                validationSchema={changeOfPlacementSchema} // Ensure this is correct
-                onSubmit={handleChangeOfPlacementRequest}  // Correctly pass the onSubmit function
-              >
-                {({ isSubmitting, setFieldValue }) => (
-                  <Form encType="multipart/form-data">
-                    <div className="companyAddressedTo warp_contents">
-                      <div className="formInput">
-                        <label htmlFor="company_name">Company's Name<p>*</p> </label>
-                        <Field type="text" name="company_name" placeholder="Enter the name of the company " />
-                        <ErrorMessage className="error" name="company_name" component="div" />
-                      </div>
-                      <div className="formInput">
-                        <label htmlFor="company_contact_name">Signatory Positon <p>*</p></label>
-                        <Field type="text" name="company_contact_name" placeholder="e.g Engr O.A Opadare" />
-                        <ErrorMessage className="error" name="company_contact_name" component="div" />
-                      </div>
 
-                      <div className="formInput">
-                        <label htmlFor="company_contact_email">Company Email </label>
-                        <Field type="text" name="company_contact_email" placeholder="Enter the company’s email" />
-                        <ErrorMessage className="error" name="company_contact_email" component="div" />
-                      </div>
-
-                      <div className="formInput">
-                        <label htmlFor="company_contact_phone">Signatory Phone Number</label>
-                        <Field type="tel" name="company_contact_phone" placeholder="e.g 08066641912" />
-                        <ErrorMessage className="error" name="company_contact_phone" component="div" />
-                      </div>
-
-
-                      <div className="formInput move-left">
-            <label htmlFor="letter">Letter <p>*</p></label>
-            <input
-              id="letter"
-              name="letter"
-              type="file"
-              onChange={(event) => {
-                setFieldValue("letter", event.currentTarget.files[0]);
-                // setFile(event.currentTarget.files[0]);
-              }}
-            />
-            <ErrorMessage className="error" name="letter" component="div" />
-          </div>
-                    </div>
- <div className="companyDetails">
-                      <div className="company">Company's Address<p>*</p></div>
-                      <div className="formInput buildNo">
-                        <label htmlFor="company_address.building_number"></label>
-                        <Field type="text" name="company_address.building_number" placeholder="Building No : No 24" className="buildNo" />
-                        <ErrorMessage className="error" name="company_address.building_number" component="div" />
-                      </div>
-                      <div className="formInput">
-                        <label htmlFor="company_address.street"></label>
-                        <Field type="text" name="company_address.street" placeholder="Street, e.g UI Road" />
-                        <ErrorMessage className="error" name="company_address.street" component="div" />
-                      </div>
-                      <div className="formInput">
-                        <label htmlFor="company_address.area"></label>
-                        <Field type="text" name="company_address.area" placeholder="Area, e.g. Ojoo" />
-                        <ErrorMessage className="error" name="company_address.area" component="div" />
-                      </div>
-                      <div className="stateofCompany">
-                        <div className="formInput">
-                          <label htmlFor="company_address.city"></label>
-                          <Field type="text" name="company_address.city" placeholder="City, e.g Ibadan *" />
-                          <ErrorMessage className="error" name="company_address.city" component="div" />
-                        </div>
-                        <div className="formInput">
-                          <label htmlFor="company_address.state_or_province"></label>
-                          <StatesComboBox
-              name="company_address.state_or_province"
-              options={statesOfNigeria}
-              placeholder="E.g. Oyo  "
-              className="combo"
-              
-            />
-                          <ErrorMessage className="error" name="company_address.state_or_province" component="div" />
-                        </div>
-                      </div>
-                    </div>
-
-
-
-                    <button type="submit" className="submitting">
-                      {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
-                    </button>
-                  </Form>
-                )}
-              </Formik>
-            </div>
-          </div>
-        </div>
+<MultiStepForm toggleNewPlacementReq={toggleNewPlacementReq}/>
       )}
 
 

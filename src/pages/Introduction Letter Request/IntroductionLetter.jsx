@@ -88,7 +88,7 @@ const IntroductionLetter = () => {
       street: Yup.string().required("Street is required"),
       area: Yup.string(),
       city: Yup.string().required("City is required"),
-      state_or_province: Yup.string().required("State or province is required"),
+      state_or_province_id: Yup.string().required("State or province is required"),
     }),
     company_name: Yup.string().required("Company name is required"),
     address_to: Yup.string().required("Addressee is required"),
@@ -136,14 +136,6 @@ useEffect(()=>{
   
 
 
-  // const statesOfNigeria = [
-  //   "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", 
-  //   "Benue", "Borno", "Cross River", "Delta", "Ebonyi", "Edo", 
-  //   "Ekiti", "Enugu", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", 
-  //   "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", 
-  //   "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", 
-  //   "Sokoto", "Taraba", "Yobe", "Zamfara", "Federal Capital Territory (FCT)"
-  // ];
   
 
   return (
@@ -174,7 +166,7 @@ useEffect(()=>{
                     street: "",
                     area: "",
                     city: "",
-                    state_or_province: "",
+                    state_or_province_id: "",
                     country: "",
                     postal_code: "",
                   },
@@ -228,15 +220,15 @@ useEffect(()=>{
                           <ErrorMessage className="error" name="company_address.city" component="div" />
                         </div>
                         <div className="formInput">
-                          <label htmlFor="company_address.state_or_province"></label>
+                          <label htmlFor="company_address.state_or_province_id"></label>
                           <StatesComboBox
-              name="company_address.state_or_province"
+              name="company_address.state_or_province_id"
               options={statesOfNigeria}
-              placeholder="E.g. Oyo  "
+              placeholder="State, e.g. Oyo  "
               className="combo"
               
             />
-                          <ErrorMessage className="error" name="company_address.state_or_province" component="div" />
+                          <ErrorMessage className="error" name="company_address.state_or_province_id" component="div" />
                         </div>
                       </div>
                     </div>
