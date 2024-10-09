@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import { RingLoader } from 'react-spinners';
-import MoreDetails from '../../../components/View More/MoreDetails';
+import MoreDetails from '../../../components/View More/MoreDetailsIntroductionLetter';
 import { Search } from 'lucide-react';
 import Filter from "/images/Filter.png"
 
@@ -174,7 +174,7 @@ const IntroductionLetterTable = () => {
                   <tr key={index}>
                     <td>{request.company_name}</td>
                     <td>{request.address_to}</td>
-                    <td>{request.company_address.state_or_province_id}</td>
+                    <td>{request.company_address.state_or_province.name}</td>
                     <td>
                       <div className={statusClasses}>
                         {request.approval_status}
