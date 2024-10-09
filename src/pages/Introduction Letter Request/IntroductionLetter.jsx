@@ -11,7 +11,7 @@ import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
 import IntroductionLetterTable from "./IntroductionLetterTable";
 import FormikComboboxInput from "./ComboBox";
-import StatesComboBox from "./ComboBoxStates";
+
 
 const IntroductionLetter = () => {
   const [showNewRequest, setShowNewRequest] = useState(false);
@@ -224,7 +224,7 @@ useEffect(()=>{
                         <div className="formInput">
   <label htmlFor="company_address.state_or_province_id"></label>
 
-  <Field as="select" name="company_address.state_or_province_id">
+  <Field as="select" name="company_address.state_or_province_id" className="selector">
   <option value="" label="Select a state or province" /> {/* Optional default option */}
     {statesOfNigeria.map((item) => (
       <option key={item.id} value={item.id}>
