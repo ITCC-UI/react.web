@@ -11,7 +11,7 @@ import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
 import IntroductionLetterTable from "./IntroductionLetterTable";
 import FormikComboboxInput from "./ComboBox";
-import StatesComboBox from "./ComboBoxStates";
+
 
 const IntroductionLetter = () => {
   const [showNewRequest, setShowNewRequest] = useState(false);
@@ -73,6 +73,7 @@ const IntroductionLetter = () => {
       }, 500);
     } catch (error) {
       setSubmissionStatus("failure");
+      console.error("error type", error)
       setTimeout(() => {
         setSubmissionStatus("");
       }, 500);
@@ -88,7 +89,8 @@ const IntroductionLetter = () => {
       street: Yup.string().required("Street is required"),
       area: Yup.string(),
       city: Yup.string().required("City is required"),
-      state_or_province_id: Yup.string().required("State or province is required"),
+      state_or_province_id: Yup.string()
+      .required("State or province is required"),
     }),
     company_name: Yup.string().required("Company name is required"),
     address_to: Yup.string().required("Addressee is required"),
@@ -110,19 +112,19 @@ const fetchAddressee =()=>{
   })
 }
 
-const fetchStates =()=>{
-  axiosInstance.get(`/states`)
-  .then(states =>{
-    const newStates=states.data.map(state=>state.name)
-    // console.log(newStates)
-    setNewState(newStates)
-    // stateIsLoading(false)
-  })
 
-  .catch(error=>{
-    console.log(error)
-    
-  })
+const fetchStates = async ()=>{
+  try{
+    const states= await axiosInstance.get("/states")
+    // const result= await states.json();
+    console.log(states.data)
+    setNewState(states.data)
+
+  }
+
+  catch{
+    console.error("Hits error", error)
+  }
 }
 
 
@@ -220,16 +222,21 @@ useEffect(()=>{
                           <ErrorMessage className="error" name="company_address.city" component="div" />
                         </div>
                         <div className="formInput">
-                          <label htmlFor="company_address.state_or_province_id"></label>
-                          <StatesComboBox
-              name="company_address.state_or_province_id"
-              options={statesOfNigeria}
-              placeholder="State, e.g. Oyo  "
-              className="combo"
-              
-            />
-                          <ErrorMessage className="error" name="company_address.state_or_province_id" component="div" />
-                        </div>
+  <label htmlFor="company_address.state_or_province_id"></label>
+
+  <Field as="select" name="company_address.state_or_province_id" className="selector">
+  <option value="" label="Select a state or province" /> {/* Optional default option */}
+    {statesOfNigeria.map((item) => (
+      <option key={item.id} value={item.id}>
+        {item.name}
+      </option>
+    ))}
+  </Field>
+  
+  <ErrorMessage className="error" name="company_address.state_or_province_id" component="div" />
+</div>
+
+
                       </div>
                     </div>
                     <button type="submit" className="submitting">
@@ -276,11 +283,7 @@ useEffect(()=>{
           <IntroductionLetterTable letterRequests={letterRequests} />
         )}
         
-        {/* {programmeId && letterRequests.length === 5 && (
-        <div className="register_above p-2 bg-yellow-100 text-yellow-800 rounded">
-         Request limit exceeded
-        </div>
-      )} */}
+      
         {submissionStatus === "success" && (
           <div className="submissionStatus success">
             Form submitted successfully! Reload the page.

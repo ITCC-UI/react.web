@@ -110,7 +110,7 @@ text-transform: uppercase;
 
 @media (max-width:430px) {
   .navButtons{
-    /* border: 1px solid red; */
+    scrollbar-width: none;
     width: 90%;
     overflow-x: scroll;
     overflow-wrap: break-word;

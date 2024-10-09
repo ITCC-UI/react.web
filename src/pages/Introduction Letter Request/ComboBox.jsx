@@ -56,9 +56,7 @@ const FormikComboboxInput = ({ options, ...props }) => {
           )}
         </ul>
       )}
-      {meta.touched && meta.error && (
-        <div className="error text-red-500 text-sm mt-1">{meta.error}</div>
-      )}
+   
     </div></>
   );
 };
