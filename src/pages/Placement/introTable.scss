@@ -56,16 +56,14 @@ opacity: .8;
         width: 85px;
         // font-size: 10px;
     }
-
-    // section table tbody tr td:nth-child(5){
-    //     // border: 1px solid red;
-    //     text-wrap: wrap;
-    //     width: fit-content;
-    // }
     .down{
         button{
             padding: 8px;
         }
+    }
+
+    .search-bar{
+        position: fixed;
     }
 }
 
