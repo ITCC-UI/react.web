@@ -174,7 +174,7 @@ const IntroductionLetterTable = () => {
                   <tr key={index}>
                     <td>{request.company_name}</td>
                     <td>{request.address_to}</td>
-                    <td>{request.company_address.state_or_province}</td>
+                    <td>{request.company_address.state_or_province_id}</td>
                     <td>
                       <div className={statusClasses}>
                         {request.approval_status}
