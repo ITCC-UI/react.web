@@ -24,6 +24,7 @@ const Placement = () => {
   const [file, setFile] = useState(null);
   const [acceptanceSubmissionStatus, setAcceptanceSubmissionStatus] = useState("");
   const [acceptanceSuccessMessage, setAcceptanceSuccessMessage] = useState("");
+  const [acceptanceFailureMessage, setAcceptanceFailureMessage] = useState("")
   const [showAcceptanceSuccessful, setShowAcceptanceSuccessful] = useState(false);
   const [showAcceptanceFailure, setShowAcceptanceFailure] = useState(false);
 
@@ -111,6 +112,8 @@ setClose(!closeModal)
       }, 2000);
     } catch (error) {
       console.error("Error submitting acceptance form", error);
+      // setAcceptanceFailureMessage(error.response.data)
+      console.log("The error is", error)
       setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(true);
@@ -435,7 +438,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
               name="addressee"
               options={addressOptions}
               placeholder="Title/Position to address letter to, e.g The Managing Director"
-              // className="combo"
+              
             />
                         <ErrorMessage className="error" name="addressee" component="div" />
                       </div>
@@ -550,7 +553,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
 
 <FullScreenFailureMessage
         isOpen={showAcceptanceFailure}
-        message="Failed to submit acceptance form. Please try again."
+        message={acceptanceFailureMessage}
         onClose={() => setShowAcceptanceFailure(false)}
       />
 
