@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useField } from 'formik';
 
-const StatesComboBox = ({ options, ...props }) => {
+const AcceptanceLetterAdressee = ({ options, ...props }) => {
   const [field, meta, helpers] = useField(props);
   const [inputValue, setInputValue] = useState(field.value);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -19,9 +19,9 @@ const StatesComboBox = ({ options, ...props }) => {
     setShowDropdown(false);
   };
 
-  const filteredOptions = options.filter(option =>
-    option.toLowerCase().includes(inputValue.toLowerCase())
-  );
+  // const filteredOptions = options.filter(option =>
+  //   option.toLowerCase().includes(inputValue.toLowerCase())
+  // );
 
   return (
     <>
@@ -37,7 +37,7 @@ const StatesComboBox = ({ options, ...props }) => {
           setTimeout(() => setShowDropdown(false), 200);
         }}
         autoComplete='off'
-        className="combo"
+        className="combo state"
       />
       {showDropdown && (
         <ul className="absolute w-full mt-1 max-h-60 overflow-auto bg-white border rounded shadow-lg z-10 lists states">
@@ -61,4 +61,4 @@ const StatesComboBox = ({ options, ...props }) => {
   );
 };
 
-export default StatesComboBox;
+export default AcceptanceLetterAdressee;

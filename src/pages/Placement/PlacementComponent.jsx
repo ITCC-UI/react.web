@@ -10,7 +10,6 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
   const [placement, setLetterRequests] = useState([]);
   const [placementLetter, setPlacementRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
   const [noProgrammeId, setNoProgrammeId] = useState(false); // State for no Programme ID
 
   const fetchProgrammeId = async () => {
@@ -91,16 +90,7 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
       ) : (
         <PlacementTable letterRequests={placement} />
       )}
-      {submissionStatus === "success" && (
-        <div className="submissionStatus success">
-          Form submitted successfully! Reload the page.
-        </div>
-      )}
-      {submissionStatus === "failure" && (
-        <div className="submissionStatus failure">
-          Error submitting form. Please try again.
-        </div>
-      )}
+   
     </>
   );
 };

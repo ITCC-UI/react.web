@@ -22,7 +22,7 @@ const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest
           setProgrammeId(id);
           console.log("This Programme ID:", id);
           fetchIntroductionLetterRequests(id);
-          fetchPlacementRequests(id);
+
         } else {
           setNoProgrammeId(true); // Set state when no Programme ID is found
           setIsLoading(false);
@@ -36,7 +36,7 @@ const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest
     const fetchIntroductionLetterRequests = async (id) => {
       try {
         // console.log("Fetching introduction letters for programme ID:", id);
-        const response = await axiosInstance.get(`trainings/acceptance-letters/registrations/${id}/`);
+        const response = await axiosInstance.get(`trainings/registrations/${id}/acceptance-letters`);
         setLetterRequests(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -45,18 +45,18 @@ const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest
       }
     };
   
-    const fetchPlacementRequests = async (id) => {
-      try {
-        // console.log("Fetching Placement letters for programme ID:", id);
-        const response = await axiosInstance.get(`/trainings/placements/registrations/${id}/`);
-        setPlacementRequests(response.data);
-        console.log(response.data)
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching placment letter requests:", error);
-        setIsLoading(false);
-      }
-    };
+    // const fetchPlacementRequests = async (id) => {
+    //   try {
+    //     // console.log("Fetching Placement letters for programme ID:", id);
+    //     const response = await axiosInstance.get(`/trainings/placements/registrations/${id}/`);
+    //     setPlacementRequests(response.data);
+    //     console.log(response.data)
+    //     setIsLoading(false);
+    //   } catch (error) {
+    //     console.error("Error fetching placment letter requests:", error);
+    //     setIsLoading(false);
+    //   }
+    // };
     useEffect(() => {
       fetchProgrammeId();
     }, []);

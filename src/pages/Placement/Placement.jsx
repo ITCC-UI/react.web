@@ -13,9 +13,11 @@ import ActivePlacement from "./ActivePlacement";
 import PlacementAcceptance from "./PlacementAcceptance";
 import PlacementChange from "./PlacementChange";
 import FullScreenSuccessMessage from "./Successful/Successful";
-import StatesComboBox from "./ComboBoxStates";
+import StatesComboBox from "./AcceptanceAddressee";
 import FullScreenFailureMessage from "./Failed/FullScreenFailureMessage";
 import MultiStepForm from "../../../components/View More/NewForm";
+import AcceptanceLetterAdressee from "./AcceptanceAddressee";
+// import StatesComboBox from "./ComboBoxStates";
 
 
 const Placement = () => {
@@ -44,13 +46,24 @@ const Placement = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [addressOptions, setAdressOptions]= useState([])
   const [statesOfNigeria, setNewState] =useState([])
+  const [closeModal, setClose]=useState(false)
+
+
+  const [isFormOpen, setIsFormOpen] = useState(true);
+// Form toggle
 
   const toggleNewRequest = () => {
-    setShowNewRequest(!showNewRequest);
+    setShowNewRequest((prev)=>!prev);
   };
 
-  const toggleNewPlacementReq=()=>{
-    setNewChangeRequest (!changeOfPlacementRequest)
+
+  const toggleNewPlacementReq = () => {
+    setNewChangeRequest((prev) => !prev);
+    console.log("Supposed to work");
+  };
+
+  const toggleClosePlacement=()=>{
+setClose(!closeModal)
   }
 
   const toggleAcceptanceRequest = () => {
@@ -83,7 +96,7 @@ const Placement = () => {
   const handleAcceptanceRequest = async (values, { setSubmitting }) => {
     try {
   
-      const response = await axiosInstance.post(`/trainings/acceptance-letters/registrations/${id}/`, values, {
+      const response = await axiosInstance.post(`/trainings/registrations/${id}/acceptance-letters`, values, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -114,7 +127,7 @@ const fetchAddressee =()=>{
   axiosInstance.get(`/option-types/${type}/options`)
   .then(titles =>{
     const addressee=titles.data.map(title=>title.name)
-    // console.log(addressee)
+    console.log("Addressee", addressee)
     setAdressOptions(addressee)
     // titleIsLoading(false)
   })
@@ -125,19 +138,18 @@ const fetchAddressee =()=>{
   })
 }
 
-const fetchStates =()=>{
-  axiosInstance.get(`/states`)
-  .then(states =>{
-    const newStates=states.data.map(state=>state.name)
-    // console.log(newStates)
-    setNewState(newStates)
-    // stateIsLoading(false)
-  })
+const fetchStates = async ()=>{
+  try{
+    const states= await axiosInstance.get("/states")
+    // const result= await states.json();
+    console.log(states.data)
+    setNewState(states.data)
 
-  .catch(error=>{
-    console.log(error)
-    
-  })
+  }
+
+  catch{
+    console.error("Hits error", error)
+  }
 }
 
 
@@ -283,16 +295,17 @@ useEffect(()=>{
       .required('Letter type is required'),
     company_name: Yup.string()
       .required('Company name is required'),
-      company_address_building_number: Yup.string().required("Company address is required"),
+      company_address_building_number: Yup.string(),
       company_address_building_name: Yup.string(),
-      company_address_street: Yup.string(),
+      company_address_street: Yup.string().required("Street is required"),
       company_address_area: Yup.string(),
-      company_address_city: Yup.string(),
+      company_address_city: Yup.string().required("City is required"),
       company_address_state_or_province: Yup.string().required("Company's State is required"),
+      
 
 
-    company_contact_name: Yup.string()
-      .required('Signatory Position is required'),
+    company_contact_name: Yup.string(),
+      addressee:Yup.string().required("Signatory Position is required"),
     company_contact_email: Yup.string()
       .email('Invalid email'),
       // .required('Company contact email is required'),
@@ -374,7 +387,7 @@ useEffect(()=>{
 
       {changeOfPlacementRequest && (
 
-<MultiStepForm toggleNewPlacementReq={toggleNewPlacementReq}/>
+isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
       )}
 
 
@@ -402,6 +415,7 @@ useEffect(()=>{
                   company_contact_name: '',
                   company_contact_email: '',
                   company_contact_phone: '',
+                  addressee: ''
                 }}
                 validationSchema={acceptanceLetterSchema} // Ensure this is correct
                 onSubmit={handleAcceptanceRequest}  // Correctly pass the onSubmit function
@@ -414,11 +428,23 @@ useEffect(()=>{
                         <Field type="text" name="company_name" placeholder="Enter the name of the company " />
                         <ErrorMessage className="error" name="company_name" component="div" />
                       </div>
+
                       <div className="formInput">
-                        <label htmlFor="company_contact_name">Signatory Position <p>*</p></label>
+                        <label htmlFor="addressee">Signatory Position <p>*</p></label>
+                        <AcceptanceLetterAdressee
+              name="addressee"
+              options={addressOptions}
+              placeholder="Title/Position to address letter to, e.g The Managing Director"
+              // className="combo"
+            />
+                        <ErrorMessage className="error" name="addressee" component="div" />
+                      </div>
+                      <div className="formInput">
+                        <label htmlFor="company_contact_name">Signatory Name </label>
                         <Field type="text" name="company_contact_name" placeholder="e.g Engr O.A Opadare" />
                         <ErrorMessage className="error" name="company_contact_name" component="div" />
                       </div>
+                    
 
                       <div className="formInput">
                         <label htmlFor="company_contact_email">Company Email</label>
@@ -442,7 +468,7 @@ useEffect(()=>{
                         <ErrorMessage className="error" name="letter_type" component="div" />
                       </div>
 
-                      <div className="formInput">
+                      <div className="formInput letter">
             <label htmlFor="letter">Letter <p>*</p></label>
             <input
               id="letter"
@@ -454,10 +480,10 @@ useEffect(()=>{
                 // setFile(event.currentTarget.files[0]);
               }}
             />
-            <ErrorMessage className="error" name="letter" component="div" />
+            <ErrorMessage className="error side" name="letter" component="div" />
           </div>
                     </div>
- <div className="companyDetails">
+ <div className="companyDetails acceptance">
                       <div className="company">Company Address</div>
                       <div className="formInput buildNo">
                         <label htmlFor="company_address_building_number"></label>
@@ -481,16 +507,19 @@ useEffect(()=>{
                           <ErrorMessage className="error" name="company_address_city" component="div" />
                         </div>
                         <div className="formInput">
-                          <label htmlFor="company_address_state_or_province"></label>
-                          <StatesComboBox
-              name="company_address_state_or_province"
-              options={statesOfNigeria}
-              placeholder="E.g Oyo"
-              className="combo"
-              
-            />
-                          <ErrorMessage className="error" name="company_address_state_or_province" component="div" />
-                        </div>
+  <label htmlFor="company_address_state_or_province"></label>
+
+  <Field as="select" name="company_address_state_or_province" className="selector">
+  <option value="" label="Select a state or province" /> {/* Optional default option */}
+    {statesOfNigeria.map((item) => (
+      <option key={item.id} value={item.id}>
+        {item.name}
+      </option>
+    ))}
+  </Field>
+  
+  <ErrorMessage className="error" name="company_address_state_or_province" component="div" />
+</div>
                       </div>
                     </div>
 
@@ -575,7 +604,6 @@ useEffect(()=>{
     </div>
   );
 };
-
 
 
 export default Placement;

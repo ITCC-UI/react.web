@@ -11,7 +11,7 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
     const [id, setProgrammeId] = useState(null);
     const [placement, setLetterRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
+
 
   
     const fetchProgrammeId = async () => {
@@ -84,16 +84,7 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
               <img src={Empty} alt="Empty" />
             </div>
           ) }
-          {submissionStatus === "success" && (
-            <div className="submissionStatus success">
-              Form submitted successfully! Reload the page.
-            </div>
-          )}
-          {submissionStatus === "failure" && (
-            <div className="submissionStatus failure">
-              Error submitting form. Please try again.
-            </div>
-          )}
+      
   </>)
   }
 
