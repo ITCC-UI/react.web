@@ -32,16 +32,14 @@ const [filter, setFilter] =useState('all')
 
       // Use the ID of the first registration
       const id = registrations[0].id;
-      //console.log("Using Registration ID:", id);
-
-      const requestsResponse = await axiosInstance.get(`/trainings/placements/registrations/${id}`);
-      // const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests`)
+      console.log("Using Registration ID:", id);
+      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`)
       const requests = requestsResponse.data;
       console.log("Fetched requests:", requests);
       
       const processedRequests = requests.map(request => ({
         ...request,
-        statusClass: getStatusClass(request.approval_status),
+        statusClass: getStatusClass(request.status),
       }));
 
       setLetterRequests(processedRequests);
@@ -52,11 +50,11 @@ const [filter, setFilter] =useState('all')
 
   const getStatusClass = (status) => {
     switch(status) {
-      case 'ACTIVE':
+      case 'STARTED':
         return 'approved';
-      case 'DISCONTINED':
+      case 'NOT_STARTED':
         return 'rejected'
-        
+      
         default:
         return 'rejected';
     }
@@ -160,16 +158,17 @@ const [filter, setFilter] =useState('all')
                 });
                 return (
                   <tr key={index}>
-                    <td className='placement_content'>{request.company_name}</td>
-                    <td className='placement_content'>{request.company_supervisor}</td>
-                    <td className='placement_content'>{formatDate(request.date_created)}</td>
-                    <td className='placement_content'>{formatDate(request.date_created)}</td>
+                    <td className='placement_content'>{request.attached_company_branch.company.name}</td>
+                    {/* <td className='placement_content'>{request.company_supervisor}</td> */}
+                    <td className='placement_content'>----------</td>
+                    <td className='placement_content'>{request.start_date===null?"Not yet started": formatDate(request.start_date)}</td>
+                    <td className='placement_content'>{request.end_date===null?"Not yet started": formatDate(request.start_date)}</td>
                     
                    
         
                  <td className='placement_content'>
                       <div className={statusClasses}>
-                        {request.approval_status}
+                        {request.status}
                       </div>
                     </td>
                     <td className='down placement_content'>

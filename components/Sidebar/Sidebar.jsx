@@ -34,7 +34,7 @@ const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, 
                   Dashboard
                 </div>
               </Link>
-              <Link to="/placement" className="null">
+              <Link to="/placement">
                 <div className={placementClass}>
                                     <img src={Document} alt="docs" />
                   Placement

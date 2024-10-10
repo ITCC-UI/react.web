@@ -35,7 +35,7 @@ const PlacementAcceptanceTable = () => {
       const id = registrations[0].id;
       //console.log("Using Registration ID:", id);
 
-      const requestsResponse = await axiosInstance.get(`/trainings/acceptance-letters/registrations/${id}`);
+      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/acceptance-letters`);
       const requests = requestsResponse.data;
       console.log("Fetched requests:", requests);
 
@@ -189,7 +189,7 @@ const PlacementAcceptanceTable = () => {
     return (
       <tr key={`${index}`}> {/* Use index or a stable unique identifier */}
         <td>{request.company_name}</td>
-        <td>{request.company_contact_name}</td>
+        <td>{request.company_contact_name===""?"--------":request.company_contact_name}</td>
         <td>
           <div className={letterClasses}>
             {request.letter_type}

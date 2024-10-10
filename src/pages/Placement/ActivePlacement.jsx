@@ -9,12 +9,9 @@ import axiosInstance from "../../../API Instances/AxiosIntances";
 const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
     
     const [id, setProgrammeId] = useState(null);
-    const [Placement, setLetterRequests] = useState([]);
-    const [PlacementLetter, setPlacementRequests]= useState([])
+    const [placement, setLetterRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
-    const [addressOptions, setAdressOptions]= useState([])
-  const [statesOfNigeria, setNewState] =useState([])
+
 
   
     const fetchProgrammeId = async () => {
@@ -22,13 +19,9 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
         const response = await axiosInstance.get("trainings/registrations/");
         const id = response.data[0].id;
         setProgrammeId(id);
-        console.log(Placement)
-        // console.log("This Programme ID:", id);
-        // fetchIntroductionLetterRequests(id);
-        // fetchPlacementRequests(id);
         setIsLoading(false);
       } catch (error) {
-        // console.error("Error fetching programme ID:", error);
+        
         setIsLoading(false);
 
       }
@@ -39,7 +32,30 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
     }, []);
   
    
+    const fetchPlacementLetter = async () => {
+      try {
+        const registrationResponse = await axiosInstance.get("trainings/registrations/");
+        const registrations = registrationResponse.data;
+        console.log("Fetched registrations:", registrations);
   
+        // Use the ID of the first registration
+        const id = registrations[0].id;
+        console.log("Using Registration ID:", id);
+        const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`)
+        const requests = requestsResponse.data;
+        console.log("Fetched requests:", requests);
+        setLetterRequests(requests)
+   
+  
+        
+      } catch (error) {
+        console.error("Error fetching introduction letter requests:", error);
+      }
+    };
+
+    useEffect(() => {
+      fetchPlacementLetter();
+    }, []);
     
     return(
     <>
@@ -59,23 +75,16 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
               <PulseLoader size={15} color={"#123abc"} />
             </div>
             
-          ) : Placement.length === 0 ? (
-            <div className="image">
+          ) : placement.length !== 0 ? (
+
+            
+              <PlacementTable />)
+          :
+           ( <div className="image">
               <img src={Empty} alt="Empty" />
             </div>
-          ) : (
-            <PlacementTable letterRequests={Placement} />
-          )}
-          {submissionStatus === "success" && (
-            <div className="submissionStatus success">
-              Form submitted successfully! Reload the page.
-            </div>
-          )}
-          {submissionStatus === "failure" && (
-            <div className="submissionStatus failure">
-              Error submitting form. Please try again.
-            </div>
-          )}
+          ) }
+      
   </>)
   }
 

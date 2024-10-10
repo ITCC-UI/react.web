@@ -4,12 +4,12 @@ import Empty from "/images/empty_dashboard.png";
 import PlacementTable from "./PlacementReqTable";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 
+
 const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
   const [programmeId, setProgrammeId] = useState(null);
   const [placement, setLetterRequests] = useState([]);
   const [placementLetter, setPlacementRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
   const [noProgrammeId, setNoProgrammeId] = useState(false); // State for no Programme ID
 
   const fetchProgrammeId = async () => {
@@ -33,9 +33,9 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
 
   const fetchIntroductionLetterRequests = async (id) => {
     try {
-      const response = await axiosInstance.get(`trainings/placement-requests/registrations/${id}/`);
+      const response = await axiosInstance.get(`trainings/registrations/${id}/placement-requests-view/`);
       setLetterRequests(response.data);
-      console.log("The Id is", id)
+      console.log("The Id is", placement)
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching introduction letter requests:", error);
@@ -45,7 +45,7 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
 
   const fetchPlacementRequests = async (id) => {
     try {
-      const response = await axiosInstance.get(`/trainings/placements/registrations/${id}/`);
+      const response = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
       setPlacementRequests(response.data);
       console.log(response.data);
       setIsLoading(false);
@@ -90,16 +90,7 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
       ) : (
         <PlacementTable letterRequests={placement} />
       )}
-      {submissionStatus === "success" && (
-        <div className="submissionStatus success">
-          Form submitted successfully! Reload the page.
-        </div>
-      )}
-      {submissionStatus === "failure" && (
-        <div className="submissionStatus failure">
-          Error submitting form. Please try again.
-        </div>
-      )}
+   
     </>
   );
 };

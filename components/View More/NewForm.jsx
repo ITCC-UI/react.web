@@ -3,13 +3,13 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import axiosInstance from "../../API Instances/AxiosIntances";
 import { PulseLoader } from "react-spinners";
-import StatesComboBox from "../../src/pages/Placement/ComboBoxStates";
+import StatesComboBox from "../../src/pages/Placement/AcceptanceAddressee";
 import CloseIcon from "/images/closeButton.png"
 
-const MultiStepForm = (toggleNewPlacementReq) => {
+const MultiStepForm = ({toggleNewRequest}) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [statesOfNigeria, setNewState] =useState([])
-    // const [changeOfPlacementRequest, setNewChangeRequest] = useState(false)
+    const [changeOfPlacementRequest, setNewChangeRequest] = useState(true)
 
     const submitPlacementChange = async (formData) => {
         try {
@@ -20,9 +20,7 @@ const MultiStepForm = (toggleNewPlacementReq) => {
         }
     };
 
-    // const toggleNewPlacementReq=()=>{
-    //     setNewChangeRequest (!changeOfPlacementRequest)
-    //   }
+
 
     const handleNextStep = (values, final = false) => {
         if (final) {
@@ -55,9 +53,11 @@ const MultiStepForm = (toggleNewPlacementReq) => {
       useEffect(()=>{
         fetchStates()
       }, [])
+
+
     const steps = [
-        <StepOne key="step1" next={handleNextStep} toggleNewPlacementReq={toggleNewPlacementReq} />,
-        <StepTwo key="step2" next={handleNextStep} prev={handlePrevStep} statesOfNigeria={statesOfNigeria}  toggleNewPlacementReq={toggleNewPlacementReq} />
+        <StepOne key="step1" next={handleNextStep} toggleNewPlacementReq={toggleNewRequest} />,
+        <StepTwo key="step2" next={handleNextStep} prev={handlePrevStep} statesOfNigeria={statesOfNigeria}  toggleNewPlacementReq={toggleNewRequest} />
     ];
 
     return <div className="newRequestComponent">
