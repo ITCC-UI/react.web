@@ -74,13 +74,19 @@ button:focus-visible {
 .navButtons{
   display: flex;
   gap: 50px;
+  margin: 20px auto;
   margin-bottom: 15px;
+  width: 95%;
+  text-wrap: nowrap;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  justify-content: space-between;
+
 
 }
 
 .shift_button {
   padding: 10px 20px;
-  
   border: none;
   cursor: pointer;
   font-size: 16px;

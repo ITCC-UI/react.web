@@ -4,6 +4,7 @@ import Empty from "/images/empty_dashboard.png";
 import PlacementTable from "./PlacementReqTable";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 
+
 const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
   const [programmeId, setProgrammeId] = useState(null);
   const [placement, setLetterRequests] = useState([]);
@@ -33,9 +34,9 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
 
   const fetchIntroductionLetterRequests = async (id) => {
     try {
-      const response = await axiosInstance.get(`trainings/placement-requests/registrations/${id}/`);
+      const response = await axiosInstance.get(`trainings/registrations/${id}/placement-requests-view/`);
       setLetterRequests(response.data);
-      console.log("The Id is", id)
+      console.log("The Id is", placement)
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching introduction letter requests:", error);
@@ -45,7 +46,7 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
 
   const fetchPlacementRequests = async (id) => {
     try {
-      const response = await axiosInstance.get(`/trainings/placements/registrations/${id}/`);
+      const response = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
       setPlacementRequests(response.data);
       console.log(response.data);
       setIsLoading(false);

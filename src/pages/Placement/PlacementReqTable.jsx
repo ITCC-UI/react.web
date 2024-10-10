@@ -26,7 +26,7 @@ const PlacementRequest = () => {
 
       const id = registrations[0].id;
 
-      const requestsResponse = await axiosInstance.get(`/trainings/placement-requests/registrations/${id}/`);
+      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placement-requests-view`);
       const requests = requestsResponse.data;
       
       const processedRequests = requests.map(request => ({
@@ -165,7 +165,7 @@ const PlacementRequest = () => {
                         {request.approval_status}
                       </div>
                     </td>
-                    <td>{(request.company_name !==null? "-----": request.company_name )}</td>
+                    <td>{(request.approved_company_name ===null? "-----": request.approved_company_name )}</td>
                     <td className='down'>
                       <button onClick={() => handleViewClick(request)}>View More</button>
                     </td>

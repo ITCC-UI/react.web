@@ -29,9 +29,9 @@ const MoreDetails = ({ request, onClose }) => {
 
   const getStatusClass = (status) => {
     switch(status) {
-      case 'APPROVED':
+      case 'STARTED':
         return 'status approved';
-      case 'REJECTED':
+      case 'NOT_STARTED':
         return 'status rejected';
       case 'SUBMITTED':
       default:
@@ -49,38 +49,32 @@ const MoreDetails = ({ request, onClose }) => {
           <h2 className='approval'>More Details</h2>
           <div className="compProfile">
             <div className='details'>Company Name</div>
-            <div className="cDetails">{(request.company_name !==null? "Placement not yet assigned": request.company_name )}</div>
-          </div>
-
-
-
-          <div className='compProfile'>
-            <div className="details">Date of Request</div>
-            <div className="cDetails">{formatApprovalDate(request.date_created)}</div>
+            <div className="cDetails">{(request.attached_company_branch.company.name)}</div>
           </div>
 
 
           <div className='compProfile'>
-            <div className="details">Date of Approval</div>
-            <div className="cDetails">{request.date_of_approval===null? "Pending Approval ": formatApprovalDate(request.date_of_approval)}</div>
+            <div className="details">Company Supervisor</div>
+            <div className="cDetails">{request.company_supervisor}</div>
           </div>
 
           <div className='compProfile'>
-            <div className="details">Approval Status</div>
-            <div className={getStatusClass(request.approval_status)}>{request.approval_status}</div>
+            <div className="details">Start Date</div>
+            <div className="cDetails">{request.start_date===null?"Not yet started": formatApprovalDate(request.date_created)}</div>
           </div>
 
-          <div className="compProfile">
-            <div className="details">Approver's comment</div>
-            <div className="cDetails">{getApprovalNote(request.approval_note)}</div>
+
+      
+          <div className='compProfile'>
+            <div className="details">End Date</div>
+            <div className="cDetails">{request.end_date===null?"Not yet started": formatApprovalDate(request.date_created)}</div>
           </div>
 
-          {request.date_of_approval && (
-            <div className="compProfile">
-              <div className="details">Approval Date</div>
-              <div className="cDetails">{formatApprovalDate(request.date_of_approval)}</div>
-            </div>
-          )}
+          <div className='compProfile'>
+            <div className="details">Status</div>
+            <div className={getStatusClass(request.status)}>{request.status}</div>
+          </div>
+
           
         </div>
       </div>

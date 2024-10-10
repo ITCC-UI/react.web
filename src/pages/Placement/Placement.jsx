@@ -29,6 +29,7 @@ const Placement = () => {
   const [placementSuccessMessage, setPlacementSuccessMessage] = useState("");
   const [showPlacementSuccessful, setShowPlacementSuccessful] = useState(false);
   const [showPlacementFailure, setShowPlacementFailure] = useState(false);
+  const [placementFailureMessage, setPlacementFailureMessage] =useState("")
 
   const [changeOfPlacement, setChangeofPlacement] = useState("");
   const [changeOfPlacementSuccessMessage, setPlacementChangeSuccessMessage] = useState("");
@@ -62,11 +63,9 @@ const Placement = () => {
       if (response.data.length > 0) {
         const id = response.data[0].id;
         setProgrammeId(id);
-        console.log("This Programme ID:", id);
-        // fetchIntroductionLetterRequests(id);
-        // fetchPlacementRequests(id);
+  
       } else {
-        // setNoProgrammeId(true); // Set state when no Programme ID is found
+        setNoProgrammeId(true); // Set state when no Programme ID is found
         setIsLoading(false);
       }
     } catch (error) {
@@ -156,7 +155,7 @@ useEffect(()=>{
 
   const handlePlacementRequestsSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await axiosInstance.post(`/trainings/placement-requests/registrations/${id}/`, values);
+      const response = await axiosInstance.post(`/trainings/registrations/${id}/placement-requests/`, values);
       setPlacementSubmissionStatus("success");
       setPlacementSuccessMessage("Your Placement Request has been submitted successfully!");
       setShowPlacementSuccessful(true);
@@ -166,7 +165,10 @@ useEffect(()=>{
       }, 5000);
     } catch (error) {
       console.error("Error submitting placement request form", error);
-      setShowAcceptanceFailure(true)
+      setShowPlacementFailure(true)
+      setPlacementFailureMessage(error.response.data.detail)
+      console.log("The error Array", error.response.data.detail)
+      // setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(false)
       }, 5000);
@@ -532,7 +534,7 @@ useEffect(()=>{
 
 <FullScreenFailureMessage
         isOpen={showPlacementFailure}
-        message="Failed to submit placement request. Please try again."
+        message={placementFailureMessage}
         onClose={() => setShowPlacementFailure(false)}
       />
 
