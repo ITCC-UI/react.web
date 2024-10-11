@@ -31,7 +31,8 @@ const PlacementChangeReq = () => {
       const id = registrations[0].id;
       //console.log("Using Registration ID:", id);
 
-      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests/`);
+      const requestsResponse = await axiosInstance.get(`trainings/registrations/change-of-placements-view/${id}/`);
+      // const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests`);
       const requests = requestsResponse.data;
       console.log("Fetched requests:", requests);
       
@@ -42,7 +43,7 @@ const PlacementChangeReq = () => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      console.error("Error fetching introduction letter requests:", error);
+      console.error("Error fetching Placement letter Changes:", error);
     }
   };
 

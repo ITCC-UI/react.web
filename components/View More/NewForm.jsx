@@ -1,30 +1,78 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import axiosInstance from "../../API Instances/AxiosIntances";
 import { PulseLoader } from "react-spinners";
 import StatesComboBox from "../../src/pages/Placement/AcceptanceAddressee";
-import CloseIcon from "/images/closeButton.png"
+import CloseIcon from "/images/closeButton.png";
 
-const MultiStepForm = ({toggleNewRequest}) => {
+const MultiStepForm = ({ toggleNewRequest }) => {
     const [currentStep, setCurrentStep] = useState(0);
-    const [statesOfNigeria, setNewState] =useState([])
-    const [changeOfPlacementRequest, setNewChangeRequest] = useState(true)
+    const [statesOfNigeria, setNewState] = useState([]);
+    const [formData, setFormData] = useState({});
+    const [id, setProgrammeId] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const submitPlacementChange = async (formData) => {
+    const fetchProgrammeId = async () => {
         try {
-            const response = await axiosInstance.post('/submit', formData);
-            console.log("Form submitted successfully:", response.data);
+            const response = await axiosInstance.get("trainings/registrations/");
+            if (response.data.length > 0) {
+                const id = response.data[0].id;
+                setProgrammeId(id);
+            }
         } catch (error) {
-            console.error("Error submitting form:", error.response ? error.response.data : error.message);
+            console.error("Error fetching programme ID:", error);
         }
     };
 
+    useEffect(() => {
+        fetchProgrammeId();
+    }, []);
 
+    const submitPlacementChange = async () => {
+        try {
+            
+            const formDataToSend = new FormData();
+
+            // Append all form fields to FormData
+            Object.keys(formData).forEach(key => {
+                if (key === 'company_address') {
+                    Object.keys(formData[key]).forEach(addressKey => {
+                        formDataToSend.append(`company_address.${addressKey}`, formData[key][addressKey]);
+                    });
+                } else if (key === 'letter') {
+                    formDataToSend.append('letter', formData[key]);
+                } else if (key === 'request_placement') {
+                    formDataToSend.append('request_placement', formData[key]); // Ensure it's appended
+                } else {
+                    formDataToSend.append(key, formData[key]);
+                }
+            });
+
+            // **Debugging Log**
+            console.log("Form Data to Send:");
+            for (let pair of formDataToSend.entries()) {
+                console.log(`${pair[0]}: ${pair[1]}`);
+            }
+
+            const response = await axiosInstance.post(`/trainings/registrations/placements/${id}/change-request/`, formDataToSend, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            console.log("Form submitted successfully:", response.data);
+            toggleNewRequest(); // Close the form after successful submission
+        } catch (error) {
+            console.error("Error submitting form:", error.response ? error.response.data : error.message);
+            // Optionally, handle error display to the user here
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     const handleNextStep = (values, final = false) => {
+        setFormData(prevData => ({ ...prevData, ...values }));
         if (final) {
-            submitPlacementChange(values);
+            setIsSubmitting(true);
+            submitPlacementChange();
             return;
         }
         setCurrentStep(prev => prev + 1);
@@ -34,78 +82,94 @@ const MultiStepForm = ({toggleNewRequest}) => {
         setCurrentStep(prev => prev - 1);
     };
 
-
-    const fetchStates =()=>{
+    const fetchStates = () => {
         axiosInstance.get(`/states`)
-        .then(states =>{
-          const newStates=states.data.map(state=>state.name)
-          console.log(newStates)
-          setNewState(newStates)
-          // stateIsLoading(false)
-        })
-      
-        .catch(error=>{
-          console.log(error)
-          
-        })
-      }
+            .then(states => {
+                const newStates = states.data.map(state => state.name);
+                setNewState(newStates);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
 
-      useEffect(()=>{
-        fetchStates()
-      }, [])
-
+    useEffect(() => {
+        fetchStates();
+    }, []);
 
     const steps = [
-        <StepOne key="step1" next={handleNextStep} toggleNewPlacementReq={toggleNewRequest} />,
-        <StepTwo key="step2" next={handleNextStep} prev={handlePrevStep} statesOfNigeria={statesOfNigeria}  toggleNewPlacementReq={toggleNewRequest} />
+        <StepOne key="step1" next={handleNextStep} toggleNewPlacementReq={toggleNewRequest} initialValues={formData} />,
+        <StepTwo key="step2" next={handleNextStep} />,
+        <StepThree key="step3" next={handleNextStep} prev={handlePrevStep} statesOfNigeria={statesOfNigeria} toggleNewPlacementReq={toggleNewRequest} initialValues={formData} />
     ];
 
-    return <div className="newRequestComponent">
-  {steps[currentStep]}
-    </div>
+    return (
+        <div className="newRequestComponent">
+            {steps[currentStep]}
+            {isSubmitting && <PulseLoader size={10} color="white" />}
+        </div>
+    );
 };
+
+
+
 
 const stepOneValidationSchema = Yup.object().shape({
     request_message: Yup.string().required("Reason for change is required")
 });
 
-const StepOne = ({ next, toggleNewPlacementReq }) => {
-    const initialValues = {
-        request_message:""
-    };
-
+const StepOne = ({ next, toggleNewPlacementReq, initialValues }) => {
     const handleSubmit = (values) => {
         next(values);
     };
 
     return (
         <div className="newRequestHeader">
-        <div className="introductionLetter"> Reason for Change</div>
-        <button className="closeButton" onClick={toggleNewPlacementReq} >
-      <img src={CloseIcon} alt="Close" />
-    </button>
-        <div className="requestContent">
-        <Formik
-            validationSchema={stepOneValidationSchema}
-            initialValues={initialValues}
-            onSubmit={handleSubmit}
-        >
-            {() => (
-                <Form>
-                    <p>Reason for change</p>
-                    <Field name="request_message"/>
-                    <ErrorMessage name="request_message" component="div" className="error" />
-
-                    <button type="submit">Next</button>
-                </Form>
-            )}
-        </Formik>
-
-        </div></div>
+            <div className="introductionLetter"> Reason for Change</div>
+            <button className="closeButton" onClick={toggleNewPlacementReq} >
+                <img src={CloseIcon} alt="Close" />
+            </button>
+            <div className="requestContent">
+                <Formik
+                    validationSchema={stepOneValidationSchema}
+                    initialValues={initialValues}
+                    onSubmit={handleSubmit}
+                >
+                    {() => (
+                        <Form>
+                            <div className="formInput">
+                                <Field name="request_message" as="textarea" className="placement_letter" placeholder="Reason for change of placement"/>
+                                <ErrorMessage name="request_message" component="div" className="error" />
+                            </div>
+                            <button type="submit">Next</button>
+                        </Form>
+                    )}
+                </Formik>
+            </div>
+        </div>
     );
 };
 
+const StepTwo = ({ next }) => {
+    const handlePlacementChoice = (choice) => {
+        next({ request_placement: choice }, choice); // Pass 'choice' as 'final' if true
+    };
+
+    return (
+        <div className="placementChoiceStep">
+            <h2>Do you want to request a placement change?</h2>
+            <button onClick={() => handlePlacementChoice(true)}>Yes</button>
+            <button onClick={() => handlePlacementChoice(false)}>No</button>
+        </div>
+    );
+};
+
+
+
 const stepTwoValidationSchema = Yup.object().shape({
+    letter_type: Yup.string()
+    .oneOf(['UNDERTAKING', 'ACCEPTANCE'], 'Invalid letter type')
+    .required('Letter type is required'),
     company_name: Yup.string().required("Company name is required"),
     company_contact_name: Yup.string().required("Signatory position is required"),
     company_contact_email: Yup.string().email("Invalid email"),
@@ -120,7 +184,7 @@ const stepTwoValidationSchema = Yup.object().shape({
     }),
 });
 
-const StepTwo = ({ next, prev, statesOfNigeria, toggleNewPlacementReq }) => {
+const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq }) => {
     const initialValues = {
         letter_type: '',
         letter: null,
@@ -149,18 +213,18 @@ const StepTwo = ({ next, prev, statesOfNigeria, toggleNewPlacementReq }) => {
 
     return (
         <div className="newRequestHeader">
-        <div className="introductionLetter"> Change of Placement Request</div>
-        <button className="closeButton" onClick={toggleNewPlacementReq} >
-      <img src={CloseIcon} alt="Close" />
-    </button>
-        <div className="requestContent">
-            <Formik
-                initialValues={initialValues}
-                validationSchema={stepTwoValidationSchema}
-                onSubmit={handleSubmit}
-            >
-                {({ isSubmitting, setFieldValue }) => (
-                    <Form encType="multipart/form-data">
+            <div className="introductionLetter"> Change of Placement Request</div>
+            <button className="closeButton" onClick={toggleNewPlacementReq} >
+                <img src={CloseIcon} alt="Close" />
+            </button>
+            <div className="requestContent">
+                <Formik
+                    initialValues={initialValues}
+                    validationSchema={stepTwoValidationSchema}
+                    onSubmit={handleSubmit}
+                >
+                    {({ isSubmitting, setFieldValue }) => (
+                        <Form encType="multipart/form-data">
                         <div className="companyAddressedTo warp_contents">
                             <div className="formInput">
                                 <label htmlFor="company_name">Company's Name<p>*</p> </label>
@@ -182,6 +246,16 @@ const StepTwo = ({ next, prev, statesOfNigeria, toggleNewPlacementReq }) => {
                                 <Field type="tel" name="company_contact_phone" placeholder="e.g 08066641912" />
                                 <ErrorMessage className="error" name="company_contact_phone" component="div" />
                             </div>
+
+                            <div className="formInput">
+                        <label htmlFor="letter_type">Letter Type <p>*</p></label>
+                        <Field as="select" name="letter_type">
+                          <option value="">Select Letter Type</option>
+                          <option value="UNDERTAKING">UNDERTAKING</option>
+                          <option value="ACCEPTANCE">ACCEPTANCE LETTER</option>
+                        </Field>
+                        <ErrorMessage className="error" name="letter_type" component="div" />
+                      </div>
                             <div className="formInput move-left">
                                 <label htmlFor="letter">Letter <p>*</p></label>
                                 <input

@@ -31,9 +31,9 @@ const MoreDetails = ({ request, onClose }) => {
   const getStatusClass = (status) => {
     switch(status) {
       case 'ACCEPTANCE':
-        return 'status rejected';
+        return 'status acceptance';
       case 'UNDERTAKEN':
-        return 'status rejected';
+        return 'status undertaking';
       case 'SUBMITTED':
         return 'status submitted';
       case 'null':
@@ -57,35 +57,28 @@ const MoreDetails = ({ request, onClose }) => {
 
           <div className="compProfile">
             <div className="details"> Company Address</div>
-            <div className="cDetails">{request.company_address.street} {request.company_address.state_or_province}, {request.company_address.city}, {request.company_address.country}</div>
+            <div className="cDetails">{request.company_address.street} {request.company_address.state_or_province_name}, {request.company_address.city}, {request.company_address.state_or_province.country}</div>
           </div>
 
-<div className="compProfile">
-  <div className="details"> Company Name</div>
-  <div className="cDetails">
-    {request.company_contact_name}
-  </div>
-</div>
 
 <div className="compProfile">
   <div className="details"> Contact Email</div>
   <div className="cDetails">
-    {request.company_contact_email}
+    {request.company_contact_email===""?"Not provided": request.company_contact_email}
   </div>
 </div>
 
 <div className="compProfile">
   <div className="details"> Contact Phone Number</div>
   <div className="cDetails">
-    {request.company_contact_phone}
+    {request.company_contact_phone===""?"Not provided": requestAnimationFrame.company_contact_phone}
   </div>
 </div>
 
 <div className="compProfile">
   <div className="details">Type of Letter</div>
-  <div className={`cDetails ${getStatusClass(getStatusClass)}`}>
+  <div className={getStatusClass(request.letter_type)}>
     {request.letter_type}
-    {console.log(request.letter_type)}
   </div>
 </div>
 

@@ -110,7 +110,7 @@ const MoreDetails = ({ request, onClose }) => {
             </div>
           )}
 
-          {request.approval_status==="APPROVED"?
+          {/* {request.approval_status==="APPROVED"?
             <div> {loadingDownloads[request.id] ? (
                         <RingLoader size={20} color='blue' />
                       ) : (
@@ -124,7 +124,7 @@ const MoreDetails = ({ request, onClose }) => {
 
                         </div>
                       )}</div>: <div></div>
-                    }
+                    } */}
           
         </div>
       </div>

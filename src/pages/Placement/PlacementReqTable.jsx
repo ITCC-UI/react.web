@@ -159,7 +159,7 @@ const PlacementRequest = () => {
                 return (
                   <tr key={index}>
                     <td>{formatDate(request.date_created)}</td>
-                    <td>{(formatDate(request.date_approved)=="Invalid Date"?"-----":formatDate(request.date_approved))}</td>
+                    <td>{(formatDate(request.date_of_approval)==="Invalid Date"?"-----":formatDate(request.date_of_approval))}</td>
                     <td>
                       <div className={statusClasses}>
                         {request.approval_status}
