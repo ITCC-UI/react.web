@@ -120,7 +120,7 @@ const [filter, setFilter] =useState('all')
               >
                 
                 {/* <option value="all" disabled>Filter</option> */}
-                <option value="default" disabled selected hidden>
+                <option value="default" disabled defaultValue={true} hidden>
       Select a status
       
     </option>

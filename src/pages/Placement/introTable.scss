@@ -68,17 +68,24 @@ opacity: .8;
 }
 
 .this{
-    display: none;
-    border-radius: 5px;
+    // display: none;
+    border-radius: 5px !important;
     position: absolute;
     width: 120px;
-    
-    left: -3px;
-    margin-top: 10px;
+    left: 20px;
+    margin-top: 85px;
     background-color: white;
+    padding: 2px;
+    z-index: 2;
+    
     .that{
-        padding: 10px 5px;
-        
+        padding:  5px;
+  width: 100% !important; 
+  color: black !important; 
+  font-weight: normal;
+  border: 1px solid black;
+
+  display: block;  
         &:hover{
             background-color: rgb(172, 172, 172);
             
@@ -86,7 +93,7 @@ opacity: .8;
 
         a{
             padding: 10px 5px;
-            color: inherit;
+            
         }
     }
 }

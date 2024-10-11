@@ -116,7 +116,7 @@ const MoreDetails = ({ request, onClose }) => {
           <div className='compProfile'>
             <div className="details">Company Address</div>
             {/* <div className="cDetails">{formatApprovalDate(request.date_created)}</div> */}
-            <div className="cDetails">{(request.company_address.building_number)}, {(request.company_address.building_name)} {(request.company_address.street)} {(request.company_address.area)} {(request.company_address.city)}, {(request.company_address.state_or_province)}</div>
+            <div className="cDetails">{(request.company_address.building_number)}, {(request.company_address.building_name)} {(request.company_address.street)} {(request.company_address.area)} {(request.company_address.city)}, {(request.company_address.state_or_province.name)}, {(request.company_address.state_or_province.country)}</div>
           </div>
 
 

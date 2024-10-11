@@ -13,7 +13,6 @@ import ActivePlacement from "./ActivePlacement";
 import PlacementAcceptance from "./PlacementAcceptance";
 import PlacementChange from "./PlacementChange";
 import FullScreenSuccessMessage from "./Successful/Successful";
-import StatesComboBox from "./AcceptanceAddressee";
 import FullScreenFailureMessage from "./Failed/FullScreenFailureMessage";
 import MultiStepForm from "../../../components/View More/NewForm";
 import AcceptanceLetterAdressee from "./AcceptanceAddressee";
