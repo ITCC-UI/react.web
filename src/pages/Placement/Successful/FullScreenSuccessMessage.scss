@@ -65,8 +65,40 @@ text-align: center;
 background-color: #000080;
 color: white;      
   
-      &:hover {
-        background-color: #45a049;
-      }
+   
     }
+  }
+
+
+
+  .continueClass, .acceptanceLetter{
+    margin: 20px auto;
+width: 250px;
+display: block;
+min-height: 50px;
+gap: 10px;
+border-radius: 12px;
+opacity: 0px;
+background-color: #000080;
+color: white;
+
+
+  }
+
+
+  .nestedButton{
+    display: flex;
+    width: 80%;
+    margin: 30px auto;
+    justify-content: space-around;
+    .acceptanceLetter{
+    background-color: white;
+    color: #000080;
+    border: 1px solid #000080;
+    }
+  }
+
+  .submitButton{
+    margin: 0 auto !important;
+    width: 70% !important;
   }

@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { AiOutlineCheckCircle } from "react-icons/ai";
 import './FullScreenSuccessMessage.scss';
 import Ticked from "/images/ticked.png"
 
