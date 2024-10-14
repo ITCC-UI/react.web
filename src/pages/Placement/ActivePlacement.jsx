@@ -36,20 +36,20 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
       try {
         const registrationResponse = await axiosInstance.get("trainings/registrations/");
         const registrations = registrationResponse.data;
-        console.log("Fetched registrations:", registrations);
+        // //console.log("Fetched registrations:", registrations);
   
         // Use the ID of the first registration
         const id = registrations[0].id;
-        console.log("Using Registration ID:", id);
+        //console.log("Using Registration ID:", id);
         const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`)
         const requests = requestsResponse.data;
-        console.log("Fetched requests:", requests);
+        //console.log("Fetched requests:", requests);
         setLetterRequests(requests)
    
   
         
       } catch (error) {
-        console.error("Error fetching introduction letter requests:", error);
+        //console.error("Error fetching introduction letter requests:", error);
       }
     };
 
@@ -63,7 +63,7 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
             <div className="topHead place">
                {/* Conditionally render the New Request button only if programmeId exists */}
           {id && (
-            <button className="newReq" onClick={toggleNewRequest}>
+            <button className="newReq null off" onClick={toggleNewRequest} disabled >
              + Change Placement
             </button>
           )}

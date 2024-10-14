@@ -103,3 +103,27 @@ button:focus, button:focus-visible{
         display: block;
     }
 }
+
+
+.dashholder{
+    margin-left: 10px;
+    
+
+    a{
+        color: #fff;
+        font-weight: 300;
+        padding: 5px 0;
+        padding-left: 10px;
+
+    }
+}
+
+.activeBar{
+    background-color: rgb(255, 255, 255);
+    // width: ;
+    display: block;
+  
+    border-radius: 0 10px 10px 0;
+    color: blue !important;
+    font-weight: 600 !important;
+}

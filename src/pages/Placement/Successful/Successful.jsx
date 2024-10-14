@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { AiOutlineCheckCircle } from "react-icons/ai";
 import './FullScreenSuccessMessage.scss';
 import Ticked from "/images/ticked.png"
 
@@ -25,7 +24,7 @@ const FullScreenSuccessMessage = ({ isOpen, message, onClose }) => {
         </div>
 
         <div className="successMessageContent">
-        Your information has been successfully submitted and is now under review
+      {message}
         </div>
         <button onClick={onClose}>Close</button>
       </div>

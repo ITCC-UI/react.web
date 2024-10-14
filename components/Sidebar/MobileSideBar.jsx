@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 import LogOutIcon from "/images/Logout.png";
 import Logo from "/images/UI_logo.png";
 
-const Sidebar = ({ accordions }) => {
+const Sidebar = ({ accordions,active }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -49,6 +49,10 @@ const Sidebar = ({ accordions }) => {
           <div className="logoContainer">
             <img src={Logo} alt="Logo" />
           </div>
+<div className="placement dashholder">
+<Link to="/placement"className={active}>Placement</Link>
+</div>
+          
           {accordions.map((accordion, index) => (
             <Accordion
               key={index}

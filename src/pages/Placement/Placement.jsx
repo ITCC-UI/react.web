@@ -59,7 +59,6 @@ const Placement = () => {
 
   const toggleNewPlacementReq = () => {
     setNewChangeRequest((prev) => !prev);
-    console.log("Supposed to work");
   };
 
   const toggleClosePlacement=()=>{
@@ -82,7 +81,7 @@ setClose(!closeModal)
         setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error fetching programme ID:", error);
+      // console.error("Error fetching programme ID:", error);
       setIsLoading(false);
     }
   };
@@ -110,9 +109,9 @@ setClose(!closeModal)
         window.location.reload();
       }, 2000);
     } catch (error) {
-      console.error("Error submitting acceptance form", error);
-      // setAcceptanceFailureMessage(error.response.data)
-      console.log("The error is", error)
+      // console.error("Error submitting acceptance form", error);
+      setAcceptanceFailureMessage("Unable to complete action, please try again later")
+      // console.log("The error is", error.request.status)
       setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(true);
@@ -129,7 +128,7 @@ const fetchAddressee =()=>{
   axiosInstance.get(`/option-types/${type}/options`)
   .then(titles =>{
     const addressee=titles.data.map(title=>title.name)
-    console.log("Addressee", addressee)
+    // console.log("Addressee", addressee)
     setAdressOptions(addressee)
     // titleIsLoading(false)
   })
@@ -144,7 +143,7 @@ const fetchStates = async ()=>{
   try{
     const states= await axiosInstance.get("/states")
     // const result= await states.json();
-    console.log(states.data)
+    // console.log(states.data)
     setNewState(states.data)
 
   }
@@ -177,11 +176,12 @@ useEffect(()=>{
         setShowPlacementSuccessful(false);
         window.location.reload();
       }, 5000);
+      // console.log(response)
     } catch (error) {
-      console.error("Error submitting placement request form", error);
+      // console.error("Error submitting placement request form", error);
       setShowPlacementFailure(true)
       setPlacementFailureMessage(error.response.data.detail)
-      console.log("The error Array", error.response.data.detail)
+      // console.log("The error Array", error.response.data.detail)
       // setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(false)
@@ -220,7 +220,7 @@ useEffect(()=>{
         window.location.reload();
       }, 2000);
     } catch (error) {
-      console.error("Error submitting change of placement request", error);
+      // console.error("Error submitting change of placement request", error);
       setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(false)
@@ -443,7 +443,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
                       </div>
                       <div className="formInput">
                         <label htmlFor="company_contact_name">Signatory Name </label>
-                        <Field type="text" name="company_contact_name" placeholder="e.g Engr O.A Opadare" />
+                        <Field type="text" name="company_contact_name" placeholder="e.g John Doe" />
                         <ErrorMessage className="error" name="company_contact_name" component="div" />
                       </div>
                     
@@ -456,7 +456,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
 
                       <div className="formInput">
                         <label htmlFor="company_contact_phone">Signatory Phone Number</label>
-                        <Field type="tel" name="company_contact_phone" placeholder="e.g 08066641912" />
+                        <Field type="tel" name="company_contact_phone" placeholder="e.g 08012345689" />
                         <ErrorMessage className="error" name="company_contact_phone" component="div" />
                       </div>
 
@@ -584,7 +584,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
       />
 
       <main className="introLetter">
-        <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} />
+        <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} active={"activeBar"}/>
 
         <div className="placement-head">
           Placement
