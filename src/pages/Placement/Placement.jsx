@@ -81,7 +81,7 @@ setClose(!closeModal)
         setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error fetching programme ID:", error);
+      // console.error("Error fetching programme ID:", error);
       setIsLoading(false);
     }
   };
@@ -111,7 +111,7 @@ setClose(!closeModal)
     } catch (error) {
       // console.error("Error submitting acceptance form", error);
       setAcceptanceFailureMessage("Unable to complete action, please try again later")
-      console.log("The error is", error.request.status)
+      // console.log("The error is", error.request.status)
       setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(true);
@@ -128,7 +128,7 @@ const fetchAddressee =()=>{
   axiosInstance.get(`/option-types/${type}/options`)
   .then(titles =>{
     const addressee=titles.data.map(title=>title.name)
-    console.log("Addressee", addressee)
+    // console.log("Addressee", addressee)
     setAdressOptions(addressee)
     // titleIsLoading(false)
   })
@@ -143,7 +143,7 @@ const fetchStates = async ()=>{
   try{
     const states= await axiosInstance.get("/states")
     // const result= await states.json();
-    console.log(states.data)
+    // console.log(states.data)
     setNewState(states.data)
 
   }
@@ -175,13 +175,13 @@ useEffect(()=>{
       setTimeout(() => {
         setShowPlacementSuccessful(false);
         window.location.reload();
-      }, 10000);
-      console.log(response)
+      }, 5000);
+      // console.log(response)
     } catch (error) {
-      console.error("Error submitting placement request form", error);
+      // console.error("Error submitting placement request form", error);
       setShowPlacementFailure(true)
       setPlacementFailureMessage(error.response.data.detail)
-      console.log("The error Array", error.response.data.detail)
+      // console.log("The error Array", error.response.data.detail)
       // setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(false)
@@ -220,7 +220,7 @@ useEffect(()=>{
         window.location.reload();
       }, 2000);
     } catch (error) {
-      console.error("Error submitting change of placement request", error);
+      // console.error("Error submitting change of placement request", error);
       setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(false)
