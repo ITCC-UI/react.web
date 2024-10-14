@@ -584,7 +584,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
       />
 
       <main className="introLetter">
-        <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} />
+        <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} active={"active"}/>
 
         <div className="placement-head">
           Placement

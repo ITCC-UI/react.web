@@ -11,7 +11,7 @@ import NetworkStatusIcon from '../NetworkStatus/Network';
 import Sidebar from '../Sidebar/MobileSideBar';
 import axiosInstance from '../../API Instances/AxiosIntances';
 
-const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisible }) => {
+const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisible, active }) => {
   const [userName, setUserName] = useState(' ');
   const [matricNumber, setMatricNumber] = useState(' ');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -78,7 +78,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
 
   return (
     <nav className="topNav">
-      <Sidebar accordions={accordions} />
+      <Sidebar accordions={accordions} active={active} />
       <div className="greetDate">
         <div className="greet">Welcome</div>
         <div className="date">{new Date().toLocaleDateString()}</div>
