@@ -63,7 +63,7 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
             <div className="topHead place">
                {/* Conditionally render the New Request button only if programmeId exists */}
           {id && (
-            <button className="newReq" onClick={toggleNewRequest}>
+            <button className="newReq null off" onClick={toggleNewRequest} disabled >
              + Change Placement
             </button>
           )}

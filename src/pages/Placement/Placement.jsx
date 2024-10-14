@@ -24,7 +24,7 @@ const Placement = () => {
   const [acceptanceSubmissionStatus, setAcceptanceSubmissionStatus] = useState("");
   const [acceptanceSuccessMessage, setAcceptanceSuccessMessage] = useState("");
   const [acceptanceFailureMessage, setAcceptanceFailureMessage] = useState("")
-  const [showAcceptanceSuccessful, setShowAcceptanceSuccessful] = useState(true);
+  const [showAcceptanceSuccessful, setShowAcceptanceSuccessful] = useState(false);
   const [showAcceptanceFailure, setShowAcceptanceFailure] = useState(false);
 
   const [placementSubmissionStatus, setPlacementSubmissionStatus] = useState("");
@@ -59,7 +59,6 @@ const Placement = () => {
 
   const toggleNewPlacementReq = () => {
     setNewChangeRequest((prev) => !prev);
-    console.log("Supposed to work");
   };
 
   const toggleClosePlacement=()=>{
@@ -110,9 +109,9 @@ setClose(!closeModal)
         window.location.reload();
       }, 2000);
     } catch (error) {
-      console.error("Error submitting acceptance form", error);
-      // setAcceptanceFailureMessage(error.response.data)
-      console.log("The error is", error)
+      // console.error("Error submitting acceptance form", error);
+      setAcceptanceFailureMessage("Unable to complete action, please try again later")
+      console.log("The error is", error.request.status)
       setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(true);
@@ -176,7 +175,8 @@ useEffect(()=>{
       setTimeout(() => {
         setShowPlacementSuccessful(false);
         window.location.reload();
-      }, 5000);
+      }, 10000);
+      console.log(response)
     } catch (error) {
       console.error("Error submitting placement request form", error);
       setShowPlacementFailure(true)
@@ -443,7 +443,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
                       </div>
                       <div className="formInput">
                         <label htmlFor="company_contact_name">Signatory Name </label>
-                        <Field type="text" name="company_contact_name" placeholder="e.g Engr O.A Opadare" />
+                        <Field type="text" name="company_contact_name" placeholder="e.g John Doe" />
                         <ErrorMessage className="error" name="company_contact_name" component="div" />
                       </div>
                     
@@ -456,7 +456,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
 
                       <div className="formInput">
                         <label htmlFor="company_contact_phone">Signatory Phone Number</label>
-                        <Field type="tel" name="company_contact_phone" placeholder="e.g 08066641912" />
+                        <Field type="tel" name="company_contact_phone" placeholder="e.g 08012345689" />
                         <ErrorMessage className="error" name="company_contact_phone" component="div" />
                       </div>
 

@@ -24,7 +24,7 @@ const FullScreenSuccessMessage = ({ isOpen, message, onClose }) => {
         </div>
 
         <div className="successMessageContent">
-        Your information has been successfully submitted and is now under review
+      {message}
         </div>
         <button onClick={onClose}>Close</button>
       </div>
