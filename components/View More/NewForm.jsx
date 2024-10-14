@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import axiosInstance from "../../API Instances/AxiosIntances";
 import { PulseLoader } from "react-spinners";
-import {AcceptanceLetterAdressee } from "../../src/pages/Placement/AcceptanceAddressee"; // Corrected imports
+// import {AcceptanceLetterAdressee } from "../../src/pages/Placement/AcceptanceAddressee"; // Corrected imports
 import CloseIcon from "/images/closeButton.png";
 import FullScreenSuccessMessage from "../../src/pages/Placement/Successful/Successful";
 import FullScreenFailureMessage from "../../src/pages/Placement/Failed/FullScreenFailureMessage";
@@ -465,7 +465,7 @@ const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initial
                                         <ErrorMessage className="error" name="company_address.city" component="div" />
                                     </div>
                                     <div className="formInput">
-                                        <AcceptanceLetterAdressee
+                                        <AcceptanceLetterAdresse
                                             name="company_address.state_or_province_id"
                                             options={statesOfNigeria}
                                             placeholder="Select a state"

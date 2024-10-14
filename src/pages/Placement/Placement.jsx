@@ -24,7 +24,7 @@ const Placement = () => {
   const [acceptanceSubmissionStatus, setAcceptanceSubmissionStatus] = useState("");
   const [acceptanceSuccessMessage, setAcceptanceSuccessMessage] = useState("");
   const [acceptanceFailureMessage, setAcceptanceFailureMessage] = useState("")
-  const [showAcceptanceSuccessful, setShowAcceptanceSuccessful] = useState(false);
+  const [showAcceptanceSuccessful, setShowAcceptanceSuccessful] = useState(true);
   const [showAcceptanceFailure, setShowAcceptanceFailure] = useState(false);
 
   const [placementSubmissionStatus, setPlacementSubmissionStatus] = useState("");
