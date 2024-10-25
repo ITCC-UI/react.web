@@ -60,7 +60,7 @@ const IntroductionLetter = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     if (!programmeId) {
-      console.error("Programme ID not available");
+      
       return;
     }
 
@@ -73,7 +73,7 @@ const IntroductionLetter = () => {
       }, 500);
     } catch (error) {
       setSubmissionStatus("failure");
-      console.error("error type", error)
+      
       setTimeout(() => {
         setSubmissionStatus("");
       }, 500);
@@ -101,9 +101,9 @@ const fetchAddressee =()=>{
   axiosInstance.get(`/option-types/${type}/options`)
   .then(titles =>{
     const addressee=titles.data.map(title=>title.name)
-    // console.log(addressee)
+    
     setAdressOptions(addressee)
-    titleIsLoading(false)
+    
   })
 
   .catch(error=>{
@@ -117,13 +117,13 @@ const fetchStates = async ()=>{
   try{
     const states= await axiosInstance.get("/states")
     // const result= await states.json();
-    console.log(states.data)
+    
     setNewState(states.data)
 
   }
 
   catch{
-    console.error("Hits error", error)
+    // console.error("Hits error", error)
   }
 }
 
@@ -181,22 +181,29 @@ useEffect(()=>{
               >
                 {({ isSubmitting }) => (
                   <Form>
-                    <div className="companyAddressedTo">
+                    <div className="companyAddressedTo warp_contents">
                       <div className="formInput">
                         <label htmlFor="company_name">Company Name</label>
                         <Field type="text" name="company_name" placeholder="Enter the name of the company, e.g Firstbank Plc" />
                         <ErrorMessage className="error" name="company_name" component="div" />
                       </div>
                       <div className="formInput">
-                        <label htmlFor="address_to">Address To</label>
-                        <FormikComboboxInput
-              name="address_to"
-              options={addressOptions}
-              placeholder="Title/Position to address letter to, e.g The Managing Director"
-              className="combo"
-            />
-                        <ErrorMessage className="error" name="address_to" component="div" />
-                      </div>
+  <label htmlFor="addressee">
+    Addresse To 
+  </label>
+
+  <Field as="select" name="addressee" className="form-select">
+    <option value="">Select Title/Position</option>
+    {addressOptions.map((option, index) => (
+      <option key={index} value={option}>
+        {option}
+      </option>
+    ))}
+  </Field>
+
+  <ErrorMessage className="error" name="addressee" component="div" />
+</div>
+
                     </div>
                     <div className="companyDetails">
                       <div className="company">Company Address</div>

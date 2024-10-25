@@ -15,7 +15,6 @@ import PlacementChange from "./PlacementChange";
 import FullScreenSuccessMessage from "./Successful/Successful";
 import FullScreenFailureMessage from "./Failed/FullScreenFailureMessage";
 import MultiStepForm from "../../../components/View More/NewForm";
-import AcceptanceLetterAdressee from "./AcceptanceAddressee";
 // import StatesComboBox from "./ComboBoxStates";
 
 
@@ -312,7 +311,7 @@ useEffect(()=>{
       .email('Invalid email'),
       // .required('Company contact email is required'),
       company_contact_phone: Yup.string()
-      .matches(phoneRegExp, "Signatory's phone number is not valid").min(11, "Phone number must be more than 10"),
+      .matches(phoneRegExp, "Company's phone number is not valid").min(11, "Phone number must be more than 10"),
 
       letter: Yup.mixed()
       .required('A file is required')
@@ -432,15 +431,22 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="addressee">Signatory Position <p>*</p></label>
-                        <AcceptanceLetterAdressee
-              name="addressee"
-              options={addressOptions}
-              placeholder="Title/Position to address letter to, e.g The Managing Director"
-              
-            />
-                        <ErrorMessage className="error" name="addressee" component="div" />
-                      </div>
+  <label htmlFor="addressee">
+    Signatory Position <p>*</p>
+  </label>
+
+  <Field as="select" name="addressee" className="form-select">
+    <option value="">Select Title/Position</option>
+    {addressOptions.map((option, index) => (
+      <option key={index} value={option}>
+        {option}
+      </option>
+    ))}
+  </Field>
+
+  <ErrorMessage className="error" name="addressee" component="div" />
+</div>
+
                       <div className="formInput">
                         <label htmlFor="company_contact_name">Signatory Name </label>
                         <Field type="text" name="company_contact_name" placeholder="e.g John Doe" />
@@ -455,7 +461,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="company_contact_phone">Signatory Phone Number</label>
+                        <label htmlFor="company_contact_phone">Company Phone Number</label>
                         <Field type="tel" name="company_contact_phone" placeholder="e.g 08012345689" />
                         <ErrorMessage className="error" name="company_contact_phone" component="div" />
                       </div>
@@ -527,12 +533,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
 
 
 
-                    <div className="companyDetails">
-                  
-
-
-
-                    </div>
+                   
                     <button type="submit" className="submitting">
                       {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
                     </button>
