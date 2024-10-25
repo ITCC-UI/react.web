@@ -18,8 +18,8 @@ const IntroductionLetter = () => {
   const [programmeId, setProgrammeId] = useState(null);
   const [letterRequests, setLetterRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
-  const [noProgrammeId, setNoProgrammeId] = useState(false); // State for no Programme ID
+  const [submissionStatus, setSubmissionStatus] = useState(""); 
+  const [noProgrammeId, setNoProgrammeId] = useState(false); 
   const [loading, titleIsLoading] =useState(false)
   const [addressOptions, setAdressOptions]= useState([])
   const [statesOfNigeria, setNewState] =useState([])
@@ -36,7 +36,7 @@ const IntroductionLetter = () => {
         setProgrammeId(id);
         fetchIntroductionLetterRequests(id);
       } else {
-        setNoProgrammeId(true); // Set state when no Programme ID is found
+        setNoProgrammeId(true); 
         setIsLoading(false);
       }
     } catch (error) {
@@ -69,7 +69,7 @@ const IntroductionLetter = () => {
       setSubmissionStatus("success");
       setTimeout(() => {
         setSubmissionStatus("");
-        window.location.reload(); // Auto refresh the page
+        window.location.reload(); 
       }, 500);
     } catch (error) {
       setSubmissionStatus("failure");
@@ -116,14 +116,14 @@ const fetchAddressee =()=>{
 const fetchStates = async ()=>{
   try{
     const states= await axiosInstance.get("/states")
-    // const result= await states.json();
+    
     
     setNewState(states.data)
 
   }
 
   catch{
-    // console.error("Hits error", error)
+    
   }
 }
 
@@ -148,7 +148,7 @@ useEffect(()=>{
 
       <SideBar
         dashboardClass={"dashy"}
-        placementClass={"placement"} //active-accordion and filterPlacement class
+        placementClass={"placement"} 
         init={0}
         activeI={"activen"}
       />
@@ -232,7 +232,7 @@ useEffect(()=>{
   <label htmlFor="company_address.state_or_province_id"></label>
 
   <Field as="select" name="company_address.state_or_province_id" className="selector">
-  <option value="" label="Select a state or province" /> {/* Optional default option */}
+  <option value="" label="Select a state or province" /> 
     {statesOfNigeria.map((item) => (
       <option key={item.id} value={item.id}>
         {item.name}
@@ -261,7 +261,7 @@ useEffect(()=>{
         <div className="container">
           <div className="topHead">
             <div className="heading">INTRODUCTION LETTERS</div>
-            {/* Conditionallrender the New Request button only if programmeId exists */}
+            
               {programmeId  &&   (
         <button className="newReq" onClick={toggleNewRequest}>
           + New Request

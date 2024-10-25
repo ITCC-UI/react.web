@@ -23,8 +23,8 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
   const [loginError, setLoginError] = useState('');
-  const [networkError, setNetworkError] = useState(''); // State for network error
-  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
+  const [networkError, setNetworkError] = useState(''); 
+  const [passwordVisible, setPasswordVisible] = useState(false); 
   const navigate = useNavigate();
   const endpoint = "https://theegsd.pythonanywhere.com";
 

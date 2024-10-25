@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-// import './MoreDetails.scss';
+
 import { X } from 'lucide-react';
-import IconDownload from "/images/Download.png";
 const MoreDetails = ({ request, onClose }) => {
   const [isActive, setIsActive] = useState(false);
   const [loadingDownloads, setLoadingDownloads] = useState({});
@@ -31,7 +30,7 @@ const MoreDetails = ({ request, onClose }) => {
       document.body.appendChild(link);
       link.click();
     } catch (error) {
-      //console.error("Error downloading document:", error);
+      
     } finally {
       setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
     }
@@ -110,21 +109,6 @@ const MoreDetails = ({ request, onClose }) => {
             </div>
           )}
 
-          {/* {request.approval_status==="APPROVED"?
-            <div> {loadingDownloads[request.id] ? (
-                        <RingLoader size={20} color='blue' />
-                      ) : (
-                        <div className='download'>Download
-                        <img 
-                          src={IconDownload} 
-                          alt="download" 
-                          className="invert downloadIcon approved"
-                          // onClick={() => request.statusClass === 'approved' && handleDownloadClick(request.id)} 
-                        />
-
-                        </div>
-                      )}</div>: <div></div>
-                    } */}
           
         </div>
       </div>
