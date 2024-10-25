@@ -20,7 +20,7 @@ const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest
         if (response.data.length > 0) {
           const id = response.data[0].id;
           setProgrammeId(id);
-          console.log("This Programme ID:", id);
+          
           fetchIntroductionLetterRequests(id);
 
         } else {
@@ -28,35 +28,24 @@ const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest
           setIsLoading(false);
         }
       } catch (error) {
-        console.error("Error fetching programme ID:", error);
+        
         setIsLoading(false);
       }
     };
   
     const fetchIntroductionLetterRequests = async (id) => {
       try {
-        // console.log("Fetching introduction letters for programme ID:", id);
+        
         const response = await axiosInstance.get(`trainings/registrations/${id}/acceptance-letters`);
         setLetterRequests(response.data);
         setIsLoading(false);
       } catch (error) {
-        //console.error("Error fetching introduction letter requests:", error);
+        
         setIsLoading(false);
       }
     };
-  
-    // const fetchPlacementRequests = async (id) => {
-    //   try {
-    //     // console.log("Fetching Placement letters for programme ID:", id);
-    //     const response = await axiosInstance.get(`/trainings/placements/registrations/${id}/`);
-    //     setPlacementRequests(response.data);
-    //     console.log(response.data)
-    //     setIsLoading(false);
-    //   } catch (error) {
-    //     console.error("Error fetching placment letter requests:", error);
-    //     setIsLoading(false);
-    //   }
-    // };
+
+    
     useEffect(() => {
       fetchProgrammeId();
     }, []);

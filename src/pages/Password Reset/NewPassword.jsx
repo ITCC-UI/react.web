@@ -43,7 +43,7 @@ const ResetPassword = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await axiosInstance.patch(`/account/complete-password-reset`, {
+      const response = await axiosInstance.patch(`/account/complete-password-reset/`, {
         token, // Include the token from the URL
         new_password: values.password, // Use the correct key for the new password
       });
