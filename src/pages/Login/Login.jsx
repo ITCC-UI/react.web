@@ -23,8 +23,8 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
   const [loginError, setLoginError] = useState('');
-  const [networkError, setNetworkError] = useState(''); // State for network error
-  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
+  const [networkError, setNetworkError] = useState(''); 
+  const [passwordVisible, setPasswordVisible] = useState(false); 
   const navigate = useNavigate();
   const endpoint = "https://theegsd.pythonanywhere.com";
 
@@ -53,7 +53,7 @@ const Login = () => {
       }
       return false;
     } catch (error) {
-      //console.error('Error checking program completion:', error);
+      
       return false;
     }
   };
@@ -61,13 +61,13 @@ const Login = () => {
   const checkProgramRegistration = async () => {
     try {
       const response = await axiosInstance.get('/trainings/registrations');
-      //console.log(response.data)
+      
       if (response.data && response.data.length > 0) {
         return true;
       }
       return false;
     } catch (error) {
-      //console.error('Error checking program registration:', error);
+      
       return false;
     }
   };
@@ -77,34 +77,34 @@ const Login = () => {
       const response = await axiosInstance.post('/account/login/', values);
       if (response.data && response.data.token) {
         const token = response.data.token;
-        // Set cookie with 1-day expiry
+        
         Cookies.set('token', token, { expires: 1 });
-        console.log('Login successful, token:', token);
+        
 
         const isProfileComplete = await checkUserDetails();
-        //console.log('isProfileComplete:', isProfileComplete);
+        
 
         if (isProfileComplete) {
           const isProgramComplete = await checkProgramCompletion();
-          //console.log('isProgramComplete:', isProgramComplete);
+          
 
           if (isProgramComplete) {
             const isRegisteredForProgram = await checkProgramRegistration();
-            //console.log('isRegisteredForProgram:', isRegisteredForProgram);
+            
 
             if (isRegisteredForProgram) {
-              //console.log('User is registered for a program. Redirecting to dashboard.');
+              
               navigate('/registration-portal');
             } else {
-              //console.log('User needs to complete program registration. Redirecting to complete-program-registration page.');
+              
               navigate('/register');
             }
           } else {
-            //console.log('User needs to complete profile (step 2). Redirecting to complete-profile2 page.');
+            
             navigate('/complete-profile2');
           }
         } else {
-          //console.log('User details are incomplete. Redirecting to complete-profile page.');
+          
           navigate('/complete-profile');
         }
       } else {
@@ -117,7 +117,7 @@ const Login = () => {
       } else if (error.response && error.response.status === 404) {
         setLoginError('User not found in the database.');
       } else {
-        //console.error('Login error:', error);
+        
         setLoginError('Invalid email or password!');
       }
       handleErrorTimeout();

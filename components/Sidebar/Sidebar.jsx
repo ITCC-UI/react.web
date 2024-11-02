@@ -11,8 +11,8 @@ const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, 
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    Cookies.remove('token'); // Remove the token from cookies
-    navigate('/login'); // Redirect to the login page
+    Cookies.remove('token'); 
+    navigate('/login'); 
   };
 
   return (

@@ -18,8 +18,8 @@ const IntroductionLetter = () => {
   const [programmeId, setProgrammeId] = useState(null);
   const [letterRequests, setLetterRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "failure"
-  const [noProgrammeId, setNoProgrammeId] = useState(false); // State for no Programme ID
+  const [submissionStatus, setSubmissionStatus] = useState(""); 
+  const [noProgrammeId, setNoProgrammeId] = useState(false); 
   const [loading, titleIsLoading] =useState(false)
   const [addressOptions, setAdressOptions]= useState([])
   const [statesOfNigeria, setNewState] =useState([])
@@ -36,7 +36,7 @@ const IntroductionLetter = () => {
         setProgrammeId(id);
         fetchIntroductionLetterRequests(id);
       } else {
-        setNoProgrammeId(true); // Set state when no Programme ID is found
+        setNoProgrammeId(true); 
         setIsLoading(false);
       }
     } catch (error) {
@@ -60,7 +60,7 @@ const IntroductionLetter = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     if (!programmeId) {
-      console.error("Programme ID not available");
+      
       return;
     }
 
@@ -69,11 +69,11 @@ const IntroductionLetter = () => {
       setSubmissionStatus("success");
       setTimeout(() => {
         setSubmissionStatus("");
-        window.location.reload(); // Auto refresh the page
+        window.location.reload(); 
       }, 500);
     } catch (error) {
       setSubmissionStatus("failure");
-      console.error("error type", error)
+      
       setTimeout(() => {
         setSubmissionStatus("");
       }, 500);
@@ -101,9 +101,9 @@ const fetchAddressee =()=>{
   axiosInstance.get(`/option-types/${type}/options`)
   .then(titles =>{
     const addressee=titles.data.map(title=>title.name)
-    // console.log(addressee)
+    
     setAdressOptions(addressee)
-    titleIsLoading(false)
+    
   })
 
   .catch(error=>{
@@ -116,14 +116,14 @@ const fetchAddressee =()=>{
 const fetchStates = async ()=>{
   try{
     const states= await axiosInstance.get("/states")
-    // const result= await states.json();
-    console.log(states.data)
+    
+    
     setNewState(states.data)
 
   }
 
   catch{
-    console.error("Hits error", error)
+    
   }
 }
 
@@ -148,7 +148,7 @@ useEffect(()=>{
 
       <SideBar
         dashboardClass={"dashy"}
-        placementClass={"placement"} //active-accordion and filterPlacement class
+        placementClass={"placement"} 
         init={0}
         activeI={"activen"}
       />
@@ -181,22 +181,29 @@ useEffect(()=>{
               >
                 {({ isSubmitting }) => (
                   <Form>
-                    <div className="companyAddressedTo">
+                    <div className="companyAddressedTo warp_contents">
                       <div className="formInput">
                         <label htmlFor="company_name">Company Name</label>
                         <Field type="text" name="company_name" placeholder="Enter the name of the company, e.g Firstbank Plc" />
                         <ErrorMessage className="error" name="company_name" component="div" />
                       </div>
                       <div className="formInput">
-                        <label htmlFor="address_to">Address To</label>
-                        <FormikComboboxInput
-              name="address_to"
-              options={addressOptions}
-              placeholder="Title/Position to address letter to, e.g The Managing Director"
-              className="combo"
-            />
-                        <ErrorMessage className="error" name="address_to" component="div" />
-                      </div>
+  <label htmlFor="addressee">
+    Addresse To 
+  </label>
+
+  <Field as="select" name="addressee" className="form-select">
+    <option value="">Select Title/Position</option>
+    {addressOptions.map((option, index) => (
+      <option key={index} value={option}>
+        {option}
+      </option>
+    ))}
+  </Field>
+
+  <ErrorMessage className="error" name="addressee" component="div" />
+</div>
+
                     </div>
                     <div className="companyDetails">
                       <div className="company">Company Address</div>
@@ -225,7 +232,7 @@ useEffect(()=>{
   <label htmlFor="company_address.state_or_province_id"></label>
 
   <Field as="select" name="company_address.state_or_province_id" className="selector">
-  <option value="" label="Select a state or province" /> {/* Optional default option */}
+  <option value="" label="Select a state or province" /> 
     {statesOfNigeria.map((item) => (
       <option key={item.id} value={item.id}>
         {item.name}
@@ -254,7 +261,7 @@ useEffect(()=>{
         <div className="container">
           <div className="topHead">
             <div className="heading">INTRODUCTION LETTERS</div>
-            {/* Conditionallrender the New Request button only if programmeId exists */}
+            
               {programmeId  &&   (
         <button className="newReq" onClick={toggleNewRequest}>
           + New Request

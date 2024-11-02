@@ -18,7 +18,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
       if (response.data.length > 0) {
         const id = response.data[0].id;
         setProgrammeId(id);
-        console.log("This Programme ID:", id);
+        
         fetchChangeOfPlacementRequests(id);
         // fetchPlacementRequests(id);
       } else {
@@ -26,7 +26,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
         setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error fetching programme ID:", error);
+      
       setIsLoading(false);
     }
   };
@@ -37,9 +37,9 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
       // const response = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests`);
       setLetterRequests(response.data);
       setIsLoading(false);
-      console.log(response.data)
+      
     } catch (error) {
-      console.error("Error fetching change of placement requests:", error);
+      
       setIsLoading(false);
     }
   };
@@ -50,7 +50,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
 
   const handleSubmit = async (values, { setSubmitting }) => {
     if (!id) {
-      console.error("Programme ID not available");
+      
       return;
     }
 
@@ -62,7 +62,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
         window.location.reload();
       }, 500);
     } catch (error) {
-      console.error("Error submitting form", error);
+      
       setSubmissionStatus("failure");
       setTimeout(() => {
         setSubmissionStatus("");

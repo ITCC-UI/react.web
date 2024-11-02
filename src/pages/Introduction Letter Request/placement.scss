@@ -13,7 +13,6 @@ color: royalblue !important;
     width: 100%;
     margin: 0 auto;
     background-color: #ffffff;
-    // z-index: 4;
     
 
     .topHead{
@@ -102,19 +101,17 @@ color: royalblue !important;
 .companyAddressedTo{
   display: flex ;
   flex-direction: column;
-  // border: 1px solid rgb(0, 255, 119);
   height: fit-content;
   gap: 50px
 }
 
 .warp_contents{
   font-family: "Inter";
-  height: 290px;
   flex-direction: row;
   flex-wrap: wrap;
   
   width: 720px;
-  gap: 0;
+  gap: 10px;
   margin: 0 auto;
   margin-top: 30px; 
 
@@ -141,7 +138,6 @@ color: royalblue !important;
   display: flex;
   flex-direction: column;
   width: fit-content;
-  // border: 1px solid red;
   margin: 0 auto;
   label{
     font-size: 14px;
@@ -162,7 +158,6 @@ font-size: 16px;
   padding: 20px;
 }
 &::placeholder{
-  // padding:5px;
   font-family: "Poppins";
   color: rgba(136, 136, 136, 0.53);
   font-size: 16px;
@@ -195,10 +190,8 @@ input[required]:valid + label{
 }
 
   .stateofCompany{
-    // border: 1px solid red;
     display: flex;
     width: 700px;
-    // justify-content: space;
     gap: 30px;
     align-items: stretch;
     input[type="text"], .combo{
@@ -214,7 +207,6 @@ float: right;
 
 .buildNo{
   width: 200px !important;
-  // float: left;
   margin: 0 !important;
 }
 
@@ -230,9 +222,6 @@ textarea.placement_letter{
   resize: none;
   font-size: 20px;
   font-family: "inter";
-//  &:focus{
-//  font-size: 90px;
-//  }
  }
 
 .submit_placement_request{
@@ -322,7 +311,6 @@ margin-left: 0;
   .stateofCompany{
     width: 100%;
     font-size: 14px;
-    // flex-wrap: wrap;
     flex-direction: column;
     input[type="text"]{
       width: 100%;

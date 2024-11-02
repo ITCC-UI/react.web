@@ -18,22 +18,21 @@ const MoreDetails = ({ request, onClose }) => {
 
 
   const handleChange=()=>{
-    console.log("It worked")
+    // console.log("It worked")
       setChange(true)
       // setIsActive(false)
   }
 
-  const openChangeChoice = () =>{
-    console.log("This worked too")
-    setLetterChoice(true)
-    setChange(fasle)
+  // const openChangeChoice = () =>{
+  //   console.log("This worked too")
+  //   setLetterChoice(true)
+  //   setChange(fasle)
 
-  }
+  // }
+
+  
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const changeOfPlacementSchema = Yup.object().shape({
-    // letter_type: Yup.string()
-    //   .oneOf(['UNDERTAKEN', 'ACCEPTANCE_LETTER'], 'Invalid letter type')
-    //   .required('Letter type is required'),
     company_name: Yup.string()
       .required('Company name is required'),
       company_address: Yup.object().shape({

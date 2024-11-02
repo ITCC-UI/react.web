@@ -15,8 +15,7 @@ import PlacementChange from "./PlacementChange";
 import FullScreenSuccessMessage from "./Successful/Successful";
 import FullScreenFailureMessage from "./Failed/FullScreenFailureMessage";
 import MultiStepForm from "../../../components/View More/NewForm";
-import AcceptanceLetterAdressee from "./AcceptanceAddressee";
-// import StatesComboBox from "./ComboBoxStates";
+
 
 
 const Placement = () => {
@@ -50,7 +49,7 @@ const Placement = () => {
 
 
   const [isFormOpen, setIsFormOpen] = useState(true);
-// Form toggle
+
 
   const toggleNewRequest = () => {
     setShowNewRequest((prev)=>!prev);
@@ -77,17 +76,17 @@ setClose(!closeModal)
         setProgrammeId(id);
   
       } else {
-        setNoProgrammeId(true); // Set state when no Programme ID is found
+        setNoProgrammeId(true); 
         setIsLoading(false);
       }
     } catch (error) {
-      // console.error("Error fetching programme ID:", error);
+      
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProgrammeId();  // Fetch the ID when the component mounts
+    fetchProgrammeId();  
   }, []);
 
   
@@ -109,9 +108,9 @@ setClose(!closeModal)
         window.location.reload();
       }, 2000);
     } catch (error) {
-      // console.error("Error submitting acceptance form", error);
+      
       setAcceptanceFailureMessage("Unable to complete action, please try again later")
-      // console.log("The error is", error.request.status)
+      
       setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(true);
@@ -128,22 +127,22 @@ const fetchAddressee =()=>{
   axiosInstance.get(`/option-types/${type}/options`)
   .then(titles =>{
     const addressee=titles.data.map(title=>title.name)
-    // console.log("Addressee", addressee)
+    
     setAdressOptions(addressee)
-    // titleIsLoading(false)
+    
   })
 
   .catch(error=>{
-    console.log(error)
-    // titleIsLoading(false)
+    
+    
   })
 }
 
 const fetchStates = async ()=>{
   try{
     const states= await axiosInstance.get("/states")
-    // const result= await states.json();
-    // console.log(states.data)
+    
+    
     setNewState(states.data)
 
   }
@@ -176,13 +175,13 @@ useEffect(()=>{
         setShowPlacementSuccessful(false);
         window.location.reload();
       }, 5000);
-      // console.log(response)
+      
     } catch (error) {
-      // console.error("Error submitting placement request form", error);
+      
       setShowPlacementFailure(true)
       setPlacementFailureMessage(error.response.data.detail)
-      // console.log("The error Array", error.response.data.detail)
-      // setShowAcceptanceFailure(true)
+      
+      
       setTimeout(() => {
         setShowAcceptanceFailure(false)
       }, 5000);
@@ -220,19 +219,19 @@ useEffect(()=>{
         window.location.reload();
       }, 2000);
     } catch (error) {
-      // console.error("Error submitting change of placement request", error);
+      
       setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(false)
       }, 5000);
     } finally {
       setSubmitting(true );
-      // toggleChangeOfPlacementRequest();
+      
     }
   };
   
 
-  // Component display
+  
   const [activeDisplay, setActiveDisplay] = useState("placement");
   const handleButtonClick = (component) => {
     setActiveDisplay(component)
@@ -242,7 +241,7 @@ useEffect(()=>{
 
   const validationSchema = Yup.object().shape({
     request_message: Yup.string().required("A message is required")
-    // sometthin: Yup.string().required
+    
   });
 
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -254,9 +253,9 @@ useEffect(()=>{
 
 
   const changeOfPlacementSchema = Yup.object().shape({
-    // letter_type: Yup.string()
-    //   .oneOf(['UNDERTAKEN', 'ACCEPTANCE_LETTER'], 'Invalid letter type')
-    //   .required('Letter type is required'),
+    
+    
+    
    
    initial_placement: Yup.string().required(),
    request_message:Yup.string().required("Request message is required"),
@@ -273,7 +272,7 @@ useEffect(()=>{
       .required('Signatory position is required'),
     company_contact_email: Yup.string()
       .email('Invalid email'),
-      // .required('Company contact email is required'),
+      
       company_contact_phone: Yup.string()
       .matches(phoneRegExp, 'Phone number is not valid').min(11, "Phone number must be more than 10"),
 
@@ -285,7 +284,7 @@ useEffect(()=>{
       })
       .test('fileSize', 'File size is too large', (value) => {
         if (!value) return false;
-        return value.size <= 1 * 1024 * 1024; // 1MB limit
+        return value.size <= 1 * 1024 * 1024; 
       })
   });
 
@@ -310,9 +309,9 @@ useEffect(()=>{
       addressee:Yup.string().required("Signatory Position is required"),
     company_contact_email: Yup.string()
       .email('Invalid email'),
-      // .required('Company contact email is required'),
+      
       company_contact_phone: Yup.string()
-      .matches(phoneRegExp, "Signatory's phone number is not valid").min(11, "Phone number must be more than 10"),
+      .matches(phoneRegExp, "Company's phone number is not valid").min(11, "Phone number must be more than 10"),
 
       letter: Yup.mixed()
       .required('A file is required')
@@ -322,7 +321,7 @@ useEffect(()=>{
       })
       .test('fileSize', 'File size is too large', (value) => {
         if (!value) return false;
-        return value.size <= 1 * 1024 * 1024; // 1MB limit
+        return value.size <= 1 * 1024 * 1024; 
       })
   });
 
@@ -334,9 +333,9 @@ useEffect(()=>{
 
       <SideBar
         dashboardClass={"dashy"}
-        placementClass={"placement active-accordion filterPlacement"} //active-accordion and filterPlacement class
+        placementClass={"placement active-accordion filterPlacement"} 
         init={0}
-        activeI={0} //activen
+        activeI={0} 
       />
       {/* 
    
@@ -419,8 +418,8 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
                   company_contact_phone: '',
                   addressee: ''
                 }}
-                validationSchema={acceptanceLetterSchema} // Ensure this is correct
-                onSubmit={handleAcceptanceRequest}  // Correctly pass the onSubmit function
+                validationSchema={acceptanceLetterSchema} 
+                onSubmit={handleAcceptanceRequest}  
               >
                 {({ isSubmitting, setFieldValue }) => (
                   <Form encType="multipart/form-data">
@@ -432,15 +431,22 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="addressee">Signatory Position <p>*</p></label>
-                        <AcceptanceLetterAdressee
-              name="addressee"
-              options={addressOptions}
-              placeholder="Title/Position to address letter to, e.g The Managing Director"
-              
-            />
-                        <ErrorMessage className="error" name="addressee" component="div" />
-                      </div>
+  <label htmlFor="addressee">
+    Signatory Position <p>*</p>
+  </label>
+
+  <Field as="select" name="addressee" className="form-select">
+    <option value="">Select Title/Position</option>
+    {addressOptions.map((option, index) => (
+      <option key={index} value={option}>
+        {option}
+      </option>
+    ))}
+  </Field>
+
+  <ErrorMessage className="error" name="addressee" component="div" />
+</div>
+
                       <div className="formInput">
                         <label htmlFor="company_contact_name">Signatory Name </label>
                         <Field type="text" name="company_contact_name" placeholder="e.g John Doe" />
@@ -455,7 +461,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="company_contact_phone">Signatory Phone Number</label>
+                        <label htmlFor="company_contact_phone">Company Phone Number</label>
                         <Field type="tel" name="company_contact_phone" placeholder="e.g 08012345689" />
                         <ErrorMessage className="error" name="company_contact_phone" component="div" />
                       </div>
@@ -479,7 +485,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
               accept=".pdf, image/*"
               onChange={(event) => {
                 setFieldValue("letter", event.currentTarget.files[0]);
-                // setFile(event.currentTarget.files[0]);
+                
               }}
             />
             <ErrorMessage className="error side" name="letter" component="div" />
@@ -527,12 +533,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
 
 
 
-                    <div className="companyDetails">
-                  
-
-
-
-                    </div>
+                   
                     <button type="submit" className="submitting">
                       {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
                     </button>

@@ -21,7 +21,7 @@ const NetworkStatusIcon = () => {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Check initial network status
+    
     if (!navigator.onLine) {
       toast.error('You are offline');
     }

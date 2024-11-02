@@ -18,7 +18,7 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
       if (response.data.length > 0) {
         const id = response.data[0].id;
         setProgrammeId(id);
-        console.log("This Programme ID:", id);
+        
         fetchIntroductionLetterRequests(id);
         fetchPlacementRequests(id);
       } else {
@@ -35,10 +35,10 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
     try {
       const response = await axiosInstance.get(`trainings/registrations/${id}/placement-requests-view/`);
       setLetterRequests(response.data);
-      console.log("The Id is", placement)
+      
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching introduction letter requests:", error);
+      
       setIsLoading(false);
     }
   };
@@ -47,10 +47,10 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
       setPlacementRequests(response.data);
-      console.log(response.data);
+      
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching placement letter requests:", error);
+      
       setIsLoading(false);
     }
   };
