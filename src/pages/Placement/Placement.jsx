@@ -297,7 +297,7 @@ useEffect(()=>{
     company_name: Yup.string()
       .required('Company name is required'),
       company_address_building_number: Yup.string(),
-      company_address_building_name: Yup.string(),
+      company_address_building_name: Yup.string().required("Building Name is required"),
       company_address_street: Yup.string().required("Street is required"),
       company_address_area: Yup.string(),
       company_address_city: Yup.string().required("City is required"),
@@ -498,6 +498,15 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
                         <Field type="text" name="company_address_building_number" placeholder="Building No : No 24" className="buildNo" />
                         <ErrorMessage className="error" name="company_address_building_number" component="div" />
                       </div>
+//Review starts here
+
+                      <div className="formInput">
+                        <label htmlFor="company_address_building_name"></label>
+                        <Field type="text" name="company_address_building_name" placeholder="Building Name. e.g Osborne Towers" />
+                        <ErrorMessage className="error" name="company_address_building_name" component="div" />
+                      </div>
+
+//Ends here
                       <div className="formInput">
                         <label htmlFor="company_address_street"></label>
                         <Field type="text" name="company_address_street" placeholder="Street, e.g UI Road" />
