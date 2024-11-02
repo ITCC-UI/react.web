@@ -86,6 +86,7 @@ const IntroductionLetter = () => {
   const validationSchema = Yup.object().shape({
     company_address: Yup.object().shape({
       building_number: Yup.string(),
+building_name: Yup.string().required("Building name is required"),
       street: Yup.string().required("Street is required"),
       area: Yup.string(),
       city: Yup.string().required("City is required"),
@@ -212,6 +213,16 @@ useEffect(()=>{
                         <Field type="text" name="company_address.building_number" placeholder="Building No : No 24" className="buildNo" />
                         <ErrorMessage className="error" name="company_address.building_number" component="div" />
                       </div>
+
+
+//New Div field here...
+<div className="formInput">
+                        <label htmlFor="company_address.building_name"></label>
+                        <Field type="text" name="company_address.building_name" placeholder="Building name. e.g Skyline Towers" />
+                        <ErrorMessage className="error" name="company_address.building_name" component="div" />
+                      </div>
+//Ends here 
+
                       <div className="formInput">
                         <label htmlFor="company_address.street"></label>
                         <Field type="text" name="company_address.street" placeholder="Street, e.g UI Road" />
