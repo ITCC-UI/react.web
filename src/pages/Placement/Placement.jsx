@@ -109,8 +109,13 @@ setClose(!closeModal)
       }, 2000);
     } catch (error) {
       
-      setAcceptanceFailureMessage("Unable to complete action, please try again later")
-      
+      if(error.response.status===400){
+        setAcceptanceFailureMessage(error.response.data.detail)
+      }
+      else{
+        setAcceptanceFailureMessage("Unable to submit acceptance letter, please try again")
+      }
+      console.log("This is the error", error.response.status)
       setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(true);
