@@ -215,13 +215,11 @@ useEffect(()=>{
                       </div>
 
 
-//New Div field here...
 <div className="formInput">
                         <label htmlFor="company_address.building_name"></label>
                         <Field type="text" name="company_address.building_name" placeholder="Building name. e.g Skyline Towers" />
                         <ErrorMessage className="error" name="company_address.building_name" component="div" />
                       </div>
-//Ends here 
 
                       <div className="formInput">
                         <label htmlFor="company_address.street"></label>

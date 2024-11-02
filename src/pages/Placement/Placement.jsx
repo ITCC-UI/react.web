@@ -498,15 +498,12 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
                         <Field type="text" name="company_address_building_number" placeholder="Building No : No 24" className="buildNo" />
                         <ErrorMessage className="error" name="company_address_building_number" component="div" />
                       </div>
-//Review starts here
 
                       <div className="formInput">
                         <label htmlFor="company_address_building_name"></label>
                         <Field type="text" name="company_address_building_name" placeholder="Building Name. e.g Osborne Towers" />
                         <ErrorMessage className="error" name="company_address_building_name" component="div" />
                       </div>
-
-//Ends here
                       <div className="formInput">
                         <label htmlFor="company_address_street"></label>
                         <Field type="text" name="company_address_street" placeholder="Street, e.g UI Road" />
