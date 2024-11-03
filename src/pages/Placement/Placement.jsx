@@ -109,8 +109,13 @@ setClose(!closeModal)
       }, 2000);
     } catch (error) {
       
-      setAcceptanceFailureMessage("Unable to complete action, please try again later")
-      
+      if(error.response.status===400){
+        setAcceptanceFailureMessage(error.response.data.detail)
+      }
+      else{
+        setAcceptanceFailureMessage("Unable to submit acceptance letter, please try again")
+      }
+      console.log("This is the error", error.response.status)
       setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(true);
@@ -297,7 +302,7 @@ useEffect(()=>{
     company_name: Yup.string()
       .required('Company name is required'),
       company_address_building_number: Yup.string(),
-      company_address_building_name: Yup.string(),
+      company_address_building_name: Yup.string().required("Building Name is required"),
       company_address_street: Yup.string().required("Street is required"),
       company_address_area: Yup.string(),
       company_address_city: Yup.string().required("City is required"),
@@ -497,6 +502,12 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
                         <label htmlFor="company_address_building_number"></label>
                         <Field type="text" name="company_address_building_number" placeholder="Building No : No 24" className="buildNo" />
                         <ErrorMessage className="error" name="company_address_building_number" component="div" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="company_address_building_name"></label>
+                        <Field type="text" name="company_address_building_name" placeholder="Building Name. e.g Osborne Towers" />
+                        <ErrorMessage className="error" name="company_address_building_name" component="div" />
                       </div>
                       <div className="formInput">
                         <label htmlFor="company_address_street"></label>
