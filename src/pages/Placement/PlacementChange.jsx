@@ -11,6 +11,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
   const [isLoading, setIsLoading] = useState(true);
   const [submissionStatus, setSubmissionStatus] = useState("");
   const [noProgrammeId, setNoProgrammeId] = useState(false); // State for no Programme ID
+  const [placements, setPlacementLetter]= useState([])
 
   const fetchProgrammeId = async () => {
     try {
@@ -18,7 +19,6 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
       if (response.data.length > 0) {
         const id = response.data[0].id;
         setProgrammeId(id);
-        
         fetchChangeOfPlacementRequests(id);
         // fetchPlacementRequests(id);
       } else {
@@ -30,6 +30,32 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
       setIsLoading(false);
     }
   };
+
+  
+  const fetchPlacementLetter = async () => {
+    try {
+      const registrationResponse = await axiosInstance.get("trainings/registrations/");
+      const registrations = registrationResponse.data;
+     
+
+     
+      const id = registrations[0].id;
+     
+      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`)
+      const requests = requestsResponse.data;
+     
+      setPlacementLetter(requests)
+ 
+
+      
+    } catch (error) {
+    
+    }
+  };
+
+  useEffect(() => {
+    fetchPlacementLetter();
+  }, []);
 
   const fetchChangeOfPlacementRequests = async (id) => {
     try {
@@ -77,9 +103,9 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
     <>
       <div className="container">
         <div className="topHead place">
-      {  noProgrammeId ? ( <button className="newReq" onClick={togglePlacementChangeRequest} disabled="true">
+      {  noProgrammeId || placements.length===0 ? ( <button className="newReq disable" onClick={togglePlacementChangeRequest} disabled={true}>
             + New Request
-          </button>): ( <button className="newReq" onClick={togglePlacementChangeRequest}>
+          </button>): ( <button className="newReq disable" onClick={togglePlacementChangeRequest}>
             + New Request
           </button>)}
         </div>

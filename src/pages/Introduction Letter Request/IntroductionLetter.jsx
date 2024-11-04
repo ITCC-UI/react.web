@@ -10,7 +10,8 @@ import { GridLoader, PulseLoader } from "react-spinners";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
 import IntroductionLetterTable from "./IntroductionLetterTable";
-import FormikComboboxInput from "./ComboBox";
+import FullScreenSuccessMessage from "../Placement/Successful/Successful";
+import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
 
 
 const IntroductionLetter = () => {
@@ -19,6 +20,11 @@ const IntroductionLetter = () => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [submissionStatus, setSubmissionStatus] = useState(""); 
+  const [successMessage, setIntroductionSuccessMessage]= useState("")
+  const [showSuccessStatus, setShowIntroSuccess] =useState(false)
+
+  const [failureMessage, setFailureMessage]=useState("")
+const [showFailureMessage, setShowIntroFailure]=useState(false)
   const [noProgrammeId, setNoProgrammeId] = useState(false); 
   const [loading, titleIsLoading] =useState(false)
   const [addressOptions, setAdressOptions]= useState([])
@@ -57,7 +63,7 @@ const IntroductionLetter = () => {
   useEffect(() => {
     fetchProgrammeId();
   }, []);
-
+  const [triggerRefresh, setTriggerRefresh] = useState(false);
   const handleSubmit = async (values, { setSubmitting }) => {
     if (!programmeId) {
       
@@ -67,16 +73,16 @@ const IntroductionLetter = () => {
     try {
       const response = await axiosInstance.post(`/trainings/registrations/${programmeId}/introduction-letter-requests/`, values);
       setSubmissionStatus("success");
-      setTimeout(() => {
-        setSubmissionStatus("");
-        window.location.reload(); 
-      }, 500);
+      setIntroductionSuccessMessage("Introduction Letter submitted successfully")
+setShowIntroSuccess(true)
+setTriggerRefresh(prev => !prev)
+    
     } catch (error) {
       setSubmissionStatus("failure");
-      
-      setTimeout(() => {
-        setSubmissionStatus("");
-      }, 500);
+      setTriggerRefresh(prev => !prev)
+      setFailureMessage(error.response.data.detail)
+      setShowIntroFailure(true)
+     
     } finally {
       setSubmitting(false);
       toggleNewRequest();
@@ -86,7 +92,7 @@ const IntroductionLetter = () => {
   const validationSchema = Yup.object().shape({
     company_address: Yup.object().shape({
       building_number: Yup.string(),
-building_name: Yup.string().required("Building name is required"),
+building_name: Yup.string(),
       street: Yup.string().required("Street is required"),
       area: Yup.string(),
       city: Yup.string().required("City is required"),
@@ -108,7 +114,7 @@ const fetchAddressee =()=>{
   })
 
   .catch(error=>{
-    console.log(error)
+    
     titleIsLoading(false)
   })
 }
@@ -189,11 +195,11 @@ useEffect(()=>{
                         <ErrorMessage className="error" name="company_name" component="div" />
                       </div>
                       <div className="formInput">
-  <label htmlFor="addressee">
+  <label htmlFor="address_to">
     Addresse To 
   </label>
 
-  <Field as="select" name="addressee" className="form-select">
+  <Field as="select" name="address_to" className="form-select">
     <option value="">Select Title/Position</option>
     {addressOptions.map((option, index) => (
       <option key={index} value={option}>
@@ -202,7 +208,7 @@ useEffect(()=>{
     ))}
   </Field>
 
-  <ErrorMessage className="error" name="addressee" component="div" />
+  <ErrorMessage className="error" name="address_to" component="div" />
 </div>
 
                     </div>
@@ -217,7 +223,7 @@ useEffect(()=>{
 
 <div className="formInput">
                         <label htmlFor="company_address.building_name"></label>
-                        <Field type="text" name="company_address.building_name" placeholder="Building name. e.g Skyline Towers" />
+                        <Field type="text" name="company_address.building_name" placeholder="Building name. e.g CBC Towers" />
                         <ErrorMessage className="error" name="company_address.building_name" component="div" />
                       </div>
 
@@ -264,7 +270,23 @@ useEffect(()=>{
             </div>
           </div>
         </div>
+
+      
       )}
+
+<FullScreenSuccessMessage
+        isOpen={showSuccessStatus}
+        message={successMessage}
+        onClose={()=>setShowIntroSuccess(false)}
+        />
+
+        <FullScreenFailureMessage
+        message={failureMessage}
+        isOpen={showFailureMessage}
+        onClose={()=>setShowIntroFailure(false)}
+        />
+
+        
       <main className="introLetter">
         <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} />
         <div className="container">
@@ -296,20 +318,11 @@ useEffect(()=>{
           </div>
         ) : (
 
-          <IntroductionLetterTable letterRequests={letterRequests} />
+          <IntroductionLetterTable triggerRefresh={triggerRefresh} />
         )}
         
       
-        {submissionStatus === "success" && (
-          <div className="submissionStatus success">
-            Form submitted successfully! Reload the page.
-          </div>
-        )}
-        {submissionStatus === "failure" && (
-          <div className="submissionStatus failure">
-            Error submitting form. Please try again.
-          </div>
-        )}
+        
       </main>
     </div>
   );

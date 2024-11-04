@@ -41,7 +41,7 @@ const PlacementAcceptanceTable = () => {
       setLetterRequests(processedRequests);
       checkLetterType(processedRequestsLetter);
     } catch (error) {
-      console.error("Error fetching introduction letter requests:", error);
+      
     }
   };
 

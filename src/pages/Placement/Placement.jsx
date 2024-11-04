@@ -29,6 +29,7 @@ const Placement = () => {
   const [placementSubmissionStatus, setPlacementSubmissionStatus] = useState("");
   const [placementSuccessMessage, setPlacementSuccessMessage] = useState("");
   const [showPlacementSuccessful, setShowPlacementSuccessful] = useState(false);
+  const [triggerRefresh, setTriggerRefresh] =useState(false)
   const [showPlacementFailure, setShowPlacementFailure] = useState(false);
   const [placementFailureMessage, setPlacementFailureMessage] =useState("")
 
@@ -76,7 +77,7 @@ setClose(!closeModal)
         setProgrammeId(id);
   
       } else {
-        setNoProgrammeId(true); 
+        
         setIsLoading(false);
       }
     } catch (error) {
@@ -106,7 +107,7 @@ setClose(!closeModal)
         setAcceptanceSubmissionStatus("");
         setShowAcceptanceSuccessful(false);
         window.location.reload();
-      }, 2000);
+      }, 1000);
     } catch (error) {
       
       if(error.response.status===400){
@@ -115,11 +116,10 @@ setClose(!closeModal)
       else{
         setAcceptanceFailureMessage("Unable to submit acceptance letter, please try again")
       }
-      console.log("This is the error", error.response.status)
       setShowAcceptanceFailure(true)
       setTimeout(() => {
         setShowAcceptanceFailure(true);
-      }, 5000);
+      }, 2000);
     } finally {
       setSubmitting(false);
       toggleAcceptanceRequest();
@@ -153,7 +153,7 @@ const fetchStates = async ()=>{
   }
 
   catch{
-    console.error("Hits error", error)
+    
   }
 }
 
@@ -173,16 +173,17 @@ useEffect(()=>{
   const handlePlacementRequestsSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await axiosInstance.post(`/trainings/registrations/${id}/placement-requests/`, values);
-      setPlacementSubmissionStatus("success");
+      // setPlacementSubmissionStatus("success");
       setPlacementSuccessMessage("Your Placement Request has been submitted successfully!");
       setShowPlacementSuccessful(true);
-      setTimeout(() => {
-        setShowPlacementSuccessful(false);
-        window.location.reload();
-      }, 5000);
+      setTriggerRefresh(prev=> !prev)
+      // setTimeout(() => {
+      //   setShowPlacementSuccessful(false);
+      //   window.location.reload();
+      // }, 5000);
       
     } catch (error) {
-      
+      setTriggerRefresh(prev=> !prev)
       setShowPlacementFailure(true)
       setPlacementFailureMessage(error.response.data.detail)
       
@@ -215,20 +216,23 @@ useEffect(()=>{
           'Content-Type': 'multipart/form-data'
         }
       });
-      setChangeofPlacement("success");
+      // setChangeofPlacement("success");
       setPlacementChangeSuccessMessage("Your change of placement has been submitted successfully!");
       setShowPlacementSuccessful(true);
-      setTimeout(() => {
-        setChangeofPlacement("");
-        setShowPlacementSuccessful(false);
-        window.location.reload();
-      }, 2000);
+      setTriggerRefresh(prev=> !prev)
+      // setTimeout(() => {
+      //   setChangeofPlacement("");
+      //   setShowPlacementSuccessful(false);
+      //   window.location.reload();
+      // }, 2000);
     } catch (error) {
-      
-      setShowAcceptanceFailure(true)
-      setTimeout(() => {
-        setShowAcceptanceFailure(false)
-      }, 5000);
+      setChangeofPlacementFailureMessage(error.response.data.detail)
+      setShowChangeOfPlacementFailure(true)
+      // setTimeout(() => {
+      //   setShowAcceptanceFailure(false)
+      // }, 5000);
+      setTriggerRefresh(prev=> !prev)
+
     } finally {
       setSubmitting(true );
       
@@ -302,7 +306,7 @@ useEffect(()=>{
     company_name: Yup.string()
       .required('Company name is required'),
       company_address_building_number: Yup.string(),
-      company_address_building_name: Yup.string().required("Building Name is required"),
+      company_address_building_name: Yup.string(),
       company_address_street: Yup.string().required("Street is required"),
       company_address_area: Yup.string(),
       company_address_city: Yup.string().required("City is required"),
@@ -506,7 +510,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
 
                       <div className="formInput">
                         <label htmlFor="company_address_building_name"></label>
-                        <Field type="text" name="company_address_building_name" placeholder="Building Name. e.g Osborne Towers" />
+                        <Field type="text" name="company_address_building_name" placeholder="Building Name. e.g CBC Towers" />
                         <ErrorMessage className="error" name="company_address_building_name" component="div" />
                       </div>
                       <div className="formInput">
@@ -517,7 +521,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
                       <div className="formInput">
                         <label htmlFor="company_address.area"></label>
                         <Field type="text" name="company_address_area" placeholder="Area, e.g. Ojoo" />
-                        <ErrorMessage className="error" name="company_address-area" component="div" />
+                        <ErrorMessage className="error" name="company_address_area" component="div" />
                       </div>
                       <div className="stateofCompany">
                         <div className="formInput">
@@ -609,7 +613,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
         </div>
 
         {activeDisplay === "placementRequest" && <PlacementComponent showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest} />}
-        {activeDisplay === "placement" && <ActivePlacement toggleNewRequest={toggleNewPlacementReq}/>}
+        {activeDisplay === "placement" && <ActivePlacement toggleNewRequest={toggleNewPlacementReq} triggerRefresh={triggerRefresh}/>}
         {activeDisplay === "placementAcceptance" && <PlacementAcceptance showNewAcceptanceRequest={showNewAcceptanceRequest} toggleNewAcceptanceRequest={toggleAcceptanceRequest} />}
         {activeDisplay === "placementChange" && <PlacementChange showPlacementReq={showNewRequest} togglePlacementChangeRequest={toggleNewPlacementReq} />}
 

@@ -36,7 +36,7 @@ const PlacementRequest = () => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      console.error("Error fetching introduction letter requests:", error);
+      
     }
   };
 
@@ -57,7 +57,7 @@ const PlacementRequest = () => {
   }, []);
 
   const handleViewClick = (request) => {
-    console.log('Selected Request:', request);
+    
     setSelectedRequest(request);
   };
 
@@ -74,7 +74,7 @@ const PlacementRequest = () => {
       document.body.appendChild(link);
       link.click();
     } catch (error) {
-      console.error("Error downloading document:", error);
+      
     } finally {
       setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
     }
@@ -160,7 +160,7 @@ const PlacementRequest = () => {
                   <tr key={index}>
                     <td>{formatDate(request.date_created)}</td>
                     <td>{((request.date_of_approval)===null?"-----":formatDate(request.date_of_approval))}</td>
-                    {console.log(request.date_of_approval)}
+                    
                     <td>
                       <div className={statusClasses}>
                         {request.approval_status}

@@ -66,11 +66,11 @@ const MultiStepForm = ({ toggleNewRequest }) => {
         axiosInstance.get(`/option-types/${type}/options`)
             .then(titles => {
                 const addressee = titles.data.map(title => title.name);
-                console.log("Addressee", addressee);
+              
                 setAddressOptions(addressee); // Corrected setter name
             })
             .catch(error => {
-                console.log("Error fetching addressee options:", error);
+               
             });
     };
 
@@ -88,7 +88,7 @@ const MultiStepForm = ({ toggleNewRequest }) => {
                 setNewState(newStates);
             })
             .catch(error => {
-                console.log("Error fetching states:", error);
+               
             });
     };
 
@@ -117,28 +117,28 @@ const MultiStepForm = ({ toggleNewRequest }) => {
             });
 
             // **Debugging Log**
-            console.log("Form Data to Send:");
-            for (let pair of formDataToSend.entries()) {
-                console.log(`${pair[0]}: ${pair[1]}`);
-            }
+           
+            
 
             // Ensure placementId is available
             if (!placementId) {
-                throw new Error("Placement ID is not available.");
+                throw new Error("You have no active placement");
+                
             }
 
             const response = await axiosInstance.post(`/trainings/registrations/placements/${placementId}/change-request/`, formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-            console.log("Form submitted successfully:", response.data);
+           
 
             // Show Success Modal
             setShowChangeSuccess(true);
         } catch (error) {
-            console.error("Error submitting form:", error.response ? error.response.data : error.message);
+            
             setShowChangeFailure(true);
             // Safeguard against undefined error messages
-            setChangeOfPlacementFailureMessage(error.response?.data?.detail || "An unexpected error occurred.");
+            
+            setChangeOfPlacementFailureMessage(error.response?.data?.detail || "You don't have an active placement");
         } finally {
             setIsSubmitting(false);
         }
@@ -201,7 +201,7 @@ const MultiStepForm = ({ toggleNewRequest }) => {
     ];
 
     return (
-        <div className="newRequestComponent">
+        <div className="newRequestComponent reqChange">
             {currentStep < steps.length ? steps[currentStep] : null}
 
             {/* Failure Modal */}
