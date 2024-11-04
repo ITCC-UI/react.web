@@ -20,21 +20,21 @@ const PlacementChangeReq = () => {
     try {
       const registrationResponse = await axiosInstance.get("trainings/registrations/");
       const registrations = registrationResponse.data;
-      //console.log("Fetched registrations:", registrations);
+      
 
       if (registrations.length === 0) {
-        //console.log("No registrations found");
+        
         return;
       }
 
-      // Use the ID of the first registration
+      
       const id = registrations[0].id;
-      //console.log("Using Registration ID:", id);
+      
 
       const requestsResponse = await axiosInstance.get(`trainings/registrations/change-of-placements-view/${id}/`);
-      // const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests`);
+      
       const requests = requestsResponse.data;
-      console.log("Fetched requests:", requests);
+      // console.log("Fetched requests:", requests);
       
       const processedRequests = requests.map(request => ({
         ...request,
@@ -43,7 +43,7 @@ const PlacementChangeReq = () => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      console.error("Error fetching Placement letter Changes:", error);
+      // console.error("Error fetching Placement letter Changes:", error);
     }
   };
 
@@ -64,7 +64,7 @@ const PlacementChangeReq = () => {
   }, []);
 
   const handleViewClick = (request) => {
-    console.log('Selected Request:', request);
+    // console.log('Selected Request:', request);
     setSelectedRequest(request);
   };
 
@@ -81,13 +81,13 @@ const PlacementChangeReq = () => {
       document.body.appendChild(link);
       link.click();
     } catch (error) {
-      //console.error("Error downloading document:", error);
+      
     } finally {
       setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
     }
   };
 
-  // Helper function to format date
+  
   const formatDate = (dateString) => {
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);

@@ -26,7 +26,7 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
         setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error fetching programme ID:", error);
+      
       setIsLoading(false);
     }
   };

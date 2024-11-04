@@ -11,7 +11,7 @@ import MoreDetails from '../../../components/View More/MoreDetails';
 
 
 
-const PlacementTable = () => {
+const PlacementTable = ({triggerRefresh}) => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -23,19 +23,19 @@ const [filter, setFilter] =useState('all')
     try {
       const registrationResponse = await axiosInstance.get("trainings/registrations/");
       const registrations = registrationResponse.data;
-      console.log("Fetched registrations:", registrations);
+     
 
       if (registrations.length === 0) {
-        //console.log("No registrations found");
+        
         return;
       }
 
       // Use the ID of the first registration
       const id = registrations[0].id;
-      console.log("Using Registration ID:", id);
+      
       const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`)
       const requests = requestsResponse.data;
-      console.log("Fetched requests:", requests);
+      
       
       const processedRequests = requests.map(request => ({
         ...request,
@@ -44,7 +44,7 @@ const [filter, setFilter] =useState('all')
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      console.error("Error fetching introduction letter requests:", error);
+      
     }
   };
 
@@ -62,10 +62,10 @@ const [filter, setFilter] =useState('all')
 
   useEffect(() => {
     fetchPlacementLetter();
-  }, []);
+  }, [triggerRefresh]);
 
   const handleViewClick = (request) => {
-    // console.log('Selected Request:', request);
+    
     setSelectedRequest(request);
   };
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
-
 import "./introTable.scss";
 import classNames from 'classnames';
 import IconDownload from "/images/Download.png";
@@ -8,11 +7,9 @@ import axiosInstance from '../../../API Instances/AxiosIntances';
 import { RingLoader } from 'react-spinners';
 import MoreDetails from '../../../components/View More/MoreDetailsIntroductionLetter';
 import { Search } from 'lucide-react';
-import Filter from "/images/Filter.png"
+import Filter from "/images/Filter.png";
 
-
-
-const IntroductionLetterTable = () => {
+const IntroductionLetterTable = ({ triggerRefresh }) => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -23,21 +20,13 @@ const IntroductionLetterTable = () => {
     try {
       const registrationResponse = await axiosInstance.get("trainings/registrations/");
       const registrations = registrationResponse.data;
-      
 
-      if (registrations.length === 0) {
-        
-        return;
-      }
+      if (registrations.length === 0) return;
 
-      
       const id = registrations[0].id;
-      
-
       const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests/`);
       const requests = requestsResponse.data;
-      
-      
+
       const processedRequests = requests.map(request => ({
         ...request,
         statusClass: getStatusClass(request.approval_status),
@@ -45,7 +34,7 @@ const IntroductionLetterTable = () => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      
+      console.error("Error fetching letter requests", error);
     }
   };
 
@@ -61,12 +50,12 @@ const IntroductionLetterTable = () => {
     }
   };
 
+  // Refetch data when triggerRefresh changes
   useEffect(() => {
     fetchIntroductionLetterRequests();
-  }, []);
+  }, [triggerRefresh]);
 
   const handleViewClick = (request) => {
-    
     setSelectedRequest(request);
   };
 
@@ -83,13 +72,12 @@ const IntroductionLetterTable = () => {
       document.body.appendChild(link);
       link.click();
     } catch (error) {
-      
+      console.error("Error downloading document", error);
     } finally {
       setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
     }
   };
 
-  
   const formatDate = (dateString) => {
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
@@ -97,49 +85,31 @@ const IntroductionLetterTable = () => {
 
   const filteredRequests = letterRequests.filter((request) => {
     const matchesSearch = Object.values(request).some(
-      (value) => 
-        value && 
-        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      (value) => value && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
     );
-    const matchesFilter = 
-      filter === 'all' || 
-      request.approval_status.toLowerCase() === filter.toLowerCase();
+    const matchesFilter = filter === 'all' || request.approval_status.toLowerCase() === filter.toLowerCase();
     return matchesSearch && matchesFilter;
   });
 
-
   return (
     <section className='shift'>
-      
       <div className="mainBody">
         <div className="containerCourse">
-
-        <div className="search-bar">
+          <div className="search-bar">
             <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
               <input
                 type="text"
                 placeholder="Search Here"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                
               />
-             
             </div>
             <div className='filter'>
-            <img src={Filter} alt="Hey" className='image-filter' />
-              <select
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="pyro"
-              >
-                
-                <option value="default" disabled selected hidden>
-      Select a status
-      
-    </option>
-
-                <option value="all"> All </option>
+              <img src={Filter} alt="Hey" className='image-filter' />
+              <select value={filter} onChange={(e) => setFilter(e.target.value)} className="pyro">
+                <option value="default" disabled hidden>Select a status</option>
+                <option value="all">All</option>
                 <option value="approved">Approved</option>
                 <option value="submitted">Submitted</option>
                 <option value="rejected">Rejected</option>
@@ -174,11 +144,7 @@ const IntroductionLetterTable = () => {
                     <td>{request.company_name}</td>
                     <td>{request.address_to}</td>
                     <td>{request.company_address.state_or_province.name}</td>
-                    <td>
-                      <div className={statusClasses}>
-                        {request.approval_status}
-                      </div>
-                    </td>
+                    <td><div className={statusClasses}>{request.approval_status}</div></td>
                     <td>{formatDate(request.date_created)}</td>
                     <td className='down'>
                       <button onClick={() => handleViewClick(request)}>View More</button>
@@ -198,18 +164,10 @@ const IntroductionLetterTable = () => {
               })}
             </tbody>
           </table>
-          {selectedRequest && (
-            <MoreDetails
-              request={selectedRequest}
-              onClose={() => setSelectedRequest(null)}
-            />
-          )}
+          {selectedRequest && <MoreDetails request={selectedRequest} onClose={() => setSelectedRequest(null)} />}
         </div>
       </div>
-    
-      <div className="register_above mobile">
-        Scroll horizontally to see more
-      </div>
+      <div className="register_above mobile">Scroll horizontally to see more</div>
     </section>
   );
 };

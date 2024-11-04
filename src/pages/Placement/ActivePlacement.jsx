@@ -6,7 +6,7 @@ import PlacementTable from "./PlacementTable";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 
 
-const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
+const ActivePlacement=({showNewRequest, toggleNewRequest, triggerRefresh})=> {
     
     const [id, setProgrammeId] = useState(null);
     const [placement, setLetterRequests] = useState([]);
@@ -36,20 +36,20 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
       try {
         const registrationResponse = await axiosInstance.get("trainings/registrations/");
         const registrations = registrationResponse.data;
-        // //console.log("Fetched registrations:", registrations);
+       
   
-        // Use the ID of the first registration
+       
         const id = registrations[0].id;
-        //console.log("Using Registration ID:", id);
+       
         const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`)
         const requests = requestsResponse.data;
-        //console.log("Fetched requests:", requests);
+       
         setLetterRequests(requests)
    
   
         
       } catch (error) {
-        //console.error("Error fetching introduction letter requests:", error);
+      
       }
     };
 
@@ -61,7 +61,6 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
     <>
     <div className="container">
             <div className="topHead place">
-               {/* Conditionally render the New Request button only if programmeId exists */}
           {id && (
             <button className="newReq null off" onClick={toggleNewRequest} disabled >
              + Change Placement
@@ -78,7 +77,7 @@ const ActivePlacement=({showNewRequest, toggleNewRequest})=> {
           ) : placement.length !== 0 ? (
 
             
-              <PlacementTable />)
+              <PlacementTable triggerRefresh={triggerRefresh}/>)
           :
            ( <div className="image">
               <img src={Empty} alt="Empty" />
