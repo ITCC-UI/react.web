@@ -48,8 +48,9 @@ console.log(programmeId)
   const fetchChangeOfPlacementRequests = async () => {
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${programmeId}/change-of-placements/`);
-      setLetterRequests(response.data);
+      setLetterRequests(response);
       console.log(placement)
+      console.log(programmeId)
     } catch (error) {
       console.error("Error fetching change of placement requests:", error);
     }

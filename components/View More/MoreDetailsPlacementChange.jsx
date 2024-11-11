@@ -20,48 +20,10 @@ const MoreDetails = ({ request, onClose }) => {
   const handleChange=()=>{
     // console.log("It worked")
       setChange(true)
-      // setIsActive(false)
+       setIsActive(false)
+       onClose()
+      
   }
-
-  // const openChangeChoice = () =>{
-  //   console.log("This worked too")
-  //   setLetterChoice(true)
-  //   setChange(fasle)
-
-  // }
-
-  
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-  const changeOfPlacementSchema = Yup.object().shape({
-    company_name: Yup.string()
-      .required('Company name is required'),
-      company_address: Yup.object().shape({
-        building_number: Yup.string(),
-        street: Yup.string().required("Street is required"),
-        area: Yup.string(),
-        city: Yup.string().required("City is required"),
-        state_or_province: Yup.string().required("State or province is required"),
-      }),
-    company_contact_name: Yup.string()
-      .required('Company contact name is required'),
-    company_contact_email: Yup.string()
-      .email('Invalid email')
-      .required('Company contact email is required'),
-      company_contact_phone: Yup.string()
-      .matches(phoneRegExp, 'Phone number is not valid')
-      .required('Company contact phone is required').min(11, "Phone number must be more than 10"),
-
-      letter: Yup.mixed()
-      .required('A file is required')
-      .test('fileFormat', 'Unsupported file format', (value) => {
-        if (!value) return false;
-        return ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(value.type);
-      })
-      .test('fileSize', 'File size is too large', (value) => {
-        if (!value) return false;
-        return value.size <= 1 * 1024 * 1024; // 1MB limit
-      })
-  });
  
   const handleClose = () => {
     setIsActive(false);
@@ -97,7 +59,8 @@ const MoreDetails = ({ request, onClose }) => {
 
 
   return (
-    <><div className="modal-overlay" onClick={handleClose}></div>
+    <>
+    <div className="modal-overlay" onClick={handleClose}></div>
       <div className={`more-details-modal designed ${isActive ? 'active' : ''}`}>
         <div onClick={handleClose} className='closeView'>
           <X size={24} />
@@ -107,16 +70,12 @@ const MoreDetails = ({ request, onClose }) => {
           {/* <div className="placementHeader">Current Placement</div> */}
           <div className="compProfile">
             <div className='details'>Company Name</div>
-            <div className="cDetails">{(request.company_name !==null? "Placement not yet assigned": request.company_name )}</div>
+            <div className="cDetails">{(request.company_name !==null? "Pending Approval": request.company_name )}</div>
           </div>
 
 
 
-          <div className='compProfile'>
-            <div className="details">Company Address</div>
-            {/* <div className="cDetails">{formatApprovalDate(request.date_created)}</div> */}
-            <div className="cDetails">{(request.company_address.building_number)}, {(request.company_address.building_name)} {(request.company_address.street)} {(request.company_address.area)} {(request.company_address.city)}, {(request.company_address.state_or_province.name)}, {(request.company_address.state_or_province.country)}</div>
-          </div>
+      
 
 
 
@@ -141,7 +100,7 @@ const MoreDetails = ({ request, onClose }) => {
         </div>
 
 
-        <button className='changePlacement' onClick={handleChange}> Change Placement</button>
+        {/* <button className='changePlacement' onClick={handleChange}> Change Placement</button> */}
       </div>
       
 

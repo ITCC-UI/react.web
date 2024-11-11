@@ -31,11 +31,11 @@ const PlacementChangeReq = () => {
       const id = registrations[0].id;
       
 
-      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${programmeId}/change-of-placements/`);
+      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/change-of-placements/`);
       // const response = await axiosInstance.get(``);
       
       const requests = requestsResponse.data;
-      // console.log("Fetched requests:", requests);
+      console.log("Fetched requests:", requests);
       
       const processedRequests = requests.map(request => ({
         ...request,
@@ -177,9 +177,9 @@ const PlacementChangeReq = () => {
                 });
                 return (
                   <tr key={index}>
-                    <td>{request.company_name}</td>
+                    <td>{request.initial_company_name}</td>
                     <td>{formatDate(request.date_created)}</td>
-                    <td>{formatDate(request.date_last_modified)}</td>
+                    <td>{request.date_of_approval===null? "Pending": formatDate(request.date_of_approval)}</td>
                     
                     <td>
                       <div className={statusClasses}>
@@ -197,7 +197,7 @@ const PlacementChangeReq = () => {
                         />
                       )}</td> */}
                       <td>
-                        {request.company_name}
+                        {request.new_company_name}
                       </td>
                 
                     <td className='down'>
