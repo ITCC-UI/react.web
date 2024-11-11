@@ -21,7 +21,6 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
         if (registrationResponse.data.length > 0) {
           const id = registrationResponse.data[0].id;
           setProgrammeId(id);
-console.log(programmeId)
           const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
           const requests = requestsResponse.data;
           if (requests.length > 0) {
@@ -36,7 +35,7 @@ console.log(programmeId)
           setNoProgrammeId(true);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        
       } finally {
         setIsLoading(false);
       }
@@ -49,10 +48,9 @@ console.log(programmeId)
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${programmeId}/change-of-placements/`);
       setLetterRequests(response);
-      console.log(placement)
-      console.log(programmeId)
+     
     } catch (error) {
-      console.error("Error fetching change of placement requests:", error);
+      
     }
   };
 

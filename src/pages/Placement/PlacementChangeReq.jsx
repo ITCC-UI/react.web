@@ -32,7 +32,7 @@ const PlacementChangeReq = () => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      console.error("Error fetching Placement letter Changes:", error);
+      
     }
   };
 
@@ -74,7 +74,7 @@ const PlacementChangeReq = () => {
       document.body.appendChild(link);
       link.click();
     } catch (error) {
-      console.error("Error downloading document:", error);
+      
     } finally {
       setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
     }

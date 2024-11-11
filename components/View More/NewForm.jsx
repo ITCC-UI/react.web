@@ -30,7 +30,7 @@ const MultiStepForm = ({ toggleNewRequest }) => {
                 setProgrammeId(fetchedId);
             }
         } catch (error) {
-            console.error("Error fetching programme ID:", error);
+            
         }
     };
 
