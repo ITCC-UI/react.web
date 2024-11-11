@@ -3,7 +3,6 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import axiosInstance from "../../API Instances/AxiosIntances";
 import { PulseLoader } from "react-spinners";
-// import {AcceptanceLetterAdressee } from "../../src/pages/Placement/AcceptanceAddressee"; // Corrected imports
 import CloseIcon from "/images/closeButton.png";
 import FullScreenSuccessMessage from "../../src/pages/Placement/Successful/Successful";
 import FullScreenFailureMessage from "../../src/pages/Placement/Failed/FullScreenFailureMessage";
@@ -20,9 +19,9 @@ const MultiStepForm = ({ toggleNewRequest }) => {
     const [showChangeFailure, setShowChangeFailure] = useState(false);
     const [changeOfPlacementFailureMessage, setChangeOfPlacementFailureMessage] = useState("");
 
-    const [addressOptions, setAddressOptions] = useState([]); // Corrected setter name
+    const [addressOptions, setAddressOptions] = useState([]); 
 
-    // Fetch Programme ID
+    
     const fetchProgrammeId = async () => {
         try {
             const response = await axiosInstance.get(`/trainings/registrations/`);
@@ -39,18 +38,18 @@ const MultiStepForm = ({ toggleNewRequest }) => {
         fetchProgrammeId();
     }, []);
 
-    // Fetch Placement ID
+    
     const fetchPlacementLetterID = async () => {
         try {
             const registrationResponse = await axiosInstance.get("trainings/registrations/");
             const registrations = registrationResponse.data;
-            const id = registrations[0]?.id; // Using optional chaining in case registrations is empty
+            const id = registrations[0]?.id; 
             if (id) {
                 const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
                 const requests = requestsResponse.data;
                 const placementId = requests[0]?.id;
                 setPlacementId(placementId);
-                // setPlacementLetter(requests);
+                
 
             } else {
 
@@ -64,27 +63,27 @@ const MultiStepForm = ({ toggleNewRequest }) => {
         if (id) fetchPlacementLetterID();
     }, [id]);
 
-    // Fetch Addressee
+    
     const type="ADDRESSEE"
     const fetchAddressee = () => { 
         axiosInstance.get(`/option-types/${type}/options`)
             .then(titles => {
                 const addressee = titles.data.map(title => title.name);
 
-                setAddressOptions(addressee); // Corrected setter name
+                setAddressOptions(addressee); 
             })
             .catch(error => {
 
             });
     };
 
-    // Fetch Addressee on Component Mount or when 'type' changes
+    
     useEffect(() => {
         
         fetchAddressee();
-    }, []); // Add 'type' to dependencies if dynamic
+    }, []); 
 
-    // Fetch States
+    
     const fetchStates = async ()=>{
         try{
           const states= await axiosInstance.get("/states")
@@ -104,12 +103,12 @@ const MultiStepForm = ({ toggleNewRequest }) => {
         fetchStates();
     }, []);
 
-    // Submit Placement Change
+    
     const submitPlacementChange = async (dataToSend) => {
         try {
             const formDataToSend = new FormData();
     setIsSubmitting(true)
-            // Flatten nested fields for FormData
+            
             Object.keys(dataToSend).forEach((key) => {
                 if (key === 'acceptance_letter') {
                     const letterData = dataToSend[key];
@@ -120,7 +119,7 @@ const MultiStepForm = ({ toggleNewRequest }) => {
                     formDataToSend.append('acceptance_letter.company_contact_email', letterData.company_contact_email);
                     formDataToSend.append('acceptance_letter.company_contact_phone', letterData.company_contact_phone);
     
-                    // Flatten nested company_address fields
+                    
                     Object.keys(letterData.company_address).forEach((addressKey) => {
                         formDataToSend.append(
                             `acceptance_letter.company_address.${addressKey}`,
@@ -150,19 +149,19 @@ const MultiStepForm = ({ toggleNewRequest }) => {
     };
     
 
-    // Handle Next Step
+    
     const handleNextStep = (values, final = false) => {
         const updatedData = { ...formData, ...values };
         setFormData(updatedData);
 
-        if (currentStep === 1) { // Step 2: Placement Choice
+        if (currentStep === 1) { 
             if (values.request_placement) {
-                // If user chooses 'Yes', submit the form
+                
                 setIsSubmitting(true);
                 submitPlacementChange(updatedData);
                 return;
             } else {
-                // If user chooses 'No', proceed to Step 3
+                
                 setCurrentStep(prev => prev + 1);
                 return;
             }
@@ -177,7 +176,7 @@ const MultiStepForm = ({ toggleNewRequest }) => {
         setCurrentStep(prev => prev + 1);
     };
 
-    // Handle Previous Step
+    
     const handlePrevStep = () => {
         setCurrentStep(prev => prev - 1);
     };
@@ -193,7 +192,7 @@ const MultiStepForm = ({ toggleNewRequest }) => {
             key="step2"
             next={handleNextStep}
             isSubmitting={isSubmitting}
-            toggleNewPlacementReq={toggleNewRequest} // Added if needed
+            toggleNewPlacementReq={toggleNewRequest} 
         />,
         <StepThree
             key="step3"
@@ -202,7 +201,7 @@ const MultiStepForm = ({ toggleNewRequest }) => {
             statesOfNigeria={statesOfNigeria}
             toggleNewPlacementReq={toggleNewRequest}
             initialValues={formData}
-            addressOptions={addressOptions} // Pass addressOptions if needed
+            addressOptions={addressOptions} 
         />
     ];
 
@@ -210,30 +209,28 @@ const MultiStepForm = ({ toggleNewRequest }) => {
         <div className="newRequestComponent reqChange">
             {currentStep < steps.length ? steps[currentStep] : null}
 
-            {/* Failure Modal */}
             <FullScreenFailureMessage
                 isOpen={showChangeFailure}
                 message={changeOfPlacementFailureMessage}
                 onClose={() => {
                     setShowChangeFailure(false);
-                    toggleNewRequest(); // Close the form after closing the modal
+                    toggleNewRequest(); 
                 }}
             />
 
-            {/* Success Modal */}
             <FullScreenSuccessMessage
                 isOpen={showChangeSuccess}
                 message="Your placement change request was successful!"
                 onClose={() => {
                     setShowChangeSuccess(false);
-                    toggleNewRequest(); // Close the form after closing the modal
+                    toggleNewRequest(); 
                 }}
             />
         </div>
     );
 };
 
-// Validation Schemas
+
 const stepOneValidationSchema = Yup.object().shape({
     request_message: Yup.string().required("Reason for change is required")
 });
@@ -261,7 +258,7 @@ const stepTwoValidationSchema = Yup.object().shape({
 });
 
 
-// Step One Component
+
 const StepOne = ({ next, toggleNewPlacementReq, initialValues }) => {
     const handleSubmit = (values) => {
         next(values);
@@ -299,10 +296,10 @@ const StepOne = ({ next, toggleNewPlacementReq, initialValues }) => {
     );
 };
 
-// Step Two Component
+
 const StepTwo = ({ isSubmitting, next, toggleNewPlacementReq }) => {
     const handlePlacementChoice = (choice) => {
-        next({ request_placement: choice }); // Ensure choice is a boolean
+        next({ request_placement: choice }); 
     };
 
     return (
@@ -316,7 +313,7 @@ const StepTwo = ({ isSubmitting, next, toggleNewPlacementReq }) => {
                     <button
                         onClick={() => handlePlacementChoice(false)}
                         className="acceptanceLetter"
-                        disabled={isSubmitting} // Disable button when submitting
+                        disabled={isSubmitting} 
                     >
                         Submit an Acceptance Letter
                         
@@ -324,7 +321,7 @@ const StepTwo = ({ isSubmitting, next, toggleNewPlacementReq }) => {
                     <button
                         onClick={() => handlePlacementChoice(true)}
                         className="continueClass"
-                        disabled={isSubmitting} // Disable button when submitting
+                        disabled={isSubmitting} 
                     >
                         {isSubmitting ? <PulseLoader size={10} color="white" /> : "Request to be Posted"}
                     </button>
@@ -334,15 +331,15 @@ const StepTwo = ({ isSubmitting, next, toggleNewPlacementReq }) => {
     );
 };
 
-// Step Three Component
-const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initialValues, addressOptions }) => { // Added addressOptions as a prop
+
+const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initialValues, addressOptions }) => { 
     const combinedInitialValues = {
         ...initialValues,
         acceptance_letter_file: null,
        acceptance_letter:{
         letter_type: '',
         company_name: '',
-        addressee: '', // Added if needed
+        addressee: '', 
         company_address: {
             building_number: "",
             building_name: "",
@@ -361,8 +358,8 @@ const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initial
 
     const handleSubmit = (values, { setSubmitting }) => {
         const finalValues = {
-            ...initialValues,  // This includes data from Step 1 and 2
-            ...values,         // This includes data from Step 3
+            ...initialValues,  
+            ...values,         
         };
         next(finalValues, true);
         setSubmitting(false);

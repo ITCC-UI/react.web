@@ -90,16 +90,7 @@ console.log(programmeId)
       ) : (
         <PlacementChangeReq letterRequests={placement} />
       )}
-      {submissionStatus === "success" && (
-        <div className="submissionStatus success">
-          Form submitted successfully! Reload the page.
-        </div>
-      )}
-      {submissionStatus === "failure" && (
-        <div className="submissionStatus failure">
-          Error submitting form. Please try again.
-        </div>
-      )}
+ 
     </>
   );
 };

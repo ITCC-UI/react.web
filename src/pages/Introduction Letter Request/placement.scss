@@ -272,11 +272,23 @@ margin-left: 0;
     gap: 20px;
   }
   .newRequestComponent{
-    height: fit-content;
+    height: auto;
+    min-height: 100vh;
+    width: 100% !important;
     .newRequestHeader{
       padding-top: 45px;
       width: 95%;
       border-radius: 10px;
+      .nestedButton{
+
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        .acceptanceLetter, .continueClass{
+          width: 90%;
+          font-size: .8rem;
+        }
+      }
       .introductionLetter{
         margin-bottom: 20px;
       }
@@ -292,7 +304,7 @@ margin-left: 0;
     }
   }
   .reqChange{
-    height: 100vh;
+  
   }
 .formInput{
   width: 90%;
