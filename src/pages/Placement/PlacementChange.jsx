@@ -7,7 +7,8 @@ import axiosInstance from "../../../API Instances/AxiosIntances";
 
 const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => {
   const [id, setProgrammeId] = useState(null);
-  const [Placement, setLetterRequests] = useState([]);
+  const [placementID, setPlacementId]= useState(null)
+  const [placement, setLetterRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [submissionStatus, setSubmissionStatus] = useState("");
   const [noProgrammeId, setNoProgrammeId] = useState(false); // State for no Programme ID
@@ -30,65 +31,64 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
       setIsLoading(false);
     }
   };
-
-  
-  const fetchPlacementLetter = async () => {
-    try {
-      const registrationResponse = await axiosInstance.get("trainings/registrations/");
-      const registrations = registrationResponse.data;
-     
-
-     
-      const id = registrations[0].id;
-     
-      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`)
-      const requests = requestsResponse.data;
-     
-      setPlacementLetter(requests)
- 
-
-      
-    } catch (error) {
-    
-    }
-  };
-
-  useEffect(() => {
-    fetchPlacementLetter();
-  }, []);
-
-  const fetchChangeOfPlacementRequests = async (id) => {
-    try {
-      const response = await axiosInstance.get(`/trainings/registrations/change-of-placements-view/${id}`);
-      // const response = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests`);
-      setLetterRequests(response.data);
-      setIsLoading(false);
-      
-    } catch (error) {
-      
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchProgrammeId();
   }, []);
+  
+  const fetchPlacementLetterID = async () => {
+    try {
+      const registrationResponse = await axiosInstance.get("trainings/registrations/");
+      const registrations = registrationResponse.data;
+      const id = registrations[0]?.id; // Using optional chaining in case registrations is empty
+      if (id) {
+        const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
+        const requests = requestsResponse.data;
+        const placementId = requests[0]?.id;
+        setPlacementId(placementId);
+        setPlacementLetter(requests);
+        
+      } else {
+        
+      }
+    } catch (error) {
+      
+    }
+  };
+
+  useEffect(() => {
+    if (id) fetchPlacementLetterID();
+  }, [id]);
+
+
+  const fetchChangeOfPlacementRequests = async (placementID) => {
+    try {
+      const response = await axiosInstance.get(`/trainings/registrations/change-of-placements-view/${placementID}`);
+      // const response = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests`);
+      setLetterRequests(response.data);
+      console.log("requests fetched", setLetterRequests)
+      setIsLoading(false);
+      
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
+
+
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    if (!id) {
-      
+    if (!placementID) { // Check for placementID instead of id
       return;
     }
-
+  
     try {
-      const response = await axiosInstance.post(`/trainings/change-of-placement/registrations/${id}/`, values);
+      
+      const response = await axiosInstance.post(`/trainings/change-of-placement/registrations/${placementID}/`, values);
       setSubmissionStatus("success");
       setTimeout(() => {
         setSubmissionStatus("");
         window.location.reload();
       }, 500);
     } catch (error) {
-      
       setSubmissionStatus("failure");
       setTimeout(() => {
         setSubmissionStatus("");
@@ -98,6 +98,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
       togglePlacementChangeRequest();
     }
   };
+  
 
   return (
     <>
@@ -105,7 +106,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
         <div className="topHead place">
       {  noProgrammeId || placements.length===0 ? ( <button className="newReq disable" onClick={togglePlacementChangeRequest} disabled={true}>
             + New Request
-          </button>): ( <button className="newReq disable" onClick={togglePlacementChangeRequest}>
+          </button>): ( <button className="newReq" onClick={togglePlacementChangeRequest}>
             + New Request
           </button>)}
         </div>
@@ -120,12 +121,12 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
           <p>You are not eligible to request for a change of placement at this time. <br/>
         <br/>  You need to make a registration before proceeding</p>
         </div>
-      ) : Placement.length === 0 ? (
+      ) : placement.length === 0 ? (
         <div className="image">
           <img src={Empty} alt="Empty" />
         </div>
       ) : (
-        <PlacementChangeReq letterRequests={Placement} />
+        <PlacementChangeReq letterRequests={placement} />
       )}
       {submissionStatus === "success" && (
         <div className="submissionStatus success">
