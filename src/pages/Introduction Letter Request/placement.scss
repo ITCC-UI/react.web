@@ -428,6 +428,19 @@ margin-left: 0;
   }
 }
 
+@media (max-width:1024px) {
+  .newRequestComponent{
+    width: 102%;
+  }
+  main{
+    width: 75%;
+  }
+  @media (max-width:768px) {
+    .newRequestComponent{
+      width: 110%;
+    }
+  }
+}
 
 
 
