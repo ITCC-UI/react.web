@@ -15,16 +15,15 @@ const PlacementChangeReq = () => {
   const [filter, setFilter] = useState('all');
   const [refreshData, setRefreshData] = useState(false);
 
-  const fetchIntroductionLetterRequests = async () => {
+  const fetchPlacementChangeReq = async () => {
     try {
       const registrationResponse = await axiosInstance.get("trainings/registrations/");
       const registrations = registrationResponse.data;
+      console.log(registrations)
       if (registrations.length === 0) return;
-
       const id = registrations[0].id;
       const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/change-of-placements/`);
       const requests = requestsResponse.data;
-
       const processedRequests = requests.map(request => ({
         ...request,
         statusClass: getStatusClass(request.approval_status),
@@ -32,7 +31,7 @@ const PlacementChangeReq = () => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      
+      console.log("Error", error)
     }
   };
 
@@ -49,7 +48,7 @@ const PlacementChangeReq = () => {
   };
 
   useEffect(() => {
-    fetchIntroductionLetterRequests();
+    fetchPlacementChangeReq();
   }, [refreshData]);  // Trigger fetch when refreshData changes
 
   const handleFormSubmit = () => {
