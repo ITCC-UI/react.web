@@ -9,6 +9,7 @@ import axiosInstance from "../../../API Instances/AxiosIntances";
 const ActivePlacement=({showNewRequest, toggleNewRequest, triggerRefresh})=> {
     
     const [id, setProgrammeId] = useState(null);
+  
     const [placement, setLetterRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -45,6 +46,7 @@ const ActivePlacement=({showNewRequest, toggleNewRequest, triggerRefresh})=> {
         const requests = requestsResponse.data;
        
         setLetterRequests(requests)
+      
    
   
         
@@ -61,12 +63,14 @@ const ActivePlacement=({showNewRequest, toggleNewRequest, triggerRefresh})=> {
     <>
     <div className="container">
             <div className="topHead place">
-          {id && (
-            <button className="newReq" onClick={toggleNewRequest} >
+        
+          {placement.length===0?(
+             <button className="newReq disable" onClick={null} >
              + Change Placement
             </button>
-          )}
-          
+          ):  <button className="newReq" onClick={toggleNewRequest} >
+          + Change Placement
+         </button>}
             </div>
           </div>
           {isLoading ? (

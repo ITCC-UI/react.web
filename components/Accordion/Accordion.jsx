@@ -97,7 +97,8 @@ const AccordionS = ({ initialOpenSection, activeIntro, activeReg, activeDailyLog
       </div>
 
       <div className={`navigation-item ${openAccordion === 1 ? 'active' : ''}`}>
-        <div className="navigation-header null" onClick={() => handlePanelToggle(1)}>
+        {/* <div className="navigation-header null" onClick={() => handlePanelToggle(1)}> */}
+        <div className="navigation-header null" onClick={null}>
           <h3>Training</h3>
           <img
             className="navigation-toggle"
@@ -117,12 +118,13 @@ const AccordionS = ({ initialOpenSection, activeIntro, activeReg, activeDailyLog
         >
           <Link to="/job-reporting-form">Job Reporting Form</Link>
           <Link to="/daily-logs" className={activeDailyLog}>Daily logs</Link>
-          <Link to="/new-logbook-request">New Logbook Request</Link>
+          <Link to="/new-logbook-request"className="null">New Logbook Request</Link>
         </div>
       </div>
 
       <div className={`navigation-item ${openAccordion === 2 ? 'active' : ''}`}>
-        <div className="navigation-header null" onClick={() => handlePanelToggle(2)}>
+        {/* <div className="navigation-header null" onClick={() => handlePanelToggle(2)}> */}
+        <div className="navigation-header" onClick={null}>
           <h3>Post-Training</h3>
           <img
             className="navigation-toggle"

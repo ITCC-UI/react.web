@@ -17,6 +17,7 @@ const PlacementComponent = ({ toggleNewRequest, refreshPlacementTable }) => {
       const response = await axiosInstance.get("trainings/registrations/");
       if (response.data.length > 0) {
         const id = response.data[0].id;
+        
         setProgrammeId(id);
         
         fetchIntroductionLetterRequests(id);
