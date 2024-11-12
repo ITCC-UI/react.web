@@ -32,7 +32,7 @@ import ChangePlacementForm from '../components/View More/NewForm.jsx';
 import MultiStepForm from '../components/View More/NewForm.jsx';
 // import PrintPreviewContainer from '../components/Print Layout/PrintPreview.jsx';
 // import RegistrationForm from '../components/Print Form/RegistrationForm.jsx';
-import JobReportingForm from './pages/Job Reporting Form/JobReportMain.jsx';
+// import JobReportingForm from './pages/Job Reporting Form/JobReportMain.jsx';
 function App() {
 
     return (
