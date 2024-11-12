@@ -47,7 +47,8 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
   const fetchChangeOfPlacementRequests = async () => {
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${programmeId}/change-of-placements/`);
-      setLetterRequests(response);
+      setLetterRequests(response.data);
+      
      
     } catch (error) {
       
