@@ -3,26 +3,25 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import axiosInstance from "../../API Instances/AxiosIntances";
 import { PulseLoader } from "react-spinners";
-// import {AcceptanceLetterAdressee } from "../../src/pages/Placement/AcceptanceAddressee"; // Corrected imports
 import CloseIcon from "/images/closeButton.png";
 import FullScreenSuccessMessage from "../../src/pages/Placement/Successful/Successful";
 import FullScreenFailureMessage from "../../src/pages/Placement/Failed/FullScreenFailureMessage";
 
-const MultiStepForm = ({ toggleNewRequest }) => {
+const MultiStepForm = ({ toggleNewRequest, onFormSubmit }) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [statesOfNigeria, setNewState] = useState([]);
     const [formData, setFormData] = useState({});
     const [id, setProgrammeId] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [placementId, setPlacementId] = useState(null);
+    const [placementID, setPlacementId] = useState(null);
 
     const [showChangeSuccess, setShowChangeSuccess] = useState(false);
     const [showChangeFailure, setShowChangeFailure] = useState(false);
     const [changeOfPlacementFailureMessage, setChangeOfPlacementFailureMessage] = useState("");
 
-    const [addressOptions, setAddressOptions] = useState([]); // Corrected setter name
-
-    // Fetch Programme ID
+    const [addressOptions, setAddressOptions] = useState([]); 
+    const [refreshPlacementTable, setRefreshPlacementTable]= useState(false)
+    
     const fetchProgrammeId = async () => {
         try {
             const response = await axiosInstance.get(`/trainings/registrations/`);
@@ -31,7 +30,7 @@ const MultiStepForm = ({ toggleNewRequest }) => {
                 setProgrammeId(fetchedId);
             }
         } catch (error) {
-            console.error("Error fetching programme ID:", error);
+            
         }
     };
 
@@ -39,124 +38,132 @@ const MultiStepForm = ({ toggleNewRequest }) => {
         fetchProgrammeId();
     }, []);
 
-    // Fetch Placement ID
-    const fetchPlacementId = async () => {
+    
+    const fetchPlacementLetterID = async () => {
         try {
-            const response = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
-            if (response.data.length > 0) {
-                const fetchedPlacementId = response.data[0].id;
-                console.log("Fetched Placement ID:", fetchedPlacementId);
-                setPlacementId(fetchedPlacementId);
+            const registrationResponse = await axiosInstance.get("trainings/registrations/");
+            const registrations = registrationResponse.data;
+            const id = registrations[0]?.id; 
+            if (id) {
+                const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
+                const requests = requestsResponse.data;
+                const placementId = requests[0]?.id;
+                setPlacementId(placementId);
+                
+
+            } else {
+
             }
         } catch (error) {
-            console.error("Error fetching placement ID:", error);
-            setShowChangeFailure(true);
-            setChangeOfPlacementFailureMessage("Failed to fetch placement ID.");
+
         }
     };
 
     useEffect(() => {
-        if (id) {
-            fetchPlacementId();
-        }
+        if (id) fetchPlacementLetterID();
     }, [id]);
 
-    // Fetch Addressee
-    const fetchAddressee = (type) => { // Accept 'type' as a parameter
+    
+    const type="ADDRESSEE"
+    const fetchAddressee = () => { 
         axiosInstance.get(`/option-types/${type}/options`)
             .then(titles => {
                 const addressee = titles.data.map(title => title.name);
-              
-                setAddressOptions(addressee); // Corrected setter name
+
+                setAddressOptions(addressee); 
             })
             .catch(error => {
-               
+
             });
     };
 
-    // Fetch Addressee on Component Mount or when 'type' changes
+    
     useEffect(() => {
-        const type = "addressee_type"; // Define the correct type here
-        fetchAddressee(type);
-    }, []); // Add 'type' to dependencies if dynamic
+        
+        fetchAddressee();
+    }, []); 
 
-    // Fetch States
-    const fetchStates = () => {
-        axiosInstance.get(`/states`)
-            .then(states => {
-                const newStates = states.data.map(state => state.name);
-                setNewState(newStates);
-            })
-            .catch(error => {
-               
-            });
-    };
+    
+    const fetchStates = async ()=>{
+        try{
+          const states= await axiosInstance.get("/states")
+          
+          
+          setNewState(states.data)
+      
+        }
+      
+        catch{
+          
+        }
+      }
+      
 
     useEffect(() => {
         fetchStates();
     }, []);
 
-    // Submit Placement Change
+    
     const submitPlacementChange = async (dataToSend) => {
         try {
             const formDataToSend = new FormData();
-
-            // Append all form fields to FormData
-            Object.keys(dataToSend).forEach(key => {
-                if (key === 'company_address') {
-                    Object.keys(dataToSend[key]).forEach(addressKey => {
-                        formDataToSend.append(`company_address.${addressKey}`, dataToSend[key][addressKey]);
+    setIsSubmitting(true)
+            
+            Object.keys(dataToSend).forEach((key) => {
+                if (key === 'acceptance_letter') {
+                    const letterData = dataToSend[key];
+                    formDataToSend.append('acceptance_letter.letter_type', letterData.letter_type);
+                    formDataToSend.append('acceptance_letter.company_name', letterData.company_name);
+                    formDataToSend.append('acceptance_letter.addressee', letterData.addressee);
+                    formDataToSend.append('acceptance_letter.company_contact_name', letterData.company_contact_name);
+                    formDataToSend.append('acceptance_letter.company_contact_email', letterData.company_contact_email);
+                    formDataToSend.append('acceptance_letter.company_contact_phone', letterData.company_contact_phone);
+    
+                    
+                    Object.keys(letterData.company_address).forEach((addressKey) => {
+                        formDataToSend.append(
+                            `acceptance_letter.company_address.${addressKey}`,
+                            letterData.company_address[addressKey]
+                        );
                     });
                 } else if (key === 'acceptance_letter_file') {
                     formDataToSend.append('acceptance_letter_file', dataToSend[key]);
-                } else if (key === 'request_placement') {
-                    formDataToSend.append('request_placement', dataToSend[key]); // Append as boolean directly
                 } else {
                     formDataToSend.append(key, dataToSend[key]);
                 }
             });
-
-            // **Debugging Log**
-           
-            
-
-            // Ensure placementId is available
-            if (!placementId) {
-                throw new Error("You have no active placement");
-                
-            }
-
-            const response = await axiosInstance.post(`/trainings/registrations/placements/${placementId}/change-request/`, formDataToSend, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-           
-
-            // Show Success Modal
+    
+            const response = await axiosInstance.post(
+                `/trainings/registrations/placements/${placementID}/change-request/`,
+                formDataToSend,
+                { headers: { 'Content-Type': 'multipart/form-data' } }
+            );
+    
             setShowChangeSuccess(true);
+        
+            onFormSubmit()
         } catch (error) {
-            
             setShowChangeFailure(true);
-            // Safeguard against undefined error messages
-            
-            setChangeOfPlacementFailureMessage(error.response?.data?.detail || "You don't have an active placement");
+            setChangeOfPlacementFailureMessage(error.response?.data?.detail || 'An error occurred.');
         } finally {
             setIsSubmitting(false);
         }
     };
+    
 
-    // Handle Next Step
+    
     const handleNextStep = (values, final = false) => {
         const updatedData = { ...formData, ...values };
         setFormData(updatedData);
-        
-        if (currentStep === 1) { // Step 2: Placement Choice
+
+        if (currentStep === 1) { 
             if (values.request_placement) {
-                // If user chooses 'Yes', submit the form
+                
                 setIsSubmitting(true);
                 submitPlacementChange(updatedData);
                 return;
             } else {
-                // If user chooses 'No', proceed to Step 3
+                
                 setCurrentStep(prev => prev + 1);
                 return;
             }
@@ -171,32 +178,32 @@ const MultiStepForm = ({ toggleNewRequest }) => {
         setCurrentStep(prev => prev + 1);
     };
 
-    // Handle Previous Step
+    
     const handlePrevStep = () => {
         setCurrentStep(prev => prev - 1);
     };
 
     const steps = [
-        <StepOne 
-            key="step1" 
-            next={handleNextStep} 
-            toggleNewPlacementReq={toggleNewRequest} 
-            initialValues={formData} 
+        <StepOne
+            key="step1"
+            next={handleNextStep}
+            toggleNewPlacementReq={toggleNewRequest}
+            initialValues={formData}
         />,
-        <StepTwo 
-            key="step2" 
-            next={handleNextStep} 
-            isSubmitting={isSubmitting} 
-            toggleNewPlacementReq={toggleNewRequest} // Added if needed
-        />,
-        <StepThree 
-            key="step3" 
-            next={handleNextStep} 
-            prev={handlePrevStep} 
-            statesOfNigeria={statesOfNigeria} 
+        <StepTwo
+            key="step2"
+            next={handleNextStep}
+            isSubmitting={isSubmitting}
             toggleNewPlacementReq={toggleNewRequest} 
-            initialValues={formData} 
-            addressOptions={addressOptions} // Pass addressOptions if needed
+        />,
+        <StepThree
+            key="step3"
+            next={handleNextStep}
+            prev={handlePrevStep}
+            statesOfNigeria={statesOfNigeria}
+            toggleNewPlacementReq={toggleNewRequest}
+            initialValues={formData}
+            addressOptions={addressOptions} 
         />
     ];
 
@@ -204,53 +211,56 @@ const MultiStepForm = ({ toggleNewRequest }) => {
         <div className="newRequestComponent reqChange">
             {currentStep < steps.length ? steps[currentStep] : null}
 
-            {/* Failure Modal */}
             <FullScreenFailureMessage
                 isOpen={showChangeFailure}
                 message={changeOfPlacementFailureMessage}
                 onClose={() => {
                     setShowChangeFailure(false);
-                    toggleNewRequest(); // Close the form after closing the modal
+                    toggleNewRequest(); 
                 }}
             />
 
-            {/* Success Modal */}
             <FullScreenSuccessMessage
                 isOpen={showChangeSuccess}
                 message="Your placement change request was successful!"
                 onClose={() => {
                     setShowChangeSuccess(false);
-                    toggleNewRequest(); // Close the form after closing the modal
+                    toggleNewRequest(); 
                 }}
             />
         </div>
     );
 };
 
-// Validation Schemas
+
 const stepOneValidationSchema = Yup.object().shape({
     request_message: Yup.string().required("Reason for change is required")
 });
 
 const stepTwoValidationSchema = Yup.object().shape({
-    letter_type: Yup.string()
-        .oneOf(['UNDERTAKING', 'ACCEPTANCE'], 'Invalid letter type')
-        .required('Letter type is required'),
-    company_name: Yup.string().required("Company name is required"),
-    company_contact_name: Yup.string().required("Signatory position is required"),
-    company_contact_email: Yup.string().email("Invalid email"),
-    company_contact_phone: Yup.string(),
     acceptance_letter_file: Yup.mixed().required("Letter is required"),
-    company_address: Yup.object().shape({
-        building_number: Yup.string(),
-        street: Yup.string().required("Street is required"),
-        area: Yup.string(),
-        city: Yup.string().required("City is required"),
-        state_or_province_id: Yup.string().required("State is required"),
-    }),
+    acceptance_letter: Yup.object().shape({
+        letter_type: Yup.string()
+            .oneOf(['ACCEPTANCE'], 'Only "ACCEPTANCE" type is allowed')
+            .required('Letter type is required'),
+            company_contact_name:Yup.string(),
+        company_name: Yup.string().required("Company name is required"),
+        addressee: Yup.string().required('Addressee title is required'),
+        company_contact_email: Yup.string().email("Invalid email"),
+      
+        company_address: Yup.object().shape({
+            building_number: Yup.string(),
+            building_name: Yup.string(),
+            street: Yup.string().required("Street is required"),
+            area: Yup.string(),
+            city: Yup.string().required("City is required"),
+            state_or_province_id: Yup.string().required("State is required"),
+        })
+    })
 });
 
-// Step One Component
+
+
 const StepOne = ({ next, toggleNewPlacementReq, initialValues }) => {
     const handleSubmit = (values) => {
         next(values);
@@ -271,11 +281,11 @@ const StepOne = ({ next, toggleNewPlacementReq, initialValues }) => {
                     {() => (
                         <Form>
                             <div className="formInput">
-                                <Field 
-                                    name="request_message" 
-                                    as="textarea" 
-                                    className="placement_letter" 
-                                    placeholder="Reason for change of placement" 
+                                <Field
+                                    name="request_message"
+                                    as="textarea"
+                                    className="placement_letter"
+                                    placeholder="Reason for change of placement"
                                 />
                                 <ErrorMessage name="request_message" component="div" className="error" />
                             </div>
@@ -288,10 +298,10 @@ const StepOne = ({ next, toggleNewPlacementReq, initialValues }) => {
     );
 };
 
-// Step Two Component
+
 const StepTwo = ({ isSubmitting, next, toggleNewPlacementReq }) => {
     const handlePlacementChoice = (choice) => {
-        next({ request_placement: choice }); // Ensure choice is a boolean
+        next({ request_placement: choice }); 
     };
 
     return (
@@ -302,17 +312,18 @@ const StepTwo = ({ isSubmitting, next, toggleNewPlacementReq }) => {
             </button>
             <div className="requestContent">
                 <div className="nestedButton">
-                    <button 
-                        onClick={() => handlePlacementChoice(false)} 
-                        className="acceptanceLetter" 
-                        disabled={isSubmitting} // Disable button when submitting
+                    <button
+                        onClick={() => handlePlacementChoice(false)}
+                        className="acceptanceLetter"
+                        disabled={isSubmitting} 
                     >
                         Submit an Acceptance Letter
+                        
                     </button>
-                    <button 
-                        onClick={() => handlePlacementChoice(true)} 
-                        className="continueClass" 
-                        disabled={isSubmitting} // Disable button when submitting
+                    <button
+                        onClick={() => handlePlacementChoice(true)}
+                        className="continueClass"
+                        disabled={isSubmitting} 
                     >
                         {isSubmitting ? <PulseLoader size={10} color="white" /> : "Request to be Posted"}
                     </button>
@@ -322,14 +333,15 @@ const StepTwo = ({ isSubmitting, next, toggleNewPlacementReq }) => {
     );
 };
 
-// Step Three Component
-const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initialValues, addressOptions }) => { // Added addressOptions as a prop
+
+const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initialValues, addressOptions }) => { 
     const combinedInitialValues = {
         ...initialValues,
-        letter_type: '',
         acceptance_letter_file: null,
+       acceptance_letter:{
+        letter_type: '',
         company_name: '',
-        addressee: '', // Added if needed
+        addressee: '', 
         company_address: {
             building_number: "",
             building_name: "",
@@ -343,15 +355,17 @@ const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initial
         company_contact_name: '',
         company_contact_email: '',
         company_contact_phone: '',
+       }
     };
 
     const handleSubmit = (values, { setSubmitting }) => {
         const finalValues = {
-            ...initialValues,  // This includes data from Step 1 and 2
-            ...values,         // This includes data from Step 3
+            ...initialValues,  
+            ...values,         
         };
         next(finalValues, true);
         setSubmitting(false);
+        
     };
 
     return (
@@ -362,124 +376,130 @@ const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initial
             </button>
             <div className="requestContent">
                 <Formik
-                   initialValues={combinedInitialValues}
-                   validationSchema={stepTwoValidationSchema}
-                   onSubmit={handleSubmit}
+                    initialValues={combinedInitialValues}
+                    validationSchema={stepTwoValidationSchema}
+                    onSubmit={handleSubmit}
                 >
                     {({ isSubmitting, setFieldValue }) => (
                         <Form encType="multipart/form-data">
                             <div className="companyAddressedTo warp_contents">
                                 <div className="formInput">
-                                    <label htmlFor="company_name">Company's Name <p>*</p> </label>
-                                    <Field 
-                                        type="text" 
-                                        name="company_name" 
-                                        placeholder="Enter the name of the company " 
-                                    />
-                                    <ErrorMessage className="error" name="company_name" component="div" />
-                                </div>
-                                <div className="formInput">
-                                    <label htmlFor="addressee">Addressee <p>*</p></label>
-                                    <AcceptanceLetterAdressee
-                                        name="addressee"
-                                        options={addressOptions}
-                                        placeholder="Title/Position to address letter to, e.g The Managing Director"
-                                    />
-                                    <ErrorMessage className="error" name="addressee" component="div" />
-                                </div>
-                                <div className="formInput">
-                                    <label htmlFor="company_contact_email">Company Email </label>
-                                    <Field 
-                                        type="text" 
-                                        name="company_contact_email" 
-                                        placeholder="Enter the company's email" 
-                                    />
-                                    <ErrorMessage className="error" name="company_contact_email" component="div" />
-                                </div>
-                                <div className="formInput">
-                                    <label htmlFor="company_contact_phone">Signatory Phone Number</label>
-                                    <Field 
-                                        type="tel" 
-                                        name="company_contact_phone" 
-                                        placeholder="e.g 08066641912" 
-                                    />
-                                    <ErrorMessage className="error" name="company_contact_phone" component="div" />
+                                    <label htmlFor="acceptance_letter.company_name">Company's Name <p>*</p></label>
+                                    <Field type="text" name="acceptance_letter.company_name" placeholder="Enter the name of the company " />
+                                    <ErrorMessage className="error" name="acceptance_letter.company_name" component="div" />
                                 </div>
 
                                 <div className="formInput">
-                                    <label htmlFor="letter_type">Letter Type <p>*</p></label>
-                                    <Field as="select" name="letter_type">
+                                    <label htmlFor="acceptance_letter.addressee">
+                                        Signatory Position <p>*</p>
+                                    </label>
+
+                                    <Field as="select" name="acceptance_letter.addressee" className="form-select">
+                                        <option value="">Select Title/Position</option>
+                                        {addressOptions.map((option, index) => (
+                                            <option key={index} value={option}>
+                                                {option}
+                                            </option>
+                                        ))}
+                                    </Field>
+
+                                    <ErrorMessage className="error" name="acceptance_letter.addressee" component="div" />
+                                </div>
+
+                                <div className="formInput">
+                                    <label htmlFor="acceptance_letter.company_contact_name">Signatory Name </label>
+                                    <Field type="text" name="acceptance_letter.company_contact_name" placeholder="e.g John Doe" />
+                                    <ErrorMessage className="error" name="acceptance_letter.company_contact_name" component="div" />
+                                </div>
+
+
+                                <div className="formInput">
+                                    <label htmlFor="acceptance_letter.company_contact_email">Company Email</label>
+                                    <Field type="text" name="acceptance_letter.company_contact_email" placeholder="Enter the company’s email" />
+                                    <ErrorMessage className="error" name="acceptance_letter.company_contact_email" component="div" />
+                                </div>
+
+                                <div className="formInput">
+                                    <label htmlFor="acceptance_letter.company_contact_phone">Company Phone Number</label>
+                                    <Field type="tel" name="acceptance_letter.company_contact_phone" placeholder="e.g 08012345689" />
+                                    <ErrorMessage className="error" name="acceptance_letter.company_contact_phone" component="div" />
+                                </div>
+
+                                <div className="formInput">
+                                    <label htmlFor="acceptance_letter.letter_type">Letter Type <p>*</p></label>
+                                    <Field as="select" name="acceptance_letter.letter_type">
                                         <option value="">Select Letter Type</option>
-                                        <option value="UNDERTAKING">UNDERTAKING</option>
+                                        <option value="UNDERTAKING" disabled >UNDERTAKING</option>
                                         <option value="ACCEPTANCE">ACCEPTANCE LETTER</option>
                                     </Field>
-                                    <ErrorMessage className="error" name="letter_type" component="div" />
+                                    <ErrorMessage className="error" name="acceptance_letter.letter_type" component="div" />
                                 </div>
-                                <div className="formInput move-left">
+
+                                <div className="formInput letter">
                                     <label htmlFor="acceptance_letter_file">Letter <p>*</p></label>
                                     <input
                                         id="acceptance_letter_file"
                                         name="acceptance_letter_file"
                                         type="file"
+                                        accept=".pdf, image/*"
                                         onChange={(event) => {
                                             setFieldValue("acceptance_letter_file", event.currentTarget.files[0]);
+
                                         }}
                                     />
-                                    <ErrorMessage className="error" name="acceptance_letter_file" component="div" />
+                                    <ErrorMessage className="error side" name="acceptance_letter_file" component="div" />
                                 </div>
                             </div>
-                            <div className="companyDetails">
-                                <div className="company">Company's Address <p>*</p></div>
+                            <div className="companyDetails acceptance">
+                                <div className="company">Company Address</div>
                                 <div className="formInput buildNo">
-                                    <Field 
-                                        type="text" 
-                                        name="company_address.building_number" 
-                                        placeholder="Building No : No 24" 
-                                        className="buildNo" 
-                                    />
-                                    <ErrorMessage className="error" name="company_address.building_number" component="div" />
+                                    <label htmlFor="acceptance_letter.company_address_building_number"></label>
+                                    <Field type="text" name="acceptance_letter.company_address_building_number" placeholder="Building No : No 24" className="buildNo" />
+                                    <ErrorMessage className="error" name="acceptance_letter.company_address_building_number" component="div" />
+                                </div>
+
+                                <div className="formInput">
+                                    <label htmlFor="acceptance_letter.company_address_building_name"></label>
+                                    <Field type="text" name="acceptance_letter.company_address_building_name" placeholder="Building Name. e.g CBC Towers" />
+                                    <ErrorMessage className="error" name="acceptance_letter.company_address_building_name" component="div" />
                                 </div>
                                 <div className="formInput">
-                                    <Field 
-                                        type="text" 
-                                        name="company_address.street" 
-                                        placeholder="Street, e.g UI Road" 
-                                    />
-                                    <ErrorMessage className="error" name="company_address.street" component="div" />
+                                    <label htmlFor="acceptance_letter.company_address.street"></label>
+                                    <Field type="text" name="acceptance_letter.company_address.street" placeholder="Street, e.g UI Road" />
+                                    <ErrorMessage className="error" name="acceptance_letter.company_address.street" component="div" />
                                 </div>
                                 <div className="formInput">
-                                    <Field 
-                                        type="text" 
-                                        name="company_address.area" 
-                                        placeholder="Area, e.g. Ojoo" 
-                                    />
-                                    <ErrorMessage className="error" name="company_address.area" component="div" />
+                                    <label htmlFor="acceptance_letter.company_address.area"></label>
+                                    <Field type="text" name="acceptance_letter.company_address.area" placeholder="Area, e.g. Ojoo" />
+                                    <ErrorMessage className="error" name="acceptance_letter.company_address.area" component="div" />
                                 </div>
                                 <div className="stateofCompany">
                                     <div className="formInput">
-                                        <Field 
-                                            type="text" 
-                                            name="company_address.city" 
-                                            placeholder="City, e.g Ibadan *" 
-                                        />
-                                        <ErrorMessage className="error" name="company_address.city" component="div" />
+                                        <label htmlFor="acceptance_letter.company_address.city"></label>
+                                        <Field type="text" name="acceptance_letter.company_address.city" placeholder="City, e.g Ibadan *" />
+                                        <ErrorMessage className="error" name="acceptance_letter.company_address.city" component="div" />
                                     </div>
                                     <div className="formInput">
-                                        <AcceptanceLetterAdresse
-                                            name="company_address.state_or_province_id"
-                                            options={statesOfNigeria}
-                                            placeholder="Select a state"
-                                        />
-                                        <ErrorMessage className="error" name="company_address.state_or_province_id" component="div" />
+                                        <label htmlFor="acceptance_letter.company_address.state_or_province_id"></label>
+
+                                        <Field as="select" name="acceptance_letter.company_address.state_or_province_id" className="selector">
+                                            <option value="" label="Select a state or province" /> {/* Optional default option */}
+                                            {statesOfNigeria.map((item) => (
+                                                <option key={item.id} value={item.id}>
+                                                    {item.name}
+                                                </option>
+                                            ))}
+                                        </Field>
+
+                                        <ErrorMessage className="error" name="acceptance_letter.company_address.state_or_province_id" component="div" />
                                     </div>
                                 </div>
                             </div>
-                            {/* <button type="button" onClick={prev}>Previous</button> */}
-                            <button 
-                                type="submit" 
-                                className="submitting continueClass submitButton" 
-                                disabled={isSubmitting}
-                            >
+
+
+
+
+                            <button type="submit" className="submitting">
                                 {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
                             </button>
                         </Form>

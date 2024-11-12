@@ -5,37 +5,25 @@ import classNames from 'classnames';
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import MoreDetails from '../../../components/View More/MoreDetailsPlacementChange';
 import { Search } from 'lucide-react';
-import Filter from "/images/Filter.png"
+import Filter from "/images/Filter.png";
 
-
-
-const PlacementChangeReq = () => {
+const PlacementChangeReq = (refreshData) => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
+  
 
-  const fetchIntroductionLetterRequests = async () => {
+  const fetchPlacementChangeReq = async () => {
     try {
       const registrationResponse = await axiosInstance.get("trainings/registrations/");
       const registrations = registrationResponse.data;
-      
-
-      if (registrations.length === 0) {
-        
-        return;
-      }
-
-      
+      console.log(registrations)
+      if (registrations.length === 0) return;
       const id = registrations[0].id;
-      
-
-      const requestsResponse = await axiosInstance.get(`trainings/registrations/change-of-placements-view/${id}/`);
-      
+      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/change-of-placements/`);
       const requests = requestsResponse.data;
-      // console.log("Fetched requests:", requests);
-      
       const processedRequests = requests.map(request => ({
         ...request,
         statusClass: getStatusClass(request.approval_status),
@@ -43,7 +31,7 @@ const PlacementChangeReq = () => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      // console.error("Error fetching Placement letter Changes:", error);
+      console.log("Error", error)
     }
   };
 
@@ -60,11 +48,11 @@ const PlacementChangeReq = () => {
   };
 
   useEffect(() => {
-    fetchIntroductionLetterRequests();
-  }, []);
+    fetchPlacementChangeReq();
+  }, [refreshData]);  // Trigger fetch when refreshData changes
+
 
   const handleViewClick = (request) => {
-    // console.log('Selected Request:', request);
     setSelectedRequest(request);
   };
 
@@ -87,13 +75,10 @@ const PlacementChangeReq = () => {
     }
   };
 
-  
   const formatDate = (dateString) => {
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
-
-
 
   const filteredRequests = letterRequests.filter((request) => {
     const matchesSearch = Object.values(request).some(
@@ -107,50 +92,36 @@ const PlacementChangeReq = () => {
     return matchesSearch && matchesFilter;
   });
 
-
-
-
-
   return (
     <section className='shift placement_table'>
-      
       <div className="mainBody">
-        <div className="containerCourse">
-
-
         <div className="search-bar">
-            <div className="relative">
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
-              <input
-                type="text"
-                placeholder="Search Here"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                
-              />
-             
-            </div>
-            <div className='filter'>
-            <img src={Filter} alt="Hey" className='image-filter' />
-              <select
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="pyro"
-              >
-                
-                {/* <option value="all" disabled>Filter</option> */}
-                <option value="default" disabled selected hidden>
-      Select a status
-      
-    </option>
-
-                <option value="all"> All </option>
-                <option value="approved">Approved</option>
-                <option value="submitted">Submitted</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
+            <input
+              type="text"
+              placeholder="Search Here"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
+          <div className='filter'>
+            <img src={Filter} alt="Hey" className='image-filter' />
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="pyro"
+            >
+              <option value="default" disabled selected hidden>Select a status</option>
+              <option value="all"> All </option>
+              <option value="approved">Approved</option>
+              <option value="submitted">Submitted</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+        </div>
+        
+        <div className="containerCourse">
           <table>
             <thead>
               <tr>
@@ -170,38 +141,19 @@ const PlacementChangeReq = () => {
                   'rejected': request.statusClass === 'rejected',
                   'submitted': request.statusClass === 'submitted',
                 });
-                const downloadIconClasses = classNames({
-                  'downloadIcon': true,
-                  'inactive': request.statusClass !== 'approved',
-                });
                 return (
                   <tr key={index}>
-                    <td>{request.company_name}</td>
+                    <td>{request.initial_company_name}</td>
                     <td>{formatDate(request.date_created)}</td>
-                    <td>{formatDate(request.date_last_modified)}</td>
-                    
+                    <td>{request.date_of_approval === null ? "Pending" : formatDate(request.date_of_approval)}</td>
                     <td>
                       <div className={statusClasses}>
                         {request.approval_status}
                       </div>
                     </td>
-                    {/* <td> {loadingDownloads[request.id] ? (
-                        <RingLoader size={20} color='blue' />
-                      ) : (
-                        <img 
-                          src={IconDownload} 
-                          alt="download" 
-                          className={downloadIconClasses}
-                          onClick={() => request.statusClass === 'approved' && handleDownloadClick(request.id)} 
-                        />
-                      )}</td> */}
-                      <td>
-                        {request.company_name}
-                      </td>
-                
+                    <td>{request.new_company_name}</td>
                     <td className='down'>
                       <button onClick={() => handleViewClick(request)}>View More</button>
-                     
                     </td>
                   </tr>
                 );
@@ -216,7 +168,6 @@ const PlacementChangeReq = () => {
           )}
         </div>
       </div>
-    
       <div className="register_above mobile">
         Scroll horizontally to see more
       </div>

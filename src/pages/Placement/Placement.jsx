@@ -19,25 +19,23 @@ import MultiStepForm from "../../../components/View More/NewForm";
 
 
 const Placement = () => {
-  const [file, setFile] = useState(null);
-  const [acceptanceSubmissionStatus, setAcceptanceSubmissionStatus] = useState("");
   const [acceptanceSuccessMessage, setAcceptanceSuccessMessage] = useState("");
   const [acceptanceFailureMessage, setAcceptanceFailureMessage] = useState("")
   const [showAcceptanceSuccessful, setShowAcceptanceSuccessful] = useState(false);
   const [showAcceptanceFailure, setShowAcceptanceFailure] = useState(false);
 
-  const [placementSubmissionStatus, setPlacementSubmissionStatus] = useState("");
   const [placementSuccessMessage, setPlacementSuccessMessage] = useState("");
   const [showPlacementSuccessful, setShowPlacementSuccessful] = useState(false);
   const [triggerRefresh, setTriggerRefresh] =useState(false)
+  const [refreshAcceptanceTable, setTriggerRefreshAcceptance] =useState(false)
+  
   const [showPlacementFailure, setShowPlacementFailure] = useState(false);
   const [placementFailureMessage, setPlacementFailureMessage] =useState("")
 
-  const [changeOfPlacement, setChangeofPlacement] = useState("");
   const [changeOfPlacementSuccessMessage, setPlacementChangeSuccessMessage] = useState("");
   const [showChangeOfPlacementSuccessful, setShowChangeOfPlacementSuccessful] = useState(false);
   const [showChangeOfPlacementFailure, setShowChangeOfPlacementFailure] = useState(false);
-
+const [ refreshData, setRefreshData]= useState(false)
 
   const [showNewRequest, setShowNewRequest] = useState(false);
   const [showNewAcceptanceRequest, setShowNewAcceptanceRequest] = useState(false);
@@ -56,14 +54,15 @@ const Placement = () => {
     setShowNewRequest((prev)=>!prev);
   };
 
+  const triggerRefreshPlacementChange = () => {
+    setRefreshData(prev => !prev);  // Toggle the state to trigger a re-fetch
+  };
 
   const toggleNewPlacementReq = () => {
     setNewChangeRequest((prev) => !prev);
   };
 
-  const toggleClosePlacement=()=>{
-setClose(!closeModal)
-  }
+
 
   const toggleAcceptanceRequest = () => {
     setShowNewAcceptanceRequest(!showNewAcceptanceRequest);
@@ -103,6 +102,7 @@ setClose(!closeModal)
       setAcceptanceSubmissionStatus("success");
       setAcceptanceSuccessMessage("Your Acceptance Letter has been submitted successfully!");
       setShowAcceptanceSuccessful(true);
+      setTriggerRefreshAcceptance(prev=> !prev)
       setTimeout(() => {
         setAcceptanceSubmissionStatus("");
         setShowAcceptanceSuccessful(false);
@@ -196,48 +196,6 @@ useEffect(()=>{
       toggleNewRequest();
     }
   };
-
-  const handleChangeOfPlacementRequest = async (values, { setSubmitting }) => {
-    try {
-      const formData = new FormData();
-      const formattedAddress = formatAddress(values.company_address);
-      Object.keys(values).forEach(key => {
-        if (key === 'letter') {
-          formData.append(key, file);
-        } else if (key === 'company_address') {
-          formData.append(key, formattedAddress);
-        } else {
-          formData.append(key, values[key]);
-        }
-      });
-  
-      const response = await axiosInstance.post(`/trainings/change-of-placements/registrations/${id}/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      // setChangeofPlacement("success");
-      setPlacementChangeSuccessMessage("Your change of placement has been submitted successfully!");
-      setShowPlacementSuccessful(true);
-      setTriggerRefresh(prev=> !prev)
-      // setTimeout(() => {
-      //   setChangeofPlacement("");
-      //   setShowPlacementSuccessful(false);
-      //   window.location.reload();
-      // }, 2000);
-    } catch (error) {
-      setChangeofPlacementFailureMessage(error.response.data.detail)
-      setShowChangeOfPlacementFailure(true)
-      // setTimeout(() => {
-      //   setShowAcceptanceFailure(false)
-      // }, 5000);
-      setTriggerRefresh(prev=> !prev)
-
-    } finally {
-      setSubmitting(true );
-      
-    }
-  };
   
 
   
@@ -259,44 +217,6 @@ useEffect(()=>{
     const { building_number, street, area, city, state_or_province } = addressObj;
     return `${building_number || ''} ${street}, ${area ? area + ', ' : ''}${city}, ${state_or_province}`.trim();
   };
-
-
-  const changeOfPlacementSchema = Yup.object().shape({
-    
-    
-    
-   
-   initial_placement: Yup.string().required(),
-   request_message:Yup.string().required("Request message is required"),
-    company_name: Yup.string()
-      .required('Company name is required'),
-      company_address: Yup.object().shape({
-        building_number: Yup.string(),
-        street: Yup.string().required("Street is required"),
-        area: Yup.string(),
-        city: Yup.string().required("City is required"),
-        state_or_province: Yup.string().required("State or province is required"),
-      }),
-    company_contact_name: Yup.string()
-      .required('Signatory position is required'),
-    company_contact_email: Yup.string()
-      .email('Invalid email'),
-      
-      company_contact_phone: Yup.string()
-      .matches(phoneRegExp, 'Phone number is not valid').min(11, "Phone number must be more than 10"),
-
-      letter: Yup.mixed()
-      .required('A file is required')
-      .test('fileFormat', 'Unsupported file format', (value) => {
-        if (!value) return false;
-        return ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(value.type);
-      })
-      .test('fileSize', 'File size is too large', (value) => {
-        if (!value) return false;
-        return value.size <= 1 * 1024 * 1024; 
-      })
-  });
-
 
 
   const acceptanceLetterSchema = Yup.object().shape({
@@ -397,7 +317,7 @@ useEffect(()=>{
 
       {changeOfPlacementRequest && (
 
-isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
+isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq} onFormSubmit={triggerRefreshPlacementChange}/>
       )}
 
 
@@ -614,8 +534,8 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq}/>
 
         {activeDisplay === "placementRequest" && <PlacementComponent showNewRequest={showNewRequest} toggleNewRequest={toggleNewRequest} />}
         {activeDisplay === "placement" && <ActivePlacement toggleNewRequest={toggleNewPlacementReq} triggerRefresh={triggerRefresh}/>}
-        {activeDisplay === "placementAcceptance" && <PlacementAcceptance showNewAcceptanceRequest={showNewAcceptanceRequest} toggleNewAcceptanceRequest={toggleAcceptanceRequest} />}
-        {activeDisplay === "placementChange" && <PlacementChange showPlacementReq={showNewRequest} togglePlacementChangeRequest={toggleNewPlacementReq} />}
+        {activeDisplay === "placementAcceptance" && <PlacementAcceptance showNewAcceptanceRequest={showNewAcceptanceRequest} toggleNewAcceptanceRequest={toggleAcceptanceRequest} refreshAcceptanceTable={refreshAcceptanceTable}/>}
+        {activeDisplay === "placementChange" && <PlacementChange showPlacementReq={showNewRequest} togglePlacementChangeRequest={toggleNewPlacementReq} refreshData={refreshData}/>}
 
 
       </main>

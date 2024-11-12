@@ -4,7 +4,7 @@ import { PulseLoader } from "react-spinners";
 import Empty from "/images/empty_dashboard.png";
 import PlacementAcceptanceTable from "./PlacementAcceptanceTable";
 import axiosInstance from "../../../API Instances/AxiosIntances";
-const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest})=> {
+const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest, refreshAcceptanceTable})=> {
     
     const [id, setProgrammeId] = useState(null);
     const [Placement, setLetterRequests] = useState([]);
@@ -79,7 +79,7 @@ const PlacementAcceptance=({showNewAcceptanceRequest, toggleNewAcceptanceRequest
               <img src={Empty} alt="Empty" />
             </div>
           ) : (
-            <PlacementAcceptanceTable letterRequests={Placement} />
+            <PlacementAcceptanceTable letterRequests={Placement} refreshAcceptanceTable={refreshAcceptanceTable}/>
           )}
           {submissionStatus === "success" && (
             <div className="submissionStatus success">

@@ -62,7 +62,7 @@ const ActivePlacement=({showNewRequest, toggleNewRequest, triggerRefresh})=> {
     <div className="container">
             <div className="topHead place">
           {id && (
-            <button className="newReq null off" onClick={toggleNewRequest} disabled >
+            <button className="newReq" onClick={toggleNewRequest} >
              + Change Placement
             </button>
           )}

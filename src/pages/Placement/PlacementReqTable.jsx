@@ -8,7 +8,7 @@ import MoreDetails from './MoreDetailsPlacement';
 import { Search } from 'lucide-react';
 import Filter from "/images/Filter.png"
 
-const PlacementRequest = () => {
+const PlacementRequest = (refreshPlacementTable) => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -54,7 +54,7 @@ const PlacementRequest = () => {
 
   useEffect(() => {
     fetchIntroductionLetterRequests();
-  }, []);
+  }, [refreshPlacementTable]);
 
   const handleViewClick = (request) => {
     
@@ -100,8 +100,7 @@ const PlacementRequest = () => {
   return (
     <section className='shift placement_table'>
       <div className="mainBody">
-        <div className="containerCourse">
-          <div className="search-bar">
+      <div className="search-bar">
             <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
               <input
@@ -134,6 +133,8 @@ const PlacementRequest = () => {
               </select>
             </div>
           </div>
+        <div className="containerCourse">
+         
           <table>
             <thead>
               <tr>

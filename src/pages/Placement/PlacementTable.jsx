@@ -97,9 +97,7 @@ const [filter, setFilter] =useState('all')
     <section className='shift placement_table'>
       
       <div className="mainBody">
-        <div className="containerCourse">
-
-        <div className="search-bar">
+      <div className="search-bar">
             <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
               <input
@@ -132,6 +130,9 @@ const [filter, setFilter] =useState('all')
               </select>
             </div>
           </div>
+        <div className="containerCourse">
+
+       
           <table>
             <thead>
               <tr>
