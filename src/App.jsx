@@ -46,7 +46,7 @@ function App() {
           <Route path='/register' element={<Auth><Dashboard/></Auth>}></Route>
           <Route path='/registration-portal' element= {<Auth><RegistrationDash/></Auth>}></Route>
           <Route path='/dashboar' element={<Auth><MainDashboard/></Auth>  } />
-          <Route path='/job-reporting-form' element={<Auth><JobReportingForm/></Auth>  } />
+          {/* <Route path='/job-reporting-form' element={<Auth><JobReportingForm/></Auth>  } /> */}
           <Route path='/placement' element={<Auth><Placement/></Auth>} />               
           <Route path='/introduction-letter' element={<Auth><IntroductionLetter/></Auth>} /> 
           <Route path='/complete-profile2' element={<Auth><FormCase/></Auth>}/>
