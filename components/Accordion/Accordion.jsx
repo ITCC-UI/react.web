@@ -97,7 +97,7 @@ const AccordionS = ({ initialOpenSection, activeIntro, activeReg, activeDailyLog
       </div>
 
       <div className={`navigation-item ${openAccordion === 1 ? 'active' : ''}`}>
-        {/* <div className="navigation-header null" onClick={() => handlePanelToggle(1)}> */}
+        {/* <div className="navigation-header" onClick={() => handlePanelToggle(1)}> */}
         <div className="navigation-header null" onClick={null}>
           <h3>Training</h3>
           <img
