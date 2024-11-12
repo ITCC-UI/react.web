@@ -51,21 +51,22 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
   }, [authToken]);
 
   return (
-    <>
-    <Helmet>
-      <title> ITCC - Course Registration</title>
-    </Helmet>
- {isDisplayed && <DisplayedComponent onClose={handleClose} selectedCourse={selectedCourse}/>}
-    <div className="route-Dash">
-    <SideBar dashboardClass="dashy" placementClass={"placement"} disableCover="dash_navig" activeR={"activen"} init={0} />
-      
-      
-      <main>
-        <TopNav disableReg="registration" setVisible={"show"} regVisible={"hide"} />
-        <DepartmentTrainingCourses checked={handleDisplay} courses={trainingCourses} onRegister={handleRegister} />
-      </main>
+    <div className="introductionLetter">
+      <Helmet>
+        <title> ITCC - Course Registration</title>
+      </Helmet>
+      {isDisplayed && <DisplayedComponent onClose={handleClose} selectedCourse={selectedCourse} />}
+    
+      <div className="route-Dash">
+        <SideBar dashboardClass="dashy" placementClass={"placement"} disableCover="dash_navig" activeR={"activen"} init={0} />
+
+
+        <main className="introLetter">
+          <TopNav disableReg="registration" setVisible={"show"} regVisible={"hide"} />
+          <DepartmentTrainingCourses checked={handleDisplay} courses={trainingCourses} onRegister={handleRegister} />
+        </main>
+      </div>
     </div>
-    </>
   );
 };
 
