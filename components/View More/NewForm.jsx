@@ -202,6 +202,7 @@ const MultiStepForm = ({ toggleNewRequest, onFormSubmit }) => {
             prev={handlePrevStep}
             statesOfNigeria={statesOfNigeria}
             toggleNewPlacementReq={toggleNewRequest}
+            isSubmitting={isSubmitting}
             initialValues={formData}
             addressOptions={addressOptions} 
         />
@@ -364,7 +365,7 @@ const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initial
             ...values,         
         };
         next(finalValues, true);
-        setSubmitting(false);
+        setSubmitting(true);
         
     };
 
@@ -379,6 +380,7 @@ const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initial
                     initialValues={combinedInitialValues}
                     validationSchema={stepTwoValidationSchema}
                     onSubmit={handleSubmit}
+                    isSubmitting
                 >
                     {({ isSubmitting, setFieldValue }) => (
                         <Form encType="multipart/form-data">
