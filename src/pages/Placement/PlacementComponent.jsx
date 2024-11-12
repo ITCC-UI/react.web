@@ -5,7 +5,7 @@ import PlacementTable from "./PlacementReqTable";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 
 
-const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
+const PlacementComponent = ({ toggleNewRequest, refreshPlacementTable }) => {
   const [programmeId, setProgrammeId] = useState(null);
   const [placement, setLetterRequests] = useState([]);
   const [placementLetter, setPlacementRequests] = useState([]);
@@ -88,7 +88,7 @@ const PlacementComponent = ({ showNewRequest, toggleNewRequest }) => {
           <img src={Empty} alt="Empty" />
         </div>
       ) : (
-        <PlacementTable letterRequests={placement} />
+        <PlacementTable letterRequests={placement} refreshPlacementTable={refreshPlacementTable}/>
       )}
    
     </>

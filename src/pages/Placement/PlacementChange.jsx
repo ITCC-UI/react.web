@@ -5,7 +5,7 @@ import Empty from "/images/empty_dashboard.png";
 import PlacementChangeReq from "./PlacementChangeReq";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 
-const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => {
+const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest, refreshData }) => {
   const [programmeId, setProgrammeId] = useState(null);
   const [placementID, setPlacementId] = useState(null);
   const [placement, setLetterRequests] = useState([]);
@@ -87,7 +87,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest }) => 
           <img src={Empty} alt="Empty" />
         </div>
       ) : (
-        <PlacementChangeReq letterRequests={placement} />
+        <PlacementChangeReq letterRequests={placement} refreshData={refreshData}/>
       )}
  
     </>

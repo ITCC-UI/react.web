@@ -8,7 +8,7 @@ import { Search } from 'lucide-react';
 import Filter from "/images/Filter.png";
 import { Link } from 'react-router-dom';
 
-const PlacementAcceptanceTable = () => {
+const PlacementAcceptanceTable = (refreshAcceptanceTable) => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [letterType, checkLetterType] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
@@ -63,7 +63,7 @@ const PlacementAcceptanceTable = () => {
 
   useEffect(() => {
     fetchPlacementLetter();
-  }, []);
+  }, [refreshAcceptanceTable]);
 
   const handleViewClick = (request) => {
     setSelectedRequest(request);

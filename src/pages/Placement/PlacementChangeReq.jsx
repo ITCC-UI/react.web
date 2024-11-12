@@ -7,13 +7,13 @@ import MoreDetails from '../../../components/View More/MoreDetailsPlacementChang
 import { Search } from 'lucide-react';
 import Filter from "/images/Filter.png";
 
-const PlacementChangeReq = () => {
+const PlacementChangeReq = (refreshData) => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
-  const [refreshData, setRefreshData] = useState(false);
+  
 
   const fetchPlacementChangeReq = async () => {
     try {
@@ -51,10 +51,6 @@ const PlacementChangeReq = () => {
     fetchPlacementChangeReq();
   }, [refreshData]);  // Trigger fetch when refreshData changes
 
-  const handleFormSubmit = () => {
-    // Call this function after form submission
-    setRefreshData(prev => !prev);  // Toggle refreshData to re-trigger fetch
-  };
 
   const handleViewClick = (request) => {
     setSelectedRequest(request);

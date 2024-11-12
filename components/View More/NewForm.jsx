@@ -7,7 +7,7 @@ import CloseIcon from "/images/closeButton.png";
 import FullScreenSuccessMessage from "../../src/pages/Placement/Successful/Successful";
 import FullScreenFailureMessage from "../../src/pages/Placement/Failed/FullScreenFailureMessage";
 
-const MultiStepForm = ({ toggleNewRequest, onSuccess }) => {
+const MultiStepForm = ({ toggleNewRequest, onFormSubmit }) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [statesOfNigeria, setNewState] = useState([]);
     const [formData, setFormData] = useState({});
@@ -20,7 +20,7 @@ const MultiStepForm = ({ toggleNewRequest, onSuccess }) => {
     const [changeOfPlacementFailureMessage, setChangeOfPlacementFailureMessage] = useState("");
 
     const [addressOptions, setAddressOptions] = useState([]); 
-
+    const [refreshPlacementTable, setRefreshPlacementTable]= useState(false)
     
     const fetchProgrammeId = async () => {
         try {
@@ -140,7 +140,8 @@ const MultiStepForm = ({ toggleNewRequest, onSuccess }) => {
             );
     
             setShowChangeSuccess(true);
-            onSuccess()
+        
+            onFormSubmit()
         } catch (error) {
             setShowChangeFailure(true);
             setChangeOfPlacementFailureMessage(error.response?.data?.detail || 'An error occurred.');

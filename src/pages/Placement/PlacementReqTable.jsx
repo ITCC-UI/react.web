@@ -8,7 +8,7 @@ import MoreDetails from './MoreDetailsPlacement';
 import { Search } from 'lucide-react';
 import Filter from "/images/Filter.png"
 
-const PlacementRequest = () => {
+const PlacementRequest = (refreshPlacementTable) => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -54,7 +54,7 @@ const PlacementRequest = () => {
 
   useEffect(() => {
     fetchIntroductionLetterRequests();
-  }, []);
+  }, [refreshPlacementTable]);
 
   const handleViewClick = (request) => {
     
