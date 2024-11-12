@@ -19,7 +19,7 @@ const PlacementChangeReq = (refreshData) => {
     try {
       const registrationResponse = await axiosInstance.get("trainings/registrations/");
       const registrations = registrationResponse.data;
-      console.log(registrations)
+      
       if (registrations.length === 0) return;
       const id = registrations[0].id;
       const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/change-of-placements/`);
@@ -31,7 +31,7 @@ const PlacementChangeReq = (refreshData) => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      console.log("Error", error)
+      
     }
   };
 

@@ -48,7 +48,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest, refre
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${programmeId}/change-of-placements/`);
       setLetterRequests(response);
-      console.log(placement)
+      
      
     } catch (error) {
       
@@ -61,7 +61,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest, refre
       <div className="container">
         <div className="topHead place">
           {noProgrammeId || placements.length === 0 ? (
-            <button className="newReq disable" onClick={togglePlacementChangeRequest} disabled={true}>
+            <button className="newReq disable" onClick={null} disabled>
               + New Request
             </button>
           ) : (

@@ -407,7 +407,7 @@ const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initial
                                 </div>
 
                                 <div className="formInput">
-                                    <label htmlFor="acceptance_letter.company_contact_name">Signatory Name </label>
+                                    <label htmlFor="acceptance_letter.company_contact_name">Company Contact Name </label>
                                     <Field type="text" name="acceptance_letter.company_contact_name" placeholder="e.g John Doe" />
                                     <ErrorMessage className="error" name="acceptance_letter.company_contact_name" component="div" />
                                 </div>

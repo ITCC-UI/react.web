@@ -377,7 +377,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq} onFormSubm
 </div>
 
                       <div className="formInput">
-                        <label htmlFor="company_contact_name">Signatory Name </label>
+                        <label htmlFor="company_contact_name">Company Contact Name </label>
                         <Field type="text" name="company_contact_name" placeholder="e.g John Doe" />
                         <ErrorMessage className="error" name="company_contact_name" component="div" />
                       </div>
