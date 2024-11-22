@@ -1,0 +1,78 @@
+.header-main{
+    
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .placement-head{
+        font-family: Poppins;
+font-size: 20px;
+font-weight: 700;
+
+    }
+
+    .form-nest{
+        
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding-right: 5px;
+        .form-download{
+        background-color: #000080;
+        color: #ffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        }
+
+        .form-upload{
+            background-color: #ffff;
+            border: 1px solid #000080;
+            color: #000080;
+            font-family: Poppins;
+        }
+        .null{
+            opacity: .4;
+;
+        }
+    }
+}
+
+@media (max-width:435px) {
+
+        .header-main{
+            
+            align-content: center;
+            align-items: center;
+            flex-wrap: nowrap;
+           .placement-head{
+            margin-left: 15px;
+            width: fit-content;
+            height: fit-content;
+            font-size: 14px;
+            font-weight: 500;
+            
+           }
+
+           .form-nest{
+            gap: 10px;
+            .form-download{
+                gap: 5px;
+            }
+            button.form-download, button.form-upload  {
+                
+                font-size: 10px;
+                width: 100px;
+                img{
+                    width: 20px;
+                }
+            }
+
+            button.form-download{
+                width: 120px;
+            }
+           }
+        }
+    
+}
