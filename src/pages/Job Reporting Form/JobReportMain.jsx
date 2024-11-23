@@ -258,8 +258,8 @@ const handleDownload = async () => {
                 validationSchema={validationSchema}
                 onSubmit={null}
               >
-                {({ isSubmitting }) => (
-                  <Form>
+                {({ isSubmitting, setFieldValue }) => (
+                    <Form encType="multipart/form-data">
                     <div className="companyDetails">
                       <div className="formInput">
                         <label htmlFor="company_supervisor">Supervisor's Name</label>
@@ -269,7 +269,7 @@ const handleDownload = async () => {
 
                       <div className="formInput">
                         <label htmlFor="supervisor_title">Supervisor Title</label>
-                        <Field as="select" name="spervisor_title" className="form-select">
+                        <Field as="select" name="supervisor_title" className="form-select">
     <option value="">Select Title/Position</option>
     {addressOptions.map((option, index) => (
       <option key={index} value={option}>
@@ -281,7 +281,7 @@ const handleDownload = async () => {
                       </div>
                       <div className="formInput">
                         <label htmlFor="supervisor_phone">Supervisor's Phone Number</label>
-                        <Field type="text" name="supervisor_phone" placeholder="Enter your company supervisor's phone number" />
+                        <Field type="tel" name="supervisor_phone" placeholder="Enter your company supervisor's phone number" />
                         <ErrorMessage className="error" name="supervisor_phone" component="div" />
                       </div>
       
@@ -310,7 +310,7 @@ const handleDownload = async () => {
 
                       <div className="formInput">
                         <label htmlFor="mailing_address">Mailing Address</label>
-                        <Field type="text" name="mailing_address" placeholder="Enter your company supervisor's name" />
+                        <Field type="email" name="mailing_address" placeholder="Enter your company supervisor's name" />
                         <ErrorMessage className="error" name="mailing_address" component="div" />
                       </div>
 
