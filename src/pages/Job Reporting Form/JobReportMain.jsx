@@ -23,6 +23,7 @@ const [noProgrammeId, setNoProgrammeId] = useState(false);
 const [letterRequests, setLetterRequests] = useState([]);
 const [placementList, setPlacementList] =useState([])
 const [companyName, setCompanyName] =useState(["Job Reporting Form"])
+const [addressOptions, setAdressOptions]= useState([])
 
 useEffect(() => {
     const handleKeyDown = (event) => {
@@ -109,7 +110,25 @@ const fetchProgrammeId = async () => {
   }, [placements]);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
 
+const type="ADDRESSEE"
+  const fetchAddressee =()=>{
+    axiosInstance.get(`/option-types/${type}/options`)
+    .then(titles =>{
+      const addressee=titles.data.map(title=>title.name)
+      
+      setAdressOptions(addressee)
+      
+    })
+  
+    .catch(error=>{
+      
+      
+    })
+  }
 
+  useEffect(()=>{
+    fetchAddressee()
+  }, [])
   const downloadReportForm = async () => {
     try {
         const response = await axiosInstance.get(`/trainings/registrations/placements/${placements}/job-reporting/form/document/`, {
@@ -249,6 +268,18 @@ const handleDownload = async () => {
                       </div>
 
                       <div className="formInput">
+                        <label htmlFor="supervisor_title">Supervisor Title</label>
+                        <Field as="select" name="spervisor_title" className="form-select">
+    <option value="">Select Title/Position</option>
+    {addressOptions.map((option, index) => (
+      <option key={index} value={option}>
+        {option}
+      </option>
+    ))}
+  </Field>
+  <ErrorMessage className="error" name="supervisor_title" component="div" />
+                      </div>
+                      <div className="formInput">
                         <label htmlFor="supervisor_phone">Supervisor's Phone Number</label>
                         <Field type="text" name="supervisor_phone" placeholder="Enter your company supervisor's phone number" />
                         <ErrorMessage className="error" name="supervisor_phone" component="div" />
@@ -276,11 +307,6 @@ const handleDownload = async () => {
                         <ErrorMessage className="error" name="form" component="div" />
                       </div>
 
-                      <div className="formInput">
-                        <label htmlFor="supervisor_title">Supervisor Title</label>
-                        <Field type="text" name="supervisor_title" placeholder="Enter your company supervisor's name" />
-                        <ErrorMessage className="error" name="supervisor_title" component="div" />
-                      </div>
 
                       <div className="formInput">
                         <label htmlFor="mailing_address">Mailing Address</label>
