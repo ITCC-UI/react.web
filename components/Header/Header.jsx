@@ -59,7 +59,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
       ],
     },
     {
-      disabled: true,
+      disabled: false,
       title: "Training",
       links: [
         { label: "Job Reporting Form", to: "/job-reporting-form" },

@@ -13,6 +13,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest, refre
   const [submissionStatus, setSubmissionStatus] = useState("");
   const [noProgrammeId, setNoProgrammeId] = useState(false);
   const [placements, setPlacementLetter] = useState([]);
+  // const [placementID, setPlacementID] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +29,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest, refre
             setPlacementId(placementId);
             setPlacementLetter(requests);
             fetchChangeOfPlacementRequests(placementId);
+        
           } else {
             setNoProgrammeId(true);
           }
@@ -47,7 +49,7 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest, refre
   const fetchChangeOfPlacementRequests = async () => {
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${programmeId}/change-of-placements/`);
-      setLetterRequests(response);
+      setLetterRequests(response.data);
       
      
     } catch (error) {

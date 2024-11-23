@@ -16,7 +16,6 @@ const MoreDetails = ({ request, onClose }) => {
 
 
   
-
   const handleDownloadClick = async (id) => {
     setLoadingDownloads(prevState => ({ ...prevState, [id]: true }));
     try {
@@ -75,8 +74,8 @@ const MoreDetails = ({ request, onClose }) => {
         <div className="more-details-content">
           <h2 className='approval'>More Details</h2>
           <div className="compProfile">
-            <div className='details'>Company Name</div>
-            <div className="cDetails">{(request.company_name !==null? "Placement not yet assigned": request.company_name )}</div>
+            <div className='details'>Approved Company</div>
+            <div className="cDetails">{(request.approved_company_name ===null? "Placement not yet assigned": request.approved_company_name )}</div>
           </div>
 
 
@@ -102,12 +101,12 @@ const MoreDetails = ({ request, onClose }) => {
             <div className="cDetails">{getApprovalNote(request.approval_note)}</div>
           </div>
 
-          {request.date_of_approval && (
+          {/* {request.date_of_approval && (
             <div className="compProfile">
               <div className="details">Approval Date</div>
               <div className="cDetails">{formatApprovalDate(request.date_of_approval)}</div>
             </div>
-          )}
+          )} */}
 
           
         </div>

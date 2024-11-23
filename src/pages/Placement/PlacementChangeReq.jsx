@@ -129,7 +129,7 @@ const PlacementChangeReq = (refreshData) => {
                 <th>Submission Date</th>
                 <th>Approval Date</th>
                 <th>Status</th>
-                <th>Desired Company</th>
+                <th>New Placement</th>
                 <th>Action</th>
               </tr>
             </thead>

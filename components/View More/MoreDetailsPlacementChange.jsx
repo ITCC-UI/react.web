@@ -17,13 +17,7 @@ const MoreDetails = ({ request, onClose }) => {
   }, []);
 
 
-  const handleChange=()=>{
-    // console.log("It worked")
-      setChange(true)
-       setIsActive(false)
-       onClose()
-      
-  }
+  
  
   const handleClose = () => {
     setIsActive(false);
