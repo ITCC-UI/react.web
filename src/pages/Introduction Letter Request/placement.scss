@@ -125,7 +125,7 @@ color: royalblue !important;
       }
     }
 
-    input[type="text"], select, textarea, input[type="tel"], input[type="file"]{
+    input[type="text"], select, textarea, input[type="tel"],input[type="date"], input[type="file"]{
       width: 100% !important;
     }
     select{
@@ -143,7 +143,7 @@ color: royalblue !important;
     font-size: 14px;
    
   }
-  input[type="text"], textarea, select, input[type="tel"], input[type="file"], .combo{
+  input[type="text"], textarea, select, input[type="tel"],input[type="date"], input[type="file"], .combo{
     width: 700px;
     height: 45px;
     background: rgba(249, 249, 250, 1);
@@ -305,7 +305,7 @@ margin-left: 0;
   }
 .formInput{
   width: 90%;
-  input[type="text"], textarea, select, .combo{
+  input[type="text"],input[type="file"],input[type="date"], textarea, select, .combo{
     width: 100%;
     font-size: 14px !important;
     &::placeholder{

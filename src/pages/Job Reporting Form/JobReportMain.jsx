@@ -14,7 +14,7 @@ import { PulseLoader, BeatLoader } from "react-spinners";
 
 
 const JobReportingForm = () => {
-const [showSubmitForm, setShowSubmitForm]=useState(false)
+const [showSubmitForm, setShowSubmitForm]=useState(true)
 const [id, setProgrammeId] = useState(null);
 const[placements, setPlacementRequests]=useState([])
 const [isLoading, setIsLoading] = useState(false);
@@ -181,19 +181,23 @@ const handleDownload = async () => {
 
 
   const validationSchema = Yup.object().shape({
-    company_supervisor: Yup.string().required("A message is required"),    
-    date_reported: Yup.date().required("date of resumption is required"),
-    supervisor_phone: Yup.string().matches(phoneRegExp, "Company's phone number is not valid").min(11, "Phone number must be more than 10"),
+    company_supervisor: Yup.string().required("Supervisor's name is required"),    
+    date_reported: Yup.date().required("Date of resumption to duty is required"),
+    supervisor_phone: Yup.string().matches(phoneRegExp, "Supervisor's phone number is not valid").min(11, "Phone number must be more than 10"),
+    placement: Yup.string().required(),
+    supervisor_title: Yup.string().required("Supervisor's title is required"),
+    mailing_address: Yup.string().required("Mailing address is required"),
+    residential_address:Yup.string().required("Residential area is required"),
     form: Yup.mixed()
-    .required('A file is required')
-    .test('fileFormat', 'Unsupported file format', (value) => {
-      if (!value) return false;
-      return ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(value.type);
-    })
-    .test('fileSize', 'File size is too large', (value) => {
-      if (!value) return false;
-      return value.size <= 1 * 1024 * 1024; 
-    })
+      .required('A file is required')
+      .test('fileFormat', 'Unsupported file format', (value) => {
+        if (!value) return false;
+        return ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(value.type);
+      })
+      .test('fileSize', 'File size is too large', (value) => {
+        if (!value) return false;
+        return value.size <= 1 * 1024 * 1024; 
+      })
   });
 
 
@@ -223,11 +227,14 @@ const handleDownload = async () => {
                 <div className="requestContent">
                 <Formik
                 initialValues={{
-             
                  form: null,
                  company_supervisor: "",
                  date_reported: "",
-                 supervisor_phone: ""
+                 supervisor_phone: "",
+                 placement: {placements},
+                 supervisor_title: "",
+                 residential_address: "",
+                 mailing_address: ""
                 }}
                 validationSchema={validationSchema}
                 onSubmit={null}
@@ -236,24 +243,56 @@ const handleDownload = async () => {
                   <Form>
                     <div className="companyDetails">
                       <div className="formInput">
-                        <label htmlFor="company_name">Supervisor's Name</label>
-                        <Field type="text" name="company_name" placeholder="Enter your company supervisor's name" />
-                        <ErrorMessage className="error" name="company_name" component="div" />
+                        <label htmlFor="company_supervisor">Supervisor's Name</label>
+                        <Field type="text" name="company_supervisor" placeholder="Enter your company supervisor's name" />
+                        <ErrorMessage className="error" name="company_supervisor" component="div" />
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="company_name">Supervisor's Phone Number</label>
-                        <Field type="text" name="company_name" placeholder="Enter your company supervisor's name" />
-                        <ErrorMessage className="error" name="company_name" component="div" />
+                        <label htmlFor="supervisor_phone">Supervisor's Phone Number</label>
+                        <Field type="text" name="supervisor_phone" placeholder="Enter your company supervisor's phone number" />
+                        <ErrorMessage className="error" name="supervisor_phone" component="div" />
                       </div>
       
 
                       <div className="formInput">
-                        <label htmlFor="company_name">Date repoorted for training</label>
-                        <Field type="text" name="company_name" placeholder="Enter your company supervisor's name" />
-                        <ErrorMessage className="error" name="company_name" component="div" />
+                        <label htmlFor="date_reported">Date reported for training</label>
+                        <Field type="date" name="date_reported" placeholder="Enter your company supervisor's name" />
+                        <ErrorMessage className="error" name="date_reported" component="div" />
                       </div>
 
+                      <div className="formInput">
+                        <label htmlFor="form">Upload your form</label>
+                        <input
+              id="letter"
+              name="form"
+              type="file"
+              accept=".pdf, image/*"
+              onChange={(event) => {
+                setFieldValue("form", event.currentTarget.files[0]);
+                
+              }}
+            />
+                        <ErrorMessage className="error" name="form" component="div" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="supervisor_title">Supervisor Title</label>
+                        <Field type="text" name="supervisor_title" placeholder="Enter your company supervisor's name" />
+                        <ErrorMessage className="error" name="supervisor_title" component="div" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="mailing_address">Mailing Address</label>
+                        <Field type="text" name="mailing_address" placeholder="Enter your company supervisor's name" />
+                        <ErrorMessage className="error" name="mailing_address" component="div" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="residential_address">Residential Address</label>
+                        <Field type="text" name="residential_address" placeholder="Enter your residential address during training" />
+                        <ErrorMessage className="error" name="residential_address" component="div" />
+                      </div>
                     </div>
                  
                     <button type="submit" className="submitting">
@@ -292,7 +331,7 @@ const handleDownload = async () => {
         </>
       )}
     </button>}
-            <button className="form-upload null" onClick={()=>toggleNewSubmission()}>
+            <button className="form-upload" onClick={()=>toggleNewSubmission()}>
            
 Submit Form
             </button>
