@@ -29,6 +29,7 @@ const [successMessage, setJobReportStatus]= useState("")
 const [showSuccessStatus, setJobReportSuccess] =useState(false)
 const [failureMessage, setFailureMessage]=useState("")
 const [showFailureMessage, setShowJobReportingFailure]=useState(false)
+const [triggerRefresh, setTriggerRefresh] = useState(false);
 useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -110,7 +111,7 @@ const fetchProgrammeId = async () => {
       fetchJobReports();
     }
   }, [placements]);
-  const [triggerRefresh, setTriggerRefresh] = useState(false);
+  
 
 const type="TITLE"
   const fetchAddressee =()=>{
@@ -175,7 +176,7 @@ const handleDownload = async () => {
       });
       setJobReportStatus("Your Job Reporting Form has been submitted successfully!");
 setJobReportSuccess(true)
-      setTriggerRefreshAcceptance(prev=> !prev)
+setTriggerRefresh(prev => !prev)
       
     } catch (error) {
       
