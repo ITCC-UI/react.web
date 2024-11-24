@@ -223,7 +223,7 @@ setTriggerRefresh(prev => !prev)
     return ( 
         <div className="introductionLetter">
             <Helmet>
-                ITCC - Job Reporting Form
+                <title>ITCC - Job Reporting Form</title>
             </Helmet>
 
             <SideBar
