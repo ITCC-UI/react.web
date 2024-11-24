@@ -6,7 +6,7 @@ import axiosInstance from '../../../API Instances/AxiosIntances';
 import { Search } from 'lucide-react';
 import Filter from "/images/Filter.png"
 
-const JobReportingTable = ({refreshPlacementTable}) => {
+const JobReportingTable = (triggerRefresh) => {
   const [letterRequests, setLetterRequests] = useState([]);
 const [company, setCompanyName] = useState('')
   const [searchTerm, setSearchTerm] = useState('');
@@ -75,7 +75,7 @@ const [company, setCompanyName] = useState('')
   // Call the function in useEffect
   useEffect(() => {
     fetchJobReports();
-  }, [refreshPlacementTable]);
+  }, [triggerRefresh]);
   
   
 
