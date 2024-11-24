@@ -10,7 +10,8 @@ import * as Yup from "yup";
 import Empty from "/images/empty_dashboard.png";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { PulseLoader, BeatLoader } from "react-spinners";
-
+import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
+import FullScreenSuccessMessage from "../Placement/Successful/Successful";
 
 
 const JobReportingForm = () => {
@@ -24,7 +25,10 @@ const [letterRequests, setLetterRequests] = useState([]);
 const [placementList, setPlacementList] =useState([])
 const [companyName, setCompanyName] =useState(["Job Reporting Form"])
 const [addressOptions, setAdressOptions]= useState([])
-
+const [successMessage, setJobReportStatus]= useState("")
+const [showSuccessStatus, setJobReportSuccess] =useState(true)
+const [failureMessage, setFailureMessage]=useState("")
+const [showFailureMessage, setShowJobReportingFailure]=useState(false)
 useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -166,35 +170,33 @@ const handleDownload = async () => {
   const submitJobReportingForm = async (values, { setSubmitting }) => {
     try {
   
-      const response = await axiosInstance.post(`/trainings/registrations/${id}/acceptance-letters`, values, {
+      const response = await axiosInstance.post(`/trainings/registrations/placements/${placements}/job-reporting`, values, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      setAcceptanceSubmissionStatus("success");
-      setAcceptanceSuccessMessage("Your Job Reporting Form has been submitted successfully!");
-      setShowAcceptanceSuccessful(true);
+      setJobReportStatus("Your Job Reporting Form has been submitted successfully!");
+setJobReportSuccess(true)
       setTriggerRefreshAcceptance(prev=> !prev)
-      setTimeout(() => {
-        setAcceptanceSubmissionStatus("");
-        setShowAcceptanceSuccessful(false);
-        window.location.reload();
-      }, 1000);
+      
     } catch (error) {
       
       if(error.response.status===400){
-        setAcceptanceFailureMessage(error.response.data.detail)
+        setFailureMessage(error.response.data.detail)
+        
       }
       else{
-        setAcceptanceFailureMessage("Unable to submit acceptance letter, please try again")
+        setFailureMessage("There was an error submitting your Job reporting form")
+        setTriggerRefresh(prev => !prev)
+        setShowJobReportingFailure(true)
       }
-      setShowAcceptanceFailure(true)
+      // setShowAcceptanceFailure(true)
       setTimeout(() => {
-        setShowAcceptanceFailure(true);
+        // setShowAcceptanceFailure(true);
       }, 2000);
     } finally {
       setSubmitting(false);
-      toggleAcceptanceRequest();
+      toggleNewSubmission();
     }
   };
 
@@ -202,8 +204,8 @@ const handleDownload = async () => {
   const validationSchema = Yup.object().shape({
     company_supervisor: Yup.string().required("Supervisor's name is required"),    
     date_reported: Yup.date().required("Date of resumption to duty is required"),
-    supervisor_phone: Yup.string().matches(phoneRegExp, "Supervisor's phone number is not valid").min(11, "Phone number must be more than 10"),
-    placement: Yup.string().required(),
+    supervisor_phone: Yup.string().matches(phoneRegExp, "Supervisor's phone number is not valid").min(11, "Phone number must be more than 10").required("Phone number is required"),
+    placement: Yup.string(),
     supervisor_title: Yup.string().required("Supervisor's title is required"),
     mailing_address: Yup.string().required("Mailing address is required"),
     residential_address:Yup.string().required("Residential area is required"),
@@ -250,13 +252,13 @@ const handleDownload = async () => {
                  company_supervisor: "",
                  date_reported: "",
                  supervisor_phone: "",
-                 placement: {placements},
+                 placement: `${placements}`,
                  supervisor_title: "",
                  residential_address: "",
                  mailing_address: ""
                 }}
                 validationSchema={validationSchema}
-                onSubmit={null}
+                onSubmit={submitJobReportingForm}
               >
                 {({ isSubmitting, setFieldValue }) => (
                     <Form encType="multipart/form-data">
@@ -310,7 +312,7 @@ const handleDownload = async () => {
 
                       <div className="formInput">
                         <label htmlFor="mailing_address">Mailing Address</label>
-                        <Field type="email" name="mailing_address" placeholder="Enter your company supervisor's name" />
+                        <Field type="email" name="mailing_address" placeholder="mailingaddrress@mail.com" />
                         <ErrorMessage className="error" name="mailing_address" component="div" />
                       </div>
 
@@ -332,7 +334,17 @@ const handleDownload = async () => {
             </div>
       )}
 
+<FullScreenSuccessMessage
+        isOpen={showSuccessStatus}
+        message={successMessage}
+        onClose={()=>setJobReportSuccess(false)}
+        />
 
+        <FullScreenFailureMessage
+        message={failureMessage}
+        isOpen={showFailureMessage}
+        onClose={()=>setShowJobReportingFailure(false)}
+        />
             
             <main className="introLetter">
 <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} active={"activeBar"}/>
