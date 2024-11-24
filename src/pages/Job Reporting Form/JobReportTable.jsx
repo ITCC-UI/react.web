@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
 import "./jobReportTable.scss";
-import classNames from 'classnames';
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import { Search } from 'lucide-react';
 import Filter from "/images/Filter.png"
@@ -22,7 +21,7 @@ const JobReportingTable = ({refreshPlacementTable}) => {
       const registrations = registrationResponse.data;
   
       if (!registrations || registrations.length === 0) {
-        console.log("No registrations found");
+        
         setLetterRequests([]); // Ensure state is cleared if no data exists
         return;
       }
@@ -35,7 +34,7 @@ const JobReportingTable = ({refreshPlacementTable}) => {
       setCompanyName(requests[0].attached_company_branch.company.name)
   
       if (!requests || requests.length === 0) {
-        console.log("No placement data found");
+        
         setLetterRequests([]); // Ensure state is cleared if no data exists
         return;
       }
@@ -51,28 +50,15 @@ const JobReportingTable = ({refreshPlacementTable}) => {
         // Process data as an object
         
         setJobData(jobReports)
-        console.log("The data",data)
-        const processedRequests = Object.keys(jobReports).map(key => ({
-          id: key,
-          ...jobReports[key]
-          // statusClass: getStatusClass(jobReports[key].approval_status),
-        }));
-  
-        setLetterRequests(processedRequests); // Populate state with processed data
-      } else if (Array.isArray(jobReports)) {
-        // If data is an array, handle as before
-        const processedRequests = jobReports.map(request => ({
-          ...request
-          // statusClass: getStatusClass(request.approval_status),
-        }));
-  
-        setLetterRequests(processedRequests);
-      } else {
-        console.error("Unexpected job report format");
+        
+      
+       }
+        else {
+        
         setLetterRequests([]);
       }
     } catch (error) {
-      console.log("Error fetching job reports:", error);
+      
     }
   };
   
@@ -96,7 +82,7 @@ const JobReportingTable = ({refreshPlacementTable}) => {
   });
 
   return (
-    <section className='shift placement_table'>
+    <section className='shift placement_table jobReport'>
       <div className="mainBody">
       <div className="search-bar">
             <div className="relative">
@@ -120,7 +106,7 @@ const JobReportingTable = ({refreshPlacementTable}) => {
               >
                 
                 
-                <option value="default" disabled selected hidden null>
+                <option value="default" disabled hidden null>
       Select a status
       
     </option>

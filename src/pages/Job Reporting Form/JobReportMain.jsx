@@ -56,7 +56,7 @@ const fetchProgrammeId = async () => {
       }
     } catch (error) {
       setNoProgrammeId(true); 
-      console.log(noProgrammeId)
+      
     }
   };
 
@@ -71,16 +71,16 @@ const fetchProgrammeId = async () => {
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/`);
       setPlacementRequests(response.data[0].id);
-      // console.log("THe Placment",placements)
+      
       setPlacementList(response.data)
-      console.log("The pacement",placementList)
+      
       setCompanyName(response.data[0].attached_company_branch.company.name)
       setIsLoading(false)
       
     } catch (error) {
-      // console.log(error)
+      
       setNoProgrammeId(true); 
-      console.log("the error",error)
+      
       
     }
   };
@@ -101,7 +101,7 @@ const fetchProgrammeId = async () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.log("There's and error", error)
+      
     }
   };
 
@@ -147,7 +147,7 @@ const type="ADDRESSEE"
         link.click();
         link.parentNode.removeChild(link);
     } catch (error) {
-        console.error(error);
+        
     }
 };
 
@@ -159,7 +159,7 @@ const handleDownload = async () => {
     await downloadReportForm();
   } catch (error) {
     // Handle errors
-    console.error(error);
+    
   } finally {
     setIsDownloading(false);
   }
@@ -193,10 +193,7 @@ setJobReportSuccess(true)
         setShowJobReportingFailure(true)
      
       }
-      // setShowAcceptanceFailure(true)
-      // setTimeout(() => {
-      //   // setShowAcceptanceFailure(true);
-      // }, 2000);
+
     } finally {
       setSubmitting(false);
       toggleNewSubmission();
