@@ -203,7 +203,6 @@ setJobReportSuccess(true)
     company_supervisor: Yup.string().required("Supervisor's name is required"),    
     date_reported: Yup.date().required("Date of resumption to duty is required"),
     supervisor_phone: Yup.string().matches(phoneRegExp, "Supervisor's phone number is not valid").min(11, "Phone number must be more than 10").required("Phone number is required"),
-    placement: Yup.string(),
     supervisor_title: Yup.string().required("Supervisor's title is required"),
     mailing_address: Yup.string().required("Mailing address is required"),
     residential_address:Yup.string().required("Residential area is required"),
@@ -250,7 +249,6 @@ setJobReportSuccess(true)
                  company_supervisor: "",
                  date_reported: "",
                  supervisor_phone: "",
-                 placement: `${placements}`,
                  supervisor_title: "",
                  residential_address: "",
                  mailing_address: ""
