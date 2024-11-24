@@ -1,175 +1,171 @@
 import React, { useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
-import "./introTable.scss";
+import "./jobReportTable.scss";
 import classNames from 'classnames';
-import IconDownload from "/images/Download.png";
 import axiosInstance from '../../../API Instances/AxiosIntances';
-import { RingLoader } from 'react-spinners';
-import MoreDetails from '../../../components/View More/MoreDetailsIntroductionLetter';
 import { Search } from 'lucide-react';
-import Filter from "/images/Filter.png";
+import Filter from "/images/Filter.png"
 
-const IntroductionLetterTable = ({ triggerRefresh }) => {
+const JobReportingTable = ({refreshPlacementTable}) => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
+  const [data, setJobData] =useState({})
+  const [companyName, setCompanyName] = useState('')
 
-  const fetchIntroductionLetterRequests = async () => {
+  const fetchJobReports = async () => {
     try {
+      // Fetch registration data
       const registrationResponse = await axiosInstance.get("trainings/registrations/");
       const registrations = registrationResponse.data;
-
-      if (registrations.length === 0) return;
-
+  
+      if (!registrations || registrations.length === 0) {
+        console.log("No registrations found");
+        setLetterRequests([]); // Ensure state is cleared if no data exists
+        return;
+      }
+  
       const id = registrations[0].id;
-      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/introduction-letter-requests/`);
+  
+      // Fetch placement data for the first registration
+      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements/`);
       const requests = requestsResponse.data;
-
-      const processedRequests = requests.map(request => ({
-        ...request,
-        statusClass: getStatusClass(request.approval_status),
-      }));
-
-      setLetterRequests(processedRequests);
+      setCompanyName(requests[0].attached_company_branch.company.name)
+  
+      if (!requests || requests.length === 0) {
+        console.log("No placement data found");
+        setLetterRequests([]); // Ensure state is cleared if no data exists
+        return;
+      }
+  
+      const placementID = requests[0].id;
+  
+      // Fetch job report data
+      const jobReportSubmission = await axiosInstance.get(`/trainings/registrations/placements/${placementID}/job-reporting/`);
+      const jobReports = jobReportSubmission.data;
+     
+  
+      if (jobReports && typeof jobReports === "object") {
+        // Process data as an object
+        
+        setJobData(jobReports)
+        console.log("The data",data)
+        const processedRequests = Object.keys(jobReports).map(key => ({
+          id: key,
+          ...jobReports[key]
+          // statusClass: getStatusClass(jobReports[key].approval_status),
+        }));
+  
+        setLetterRequests(processedRequests); // Populate state with processed data
+      } else if (Array.isArray(jobReports)) {
+        // If data is an array, handle as before
+        const processedRequests = jobReports.map(request => ({
+          ...request
+          // statusClass: getStatusClass(request.approval_status),
+        }));
+  
+        setLetterRequests(processedRequests);
+      } else {
+        console.error("Unexpected job report format");
+        setLetterRequests([]);
+      }
     } catch (error) {
-      console.error("Error fetching letter requests", error);
+      console.log("Error fetching job reports:", error);
     }
   };
-
-  const getStatusClass = (status) => {
-    switch(status) {
-      case 'APPROVED':
-        return 'approved';
-      case 'REJECTED':
-        return 'rejected';
-      case 'SUBMITTED':
-      default:
-        return 'submitted';
-    }
-  };
-
-  // Refetch data when triggerRefresh changes
+  
+  // Call the function in useEffect
   useEffect(() => {
-    fetchIntroductionLetterRequests();
-  }, [triggerRefresh]);
-
-  const handleViewClick = (request) => {
-    setSelectedRequest(request);
-  };
-
-  const handleDownloadClick = async (id) => {
-    setLoadingDownloads(prevState => ({ ...prevState, [id]: true }));
-    try {
-      const response = await axiosInstance.get(`/trainings/introduction-letter-requests/${id}/document/`, {
-        responseType: 'blob',
-      });
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `introduction_letter.pdf`);
-      document.body.appendChild(link);
-      link.click();
-    } catch (error) {
-      console.error("Error downloading document", error);
-    } finally {
-      setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
-    }
-  };
-
-  const formatDate = (dateString) => {
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
-  };
+    fetchJobReports();
+  }, [refreshPlacementTable]);
+  
+  
 
   const filteredRequests = letterRequests.filter((request) => {
     const matchesSearch = Object.values(request).some(
-      (value) => value && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      (value) => 
+        value && 
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
     );
-    const matchesFilter = filter === 'all' || request.approval_status.toLowerCase() === filter.toLowerCase();
+    const matchesFilter = 
+      filter === 'all' || 
+      request.approval_status.toLowerCase() === filter.toLowerCase();
     return matchesSearch && matchesFilter;
   });
 
   return (
-    <section className='shift'>
+    <section className='shift placement_table'>
       <div className="mainBody">
-        <div className="containerCourse">
-          <div className="search-bar">
+      <div className="search-bar">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
               <input
                 type="text"
                 placeholder="Search Here"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                
               />
+             
             </div>
             <div className='filter'>
-              <img src={Filter} alt="Hey" className='image-filter' />
-              <select value={filter} onChange={(e) => setFilter(e.target.value)} className="pyro">
-                <option value="default" disabled hidden>Select a status</option>
-                <option value="all">All</option>
-                <option value="approved">Approved</option>
-                <option value="submitted">Submitted</option>
-                <option value="rejected">Rejected</option>
+            <img src={Filter} alt="Hey" className='image-filter' />
+              <select
+                value={filter}
+                // onChange={(e) => setFilter(e.target.value)}
+                onChange={() => setFilter(null)}
+                className="pyro"
+              >
+                
+                
+                <option value="default" disabled selected hidden null>
+      Select a status
+      
+    </option>
+
+                <option value="all"> All </option>
+                <option value="approved " disabled>Approved</option>
+                <option value="submitted" disabled>Submitted</option>
+                <option value="rejected" disabled>Rejected</option>
               </select>
             </div>
           </div>
+        <div className="containerCourse">
+         
           <table>
             <thead>
               <tr>
                 <th>Company Name</th>
-                <th>Addressed To</th>
-                <th>State</th>
-                <th>Status</th>
+                <th>Supervisor's Name</th>
+                <th>Supervisor's Phone Number</th>
                 <th>Date</th>
-                <th>Action</th>
+                {/* <th>Action</th> */}
               </tr>
             </thead>
-            <tbody>
-              {filteredRequests.map((request, index) => {
-                const statusClasses = classNames({
-                  'status': true,
-                  'approved': request.statusClass === 'approved',
-                  'rejected': request.statusClass === 'rejected',
-                  'submitted': request.statusClass === 'submitted',
-                });
-                const downloadIconClasses = classNames({
-                  'downloadIcon': true,
-                  'inactive': request.statusClass !== 'approved',
-                });
-                return (
-                  <tr key={index}>
-                    <td>{request.company_name}</td>
-                    <td>{request.address_to}</td>
-                    <td>{request.company_address.state_or_province.name}</td>
-                    <td><div className={statusClasses}>{request.approval_status}</div></td>
-                    <td>{formatDate(request.date_created)}</td>
-                    <td className='down'>
-                      <button onClick={() => handleViewClick(request)}>View More</button>
-                      {loadingDownloads[request.id] ? (
-                        <RingLoader size={20} color='blue' />
-                      ) : (
-                        <img 
-                          src={IconDownload} 
-                          alt="download" 
-                          className={downloadIconClasses}
-                          onClick={() => request.statusClass === 'approved' && handleDownloadClick(request.id)} 
-                        />
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
+          {} <tbody>
+
+
+            <tr>
+              <td>{companyName}</td>
+              <td>{data.company_supervisor}</td>
+              <td>{data.supervisor_phone}</td>
+              <td>{data.date_reported}</td>
+            </tr>
+  
+
+                 
             </tbody>
           </table>
-          {selectedRequest && <MoreDetails request={selectedRequest} onClose={() => setSelectedRequest(null)} />}
+         
         </div>
       </div>
-      <div className="register_above mobile">Scroll horizontally to see more</div>
+      <div className="register_above mobile">
+        Scroll horizontally to see more
+      </div>
     </section>
   );
 };
 
-export default IntroductionLetterTable;
+export default JobReportingTable;

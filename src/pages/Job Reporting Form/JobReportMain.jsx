@@ -12,10 +12,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { PulseLoader, BeatLoader } from "react-spinners";
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
 import FullScreenSuccessMessage from "../Placement/Successful/Successful";
-
+import JobReportingTable from "./JobReportTable";
 
 const JobReportingForm = () => {
-const [showSubmitForm, setShowSubmitForm]=useState(true)
+const [showSubmitForm, setShowSubmitForm]=useState(false)
 const [id, setProgrammeId] = useState(null);
 const[placements, setPlacementRequests]=useState([])
 const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +26,7 @@ const [placementList, setPlacementList] =useState([])
 const [companyName, setCompanyName] =useState(["Job Reporting Form"])
 const [addressOptions, setAdressOptions]= useState([])
 const [successMessage, setJobReportStatus]= useState("")
-const [showSuccessStatus, setJobReportSuccess] =useState(true)
+const [showSuccessStatus, setJobReportSuccess] =useState(false)
 const [failureMessage, setFailureMessage]=useState("")
 const [showFailureMessage, setShowJobReportingFailure]=useState(false)
 useEffect(() => {
@@ -170,7 +170,7 @@ const handleDownload = async () => {
   const submitJobReportingForm = async (values, { setSubmitting }) => {
     try {
   
-      const response = await axiosInstance.post(`/trainings/registrations/placements/${placements}/job-reporting`, values, {
+      const response = await axiosInstance.post(`/trainings/registrations/placements/${placements}/job-reporting/`, values, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -183,17 +183,20 @@ setJobReportSuccess(true)
       
       if(error.response.status===400){
         setFailureMessage(error.response.data.detail)
+        setTriggerRefresh(prev => !prev)
+        setShowJobReportingFailure(true)
         
       }
       else{
         setFailureMessage("There was an error submitting your Job reporting form")
         setTriggerRefresh(prev => !prev)
         setShowJobReportingFailure(true)
+     
       }
       // setShowAcceptanceFailure(true)
-      setTimeout(() => {
-        // setShowAcceptanceFailure(true);
-      }, 2000);
+      // setTimeout(() => {
+      //   // setShowAcceptanceFailure(true);
+      // }, 2000);
     } finally {
       setSubmitting(false);
       toggleNewSubmission();
@@ -392,7 +395,7 @@ Submit Form
           </div>
         ) : (
 
-          <JobReportTable triggerRefresh={triggerRefresh} />
+          <JobReportingTable triggerRefresh={triggerRefresh} />
         )}
 
             </main>
