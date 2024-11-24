@@ -21,7 +21,7 @@ const[placements, setPlacementRequests]=useState([])
 const [isLoading, setIsLoading] = useState(false);
 const [isDownloading, setIsDownloading] = useState(false);
 const [noProgrammeId, setNoProgrammeId] = useState(false); 
-const [letterRequests, setLetterRequests] = useState([]);
+const [jobReports, setjobReports] = useState([]);
 const [placementList, setPlacementList] =useState([])
 const [companyName, setCompanyName] =useState(["Job Reporting Form"])
 const [addressOptions, setAdressOptions]= useState([])
@@ -94,10 +94,8 @@ const fetchProgrammeId = async () => {
 
   const fetchJobReports = async () => {
     try {
-      const response = await axiosInstance.get(`/trainings/registrations/placements/${placements}/job-reporting/`);
-      setLetterRequests(response.data);
-      
-      
+      const response = await axiosInstance.get(`/trainings/registrations/${id}/job-reporting/`);
+      setjobReports(response.data);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -114,7 +112,7 @@ const fetchProgrammeId = async () => {
   }, [placements]);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
 
-const type="ADDRESSEE"
+const type="TITLE"
   const fetchAddressee =()=>{
     axiosInstance.get(`/option-types/${type}/options`)
     .then(titles =>{
@@ -294,6 +292,21 @@ setJobReportSuccess(true)
                         <ErrorMessage className="error" name="date_reported" component="div" />
                       </div>
 
+                    
+
+
+                      <div className="formInput">
+                        <label htmlFor="mailing_address">Mailing Address</label>
+                        <Field type="email" name="mailing_address" placeholder="mailingaddrress@mail.com" />
+                        <ErrorMessage className="error" name="mailing_address" component="div" />
+                      </div>
+
+                      <div className="formInput">
+                        <label htmlFor="residential_address">Residential Address</label>
+                        <Field type="text" name="residential_address" placeholder="Enter your residential address during training" />
+                        <ErrorMessage className="error" name="residential_address" component="div" />
+                      </div>
+
                       <div className="formInput">
                         <label htmlFor="form">Upload your form</label>
                         <input
@@ -307,19 +320,6 @@ setJobReportSuccess(true)
               }}
             />
                         <ErrorMessage className="error" name="form" component="div" />
-                      </div>
-
-
-                      <div className="formInput">
-                        <label htmlFor="mailing_address">Mailing Address</label>
-                        <Field type="email" name="mailing_address" placeholder="mailingaddrress@mail.com" />
-                        <ErrorMessage className="error" name="mailing_address" component="div" />
-                      </div>
-
-                      <div className="formInput">
-                        <label htmlFor="residential_address">Residential Address</label>
-                        <Field type="text" name="residential_address" placeholder="Enter your residential address during training" />
-                        <ErrorMessage className="error" name="residential_address" component="div" />
                       </div>
                     </div>
                  
@@ -386,7 +386,7 @@ Submit Form
           </div>
 
           
-        ) : letterRequests.length === 0 ? (
+        ) : jobReports.length === 0 ? (
           <div className="image">
             <img src={Empty} alt="Empty" />
           </div>

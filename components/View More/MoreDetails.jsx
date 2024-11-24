@@ -29,9 +29,9 @@ const MoreDetails = ({ request, onClose }) => {
 
   const getStatusClass = (status) => {
     switch(status) {
-      case 'STARTED':
+      case 'ACTIVE':
         return 'status approved';
-      case 'NOT_STARTED':
+      case 'REJECTED':
         return 'status rejected';
       case 'SUBMITTED':
       default:
@@ -60,14 +60,14 @@ const MoreDetails = ({ request, onClose }) => {
 
           <div className='compProfile'>
             <div className="details">Start Date</div>
-            <div className="cDetails">{request.start_date===null?"Not yet started": formatApprovalDate(request.date_created)}</div>
+            <div className="cDetails">{request.start_date===null?"Not yet started": request.start_date}</div>
           </div>
 
 
       
           <div className='compProfile'>
             <div className="details">End Date</div>
-            <div className="cDetails">{request.end_date===null?"Not yet started": formatApprovalDate(request.date_created)}</div>
+            <div className="cDetails">{request.end_date===null?"-----": request.end_date}</div>
           </div>
 
           <div className='compProfile'>

@@ -35,7 +35,7 @@ const [filter, setFilter] =useState('all')
       
       const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`)
       const requests = requestsResponse.data;
-      
+    
       
       const processedRequests = requests.map(request => ({
         ...request,
@@ -50,11 +50,12 @@ const [filter, setFilter] =useState('all')
 
   const getStatusClass = (status) => {
     switch(status) {
-      case 'STARTED':
+      case 'ACTIVE':
+        return 'approved';
+      case 'COMPLETED':
         return 'approved';
       case 'NOT_STARTED':
         return 'rejected'
-      
         default:
         return 'rejected';
     }
@@ -69,10 +70,7 @@ const [filter, setFilter] =useState('all')
     setSelectedRequest(request);
   };
 
-  const handleDownloadClick = async (id) => {
-    setLoadingDownloads(prevState => ({ ...prevState, [id]: true }));
-
-  };
+ 
 
   // Helper function to format date
   const formatDate = (dateString) => {
@@ -161,9 +159,9 @@ const [filter, setFilter] =useState('all')
                   <tr key={index}>
                     <td className='placement_content'>{request.attached_company_branch.company.name}</td>
                     {/* <td className='placement_content'>{request.company_supervisor}</td> */}
-                    <td className='placement_content'>----------</td>
+                    <td className='placement_content'>{request.company_supervisor}</td>
                     <td className='placement_content'>{request.start_date===null?"Not yet started": formatDate(request.start_date)}</td>
-                    <td className='placement_content'>{request.end_date===null?"Not yet started": formatDate(request.start_date)}</td>
+                    <td className='placement_content'>{request.end_date===null?"-----": formatDate(request.start_date)}</td>
                     
                    
         

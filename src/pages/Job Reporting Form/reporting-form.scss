@@ -1,12 +1,13 @@
 .header-main{
     
-    width: 100%;
+    width: 95%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     .placement-head{
         font-family: Poppins;
 font-size: 20px;
+margin-left: 20px;
 font-weight: 700;
 
     }
@@ -53,7 +54,7 @@ font-weight: 700;
             flex-wrap: nowrap;
            .placement-head{
             margin-left: 15px;
-            width: fit-content;
+            width: 120px;
             height: fit-content;
             font-size: 14px;
             font-weight: 500;
