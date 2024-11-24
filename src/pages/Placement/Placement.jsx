@@ -173,14 +173,9 @@ useEffect(()=>{
   const handlePlacementRequestsSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await axiosInstance.post(`/trainings/registrations/${id}/placement-requests/`, values);
-      // setPlacementSubmissionStatus("success");
       setPlacementSuccessMessage("Your Placement Request has been submitted successfully!");
       setShowPlacementSuccessful(true);
       setTriggerRefresh(prev=> !prev)
-      // setTimeout(() => {
-      //   setShowPlacementSuccessful(false);
-      //   window.location.reload();
-      // }, 5000);
       
     } catch (error) {
       setTriggerRefresh(prev=> !prev)
