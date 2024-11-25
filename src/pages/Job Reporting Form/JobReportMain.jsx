@@ -231,6 +231,7 @@ setTriggerRefresh(prev => !prev)
             placementClass={"placement"}
             init={1}
             activeL={"active-accordion"}
+            formClass={"forms"}
             
             />
 

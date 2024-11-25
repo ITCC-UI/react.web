@@ -58,7 +58,8 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
       {isDisplayed && <DisplayedComponent onClose={handleClose} selectedCourse={selectedCourse} />}
     
       <div className="route-Dash">
-        <SideBar dashboardClass="dashy" placementClass={"placement"} disableCover="dash_navig" activeR={"activen"} init={0} />
+        <SideBar dashboardClass="dashy" placementClass={"placement"} disableCover="dash_navig" activeR={"activen"} init={0} 
+        formClass={"forms"}/>
 
 
         <main className="introLetter">
