@@ -58,6 +58,7 @@ const fetchProgrammeId = async () => {
     } catch (error) {
       setNoProgrammeId(true); 
       
+      
     }
   };
 
@@ -70,17 +71,19 @@ const fetchProgrammeId = async () => {
 // Fetch the placement id
   const fetchPlacement = async () => {
     try {
-      const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/`);
-      setPlacementRequests(response.data[0].id);
+      const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/current`);
+      setPlacementRequests(response.data.id);
       
-      setPlacementList(response.data)
       
-      setCompanyName(response.data[0].attached_company_branch.company.name)
+      setPlacementList(response)
+      
+      setCompanyName(response.data.attached_company_branch.company.name)
       setIsLoading(false)
       
     } catch (error) {
       
       setNoProgrammeId(true); 
+      
       
       
     }

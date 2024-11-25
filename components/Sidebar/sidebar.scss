@@ -75,8 +75,9 @@ height: inherit;
   }
 
 .null, .activeL{
-  cursor: not-allowed;
-  pointer-events: none;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  opacity: .5;
 
 }
 .width{
