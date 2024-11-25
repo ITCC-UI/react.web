@@ -8,7 +8,6 @@ import Filter from "/images/Filter.png"
 
 const JobReportingTable = (triggerRefresh) => {
   const [letterRequests, setLetterRequests] = useState([]);
-const [company, setCompanyName] = useState('')
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
 
@@ -29,8 +28,7 @@ const [company, setCompanyName] = useState('')
       // Fetch placement data for the first registration
       const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements/`);
       const requests = requestsResponse.data;
-      const companyName= requests[0].attached_company_branch.company.name
-      setCompanyName(companyName)
+
       
   
       if (!requests || requests.length === 0) {
@@ -173,7 +171,7 @@ const [company, setCompanyName] = useState('')
                 });
                 return (
                   <tr key={index}>
-                    <td>{company}</td>
+                    <td>{request.placement.attached_company_branch.company.name}</td>
                     <td>{request.company_supervisor}</td>
                     
                    
