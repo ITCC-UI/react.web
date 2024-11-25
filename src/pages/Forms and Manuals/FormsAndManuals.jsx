@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import TopNav from "../../../components/Header/Header";
 import SideBar from "../../../components/Sidebar/Sidebar";
-import "./placement.scss";
-import Empty from "/images/empty_dashboard.png";
+import "./formsmanual.scss"
 import CloseIcon from "/images/closeButton.png";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { GridLoader, PulseLoader } from "react-spinners";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
-import IntroductionLetterTable from "./IntroductionLetterTable";
-import FullScreenSuccessMessage from "../Placement/Successful/Successful";
-import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
+import ManForms from "./Forms";
+import { RemoveCircleSharp } from "@mui/icons-material";
 
 
 const IntroductionLetter = () => {
@@ -150,15 +148,15 @@ useEffect(()=>{
   return (
     <div className="introductionLetter">
       <Helmet>
-        <title>ITCC - Introduction Letter</title>
+        <title>ITCC - Forms and Manuals</title>
       </Helmet>
 
       <SideBar
         dashboardClass={"dashy"}
         placementClass={"placement"} 
         init={0}
-        activeI={"activen"}
-        formClass={"forms"}
+        activeI={0}
+        formClass={"forms active-accordion filterPlacement"}
       />
       {showNewRequest && (
         <div className="newRequestComponent">
@@ -275,24 +273,16 @@ useEffect(()=>{
       
       )}
 
-<FullScreenSuccessMessage
-        isOpen={showSuccessStatus}
-        message={successMessage}
-        onClose={()=>setShowIntroSuccess(false)}
-        />
 
-        <FullScreenFailureMessage
-        message={failureMessage}
-        isOpen={showFailureMessage}
-        onClose={()=>setShowIntroFailure(false)}
-        />
+
+    
 
         
       <main className="introLetter">
         <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} />
         <div className="container">
           <div className="topHead">
-            <div className="heading">INTRODUCTION LETTERS</div>
+            <div className="heading">FORMS AND MANUALS</div>
             
               {programmeId  &&   (
         <button className="newReq" onClick={toggleNewRequest}>
@@ -302,28 +292,37 @@ useEffect(()=>{
       
           </div>
         </div>
-        {isLoading ? (
-          <div className="loader">
-            <GridLoader size={15} color={"#123abc"} />
-          </div>
-        ) : noProgrammeId ? (
-          <div className="noProgrammeId register_above">
-            <p>You are not registered for a Programme. <br/> You are not eligible to request an introduction letter at this time. <br/>  <br/>
-            Proceed to the registration page to register for you industrial training.</p>
-          </div>
-
-          
-        ) : letterRequests.length === 0 ? (
-          <div className="image">
-            <img src={Empty} alt="Empty" />
-          </div>
-        ) : (
-
-          <IntroductionLetterTable triggerRefresh={triggerRefresh} />
-        )}
+   <div className="form-holder">
+   <ManForms
+     title={"SIWES Manual"}
+     contents={"The SIWES Manual provides key guidelines and expectation for students and supervisors during industrial training."}
+     reveal={"Hi"}
+     download={"downloadthis"}
+     />
         
-      
+      <ManForms title={"Job Reporting Form"}
+      contents={"It serves as an evidence that the student has begun their training and must be submitted within the first two weeks of their training"}
+      reveal={"Hi"}
+      download={"Download"}
+      />
         
+        <ManForms 
+        title={"Employer’s Evaluation Form"}
+        contents={"The Employer's Evaluation Form assesses the student's performance and must be completed post-training"}
+       download={"Downlooad"} 
+        />
+   </div>
+   <div className="enlong">
+   <ManForms
+        title={"ITF Form"}
+        contents={"This ITF Form is to be returned to the ITF on completion by the respective institution under seal."}
+        />
+
+        <ManForms
+        title={"SCAF Form"}
+        contents={"The SCAF Form is to be completed and submitted to the nearest ITF office to your location of Internship."}
+        />
+   </div>
       </main>
     </div>
   );

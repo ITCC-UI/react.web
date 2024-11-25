@@ -42,7 +42,7 @@ height: inherit;
     gap: 10px;
     align-items: flex-start;
     z-index: 2;
-    .placement{
+    .placement,.forms{
         width: 100%;
         display: flex;
         align-items: center;
@@ -75,8 +75,9 @@ height: inherit;
   }
 
 .null, .activeL{
-  cursor: not-allowed;
-  pointer-events: none;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  opacity: .5;
 
 }
 .width{
@@ -91,7 +92,7 @@ height: inherit;
    
     &:before{
       content: " ";
-      width: 200px;
+      width: 220px;
       border-radius: 0 12px 12px 0;
       position: absolute;
       left: -20px;
