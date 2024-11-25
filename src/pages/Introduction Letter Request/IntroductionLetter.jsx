@@ -158,6 +158,7 @@ useEffect(()=>{
         placementClass={"placement"} 
         init={0}
         activeI={"activen"}
+        formClass={"forms"}
       />
       {showNewRequest && (
         <div className="newRequestComponent">

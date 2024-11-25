@@ -5,9 +5,10 @@ import Document from "/images/document.png";
 import Logout from "/images/Logout.png";
 import AccordionS from "../Accordion/Accordion";
 import { Link, useNavigate } from "react-router-dom";
+import Form from "/images/form.svg"
 import Cookies from "js-cookie";
 
-const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, activeR, activeL }) => {
+const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, activeR, formClass }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -40,6 +41,15 @@ const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, 
                   Placement
                 </div>
               </Link>
+
+              <Link to="/form-and-manuals"> 
+              <div className={formClass}>
+                
+                <img src={Form} alt="Forms and Manuals" />
+                Forms and Manual
+                
+                </div></Link>
+              
               {/* Accordion Goes here */}
               <AccordionS initialOpenSection={init} activeIntro={activeI} activeReg={activeR} activeDailyLog="null"/>
               {/* Accordion Ends here */}

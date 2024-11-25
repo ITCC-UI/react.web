@@ -155,7 +155,8 @@ useEffect(()=>{
         dashboardClass={"dashy"}
         placementClass={"placement"} 
         init={0}
-        activeI={"activen"}
+        activeI={0}
+        formClass={"forms active-accordion filterPlacement"}
       />
       {showNewRequest && (
         <div className="newRequestComponent">

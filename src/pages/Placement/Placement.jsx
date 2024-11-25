@@ -260,6 +260,7 @@ useEffect(()=>{
         placementClass={"placement active-accordion filterPlacement"} 
         init={0}
         activeI={0} 
+        formClass={"forms"}
       />
       {/* 
    
