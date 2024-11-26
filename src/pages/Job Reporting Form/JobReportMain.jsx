@@ -185,13 +185,13 @@ setTriggerRefresh(prev => !prev)
       
       if(error.response.status===400){
         setFailureMessage(error.response.data.detail)
-        setTriggerRefresh(prev => !prev)
+        // setTriggerRefresh(prev => !prev)
         setShowJobReportingFailure(true)
         
       }
       else{
         setFailureMessage("There was an error submitting your Job reporting form")
-        setTriggerRefresh(prev => !prev)
+        // setTriggerRefresh(prev => !prev)
         setShowJobReportingFailure(true)
      
       }

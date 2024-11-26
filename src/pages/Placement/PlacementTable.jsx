@@ -56,7 +56,7 @@ const [filter, setFilter] =useState('all')
         return 'approved';
       case 'NOT_STARTED':
         return 'rejected'
-        default:
+      default:
         return 'rejected';
     }
   };
@@ -167,7 +167,7 @@ const [filter, setFilter] =useState('all')
         
                  <td className='placement_content'>
                       <div className={statusClasses}>
-                        {request.status}
+                        {request.status}                        
                       </div>
                     </td>
                     <td className='down placement_content'>

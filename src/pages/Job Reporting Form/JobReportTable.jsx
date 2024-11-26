@@ -6,7 +6,7 @@ import axiosInstance from '../../../API Instances/AxiosIntances';
 import { Search } from 'lucide-react';
 import Filter from "/images/Filter.png"
 
-const JobReportingTable = (triggerRefresh) => {
+const JobReportingTable = ({triggerRefresh}) => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
@@ -44,7 +44,7 @@ const JobReportingTable = (triggerRefresh) => {
       const jobReports = jobReportSubmission.data;
   
       if (jobReports && typeof jobReports === "object") {
-        // Process data as an object
+      
         
         const processedRequests = Object.keys(jobReports).map(key => ({
           id: key,

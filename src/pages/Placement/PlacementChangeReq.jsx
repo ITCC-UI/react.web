@@ -7,31 +7,38 @@ import MoreDetails from '../../../components/View More/MoreDetailsPlacementChang
 import { Search } from 'lucide-react';
 import Filter from "/images/Filter.png";
 
-const PlacementChangeReq = (refreshData) => {
-  const [letterRequests, setLetterRequests] = useState([]);
+const PlacementChangeReq = ({ letterRequests: initialLetterRequests, refreshData }) => {
+  const [letterRequests, setLetterRequests] = useState(initialLetterRequests || []);
   const [loadingDownloads, setLoadingDownloads] = useState({});
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
-  
 
   const fetchPlacementChangeReq = async () => {
     try {
       const registrationResponse = await axiosInstance.get("trainings/registrations/");
-      const registrations = registrationResponse.data;
       
-      if (registrations.length === 0) return;
-      const id = registrations[0].id;
-      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/change-of-placements/`);
+      // Safely get the first registration ID
+      if (registrationResponse.data.length === 0) {
+        setLetterRequests([]);
+        return;
+      }
+      
+      const registrationId = registrationResponse.data[0].id;
+      
+      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${registrationId}/change-of-placements/`);
       const requests = requestsResponse.data;
+      
       const processedRequests = requests.map(request => ({
         ...request,
         statusClass: getStatusClass(request.approval_status),
       }));
 
       setLetterRequests(processedRequests);
+      
     } catch (error) {
       
+      setLetterRequests([]);
     }
   };
 
@@ -42,15 +49,18 @@ const PlacementChangeReq = (refreshData) => {
       case 'REJECTED':
         return 'rejected';
       case 'SUBMITTED':
+        return 'submitted'
       default:
         return 'submitted';
     }
   };
 
   useEffect(() => {
-    fetchPlacementChangeReq();
-  }, [refreshData]);  // Trigger fetch when refreshData changes
-
+    // If no initial letter requests were passed, fetch them
+    if (!initialLetterRequests || initialLetterRequests.length === 0) {
+      fetchPlacementChangeReq();
+    }
+  }, [initialLetterRequests, refreshData]);
 
   const handleViewClick = (request) => {
     setSelectedRequest(request);
@@ -68,6 +78,7 @@ const PlacementChangeReq = (refreshData) => {
       link.setAttribute('download', `introduction_letter.pdf`);
       document.body.appendChild(link);
       link.click();
+      link.remove(); // Clean up the link
     } catch (error) {
       
     } finally {
@@ -76,6 +87,7 @@ const PlacementChangeReq = (refreshData) => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return "Pending";
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
@@ -106,13 +118,13 @@ const PlacementChangeReq = (refreshData) => {
             />
           </div>
           <div className='filter'>
-            <img src={Filter} alt="Hey" className='image-filter' />
+            <img src={Filter} alt="Filter" className='image-filter' />
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               className="pyro"
             >
-              <option value="default" disabled selected hidden>Select a status</option>
+              <option value="default" disabled hidden>Select a status</option>
               <option value="all"> All </option>
               <option value="approved">Approved</option>
               <option value="submitted">Submitted</option>
@@ -121,52 +133,57 @@ const PlacementChangeReq = (refreshData) => {
           </div>
         </div>
         
-        <div className="containerCourse">
-          <table>
-            <thead>
-              <tr>
-                <th>Current Company</th>
-                <th>Submission Date</th>
-                <th>Approval Date</th>
-                <th>Status</th>
-                <th>New Placement</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredRequests.map((request, index) => {
-                const statusClasses = classNames({
-                  'status': true,
-                  'approved': request.statusClass === 'approved',
-                  'rejected': request.statusClass === 'rejected',
-                  'submitted': request.statusClass === 'submitted',
-                });
-                return (
-                  <tr key={index}>
-                    <td>{request.initial_company_name}</td>
-                    <td>{formatDate(request.date_created)}</td>
-                    <td>{request.date_of_approval === null ? "Pending" : formatDate(request.date_of_approval)}</td>
-                    <td>
-                      <div className={statusClasses}>
-                        {request.approval_status}
-                      </div>
-                    </td>
-                    <td>{request.new_company_name}</td>
-                    <td className='down'>
-                      <button onClick={() => handleViewClick(request)}>View More</button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          {selectedRequest && (
-            <MoreDetails
-              request={selectedRequest}
-              onClose={() => setSelectedRequest(null)}
-            />
-          )}
-        </div>
+        {filteredRequests.length === 0 ? (
+          <div className="no-requests">No placement change requests found</div>
+        ) : (
+          <div className="containerCourse">
+            <table>
+              <thead>
+                <tr>
+                  <th>Current Company</th>
+                  <th>Submission Date</th>
+                  <th>Approval Date</th>
+                  <th>Status</th>
+                  <th>New Placement</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredRequests.map((request, index) => {
+                  const statusClasses = classNames({
+                    status: true,
+                    approved: request.approval_status === 'APPROVED',
+                    rejected: request.approval_status === 'REJECTED',
+                    submitted: request.approval_status === "SUBMITTED",
+                  });
+                  return (
+                    <tr key={index}>
+                      <td>{request.initial_company_name}</td>
+                      <td>{formatDate(request.date_created)}</td>
+                      <td>{formatDate(request.date_of_approval)}</td>
+                      <td>
+                        <div className={statusClasses}>
+                          {request.approval_status}
+                      
+                        </div>
+                      </td>
+                      <td>{request.new_company_name}</td>
+                      <td className='down'>
+                        <button onClick={() => handleViewClick(request)}>View More</button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            {selectedRequest && (
+              <MoreDetails
+                request={selectedRequest}
+                onClose={() => setSelectedRequest(null)}
+              />
+            )}
+          </div>
+        )}
       </div>
       <div className="register_above mobile">
         Scroll horizontally to see more
