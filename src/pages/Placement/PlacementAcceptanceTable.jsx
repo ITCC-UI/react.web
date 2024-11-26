@@ -49,6 +49,8 @@ const PlacementAcceptanceTable = (refreshAcceptanceTable) => {
     switch (status) {
       case 'ACTIVE':
         return 'approved';
+      case 'APPROVED':
+        return 'approved';
       case 'SUBMITTED':
         return 'submitted';
       case 'UNDERTAKING':
@@ -141,9 +143,9 @@ const PlacementAcceptanceTable = (refreshAcceptanceTable) => {
               {filteredRequests.map((request, index) => {
                 const statusClasses = classNames({
                   status: true,
-                  approved: request.statusClass === 'approved',
-                  rejected: request.statusClass === 'rejected',
-                  submitted: request.statusClass === 'submitted',
+                  approved: request.approval_status === 'APPROVED',
+                  rejected: request.approval_status === 'REJECTED',
+                  submitted: request.approval_status === 'SUBMITTED',
                 });
 
                 const letterClasses = classNames({
@@ -161,7 +163,9 @@ const PlacementAcceptanceTable = (refreshAcceptanceTable) => {
                     </td>
                     <td>{formatDate(request.date_created)}</td>
                     <td>
-                      <div className={statusClasses}>{request.approval_status}</div>
+                      <div className={statusClasses}>{request.approval_status}
+                        
+                      </div>
                     </td>
 
                     <td className="down">

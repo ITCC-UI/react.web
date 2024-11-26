@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { PulseLoader } from "react-spinners";
 import Empty from "/images/empty_dashboard.png";
 import PlacementChangeReq from "./PlacementChangeReq";
@@ -10,26 +9,38 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest, refre
   const [placementID, setPlacementId] = useState(null);
   const [placement, setLetterRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [submissionStatus, setSubmissionStatus] = useState("");
   const [noProgrammeId, setNoProgrammeId] = useState(false);
   const [placements, setPlacementLetter] = useState([]);
-  // const [placementID, setPlacementID] = useState(null)
+
+  const fetchChangeOfPlacementRequests = useCallback(async (currentProgrammeId) => {
+    try {
+      const response = await axiosInstance.get(`/trainings/registrations/${currentProgrammeId}/change-of-placements/`);
+      setLetterRequests(response.data);
+      
+    } catch (error) {
+      
+      // Optionally, set an error state to show user-friendly message
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const registrationResponse = await axiosInstance.get("trainings/registrations/");
+        
         if (registrationResponse.data.length > 0) {
           const id = registrationResponse.data[0].id;
           setProgrammeId(id);
+          
           const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
           const requests = requestsResponse.data;
+          
           if (requests.length > 0) {
             const placementId = requests[0].id;
             setPlacementId(placementId);
             setPlacementLetter(requests);
-            fetchChangeOfPlacementRequests(placementId);
-        
+            fetchChangeOfPlacementRequests(id);
           } else {
             setNoProgrammeId(true);
           }
@@ -38,32 +49,21 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest, refre
         }
       } catch (error) {
         
+        setNoProgrammeId(true);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, []);
-
-  const fetchChangeOfPlacementRequests = async () => {
-    try {
-      const response = await axiosInstance.get(`/trainings/registrations/${programmeId}/change-of-placements/`);
-      setLetterRequests(response.data);
-      
-     
-    } catch (error) {
-      
-    }
-  };
-
+  }, [fetchChangeOfPlacementRequests]);
 
   return (
     <>
       <div className="container">
         <div className="topHead place">
           {noProgrammeId || placements.length === 0 ? (
-            <button className="newReq disable" onClick={null} disabled>
+            <button className="newReq disable" disabled>
               + New Request
             </button>
           ) : (
@@ -91,7 +91,6 @@ const PlacementChange = ({ showPlacementReq, togglePlacementChangeRequest, refre
       ) : (
         <PlacementChangeReq letterRequests={placement} refreshData={refreshData}/>
       )}
- 
     </>
   );
 };
