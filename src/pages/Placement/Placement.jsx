@@ -220,7 +220,7 @@ useEffect(()=>{
       .required('Letter type is required'),
     company_name: Yup.string()
       .required('Company name is required'),
-      company_address_building_number: Yup.string(),
+      company_address_building_number: Yup.string().required("Building number is required"),
       company_address_building_name: Yup.string(),
       company_address_street: Yup.string().required("Street is required"),
       company_address_area: Yup.string(),
