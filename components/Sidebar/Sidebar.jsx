@@ -42,8 +42,8 @@ const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, 
                 </div>
               </Link>
 
-              <Link to="/form-and-manuals"> 
-              {/* <Link to="#" className="null">  */}
+              {/* <Link to="/form-and-manuals">  */}
+              <Link to="#" className="null"> 
               {/* <div className={formClass}> */}
               <div className="forms">
                 
