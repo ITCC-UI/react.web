@@ -235,7 +235,8 @@ useEffect(()=>{
       .email('Invalid email'),
       
       company_contact_phone: Yup.string()
-      .matches(phoneRegExp, "Company's phone number is not valid").min(11, "Phone number must be more than 10").max(12, "Phone number is must not be more than 11"),
+      .matches(phoneRegExp, "Company's phone number is not valid").min(11, "Phone number must be more than 10")
+      .max(11, "Phone number is must not be more than 11"),
 
       letter: Yup.mixed()
       .required('A file is required')
