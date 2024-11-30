@@ -236,7 +236,9 @@ useEffect(()=>{
       
       company_contact_phone: Yup.string()
       .required("Phone number is required")
-      .matches(phoneRegExp, "Invalid phone number")
+      .matches(phoneRegExp, "Invalid Nigerian phone number")
+      .test('no-spaces', 'Phone number should not contain spaces', 
+          (value) => value && !value.includes(' '))
       .length(11, "Phone number must be exactly 11 digits"),
 
       letter: Yup.mixed()

@@ -245,9 +245,11 @@ const stepTwoValidationSchema = Yup.object().shape({
             .required('Letter type is required'),
             company_contact_name:Yup.string(),
             company_contact_phone: Yup.string()
-            .required("Phone number is required")
-            .matches(phoneRegExp, "Invalid phone number")
-            .length(11, "Phone number must be exactly 11 digits"),
+        .required("Phone number is required")
+        .matches(phoneRegExp, "Invalid Nigerian phone number")
+        .test('no-spaces', 'Phone number should not contain spaces', 
+            (value) => value && !value.includes(' '))
+        .length(11, "Phone number must be exactly 11 digits"),
         company_name: Yup.string().required("Company name is required"),
         addressee: Yup.string().required('Addressee title is required'),
         company_contact_email: Yup.string().email("Invalid email"),
@@ -425,7 +427,7 @@ const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initial
                                 </div>
 
                                 <div className="formInput">
-                                    <label htmlFor="acceptance_letter.company_contact_phone">Company Phone Number</label>
+                                    <label htmlFor="acceptance_letter.company_contact_phone">Company Phone Number <p>*</p></label>
                                     <Field 
     type="text" 
     name="acceptance_letter.company_contact_phone" 
