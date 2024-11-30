@@ -235,8 +235,9 @@ useEffect(()=>{
       .email('Invalid email'),
       
       company_contact_phone: Yup.string()
-      .matches(phoneRegExp, "Company's phone number is not valid").min(11, "Phone number must be more than 10")
-      .max(11, "Phone number is must not be more than 11"),
+      .required("Phone number is required")
+      .matches(phoneRegExp, "Invalid phone number")
+      .length(11, "Phone number must be exactly 11 digits"),
 
       letter: Yup.mixed()
       .required('A file is required')
@@ -388,7 +389,16 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq} onFormSubm
 
                       <div className="formInput">
                         <label htmlFor="company_contact_phone">Company Phone Number</label>
-                        <Field type="tel" name="company_contact_phone" placeholder="e.g 08012345689" />
+                        <Field 
+    type="text" 
+    name="acceptance_letter.company_contact_phone" 
+    placeholder="e.g 08012345689" 
+    onKeyPress={(e) => {
+        if (e.key === ' ') {
+            e.preventDefault();
+        }
+    }}
+/>
                         <ErrorMessage className="error" name="company_contact_phone" component="div" />
                       </div>
 

@@ -150,7 +150,6 @@ const MultiStepForm = ({ toggleNewRequest, onFormSubmit }) => {
         }
     };
     
-
     
     const handleNextStep = (values, final = false) => {
         const updatedData = { ...formData, ...values };
@@ -232,7 +231,7 @@ const MultiStepForm = ({ toggleNewRequest, onFormSubmit }) => {
         </div>
     );
 };
-
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const stepOneValidationSchema = Yup.object().shape({
     request_message: Yup.string().required("Reason for change is required")
@@ -245,6 +244,10 @@ const stepTwoValidationSchema = Yup.object().shape({
             .oneOf(['ACCEPTANCE'], 'Only "ACCEPTANCE" type is allowed')
             .required('Letter type is required'),
             company_contact_name:Yup.string(),
+            company_contact_phone: Yup.string()
+            .required("Phone number is required")
+            .matches(phoneRegExp, "Invalid phone number")
+            .length(11, "Phone number must be exactly 11 digits"),
         company_name: Yup.string().required("Company name is required"),
         addressee: Yup.string().required('Addressee title is required'),
         company_contact_email: Yup.string().email("Invalid email"),
@@ -423,7 +426,16 @@ const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initial
 
                                 <div className="formInput">
                                     <label htmlFor="acceptance_letter.company_contact_phone">Company Phone Number</label>
-                                    <Field type="tel" name="acceptance_letter.company_contact_phone" placeholder="e.g 08012345689" />
+                                    <Field 
+    type="text" 
+    name="acceptance_letter.company_contact_phone" 
+    placeholder="e.g 08012345689" 
+    onKeyPress={(e) => {
+        if (e.key === ' ') {
+            e.preventDefault();
+        }
+    }}
+/>
                                     <ErrorMessage className="error" name="acceptance_letter.company_contact_phone" component="div" />
                                 </div>
 
