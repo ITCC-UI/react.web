@@ -206,7 +206,12 @@ setTriggerRefresh(prev => !prev)
   const validationSchema = Yup.object().shape({
     company_supervisor: Yup.string().required("Supervisor's name is required"),    
     date_reported: Yup.date().required("Date of resumption to duty is required"),
-    supervisor_phone: Yup.string().matches(phoneRegExp, "Supervisor's phone number is not valid").min(11, "Phone number must be more than 10").required("Phone number is required"),
+    supervisor_phone: Yup.string()
+    .required("Phone number is required")
+    .matches(phoneRegExp, "Invalid phone number")
+    .test('no-spaces', 'Phone number should not contain spaces', 
+        (value) => value && !value.includes(' '))
+    .length(11, "Phone number must be exactly 11 digits"),
     supervisor_title: Yup.string().required("Supervisor's title is required"),
     mailing_address: Yup.string().required("Mailing address is required"),
     residential_address:Yup.string().required("Residential area is required"),
@@ -284,7 +289,16 @@ setTriggerRefresh(prev => !prev)
                       </div>
                       <div className="formInput">
                         <label htmlFor="supervisor_phone">Supervisor's Phone Number</label>
-                        <Field type="tel" name="supervisor_phone" placeholder="Enter your company supervisor's phone number" />
+                        <Field 
+    type="text" 
+    name="supervisor_phone" 
+    placeholder="e.g 08012345689" 
+    onKeyPress={(e) => {
+        if (e.key === ' ') {
+            e.preventDefault();
+        }
+    }}
+/>
                         <ErrorMessage className="error" name="supervisor_phone" component="div" />
                       </div>
       
