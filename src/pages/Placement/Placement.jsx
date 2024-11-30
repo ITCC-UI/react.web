@@ -391,7 +391,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq} onFormSubm
                         <label htmlFor="company_contact_phone">Company Phone Number</label>
                         <Field 
     type="text" 
-    name="acceptance_letter.company_contact_phone" 
+    name="company_contact_phone" 
     placeholder="e.g 08012345689" 
     onKeyPress={(e) => {
         if (e.key === ' ') {
