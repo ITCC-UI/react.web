@@ -388,7 +388,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq} onFormSubm
                       </div>
 
                       <div className="formInput">
-                        <label htmlFor="company_contact_phone">Company Phone Number</label>
+                        <label htmlFor="company_contact_phone">Company Phone Number <p>*</p></label>
                         <Field 
     type="text" 
     name="company_contact_phone" 
