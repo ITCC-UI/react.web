@@ -45,9 +45,9 @@ const MultiStepForm = ({ toggleNewRequest, onFormSubmit }) => {
             const registrations = registrationResponse.data;
             const id = registrations[0]?.id; 
             if (id) {
-                const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
+                const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements/current/`);
                 const requests = requestsResponse.data;
-                const placementId = requests[0]?.id;
+                const placementId = requests.id;
                 setPlacementId(placementId);
                 
 
