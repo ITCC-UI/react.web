@@ -28,6 +28,10 @@ section table tr td, section th tr td, section td tr td{
       color: #856404;
       border: 1px solid #ffeeba;
     }
+    &.not_started{
+        color: #000000;
+        background-color: #0000001A;
+    }
 
       }
 

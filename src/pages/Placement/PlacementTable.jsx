@@ -55,7 +55,7 @@ const [filter, setFilter] =useState('all')
       case 'COMPLETED':
         return 'approved';
       case 'NOT_STARTED':
-        return 'rejected'
+        return 'not_started'
       default:
         return 'rejected';
     }
@@ -149,6 +149,7 @@ const [filter, setFilter] =useState('all')
                   'status_table': true,
                   'approved': request.statusClass === 'approved',
                   'rejected': request.statusClass === 'rejected',
+                  'not_started': request.statusClass === 'not_started'
                  
                 });
                 const downloadIconClasses = classNames({
