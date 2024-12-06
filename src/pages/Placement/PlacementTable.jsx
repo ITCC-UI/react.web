@@ -55,7 +55,9 @@ const [filter, setFilter] =useState('all')
       case 'COMPLETED':
         return 'approved';
       case 'NOT_STARTED':
-        return 'not_started'
+        return 'not_started';
+      case 'REJECTED':
+          return 'rejected'
       default:
         return 'rejected';
     }
