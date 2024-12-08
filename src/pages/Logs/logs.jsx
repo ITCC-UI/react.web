@@ -8,20 +8,12 @@ import attachment from "/images/fileAttachment.png"
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { PulseLoader, BeatLoader } from "react-spinners";
+import DailyLogsComponent from "./DailyLogsComponent";
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
 import FullScreenSuccessMessage from "../Placement/Successful/Successful";
 
 const DailyLogs = () => {
-  const [showSubmitForm, setShowSubmitForm] = useState(false);
-  const [id, setProgrammeId] = useState(null);
-  const [placements, setPlacementRequests] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [noProgrammeId, setNoProgrammeId] = useState(false); 
-  const [jobReports, setjobReports] = useState([]);
-  const [placementList, setPlacementList] = useState([]);
-  const [companyName, setCompanyName] = useState(["Job Reporting Form"]);
-  const [addressOptions, setAdressOptions] = useState([]);
+
   const [successMessage, setJobReportStatus] = useState("");
   const [showSuccessStatus, setJobReportSuccess] = useState(false);
   const [failureMessage, setFailureMessage] = useState("");
@@ -72,9 +64,38 @@ const DailyLogs = () => {
       .min(1, "At least one file is required")
   });
 
+  function formatDateWithOrdinal(date) {
+    // Ensure the date is a Date object
+    const d = new Date(date);
+    
+    // Define month names to handle lowercase
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June', 
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    
+    // Get day with ordinal suffix
+    function getOrdinalDay(day) {
+      if (day > 3 && day < 21) return day + 'th';
+      switch (day % 10) {
+        case 1: return day + 'st';
+        case 2: return day + 'nd';
+        case 3: return day + 'rd';
+        default: return day + 'th';
+      }
+    }
+    
+    // Get components
+    const day = d.getDate();
+    const month = months[d.getMonth()];
+    const year = d.getFullYear();
+    
+    // Return formatted string
+    return `${getOrdinalDay(day)} ${month} ${year}`;
+  }
   return (
     <div className="introductionLetter">
-      <Helmet>ITCC - Daily Logs</Helmet>
+      <Helmet> <title>ITCC - Daily Logs</title></Helmet>
       <SideBar
         dashboardClass={"dashy"}
         placementClass={"placement"}
@@ -100,6 +121,8 @@ const DailyLogs = () => {
         />
         <div className="header-main">
           <div className="placement-head">Daily and Weekly Logs</div>
+
+
 
             <div className="requestContent">
             <Formik
@@ -156,8 +179,14 @@ const DailyLogs = () => {
 </Formik>
 
             </div>
+
+
+            
           
         </div>
+
+
+        <DailyLogsComponent day={"Friday"} calendar={formatDateWithOrdinal(new Date())}/>
       </main>
     </div>
   );

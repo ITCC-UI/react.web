@@ -29,3 +29,21 @@ color: #000080;
 
 
 }
+
+.logsUpdate{
+    background-color: red;
+
+    .daysActions{
+.dayCalendar{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    .calendar{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+}
+    }
+}
