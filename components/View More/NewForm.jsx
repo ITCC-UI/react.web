@@ -256,7 +256,7 @@ const stepTwoValidationSchema = Yup.object().shape({
         company_contact_email: Yup.string().email("Invalid email"),
       
         company_address: Yup.object().shape({
-            building_number: Yup.string(),
+            building_number: Yup.string().max(7, "Building number too long"),
             building_name: Yup.string(),
             street: Yup.string().required("Street is required"),
             area: Yup.string(),
@@ -470,15 +470,20 @@ const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initial
                             <div className="companyDetails acceptance">
                                 <div className="company">Company Address</div>
                                 <div className="formInput buildNo">
-                                    <label htmlFor="acceptance_letter.company_address_building_number"></label>
-                                    <Field type="text" name="acceptance_letter.company_address_building_number" placeholder="Building No : No 24" className="buildNo" />
-                                    <ErrorMessage className="error" name="acceptance_letter.company_address_building_number" component="div" />
+                                    <label htmlFor="acceptance_letter.company_address.building_number"></label>
+                                    <Field type="text" name="acceptance_letter.company_address.building_number" placeholder="Building No : No 24" className="buildNo" 
+                                     onKeyPress={(e) => {
+                                        if (e.target.value.length >= 8) {
+                                          e.preventDefault();
+                                        }
+                                      }}/>
+                                    <ErrorMessage className="error" name="acceptance_letter.company_address.building_number" component="div" />
                                 </div>
 
                                 <div className="formInput">
-                                    <label htmlFor="acceptance_letter.company_address_building_name"></label>
-                                    <Field type="text" name="acceptance_letter.company_address_building_name" placeholder="Building Name. e.g CBC Towers" />
-                                    <ErrorMessage className="error" name="acceptance_letter.company_address_building_name" component="div" />
+                                    <label htmlFor="acceptance_letter.company_address.building_name"></label>
+                                    <Field type="text" name="acceptance_letter.company_address.building_name" placeholder="Building Name. e.g CBC Towers" />
+                                    <ErrorMessage className="error" name="acceptance_letter.company_address.building_name" component="div" />
                                 </div>
                                 <div className="formInput">
                                     <label htmlFor="acceptance_letter.company_address.street"></label>
@@ -500,7 +505,7 @@ const StepThree = ({ next, prev, statesOfNigeria, toggleNewPlacementReq, initial
                                         <label htmlFor="acceptance_letter.company_address.state_or_province_id"></label>
 
                                         <Field as="select" name="acceptance_letter.company_address.state_or_province_id" className="selector">
-                                            <option value="" label="Select a state or province" /> {/* Optional default option */}
+                                            <option value="" label="Select a state or province" /> 
                                             {statesOfNigeria.map((item) => (
                                                 <option key={item.id} value={item.id}>
                                                     {item.name}
