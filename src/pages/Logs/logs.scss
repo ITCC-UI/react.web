@@ -31,19 +31,73 @@ color: #000080;
 }
 
 .logsUpdate{
-    background-color: red;
+    margin-top: 20px;
+    border: 1px solid red;
+    box-shadow: 5px 6px 12px 5px #0000000D;
+height: 208px;
+border-radius: 16px;
+opacity: 0px;
+    width: 92%;
 
-    .daysActions{
-.dayCalendar{
+   .top{
+    margin-top: 10px;
     display: flex;
-    gap: 10px;
-    align-items: center;
-
-    .calendar{
+    justify-content: space-between;
+    width: 95%;
+    height: fit-content;
+    margin: 10px auto;
+    .daysActions{
         display: flex;
-        align-items: center;
-        gap: 5px;
+        border: 1px solid red;
+        width: 70%;
+         height: fit-content;
+        
+        .dayCalendar{
+            width: 80%;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            .calendar{
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                img{
+                    width: 20px;
+                }
+            }
+        }
+            }
+        
+            .logsActions{
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                img{
+                    width: 20px;
+                }
+        
+            }
+   }
+   .line{
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.179);
+    margin-top: 10px;
+   }
+.text-field{
+    width: 95%;
+    margin: 20px auto;
+    
+   #dailylogs{
+    width: 100%;
+    margin: 0 auto;
+    border: none;
+    border-left: 1px solid #00000024;
+    height: 45px;
+
+    &:focus{
+        // border:;
     }
+   }
 }
-    }
 }

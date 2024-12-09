@@ -91,7 +91,9 @@ setTriggerRefresh(prev => !prev)
 
   const validationSchema = Yup.object().shape({
     company_address: Yup.object().shape({
-      building_number: Yup.string(),
+      building_number: Yup.string().max(8, "Building number too long"),
+
+
 building_name: Yup.string(),
       street: Yup.string().required("Street is required"),
       area: Yup.string(),
