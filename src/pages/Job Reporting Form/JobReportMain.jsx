@@ -15,22 +15,24 @@ import FullScreenSuccessMessage from "../Placement/Successful/Successful";
 import JobReportingTable from "./JobReportTable";
 
 const JobReportingForm = () => {
-const [showSubmitForm, setShowSubmitForm]=useState(false)
-const [id, setProgrammeId] = useState(null);
-const[placements, setPlacementRequests]=useState([])
-const [isLoading, setIsLoading] = useState(false);
-const [isDownloading, setIsDownloading] = useState(false);
-const [noProgrammeId, setNoProgrammeId] = useState(false); 
-const [jobReports, setjobReports] = useState([]);
-const [placementList, setPlacementList] =useState([])
-const [companyName, setCompanyName] =useState(["Job Reporting Form"])
-const [addressOptions, setAdressOptions]= useState([])
-const [successMessage, setJobReportStatus]= useState("")
-const [showSuccessStatus, setJobReportSuccess] =useState(false)
-const [failureMessage, setFailureMessage]=useState("")
-const [showFailureMessage, setShowJobReportingFailure]=useState(false)
-const [triggerRefresh, setTriggerRefresh] = useState(false);
-useEffect(() => {
+  const [showSubmitForm, setShowSubmitForm] = useState(false)
+  const [id, setProgrammeId] = useState(null);
+  const [placements, setPlacementRequests] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isSCAFDownloading, setSCAFIsDownloading] = useState(false);
+  const [noProgrammeId, setNoProgrammeId] = useState(false);
+  const [jobReports, setjobReports] = useState([]);
+  const [placementList, setPlacementList] = useState([])
+  const [companyName, setCompanyName] = useState(["Job Reporting Form"])
+  const [addressOptions, setAdressOptions] = useState([])
+  const [successMessage, setJobReportStatus] = useState("")
+  const [showSuccessStatus, setJobReportSuccess] = useState(false)
+  const [failureMessage, setFailureMessage] = useState("")
+  const [showFailureMessage, setShowJobReportingFailure] = useState(false)
+  const [triggerRefresh, setTriggerRefresh] = useState(false);
+  const [trainingDuration, setDuration] =useState(0)
+  useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         setShowSubmitForm(false)
@@ -39,13 +41,13 @@ useEffect(() => {
 
     // Attach the event listener
     window.addEventListener("keydown", handleKeyDown);
-})
+  })
 
-const toggleNewSubmission=()=>{
-    setShowSubmitForm((prev)=>!prev);
-}
+  const toggleNewSubmission = () => {
+    setShowSubmitForm((prev) => !prev);
+  }
 
-const fetchProgrammeId = async () => {
+  const fetchProgrammeId = async () => {
     try {
       const response = await axiosInstance.get("trainings/registrations/");
       if (response.data.length > 0) {
@@ -53,39 +55,56 @@ const fetchProgrammeId = async () => {
         setProgrammeId(id);
         setIsLoading(false)
       } else {
-        
+
       }
     } catch (error) {
-      setNoProgrammeId(true); 
-      
-      
+      setNoProgrammeId(true);
+
+
     }
   };
 
   useEffect(() => {
-    fetchProgrammeId();  
+    fetchProgrammeId();
   }, []);
 
 
 
-// Fetch the placement id
+  // Fetch Registration ID
+const fetchRegistrationType = async () =>{
+  try{
+    const response = await axiosInstance.get(`/trainings/registrations/${id}`);
+    const duration=(response.data.training.type.duration)
+    setDuration(duration)
+
+  }
+  catch (error){
+
+  }
+}
+
+useEffect (()=>{
+  if (id){
+    fetchRegistrationType()
+  }
+}, [id])
+
+  // Fetch the placement id
   const fetchPlacement = async () => {
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/current`);
       setPlacementRequests(response.data.id);
-      
-      
       setPlacementList(response)
-      
+
       setCompanyName(response.data.attached_company_branch.company.name)
       setIsLoading(false)
-      
+
     } catch (error) {
-      
-      setNoProgrammeId(true); 
-      
-      
-      
+
+      setNoProgrammeId(true);
+
+
+
     }
   };
 
@@ -103,7 +122,7 @@ const fetchProgrammeId = async () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      
+
     }
   };
 
@@ -114,86 +133,121 @@ const fetchProgrammeId = async () => {
       fetchJobReports();
     }
   }, [placements]);
-  
 
-const type="TITLE"
-  const fetchAddressee =()=>{
+
+  const type = "TITLE"
+  const fetchAddressee = () => {
     axiosInstance.get(`/option-types/${type}/options`)
-    .then(titles =>{
-      const addressee=titles.data.map(title=>title.name)
-      
-      setAdressOptions(addressee)
-      
-    })
-  
-    .catch(error=>{
-      
-      
-    })
+      .then(titles => {
+        const addressee = titles.data.map(title => title.name)
+
+        setAdressOptions(addressee)
+
+      })
+
+      .catch(error => {
+
+
+      })
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchAddressee()
   }, [])
   const downloadReportForm = async () => {
     try {
-        const response = await axiosInstance.get(`/trainings/registrations/placements/${placements}/job-reporting/form/document/`, {
-            responseType: 'blob' // Important: Specify the response type as 'blob'
-        });
+      const response = await axiosInstance.get(`/trainings/registrations/placements/${placements}/job-reporting/form/document/`, {
+        responseType: 'blob' // Important: Specify the response type as 'blob'
+      });
 
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'report_form.pdf'); // Replace 'report_form.pdf' with the desired filename
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode.removeChild(link);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'report_form.pdf'); // Replace 'report_form.pdf' with the desired filename
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
     } catch (error) {
-        
+
     }
-};
+  };
 
-const handleDownload = async () => {
-  setIsDownloading(true);
 
-  try {
-    // Your download logic here
-    await downloadReportForm();
-  } catch (error) {
-    // Handle errors
-    
-  } finally {
-    setIsDownloading(false);
-  }
-};
+  const downloadSCAFForm = async () => {
+    try {
+      const response = await axiosInstance.get(`/trainings/registrations/${id}/job-reporting/itf/document/`, {
+        responseType: 'blob' // Important: Specify the response type as 'blob'
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'SCAF-FORM.pdf'); // Replace 'report_form.pdf' with the desired filename
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+
+    }
+  };
+
+  const handleJobReportDownload = async () => {
+    setIsDownloading(true);
+
+    try {
+      // Your download logic here
+      await downloadReportForm();
+    } catch (error) {
+      // Handle errors
+
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+
+  // SCAF FORM DOwnload
+  const handleSCAFDownload = async () => {
+    setSCAFIsDownloading(true);
+
+    try {
+      // Your download logic here
+      await downloadSCAFForm();
+    } catch (error) {
+      // Handle errors
+
+    } finally {
+      setSCAFIsDownloading(false);
+    }
+  };
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-// Job reporting form submission
+  // Job reporting form submission
   const submitJobReportingForm = async (values, { setSubmitting }) => {
     try {
-  
+
       const response = await axiosInstance.post(`/trainings/registrations/placements/${placements}/job-reporting/`, values, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
       setJobReportStatus("Your Job Reporting Form has been submitted successfully!");
-setJobReportSuccess(true)
-setTriggerRefresh(prev => !prev)
-      
+      setJobReportSuccess(true)
+      setTriggerRefresh(prev => !prev)
+
     } catch (error) {
-      
-      if(error.response.status===400){
+
+      if (error.response.status === 400) {
         setFailureMessage(error.response.data.detail)
         // setTriggerRefresh(prev => !prev)
         setShowJobReportingFailure(true)
-        
+
       }
-      else{
+      else {
         setFailureMessage("There was an error submitting your Job reporting form")
         // setTriggerRefresh(prev => !prev)
         setShowJobReportingFailure(true)
-     
+
       }
 
     } finally {
@@ -204,17 +258,17 @@ setTriggerRefresh(prev => !prev)
 
 
   const validationSchema = Yup.object().shape({
-    company_supervisor: Yup.string().required("Supervisor's name is required"),    
+    company_supervisor: Yup.string().required("Supervisor's name is required"),
     date_reported: Yup.date().required("Date of resumption to duty is required"),
     supervisor_phone: Yup.string()
-    .required("Phone number is required")
-    .matches(phoneRegExp, "Invalid phone number")
-    .test('no-spaces', 'Phone number should not contain spaces', 
+      .required("Phone number is required")
+      .matches(phoneRegExp, "Invalid phone number")
+      .test('no-spaces', 'Phone number should not contain spaces',
         (value) => value && !value.includes(' '))
-    .length(11, "Phone number must be exactly 11 digits"),
+      .length(11, "Phone number must be exactly 11 digits"),
     supervisor_title: Yup.string().required("Supervisor's title is required"),
     mailing_address: Yup.string().required("Mailing address is required"),
-    residential_address:Yup.string().required("Residential area is required"),
+    residential_address: Yup.string().required("Residential area is required"),
     form: Yup.mixed()
       .required('A file is required')
       .test('fileFormat', 'Unsupported file format', (value) => {
@@ -223,51 +277,51 @@ setTriggerRefresh(prev => !prev)
       })
       .test('fileSize', 'File size is too large', (value) => {
         if (!value) return false;
-        return value.size <= 1 * 1024 * 1024; 
+        return value.size <= 1 * 1024 * 1024;
       })
   });
 
 
-    return ( 
-        <div className="introductionLetter">
-            <Helmet>
-                <title>ITCC - Job Reporting Form</title>
-            </Helmet>
+  return (
+    <div className="introductionLetter">
+      <Helmet>
+        <title>ITCC - Job Reporting Form</title>
+      </Helmet>
 
-            <SideBar
-            dashboardClass={"dashy"}
-            placementClass={"placement"}
-            init={1}
-            activeL={"active-accordion"}
-            formClass={"forms"}
-            
-            />
+      <SideBar
+        dashboardClass={"dashy"}
+        placementClass={"placement"}
+        init={1}
+        activeL={"active-accordion"}
+        formClass={"forms"}
 
-            
+      />
 
-{showSubmitForm && (
-              <div className="newRequestComponent">
-              <div className="newRequestHeader ">
-                <div className="introductionLetter">{companyName}</div>
-                <button className="closeButton" onClick={toggleNewSubmission} >
-                  <img src={CloseIcon} alt="Close" />
-                </button>
-                <div className="requestContent">
-                <Formik
+
+
+      {showSubmitForm && (
+        <div className="newRequestComponent">
+          <div className="newRequestHeader ">
+            <div className="introductionLetter">{companyName}</div>
+            <button className="closeButton" onClick={toggleNewSubmission} >
+              <img src={CloseIcon} alt="Close" />
+            </button>
+            <div className="requestContent">
+              <Formik
                 initialValues={{
-                 form: null,
-                 company_supervisor: "",
-                 date_reported: "",
-                 supervisor_phone: "",
-                 supervisor_title: "",
-                 residential_address: "",
-                 mailing_address: ""
+                  form: null,
+                  company_supervisor: "",
+                  date_reported: "",
+                  supervisor_phone: "",
+                  supervisor_title: "",
+                  residential_address: "",
+                  mailing_address: ""
                 }}
                 validationSchema={validationSchema}
                 onSubmit={submitJobReportingForm}
               >
                 {({ isSubmitting, setFieldValue }) => (
-                    <Form encType="multipart/form-data">
+                  <Form encType="multipart/form-data">
                     <div className="companyDetails">
                       <div className="formInput">
                         <label htmlFor="company_supervisor">Supervisor's Name</label>
@@ -278,30 +332,30 @@ setTriggerRefresh(prev => !prev)
                       <div className="formInput">
                         <label htmlFor="supervisor_title">Supervisor Title</label>
                         <Field as="select" name="supervisor_title" className="form-select">
-    <option value="">Select Title/Position</option>
-    {addressOptions.map((option, index) => (
-      <option key={index} value={option}>
-        {option}
-      </option>
-    ))}
-  </Field>
-  <ErrorMessage className="error" name="supervisor_title" component="div" />
+                          <option value="">Select Title/Position</option>
+                          {addressOptions.map((option, index) => (
+                            <option key={index} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage className="error" name="supervisor_title" component="div" />
                       </div>
                       <div className="formInput">
                         <label htmlFor="supervisor_phone">Supervisor's Phone Number</label>
-                        <Field 
-    type="text" 
-    name="supervisor_phone" 
-    placeholder="e.g 08012345689" 
-    onKeyPress={(e) => {
-        if (e.key === ' ') {
-            e.preventDefault();
-        }
-    }}
-/>
+                        <Field
+                          type="text"
+                          name="supervisor_phone"
+                          placeholder="e.g 08012345689"
+                          onKeyPress={(e) => {
+                            if (e.key === ' ') {
+                              e.preventDefault();
+                            }
+                          }}
+                        />
                         <ErrorMessage className="error" name="supervisor_phone" component="div" />
                       </div>
-      
+
 
                       <div className="formInput">
                         <label htmlFor="date_reported">Date reported for training</label>
@@ -309,7 +363,7 @@ setTriggerRefresh(prev => !prev)
                         <ErrorMessage className="error" name="date_reported" component="div" />
                       </div>
 
-                    
+
 
 
                       <div className="formInput">
@@ -327,74 +381,98 @@ setTriggerRefresh(prev => !prev)
                       <div className="formInput">
                         <label htmlFor="form">Upload your form</label>
                         <input
-              id="letter"
-              name="form"
-              type="file"
-              accept=".pdf, image/*"
-              onChange={(event) => {
-                setFieldValue("form", event.currentTarget.files[0]);
-                
-              }}
-            />
+                          id="letter"
+                          name="form"
+                          type="file"
+                          accept=".pdf, image/*"
+                          onChange={(event) => {
+                            setFieldValue("form", event.currentTarget.files[0]);
+
+                          }}
+                        />
                         <ErrorMessage className="error" name="form" component="div" />
                       </div>
                     </div>
-                 
+
                     <button type="submit" className="submitting">
                       {isSubmitting ? <PulseLoader size={10} color="white" /> : "Submit"}
                     </button>
                   </Form>
                 )}
               </Formik>
-                </div>
-              </div>
             </div>
+          </div>
+        </div>
       )}
 
-<FullScreenSuccessMessage
+      <FullScreenSuccessMessage
         isOpen={showSuccessStatus}
         message={successMessage}
-        onClose={()=>setJobReportSuccess(false)}
-        />
+        onClose={() => setJobReportSuccess(false)}
+      />
 
-        <FullScreenFailureMessage
+      <FullScreenFailureMessage
         message={failureMessage}
         isOpen={showFailureMessage}
-        onClose={()=>setShowJobReportingFailure(false)}
-        />
-            
-            <main className="introLetter">
-<TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} active={"activeBar"}/>
-<div className="header-main">
-<div className="placement-head">
-          Job Reporting Form
-        </div>
+        onClose={() => setShowJobReportingFailure(false)}
+      />
 
-        <div className="form-nest">
-         {placementList.length===0?   <button className="form-download null" onClick={null}>
-<img src={DownloadIcon} alt="download" />Download Form
-            </button>:    <button
-      className={`form-download ${isDownloading? "fixed-width null": ""}`}
-      disabled={isLoading}
-      onClick={handleDownload}
-    >
-      {isDownloading ? (
-        <BeatLoader size={10} color="#36d7b7" />
-      ) : (
-        <>
-          <img src={DownloadIcon} alt="download" /> Download Form
-        </>
-      )}
-    </button>}
-            <button className="form-upload" onClick={()=>toggleNewSubmission()}>
-           
-Submit Form
+      <main className="introLetter">
+        <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} active={"activeBar"} />
+        <div className="header-main">
+          <div className="placement-head">
+            Job Reporting Form
+          </div>
+
+          <div className="form-nest">
+            {placementList.length === 0 ? <button className="form-download null" onClick={null}>
+              <img src={DownloadIcon} alt="download" />Download Form
+            </button> : <button
+              className={`form-download ${isDownloading ? "fixed-width null" : ""}`}
+              disabled={isLoading}
+              onClick={handleJobReportDownload}
+            >
+              {isDownloading ? (
+                <BeatLoader size={10} color="#36d7b7" />
+              ) : (
+                <>
+                  <img src={DownloadIcon} alt="download" /> Download Form
+                </>
+              )}
+            </button>}
+            <button className="form-upload" onClick={() => toggleNewSubmission()}>
+
+              Submit Form
             </button>
+
+
+            {/* SCAF Form Download */}
+            {jobReports.length > 0 && trainingDuration ===24 ?
+             (
+              <button
+                className={`form-download ${isSCAFDownloading ? "fixed-width null" : ""}`}
+                disabled={isLoading}
+                onClick={handleSCAFDownload}
+              >
+                {isSCAFDownloading ? (
+                  <BeatLoader size={10} color="#36d7b7" />
+                ) : (
+                  <>
+                    <img src={DownloadIcon} alt="download" /> Download SCAF
+                  </>
+                )}
+              </button>
+            ):
+             (
+  <button className="form-download null none" onClick={null}>
+    <img src={DownloadIcon} alt="download" />Download SCAF
+  </button>
+)}
+          </div>
         </div>
-</div>
-{isLoading ? (
+        {isLoading ? (
           <div className="loader">
-        
+
             <PulseLoader size={15} color={"#123abc"} />
           </div>
         ) : noProgrammeId ? (
@@ -402,7 +480,7 @@ Submit Form
             <p> You presently don't have an active placement </p>
           </div>
 
-          
+
         ) : jobReports.length === 0 ? (
           <div className="image">
             <img src={Empty} alt="Empty" />
@@ -412,9 +490,9 @@ Submit Form
           <JobReportingTable triggerRefresh={triggerRefresh} />
         )}
 
-            </main>
-        </div>
-     );
+      </main>
+    </div>
+  );
 }
- 
+
 export default JobReportingForm;

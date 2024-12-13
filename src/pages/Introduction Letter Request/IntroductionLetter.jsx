@@ -91,7 +91,7 @@ setTriggerRefresh(prev => !prev)
 
   const validationSchema = Yup.object().shape({
     company_address: Yup.object().shape({
-      building_number: Yup.string(),
+      building_number: Yup.string().max(7, "Building number too long"),
 building_name: Yup.string(),
       street: Yup.string().required("Street is required"),
       area: Yup.string(),
@@ -145,7 +145,8 @@ useEffect(()=>{
   
 
 
-  
+
+
 
   return (
     <div className="introductionLetter">
@@ -217,7 +218,13 @@ useEffect(()=>{
                       <div className="company">Company Address</div>
                       <div className="formInput buildNo">
                         <label htmlFor="company_address.building_number"></label>
-                        <Field type="text" name="company_address.building_number" placeholder="Building No : No 24" className="buildNo" />
+                        <Field type="text" name="company_address.building_number" placeholder="Building No : No 24"
+                         className="buildNo"  
+                         onKeyPress={(e) => {
+    if (e.target.value.length >= 8) {
+      e.preventDefault();
+    }
+  }} />
                         <ErrorMessage className="error" name="company_address.building_number" component="div" />
                       </div>
 

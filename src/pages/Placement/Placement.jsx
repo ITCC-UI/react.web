@@ -220,7 +220,7 @@ useEffect(()=>{
       .required('Letter type is required'),
     company_name: Yup.string()
       .required('Company name is required'),
-      company_address_building_number: Yup.string().required("Building number is required"),
+      company_address_building_number: Yup.string().required("Building number is required").max(7,"Building number too long"),
       company_address_building_name: Yup.string(),
       company_address_street: Yup.string().required("Street is required"),
       company_address_area: Yup.string(),
@@ -433,7 +433,12 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq} onFormSubm
                       <div className="company">Company Address</div>
                       <div className="formInput buildNo">
                         <label htmlFor="company_address_building_number"></label>
-                        <Field type="text" name="company_address_building_number" placeholder="Building No : No 24" className="buildNo" />
+                        <Field type="text" name="company_address_building_number" placeholder="Building No : No 24" className="buildNo" 
+                         onKeyPress={(e) => {
+                          if (e.target.value.length >= 8) {
+                            e.preventDefault();
+                          }
+                        }} />
                         <ErrorMessage className="error" name="company_address_building_number" component="div" />
                       </div>
 
