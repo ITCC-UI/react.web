@@ -32,6 +32,7 @@ font-weight: 700;
             border: 1px solid #000080;
             color: #000080;
             font-family: Poppins;
+            padding: 10px;
         }
         .null{
             opacity: .4;
@@ -51,10 +52,10 @@ font-weight: 700;
             
             align-content: center;
             align-items: center;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
            .placement-head{
             margin-left: 15px;
-            width: 120px;
+            // width: 120px;
             height: fit-content;
             font-size: 14px;
             font-weight: 500;
@@ -63,6 +64,10 @@ font-weight: 700;
 
            .form-nest{
             gap: 10px;
+            width: 90%;
+            margin: 10px auto;
+            gap: 15px;
+            justify-content: space-between;
             .form-download{
                 gap: 5px;
             }
@@ -84,4 +89,10 @@ font-weight: 700;
         width: 50px;
         height: 30px;
     }
+}
+
+
+
+.none{
+    display: none !important;
 }

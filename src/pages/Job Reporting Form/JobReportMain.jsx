@@ -31,6 +31,7 @@ const JobReportingForm = () => {
   const [failureMessage, setFailureMessage] = useState("")
   const [showFailureMessage, setShowJobReportingFailure] = useState(false)
   const [triggerRefresh, setTriggerRefresh] = useState(false);
+  const [trainingDuration, setDuration] =useState(0)
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -73,7 +74,9 @@ const JobReportingForm = () => {
 const fetchRegistrationType = async () =>{
   try{
     const response = await axiosInstance.get(`/trainings/registrations/${id}`);
-    console.log(response)
+    const duration=(response.data.training.type.duration)
+    setDuration(duration)
+
   }
   catch (error){
 
@@ -444,21 +447,27 @@ useEffect (()=>{
 
 
             {/* SCAF Form Download */}
-            {jobReports.length === 0 ? <button className="form-download null" onClick={null}>
-              <img src={DownloadIcon} alt="download" />Download SCAF
-            </button> : <button
-              className={`form-download ${isSCAFDownloading ? "fixed-width null" : ""}`}
-              disabled={isLoading}
-              onClick={handleSCAFDownload}
-            >
-              {isSCAFDownloading ? (
-                <BeatLoader size={10} color="#36d7b7" />
-              ) : (
-                <>
-                  <img src={DownloadIcon} alt="download" /> Download SCAF
-                </>
-              )}
-            </button>}
+            {jobReports.length > 0 && trainingDuration ===24 ?
+             (
+              <button
+                className={`form-download ${isSCAFDownloading ? "fixed-width null" : ""}`}
+                disabled={isLoading}
+                onClick={handleSCAFDownload}
+              >
+                {isSCAFDownloading ? (
+                  <BeatLoader size={10} color="#36d7b7" />
+                ) : (
+                  <>
+                    <img src={DownloadIcon} alt="download" /> Download SCAF
+                  </>
+                )}
+              </button>
+            ):
+             (
+  <button className="form-download null none" onClick={null}>
+    <img src={DownloadIcon} alt="download" />Download SCAF
+  </button>
+)}
           </div>
         </div>
         {isLoading ? (
