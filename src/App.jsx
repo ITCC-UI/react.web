@@ -23,6 +23,7 @@ import MultiStepForm from '../components/View More/NewForm.jsx';
 import FormsAndManuals from './pages/Forms and Manuals/FormsAndManuals.jsx';
 // import PrintPreviewContainer from '../components/Print Layout/PrintPreview.jsx';
 // import RegistrationForm from '../components/Print Form/RegistrationForm.jsx';
+import TrainingDocuments from './pages/Post-Training-Docs/TrainingDocument.jsx';
 import JobReportingForm from './pages/Job Reporting Form/JobReportMain.jsx';
 function App() {
 
@@ -48,6 +49,7 @@ function App() {
           <Route path='/details' element={<MoreDetails />} />
           <Route path='/form' element={<MultiStepForm/>}></Route>
           <Route path='/form-and-manuals' element={<Auth><FormsAndManuals></FormsAndManuals></Auth>}/>
+          <Route path='/submit-training-document' element={<Auth><TrainingDocuments></TrainingDocuments></Auth>}/>
           
         </Routes>        
       </div>
