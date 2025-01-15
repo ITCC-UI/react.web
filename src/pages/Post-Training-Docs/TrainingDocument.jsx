@@ -257,7 +257,7 @@ useEffect (()=>{
   };
 
 
-  const validationSchema = Yup.object().shape({
+  const  validationSchema = Yup.object().shape({
     employer_evaluation_score: Yup.string().required("Employer evaluation score is required"),
     ending_date: Yup.date().required("Ending date of training is required"),
     form: Yup.mixed()
