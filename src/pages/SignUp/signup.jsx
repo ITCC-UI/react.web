@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { PulseLoader } from 'react-spinners';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import DummySideBar from '../../../components/Sidebar/DummySB';
@@ -10,6 +9,7 @@ import './SignUp.scss';
 import Google from '/images/google.png';
 import SignLogHeader from '../../../components/Header/SignupLoginHead';
 import { Helmet } from 'react-helmet';
+import axiosInstance from '../../../API Instances/AxiosIntances';
 
 const SignUpSchema = Yup.object().shape({
   email: Yup.string()
@@ -34,6 +34,10 @@ const getPasswordStrength = (password) => {
 };
 
 const SignUp = () => {
+  const [searchParams] = useSearchParams();
+  const email = searchParams.get('email') || '';
+  const verificationToken = searchParams.get('token') || '';
+
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [passwordStrength, setPasswordStrength] = useState(0);
@@ -42,34 +46,32 @@ const SignUp = () => {
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const navigate = useNavigate();
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleRepeatPasswordVisibility = () => setShowRepeatPassword(!showRepeatPassword);
 
-  const toggleRepeatPasswordVisibility = () => {
-    setShowRepeatPassword(!showRepeatPassword);
-  };
-
-  const handleSubmit = async (values, { setSubmitting, setStatus }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      values.email = values.email.toLowerCase(); // Convert email to lowercase
-      const response = await axios.post('https://theegsd.pythonanywhere.com/api/v1/student/signup/', values);
-      //console.log('Signup successful', response.data);
-      setSuccessMessage('Sign up successful! Redirecting to login page...');
+      // Include the verification token in the submission
+      const submitData = {
+        email: values.email.toLowerCase(),
+        password: values.password,
+        verification_token: verificationToken
+      };
+
+      await axiosInstance.post('/account/complete-create/', submitData);
+      
+      setSuccessMessage('Sign up completed! Redirecting to login page...');
       setTimeout(() => {
-        setSuccessMessage('');
         navigate("/login");
-      }, 5000); // 5000 milliseconds = 5 seconds
+      }, 3000);
     } catch (error) {
-      //console.error('Signup failed', error);
-      if (error.response && error.response.data && error.response.data.email) {
-        setErrorMessage('User already exists.');
+      if (error.response?.data?.message) {
+        setErrorMessage(error.response.data.message);
       } else {
-        setErrorMessage('Signup failed. Please try again.');
+        setErrorMessage('Failed to complete signup. Please try again.');
+        console.log(error)
       }
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 5000); // 5000 milliseconds = 5 seconds
+      setTimeout(() => setErrorMessage(''), 5000);
     } finally {
       setSubmitting(false);
     }
@@ -93,9 +95,7 @@ const SignUp = () => {
   return (
     <div className="login route-Dash">
       <Helmet>
-        <title>
-          ITCC - Sign Up
-        </title>
+        <title>ITCC - Complete Sign Up</title>
       </Helmet>
       <DummySideBar />
       <section className="signUp">
@@ -105,37 +105,42 @@ const SignUp = () => {
               <SignLogHeader />
 
               <div className="signUpForm">
-                <div className="todo">Create Account</div>
+                <div className="todo">Complete Your Account Setup</div>
                 {errorMessage && (
-                  <div className="error-message">
-                    {errorMessage}
-                  </div>
+                  <div className="error-message">{errorMessage}</div>
                 )}
+                {successMessage && (
+                  <div className="success-message">{successMessage}</div>
+                )}
+                
                 <Formik
-                  initialValues={{ email: '', password: '', repeatPassword: '' }}
+                  initialValues={{ 
+                    email: email,
+                    password: '', 
+                    repeatPassword: '' 
+                  }}
                   validationSchema={SignUpSchema}
                   validateOnChange={true}
                   validateOnBlur={true}
                   onSubmit={handleSubmit}
                 >
-                  {({ isSubmitting, status, setFieldValue, setFieldTouched, values }) => (
+                  {({ isSubmitting, setFieldValue, setFieldTouched, values }) => (
                     <Form className="formSignUp" id="signUpForm" noValidate>
                       <div className="email">
                         <Field
                           type="email"
                           name="email"
                           placeholder="Email"
-                          autoComplete="on"
+                          disabled
+                          className="disabled-input"
                         />
-                        <div className="error">
-                          <ErrorMessage name="email" component="div" />
-                        </div>
                       </div>
+                      
                       <div className="password">
                         <Field
                           type={showPassword ? 'text' : 'password'}
                           name="password"
-                          placeholder="Password"
+                          placeholder="Create Password"
                           onChange={(e) => handlePasswordChange(e, setFieldValue, setFieldTouched, values)}
                         />
                         <span
@@ -153,6 +158,7 @@ const SignUp = () => {
                           <div className={`bar ${passwordStrength >= 3 ? 'filled' : ''}`}></div>
                         </div>
                       </div>
+                      
                       <div className="repeat-password">
                         <Field
                           type={showRepeatPassword ? 'text' : 'password'}
@@ -173,30 +179,13 @@ const SignUp = () => {
                           <div className="error">Passwords do not match</div>
                         )}
                       </div>
+
                       <button className="createAccount" type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? <PulseLoader size={10} color="white" /> : "Sign Up"}
+                        {isSubmitting ? <PulseLoader size={10} color="white" /> : "Complete Signup"}
                       </button>
-
-                      <div className="or">
-                        <hr /> <span>or</span>
-                      </div>
-
-                      <div className="signInWithGoogle">
-                        <a href="googleAPIHere" className="googleSign">
-                          <img src={Google} alt="Google Image" />
-                          Continue with Google
-                        </a>
-                      </div>
-
-                      <div className="login">Already have an account? <span><Link to="/login">Login</Link></span></div>
                     </Form>
                   )}
                 </Formik>
-                {successMessage && (
-                  <div className="success-message">
-                    {successMessage}
-                  </div>
-                )}
               </div>
             </div>
           </div>

@@ -23,7 +23,10 @@ import MultiStepForm from '../components/View More/NewForm.jsx';
 import FormsAndManuals from './pages/Forms and Manuals/FormsAndManuals.jsx';
 // import PrintPreviewContainer from '../components/Print Layout/PrintPreview.jsx';
 // import RegistrationForm from '../components/Print Form/RegistrationForm.jsx';
+import TrainingDocuments from './pages/Post-Training-Docs/TrainingDocument.jsx';
 import JobReportingForm from './pages/Job Reporting Form/JobReportMain.jsx';
+import SignUpInitial from './pages/SignUpInitial/signupinitial.jsx';
+
 function App() {
 
     return (
@@ -33,7 +36,8 @@ function App() {
           <Route path='/password_reset' element={<UpdatePassword/>} />
           <Route path='/new-password' element={<ResetPassword/>} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path='/register' element={<SignUpInitial />}    />       
+          <Route path="/signup" element={<SignUp />} /> 
           <Route path='/register' element={<Auth><Dashboard/></Auth>}></Route>
           <Route path='/registration-portal' element= {<Auth><RegistrationDash/></Auth>}></Route>
           <Route path='/dashboar' element={<Auth><MainDashboard/></Auth>  } />
@@ -48,6 +52,7 @@ function App() {
           <Route path='/details' element={<MoreDetails />} />
           <Route path='/form' element={<MultiStepForm/>}></Route>
           <Route path='/form-and-manuals' element={<Auth><FormsAndManuals></FormsAndManuals></Auth>}/>
+          <Route path='/submit-training-document' element={<Auth><TrainingDocuments></TrainingDocuments></Auth>}/>
           
         </Routes>        
       </div>

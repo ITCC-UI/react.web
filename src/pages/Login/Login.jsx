@@ -197,7 +197,7 @@ const Login = () => {
                         </a>
                       </div>
                       <div className="login">
-                        Don't have an account? <span><Link to="/signup">Create an Account</Link></span>
+                        Don't have an account? <span><Link to="/register">Create an Account</Link></span>
                       </div>
                       <div className="reset">
                         Forgotten Password? <span><Link to="/password_reset">Reset Password</Link></span>
