@@ -25,6 +25,8 @@ import FormsAndManuals from './pages/Forms and Manuals/FormsAndManuals.jsx';
 // import RegistrationForm from '../components/Print Form/RegistrationForm.jsx';
 import TrainingDocuments from './pages/Post-Training-Docs/TrainingDocument.jsx';
 import JobReportingForm from './pages/Job Reporting Form/JobReportMain.jsx';
+import SignUpInitial from './pages/SignUpInitial/signupinitial.jsx';
+
 function App() {
 
     return (
@@ -34,7 +36,8 @@ function App() {
           <Route path='/password_reset' element={<UpdatePassword/>} />
           <Route path='/new-password' element={<ResetPassword/>} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path='/register' element={<SignUpInitial />}    />       
+          <Route path="/signup" element={<SignUp />} /> 
           <Route path='/register' element={<Auth><Dashboard/></Auth>}></Route>
           <Route path='/registration-portal' element= {<Auth><RegistrationDash/></Auth>}></Route>
           <Route path='/dashboar' element={<Auth><MainDashboard/></Auth>  } />
