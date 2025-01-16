@@ -53,7 +53,7 @@ return (
                     />
                 </label>
             </div>
-            {isUploading && <div className="uploading-icon"><TailSpin height={20} width={20} visible={true} radius={2} wrapperStyle={{}} wrapperClass=''/> </div>}
+            {isUploading && <div className="uploading-icon"><TailSpin height={20} width={30} visible={true} radius={2} wrapperStyle={{}} wrapperClass='' ariaLabel='tail-spin-loading' color='blue' /> </div>}
         </div>
     </form>
 );
