@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { FiPaperclip } from 'react-icons/fi';
 import './FormSubmission.scss';
+import { Loader, LoaderPinwheel } from 'lucide-react';
+import { CircleLoader, GridLoader } from 'react-spinners';
+import { TailSpin } from 'react-loader-spinner';
 
 const FormSubmissionComponent = ({file,submission, title}) => {
   const [workReport, setWorkReport] = useState("NA");
@@ -29,7 +32,7 @@ const handleFileUpload = async (file, setFile) => {
 };
 
 return (
-    <form className="form-submission">
+    <form className="form-submission-report">
         <div className="file-input-container">
             <label>{title}</label>
             <div className="file-input-wrapper">
@@ -50,7 +53,7 @@ return (
                     />
                 </label>
             </div>
-            {isUploading && <div className="uploading-icon">Uploading...</div>}
+            {isUploading && <div className="uploading-icon"><TailSpin height={20} width={20} visible={true} radius={2} wrapperStyle={{}} wrapperClass=''/> </div>}
         </div>
     </form>
 );

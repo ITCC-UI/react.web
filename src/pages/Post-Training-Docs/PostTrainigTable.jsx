@@ -6,8 +6,6 @@ import FormSubmissionComponent from './FormSubmissionComponent';
 
 const PostTrainingTable = ({triggerRefresh}) => {
   const [letterRequests, setLetterRequests] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState('all');
 
   const fetchJobReports = async () => {
     try {

@@ -37,7 +37,7 @@ function App() {
           <Route path='/new-password' element={<ResetPassword/>} />
           <Route path="/login" element={<Login />} />
           <Route path='/register' element={<SignUpInitial />}    />       
-          <Route path="/signup" element={<SignUp />} /> 
+          <Route path="/signup?" element={<SignUp />} /> 
           <Route path='/register' element={<Auth><Dashboard/></Auth>}></Route>
           <Route path='/registration-portal' element= {<Auth><RegistrationDash/></Auth>}></Route>
           <Route path='/dashboar' element={<Auth><MainDashboard/></Auth>  } />
