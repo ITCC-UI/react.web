@@ -74,13 +74,17 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
         .required('Phone Number is required'),
     }),
     Yup.object({
-      bank: Yup.string().required('Required'),
+      bank: Yup.string()
+        .required('Required'),
       bank_account_number: Yup.string()
-        .min(10, "Number must be more than 10")
-        .max(11, "Number must be less than or equal to 11")
-        .required("Required"),
-      bank_sort_code: Yup.string().required('Bank sort code is Required').min(9, "Bank sort code must be at least 9 digits"),
-    }),
+        .matches(/^\d+$/, 'Must be only digits')
+        .length(10, 'Must be exactly 10 digits')
+        .required('Required'),
+      bank_sort_code: Yup.string()
+        .matches(/^\d+$/, 'Must be only digits')
+        .length(9, 'Must be exactly 9 digits')
+        .required('Required')
+    })
   ];
 
   const handleSubmit = async (values, actions) => {
