@@ -18,6 +18,8 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
   const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission status
   const navigate = useNavigate();
 
+
+  const bankSort = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   useEffect(() => {
     const fetchBanks = async () => {
       try {
@@ -77,12 +79,17 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
       bank: Yup.string()
         .required('Required'),
       bank_account_number: Yup.string()
-        .matches(/^\d+$/, 'Must be only digits')
+        .matches(bankSort, 'Must be only digits')
+        .test('no-spaces', 'Account number should not contain spaces', 
+          (value) => value && !value.includes(' '))
         .length(10, 'Must be exactly 10 digits')
         .required('Required'),
       bank_sort_code: Yup.string()
-        .matches(/^\d+$/, 'Must be only digits')
+        .matches(bankSort, 'Must be only digits')
+        .test('no-spaces', 'Sort code should not contain spaces', 
+          (value) => value && !value.includes(' '))
         .length(9, 'Must be exactly 9 digits')
+        .max(9, "Must be exactly 9")
         .required('Required')
     })
   ];
@@ -236,8 +243,8 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                         <label htmlFor="any_work_experience">Previous Attachment Work Experience?</label>
                         <Field as="select" name="any_work_experience">
                           <option value="">Select an Option</option>
-                          <option value="none">Yes</option>
-                          <option value="physical">No</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
                         </Field>
                         <ErrorMessage name="any_work_experience" component="div" className="error" />
                       </div>
@@ -350,11 +357,17 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                       <div className="formInput">
                         <label htmlFor="bank_account_number">Bank Account Number</label>
                         <Field
-                          type="tel"
+                          type="text"
                           name="bank_account_number"
                           onKeyPress={(e) => {
                             if (!/^[0-9]$/.test(e.key)) {
                               e.preventDefault();
+                            }
+                          }}
+
+                          onInput={(e) => {
+                            if (e.target.value.length > 10) {
+                              e.target.value = e.target.value.slice(0, 10);
                             }
                           }}
                         />
@@ -375,11 +388,16 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                       <div className="formInput">
                         <label htmlFor="bank_sort_code">Bank Sort Code</label>
                         <Field
-                          type="tel"
+                          type="text"
                           name="bank_sort_code"
                           onKeyPress={(e) => {
                             if (!/^[0-9]$/.test(e.key)) {
                               e.preventDefault();
+                            }
+                          }}
+                          onInput={(e) => {
+                            if (e.target.value.length > 9) {
+                              e.target.value = e.target.value.slice(0, 9);
                             }
                           }}
                         />
