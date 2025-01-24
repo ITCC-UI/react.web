@@ -8,6 +8,7 @@ import Close from "/images/closeButton.png";
 import Mark from "/images/succesfull circle.svg";
 import "./confirmRegister.scss";
 import PulseLoader from "react-spinners/PulseLoader"; // Import PulseLoader
+import Error from '../../Error';
 
 const DisplayedComponent = ({ onClose, selectedCourse }) => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -16,6 +17,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
   const [banks, setBanks] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission status
+  const [failure, setFailure] = useState("");
   const navigate = useNavigate();
 
 
@@ -123,10 +125,10 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
       } catch (error) {
         
         console.error('Error submitting the form:', error);
-        console.error('Server response:', error.response.data);
-        
-        setErrorMessage(error.response.data[0] || 'An error occurred while submitting the form. Please check your inputs and try again.');
-       
+        // console.error('Server response:', error.response.data);
+        setFailure(error.response.data[0]);
+        setCurrentStep(1)
+  
       }
       setIsSubmitting(false); // Set submitting state back to false
       actions.setSubmitting(false);
@@ -145,6 +147,14 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
     <div className="backgroundOverlay">
       <div className="registrationModal">{errorMessage}</div>
       <div className='registrationConfirmation'>
+
+      {(isSubmitted === false && failure) && (
+  <Error 
+    message={failure} 
+    severity="error" 
+    onClose={() => setFailure("")} 
+  />
+)}
         {isSubmitting ? (
           <div className="loadingOverlay">
             <PulseLoader color="white" loading={isSubmitting} size={10} />
