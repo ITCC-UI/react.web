@@ -77,7 +77,7 @@ const PrintPreview = () => {
           </div>
         </div>
         {/* Personal Information */}
-        <ProfileHead headings={"Personal Information"} duration={` ${submittedData.training_type_duration===12? "3 - ": "6 - "} Months`} />
+        <ProfileHead headings={"Personal Information"} duration={` ${submittedData.training_type_duration / 4} - Months`} />
         <div className="firstRow rowIdea">
           <p>First Name: <span>{submittedData.first_name}</span></p>
           <p>Middle Name: <span>{`${submittedData.middle_name || ' '}`}</span></p>

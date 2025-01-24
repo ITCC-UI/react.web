@@ -36,10 +36,11 @@ function App() {
           <Route path='/password_reset' element={<UpdatePassword/>} />
           <Route path='/new-password' element={<ResetPassword/>} />
           <Route path="/login" element={<Login />} />
-          <Route path='/init-signup' element={<SignUpInitial />}    />       
+          <Route path='/init-signup' element={<SignUpInitial />}/>
+          <Route path="/signup" element={<SignUp />} /> 
           <Route path='/register' element={<Auth><Dashboard/></Auth>}></Route>
           <Route path='/registration-portal' element= {<Auth><RegistrationDash/></Auth>}></Route>
-          <Route path='/signup' element={<SignUp/>} />
+         
           {/* <Route path='/dashboar' element={<Auth><MainDashboard/></Auth>  } /> */}
           <Route path='/job-reporting-form' element={<Auth><JobReportingForm/></Auth>  } />
           <Route path='/placement' element={<Auth><Placement/></Auth>} />               
