@@ -64,12 +64,12 @@ const UpdateProfileForm = () => {
       });
 
       // Log the form data for debugging
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-      }
+      // for (let pair of formData.entries()) {
+      //   console.log(pair[0] + ': ' + pair[1]);
+      // }
 
       if (!token) {
-        console.error('No token found');
+        // console.error('No token found');
         return false;
       }
 
@@ -84,31 +84,31 @@ const UpdateProfileForm = () => {
         }
       );
 
-      console.log('Response:', response);
+      // console.log('Response:', response);
       if (response.status === 200 || response.status === 201) {
-        console.log('Personal details submitted successfully');
+        
         setApiError(null);
         navigate('/complete-profile2');
       } else {
-        console.error('Unexpected response status:', response.status);
-        console.error('Unexpected response data:', response.data);
+        // console.error('Unexpected response status:', response.status);
+        // console.error('Unexpected response data:', response.data);
         setApiError(response.data);
       }
     } catch (error) {
       console.error('Error in handleSubmitPersonalDetails:');
       if (error.response) {
-        console.error('Response data:', error.response.data);
-        console.error('Status code:', error.response.status);
-        console.error('Headers:', error.response.headers);
+        // console.error('Response data:', error.response.data);
+        // console.error('Status code:', error.response.status);
+        // console.error('Headers:', error.response.headers);
         setApiError(error.response.data);
       } else if (error.request) {
-        console.error('No response received:', error.request);
+        // console.error('No response received:', error.request);
         setApiError({ message: 'No response received from the server' });
       } else {
-        console.error('Error setting up request:', error.message);
+        // console.error('Error setting up request:', error.message);
         setApiError({ message: 'An error occurred while submitting your details' });
       }
-      console.error('Error config:', error.config);
+      // console.error('Error config:', error.config);
     }
   };
 

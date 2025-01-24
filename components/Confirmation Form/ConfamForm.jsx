@@ -94,6 +94,8 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
     })
   ];
 
+  
+
   const handleSubmit = async (values, actions) => {
     if (currentStep < 4 || (currentStep === 4 && is6MonthIT)) {
       let step = 1;
@@ -111,18 +113,20 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
           setIsSubmitted(true);
           setRegistrationId(response.data.id);
           setErrorMessage('');
-        } else {
+        }
+         else {
           console.error('Unexpected response status:', response.status);
           setErrorMessage('An unexpected error occurred. Please try again.');
         }
+
+
       } catch (error) {
+        
         console.error('Error submitting the form:', error);
-        if (error.response) {
-          console.error('Server response:', error.response.data);
-          setErrorMessage(error.response.data.message || 'An error occurred while submitting the form. Please check your inputs and try again.');
-        } else {
-          setErrorMessage('An error occurred while submitting the form. Please check your internet connection and try again.');
-        }
+        console.error('Server response:', error.response.data);
+        
+        setErrorMessage(error.response.data[0] || 'An error occurred while submitting the form. Please check your inputs and try again.');
+       
       }
       setIsSubmitting(false); // Set submitting state back to false
       actions.setSubmitting(false);
@@ -139,6 +143,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
 
   return (
     <div className="backgroundOverlay">
+      <div className="registrationModal">{errorMessage}</div>
       <div className='registrationConfirmation'>
         {isSubmitting ? (
           <div className="loadingOverlay">
