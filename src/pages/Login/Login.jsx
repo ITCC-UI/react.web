@@ -117,8 +117,8 @@ const Login = () => {
       } else if (error.response && error.response.status === 404) {
         setLoginError('User not found in the database.');
       } else {
-        
-        setLoginError('Invalid email or password!');
+        console.log(error)
+        setLoginError(error.response.data.non_field_errors[0]);
       }
       handleErrorTimeout();
     } finally {

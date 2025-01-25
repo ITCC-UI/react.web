@@ -21,12 +21,10 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (credentials) => {
-    return axiosInstance.post('/account/login', credentials)
-      .then(response => {
-        Cookies.set('token', response.data.token);
-        setUser(response.data.user);
-      });
+  const login = async (credentials) => {
+    const response = await axiosInstance.post('/account/login', credentials);
+    Cookies.set('token', response.data.token);
+    setUser(response.data.user);
   };
 
   const logout = () => {

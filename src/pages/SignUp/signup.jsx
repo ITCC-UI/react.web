@@ -68,7 +68,7 @@ const SignUp = () => {
       if (error.response?.data?.message) {
         setErrorMessage(error.response.data.message);
       } else {
-        setErrorMessage('Failed to complete signup. Please try again.');
+        setErrorMessage(error.response.data[0]);
         console.log(error)
       }
       setTimeout(() => setErrorMessage(''), 5000);

@@ -33,7 +33,7 @@ const FormCase = () => {
       const response = await axiosInstance.get('lookups/programmes/faculties/');
       setFacultyData(response.data);
     } catch (error) {
-      console.error('Error fetching faculty data:', error);
+      // console.error('Error fetching faculty data:', error);
     }
   };
 
@@ -42,7 +42,7 @@ const FormCase = () => {
       const response = await axiosInstance.get('student/programmes/types/lookup/');
       setProgrammeData(response.data);
     } catch (error) {
-      console.error('Error fetching programme data:', error);
+      // console.error('Error fetching programme data:', error);
     }
   };
 
@@ -51,7 +51,7 @@ const FormCase = () => {
       const response = await axiosInstance.get(`lookups/programmes/faculties/${facultyId}/departments/`);
       setDepartmentData(response.data);
     } catch (error) {
-      console.error('Error fetching department data:', error);
+      // console.error('Error fetching department data:', error);
     }
   };
 
@@ -90,11 +90,11 @@ const FormCase = () => {
         navigate('/register');
         localStorage.removeItem('formValues');
       } else {
-        console.error('Error submitting form:', response);
+        console.error(error);
         setFormError('There was an error submitting your form. Please try again.');
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error(error);
       if (error.response && error.response.status === 500) {
         setFormError('An unexpected error occured. Please try again.');
       } else if (error.response && error.response.data) {

@@ -2,7 +2,6 @@ import './App.css'
 import React from 'react';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Login from './pages/Login/Login.jsx';
-import SignUp from './pages/SignUp/signup.jsx';
 import Dashboard from './pages/DashBoard/Dashboard.jsx';
 import RegistrationDash from './pages/Registration Dashboard/Registration.jsx';
 import MainDashboard from './pages/Main Dashboard/MainDash.jsx';
@@ -26,6 +25,7 @@ import FormsAndManuals from './pages/Forms and Manuals/FormsAndManuals.jsx';
 import TrainingDocuments from './pages/Post-Training-Docs/TrainingDocument.jsx';
 import JobReportingForm from './pages/Job Reporting Form/JobReportMain.jsx';
 import SignUpInitial from './pages/SignUpInitial/signupinitial.jsx';
+import SignUp from './pages/SignUp/signup.jsx';
 
 function App() {
 
@@ -40,7 +40,8 @@ function App() {
           <Route path="/signup" element={<SignUp />} /> 
           <Route path='/register' element={<Auth><Dashboard/></Auth>}></Route>
           <Route path='/registration-portal' element= {<Auth><RegistrationDash/></Auth>}></Route>
-          <Route path='/dashboar' element={<Auth><MainDashboard/></Auth>  } />
+         
+          {/* <Route path='/dashboar' element={<Auth><MainDashboard/></Auth>  } /> */}
           <Route path='/job-reporting-form' element={<Auth><JobReportingForm/></Auth>  } />
           <Route path='/placement' element={<Auth><Placement/></Auth>} />               
           <Route path='/introduction-letter' element={<Auth><IntroductionLetter/></Auth>} /> 
