@@ -163,7 +163,7 @@ const UpdateProfileForm = () => {
                   </div>
                   <div className="form-group">
                     <label htmlFor="last_name">Surname</label>
-                    <Field type="text" name="last_name" placeholder="Last Name" />
+                    <Field type="text" name="last_name" placeholder="Surname" />
                     <ErrorMessage name="last_name" component="div" className="profile_error" />
                   </div>
                   <div className="form-group">
