@@ -281,6 +281,12 @@ section.signUp {
           font-weight: normal;
         }
 
+
+        .logo {
+          img {
+            // width: 40px;
+          }
+        }
       }
       .signUpForm {
         // height: 100vh;
@@ -422,7 +428,9 @@ section.signUp {
   display: flex;
   justify-content: center;
   align-items: center;
+
   z-index: 1000;
+
 }
 
 .modal-content {

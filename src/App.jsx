@@ -27,6 +27,7 @@ import JobReportingForm from './pages/Job Reporting Form/JobReportMain.jsx';
 import SignUpInitial from './pages/SignUpInitial/signupinitial.jsx';
 import SignUp from './pages/SignUp/signup.jsx';
 
+
 function App() {
 
     return (
@@ -36,8 +37,10 @@ function App() {
           <Route path='/password_reset' element={<UpdatePassword/>} />
           <Route path='/new-password' element={<ResetPassword/>} />
           <Route path="/login" element={<Login />} />
+
           <Route path='/init-signup' element={<SignUpInitial />}/>
           <Route path="/signup" element={<SignUp />} /> 
+
           <Route path='/register' element={<Auth><Dashboard/></Auth>}></Route>
           <Route path='/registration-portal' element= {<Auth><RegistrationDash/></Auth>}></Route>
          
