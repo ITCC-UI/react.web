@@ -14,7 +14,7 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
   const [selectedCourse, setSelectedCourse] = useState(null);
 
   const handleRegister = (course) => {
-    console.log('Selected Course:', course); // Log the selected course data
+     // Log the selected course data
     setSelectedCourse(course);
     handleDisplay();
   }
@@ -43,7 +43,7 @@ const RegistrationDash = ({ dashboardClass, placementClass, disableCover, disabl
 
         setTrainingCourses(courses);
       } catch (error) {
-        console.error("Error fetching training courses:", error);
+        
       }
     };
 

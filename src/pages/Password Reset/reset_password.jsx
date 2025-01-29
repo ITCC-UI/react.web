@@ -95,7 +95,7 @@ const RequestPasswordReset = () => {
                       </button>
 
                       <div className="login">
-                        Don't have an account? <span><Link to="/signup">Create an Account</Link></span>
+                        Don't have an account? <span><Link to="/init-signup">Create an Account</Link></span>
                       </div>
                       <div className="reset">
                         Remember your password? <span><Link to="/login">Log In</Link></span>

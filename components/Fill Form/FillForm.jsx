@@ -32,7 +32,7 @@ const UserDetails = ({ isVisible, onClose }) => {
 
         if (idResponse.data) {
           const theID = idResponse.data[0].id
-          console.log(theID) // Assuming the ID is stored in the first entry's 'id' field
+          
 
           // Use the ID in the request to the second API
           const response = await axiosInstance.get(`https://theegsd.pythonanywhere.com/api/v1/student/programmes/${theID}`, {

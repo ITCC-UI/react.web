@@ -377,10 +377,10 @@ useEffect (()=>{
         <TopNav disableReg={"registration"} setVisible={"show"} regVisible={"hide"} active={"activeBar"} />
         <div className="header-main">
           <div className="placement-head">
+
             Training Report and Presentation Submission
           </div>
 
-        
         </div>
         {isLoading ? (
           <div className="loader">

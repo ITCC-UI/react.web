@@ -8,6 +8,7 @@ import Close from "/images/closeButton.png";
 import Mark from "/images/succesfull circle.svg";
 import "./confirmRegister.scss";
 import PulseLoader from "react-spinners/PulseLoader"; // Import PulseLoader
+import Error from '../../Error';
 
 const DisplayedComponent = ({ onClose, selectedCourse }) => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -16,8 +17,11 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
   const [banks, setBanks] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false); // New state for submission status
+  const [failure, setFailure] = useState("");
   const navigate = useNavigate();
 
+
+  const bankSort = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   useEffect(() => {
     const fetchBanks = async () => {
       try {
@@ -74,14 +78,25 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
         .required('Phone Number is required'),
     }),
     Yup.object({
-      bank: Yup.string().required('Required'),
+      bank: Yup.string()
+        .required('Required'),
       bank_account_number: Yup.string()
-        .min(10, "Number must be more than 10")
-        .max(11, "Number must be less than or equal to 11")
-        .required("Required"),
-      bank_sort_code: Yup.string().required('Bank sort code is Required').min(9, "Bank sort code must be at least 9 digits"),
-    }),
+        .matches(bankSort, 'Must be only digits')
+        .test('no-spaces', 'Account number should not contain spaces', 
+          (value) => value && !value.includes(' '))
+        .length(10, 'Must be exactly 10 digits')
+        .required('Required'),
+      bank_sort_code: Yup.string()
+        .matches(bankSort, 'Must be only digits')
+        .test('no-spaces', 'Sort code should not contain spaces', 
+          (value) => value && !value.includes(' '))
+        .length(9, 'Must be exactly 9 digits')
+        .max(9, "Must be exactly 9")
+        .required('Required')
+    })
   ];
+
+  
 
   const handleSubmit = async (values, actions) => {
     if (currentStep < 4 || (currentStep === 4 && is6MonthIT)) {
@@ -100,18 +115,20 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
           setIsSubmitted(true);
           setRegistrationId(response.data.id);
           setErrorMessage('');
-        } else {
+        }
+         else {
           console.error('Unexpected response status:', response.status);
           setErrorMessage('An unexpected error occurred. Please try again.');
         }
+
+
       } catch (error) {
+        
         console.error('Error submitting the form:', error);
-        if (error.response) {
-          console.error('Server response:', error.response.data);
-          setErrorMessage(error.response.data.message || 'An error occurred while submitting the form. Please check your inputs and try again.');
-        } else {
-          setErrorMessage('An error occurred while submitting the form. Please check your internet connection and try again.');
-        }
+        // console.error('Server response:', error.response.data);
+        setFailure(error.response.data[0]);
+        setCurrentStep(1)
+  
       }
       setIsSubmitting(false); // Set submitting state back to false
       actions.setSubmitting(false);
@@ -128,7 +145,16 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
 
   return (
     <div className="backgroundOverlay">
+      <div className="registrationModal">{errorMessage}</div>
       <div className='registrationConfirmation'>
+
+      {(isSubmitted === false && failure) && (
+  <Error 
+    message={failure} 
+    severity="error" 
+    onClose={() => setFailure("")} 
+  />
+)}
         {isSubmitting ? (
           <div className="loadingOverlay">
             <PulseLoader color="white" loading={isSubmitting} size={10} />
@@ -232,8 +258,8 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                         <label htmlFor="any_work_experience">Previous Attachment Work Experience?</label>
                         <Field as="select" name="any_work_experience">
                           <option value="">Select an Option</option>
-                          <option value="none">Yes</option>
-                          <option value="physical">No</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
                         </Field>
                         <ErrorMessage name="any_work_experience" component="div" className="error" />
                       </div>
@@ -346,11 +372,17 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                       <div className="formInput">
                         <label htmlFor="bank_account_number">Bank Account Number</label>
                         <Field
-                          type="tel"
+                          type="text"
                           name="bank_account_number"
                           onKeyPress={(e) => {
                             if (!/^[0-9]$/.test(e.key)) {
                               e.preventDefault();
+                            }
+                          }}
+
+                          onInput={(e) => {
+                            if (e.target.value.length > 10) {
+                              e.target.value = e.target.value.slice(0, 10);
                             }
                           }}
                         />
@@ -371,11 +403,16 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
                       <div className="formInput">
                         <label htmlFor="bank_sort_code">Bank Sort Code</label>
                         <Field
-                          type="tel"
+                          type="text"
                           name="bank_sort_code"
                           onKeyPress={(e) => {
                             if (!/^[0-9]$/.test(e.key)) {
                               e.preventDefault();
+                            }
+                          }}
+                          onInput={(e) => {
+                            if (e.target.value.length > 9) {
+                              e.target.value = e.target.value.slice(0, 9);
                             }
                           }}
                         />

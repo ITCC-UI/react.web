@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
 import classNames from 'classnames';
 import axiosInstance from '../../../API Instances/AxiosIntances';
+import { Search } from 'lucide-react';
+import Filter from "/images/Filter.png"
+
+const PostTrainingTable = ({triggerRefresh}) => {
+  const [letterRequests, setLetterRequests] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filter, setFilter] = useState('all');
 import FormSubmissionComponent from './FormSubmissionComponent';
 
 const PostTrainingTable = ({triggerRefresh}) => {
@@ -75,6 +82,19 @@ const PostTrainingTable = ({triggerRefresh}) => {
 
 
 
+  const getStatusClass = (status) => {
+    switch(status) {
+      case 'APPROVED':
+        return 'approved';
+      case 'REJECTED':
+        return 'rejected';
+      case 'SUBMITTED':
+      default:
+        return 'submitted';
+    }
+  };
+
+
 
 
   const formatDate = (dateString) => {
@@ -82,11 +102,24 @@ const PostTrainingTable = ({triggerRefresh}) => {
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
- 
+
+  const filteredRequests = letterRequests.filter((request) => {
+    const matchesSearch = Object.values(request).some(
+      (value) => 
+        value && 
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    const matchesFilter = 
+      filter === 'all' || 
+      request.approval_status.toLowerCase() === filter.toLowerCase();
+    return matchesSearch && matchesFilter;
+  });
+
 
   return (
     <section className='shift placement_table'>
       <div className="mainBody">
+
     
         <div className="containerCourse">
          
