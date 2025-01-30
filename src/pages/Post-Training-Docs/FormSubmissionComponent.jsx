@@ -1,62 +1,80 @@
 import React, { useState } from 'react';
 import { FiPaperclip } from 'react-icons/fi';
-import './FormSubmission.scss';
-import { Loader, LoaderPinwheel } from 'lucide-react';
-import { CircleLoader, GridLoader } from 'react-spinners';
 import { TailSpin } from 'react-loader-spinner';
+import './FormSubmission.scss';
+import axiosInstance from '../../../API Instances/AxiosIntances';
 
-const FormSubmissionComponent = ({file,submission, title}) => {
-  const [workReport, setWorkReport] = useState("NA");
-  const [presentationSlide, setPresentationSlide] = useState(null);
+const FormSubmissionComponent = ({ title, submission }) => {
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
+    
+    const handleFileUpload = async (file) => {
+        setIsUploading(true);
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        setSelectedFile(file);
+        setIsUploading(false);
+    };
 
-  const handleFileChange = (event, setFile) => {
-    const file = event.target.files[0];
-    setFile(file);
-  };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (selectedFile) {
+            console.log('Submitting file:', selectedFile.name);
+            // submission(selectedFile);
+        }
+    };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    console.log('Work Report:', workReport);
-    console.log('Presentation Slide:', presentationSlide);
-  };
 
-const [isUploading, setIsUploading] = useState(false);
+    const submitFile =async ()=>{
+        try{
+            const submission= await axiosInstance.post('trainings/registrations/1/job-reporting/', selectedFile, {
+                headers: {
+                    'Content-Type': 'application/pdf',
+                },
+            })
+            // console.log("Submitting file:", selectedFile.name);
+        }
 
-const handleFileUpload = async (file, setFile) => {
-    setIsUploading(true);
-    // Simulate file upload
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setFile(file);
-    setIsUploading(false);
-};
-
-return (
-    <form className="form-submission-report">
-        <div className="file-input-container">
-            <label>{title}</label>
-            <div className="file-input-wrapper">
-                <input
-                    type="text"
-                    readOnly
-                    value={workReport.name}
-                    className="file-name-display"
-                />
-                <label className="file-input-label">
-                    <FiPaperclip className="paperclip-icon" />
+        catch(error){
+            console.log("Error submitting file:", error);
+       
+    }
+}
+    return (
+        <form className="form-submission-report" onSubmit={handleSubmit}>
+            <div className="file-input-container">
+                <label>{title}</label>
+                <div className="file-input-wrapper">
                     <input
-                        type="file"
-                        accept={file}
-                        onChange={(e) => handleFileUpload(e.target.files[0], setWorkReport)}
-                        // onChange={(e) => submission(e.target.files[0], setWorkReport)}
-                        className="hidden-file-input"
+                        type="text"
+                        readOnly
+                        value={selectedFile ? selectedFile.name : ''}
+                        className="file-name-display"
+                        placeholder="No file selected"
                     />
-                </label>
+                    <label className="file-input-label">
+                        <FiPaperclip className="paperclip-icon" />
+                        <input
+                            type="file"
+                            onChange={(e) => handleFileUpload(e.target.files[0])}
+                            className="hidden-file-input"
+                        />
+                    </label>
+                </div>
+                {isUploading && (
+                    <div className="uploading-icon">
+                        <TailSpin height={20} width={30} visible={true} radius={2} color='blue' />
+                    </div>
+                )}
             </div>
-            {isUploading && <div className="uploading-icon"><TailSpin height={20} width={30} visible={true} radius={2} wrapperStyle={{}} wrapperClass='' ariaLabel='tail-spin-loading' color='blue' /> </div>}
-        </div>
-    </form>
-);
+
+            {selectedFile && (
+                <div className="buttons-container flex-it">
+                    <button type="submit" className="submit-button" onClick={()=> submitFile()}>Submit</button>
+                    <button type="button" className="change-file-button" onClick={() => setSelectedFile(null)}>Clear Selection</button>
+                </div>
+            )}
+        </form>
+    );
 };
 
 export default FormSubmissionComponent;
