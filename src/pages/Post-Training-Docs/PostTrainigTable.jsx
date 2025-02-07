@@ -1,96 +1,81 @@
 import React, { useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
-import classNames from 'classnames';
 import axiosInstance from '../../../API Instances/AxiosIntances';
-import { Search } from 'lucide-react';
-import Filter from "/images/Filter.png"
 import FormSubmissionComponent from './FormSubmissionComponent';
-  
+import FullScreenFailureMessage from '../Placement/Failed/FullScreenFailureMessage';
 
-const PostTrainingTable = ({triggerRefresh}) => {
-  const [letterRequests, setLetterRequests] = useState([]);
+const PostTrainingTable = ({ triggerRefresh }) => {
+    const [iD, setProgramID] = useState(null);
+    const [report, setReport] = useState(null);
+    const [presentation, setPresentation] = useState(null);
+    const [showFailureMessage, setShowFailureMessage] = useState(false);
+    const [failureMessage, setFailureMessage] = useState(""); // ✅ Stores error messages
 
-  const fetchJobReports = async () => {
-    try {
-      // Fetch registration data
-      const registrationResponse = await axiosInstance.get("trainings/registrations/");
-      const registrations = registrationResponse.data;
-  
-      if (!registrations || registrations.length === 0) {
-        
-        setLetterRequests([]); // Ensure state is cleared if no data exists
-        return;
-      }
-  
-      const id = registrations[0].id;
-  
-      // Fetch placement data for the first registration
-      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements/`);
-      const requests = requestsResponse.data;
+    // Function to handle errors from the child component
+    const handleErrorMessage = (error) => {
+        console.error("Received error from child:", error);
+        setFailureMessage(error);
+        setShowFailureMessage(true);
+    };
 
-      
-  
-      if (!requests || requests.length === 0) {
-        
-        setLetterRequests([]); // Ensure state is cleared if no data exists
-        return;
-      }
-  
-      const placementID = requests[0].id;
-  
-      // Fetch job report data
-      const jobReportSubmission = await axiosInstance.get(`/trainings/registrations/${id}/job-reporting/`);
-      const jobReports = jobReportSubmission.data;
-  
-      if (jobReports && typeof jobReports === "object") {
-      
-        
-        const processedRequests = Object.keys(jobReports).map(key => ({
-          id: key,
-          ...jobReports[key]
-          // statusClass: getStatusClass(jobReports[key].approval_status),
-        }));
-  
-        setLetterRequests(processedRequests); // Populate state with processed data
-      } else if (Array.isArray(jobReports)) {
-        // If data is an array, handle as before
-        const processedRequests = jobReports.map(request => ({
-          ...request
-          // statusClass: getStatusClass(request.approval_status),
-        }));
-  
-        setLetterRequests(processedRequests);
-      } else {
-        
-        setLetterRequests([]);
-      }
-    } catch (error) {
-      
-    }
-  };
-  
-  // Call the function in useEffect
-  useEffect(() => {
-    fetchJobReports();
-  }, [triggerRefresh]);
-  
+    useEffect(() => {
+        const fetchProgrammeId = async () => {
+            try {
+                const response = await axiosInstance.get("trainings/registrations/");
+                if (response.data?.length > 0) {
+                    setProgramID(response.data[0].id);
+                } else {
+                    console.warn("No data found in response");
+                }
+            } catch (error) {
+                console.error("Error fetching program ID:", error);
+            }
+        };
+        fetchProgrammeId();
+    }, []);
 
+    useEffect(() => {
+        const fetchTrainingTypes = async () => {
+            if (!iD) return;
+            try {
+                const response = await axiosInstance.get(`trainings/registrations/${iD}/documents/by-types`);
+                setReport(response.data[0]?.id || null);
+                setPresentation(response.data[1]?.id || null);
+            } catch (error) {
+                console.error("Error fetching training types:", error);
+            }
+        };
+        fetchTrainingTypes();
+    }, [iD]);
 
+    return (
+        <section className='shift placement_table'>
+            <div className="mainBody">
+                <div className="containerCourse">
+                    <FormSubmissionComponent 
+                        title={"Work Report"} 
+                        documentType={report} 
+                        onError={handleErrorMessage} // ✅ Pass error handler
+                    />
+                    <FormSubmissionComponent 
+                        title={"Presentation Slide"} 
+                        documentType={presentation} 
+                        onError={handleErrorMessage} // ✅ Pass error handler
+                    />
+                </div>
+            </div>
+            <div className="register_above mobile">
+                Scroll horizontally to see more
+            </div>
 
-  return (
-    <section className='shift placement_table'>
-      <div className="mainBody">
-        <div className="containerCourse">
-               
-       <FormSubmissionComponent title={"Work Report"} />
-       <FormSubmissionComponent title={"Presentation Slide"} />
-        </div>
-      </div>
-      <div className="register_above mobile">
-        Scroll horizontally to see more
-      </div>
-    </section>
-  );
+            {/* Show error message modal */}
+            <FullScreenFailureMessage
+                message={failureMessage}
+                isOpen={showFailureMessage}
+                onClose={() => setShowFailureMessage(false)}
+            />
+        </section>
+    );
 };
 
 export default PostTrainingTable;
