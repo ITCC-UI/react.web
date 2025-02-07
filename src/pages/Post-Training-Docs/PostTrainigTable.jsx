@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import FormSubmissionComponent from './FormSubmissionComponent';
-import FullScreenFailureMessage from '../Placement/Failed/FullScreenFailureMessage';
+
 
 const PostTrainingTable = ({ triggerRefresh }) => {
     const [iD, setProgramID] = useState(null);
@@ -56,11 +56,13 @@ const PostTrainingTable = ({ triggerRefresh }) => {
                         title={"Work Report"} 
                         documentType={report} 
                         onError={handleErrorMessage} // ✅ Pass error handler
+                        fileType={".pdf, .docx, .doc"}
                     />
                     <FormSubmissionComponent 
                         title={"Presentation Slide"} 
                         documentType={presentation} 
                         onError={handleErrorMessage} // ✅ Pass error handler
+                        fileType={".pptx, .ppt, .pdf"}
                     />
                 </div>
             </div>
@@ -68,12 +70,7 @@ const PostTrainingTable = ({ triggerRefresh }) => {
                 Scroll horizontally to see more
             </div>
 
-            {/* Show error message modal */}
-            <FullScreenFailureMessage
-                message={failureMessage}
-                isOpen={showFailureMessage}
-                onClose={() => setShowFailureMessage(false)}
-            />
+          
         </section>
     );
 };

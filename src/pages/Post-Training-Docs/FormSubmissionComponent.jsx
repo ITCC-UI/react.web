@@ -6,12 +6,14 @@ import { TailSpin } from 'react-loader-spinner';
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import './FormSubmission.scss';
 import { PulseLoader } from 'react-spinners';
-
+import FullScreenFailureMessage from '../Placement/Failed/FullScreenFailureMessage';
 
 
 const FormSubmissionComponent = ({ title, fileType, documentType }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [iD, setProgramID] = useState(null);
+ const [showFailureMessage, setShowFailureMessage] = useState(false);
+    const [failureMessage, setFailureMessage] = useState(""); // ✅ Stores error messages
 
 
 
@@ -21,7 +23,11 @@ const FormSchema = Yup.object().shape({
       .required('A file is required')
       .test('fileType', 'Invalid file format', (value) => {
         if (!value) return false;
-        return value && ['application/pdf'].includes(value.type);
+        return value && ['application/pdf', 
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+            'application/msword', 
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation', 
+            'application/vnd.ms-powerpoint'].includes(value.type);
       }),
     comment: Yup.string(),
     document_type: Yup.string()
@@ -84,6 +90,8 @@ const FormSchema = Yup.object().shape({
         resetForm();
     } catch (error) {
         console.error("Error submitting form:", error);
+        setFailureMessage(error.response.data.detail); // ✅ Set error message
+        setShowFailureMessage(true); // ✅ Show error message
     } finally {
         setSubmitting(false);
     }
@@ -93,7 +101,8 @@ const FormSchema = Yup.object().shape({
 
 
   return (
-    <Formik
+   <>
+   <Formik
     enableReinitialize 
     initialValues={{
       document: null,
@@ -158,8 +167,20 @@ const FormSchema = Yup.object().shape({
           )}
         </Form>
       )}
+      
     </Formik>
+
+
+  {/* Show error message modal */}
+  <FullScreenFailureMessage
+    message={failureMessage}
+    isOpen={showFailureMessage}
+    onClose={() => setShowFailureMessage(false)}
+/>
+    </>
   );
+
+  
 };
 
 export default FormSubmissionComponent;
