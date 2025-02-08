@@ -8,15 +8,14 @@ const PostTrainingTable = ({ triggerRefresh }) => {
     const [iD, setProgramID] = useState(null);
     const [report, setReport] = useState(null);
     const [presentation, setPresentation] = useState(null);
-    const [showFailureMessage, setShowFailureMessage] = useState(false);
-    const [failureMessage, setFailureMessage] = useState(""); // ✅ Stores error messages
-    const [reportFileName, setReportFileName] = useState("");
+       const [reportFileName, setReportFileName] = useState("");
     const [presentationFileName, setPresentationFileName] = useState("");
+    const [reportID, setReportID] = useState(null);
+    const [presnetationID, setPresnetationID] = useState(null);
     // Function to handle errors from the child component
     const handleErrorMessage = (error) => {
         console.error("Received error from child:", error);
-        setFailureMessage(error);
-        setShowFailureMessage(true);
+   
     };
 
     useEffect(() => {
@@ -39,18 +38,30 @@ const PostTrainingTable = ({ triggerRefresh }) => {
       const fetchTrainingTypes = async () => {
           if (!iD) return;
           try {
-              const response = await axiosInstance.get(`trainings/registrations/${iD}/documents/by-types`);
+              const response = await axiosInstance.get(`trainings/registrations/${iD}/documents/by-types/`);
               console.log(response.data);
-  
+              // const me = await axiosInstance.get(`trainings/registrations/${iD}/documents/by-types/`);
               // Extract file names from the API response
-              const reportUrl = response.data[0]?.documents[0]?.document || "";
-              const presentationUrl = response.data[1]?.documents[0]?.document || "";
-  
+              const reportID=(response.data[0].id);
+              const presnetationID=(response.data[1].id);
+
+              setReportID(reportID)
+              setPresnetationID(presnetationID)
+              if(response.data[0].documents.length>0 || response.data[1].documents.length>0){
+                const reportUrl = response.data[0]?.documents[0]?.document || "";
+                const presentationUrl = response.data[1]?.documents[0]?.document || "";
+                setReportFileName(reportUrl.split("/").pop()); // Extract file name
+                setPresentationFileName(presentationUrl.split("/").pop()); // Extract file name
+              }
+
+              
               setReport(response.data[0]?.id || null);
               setPresentation(response.data[1]?.id || null);
-  
-              setReportFileName(reportUrl.split("/").pop()); // Extract file name
-              setPresentationFileName(presentationUrl.split("/").pop()); // Extract file name
+             
+              console.log("Report id", reportID)
+              console.log("Presentation id", presnetationID)
+              
+              
   
           } catch (error) {
               console.error("Error fetching training types:", error);
@@ -68,6 +79,7 @@ const PostTrainingTable = ({ triggerRefresh }) => {
     documentType={report} 
     fileName={reportFileName} // ✅ Pass fetched file name
     onError={handleErrorMessage} 
+    updateAPI={`trainings/registrations/documents/${reportID}/`}
     fileType={".pdf, .docx, .doc"} 
 />
 <FormSubmissionComponent 
@@ -75,6 +87,7 @@ const PostTrainingTable = ({ triggerRefresh }) => {
     documentType={presentation} 
     fileName={presentationFileName} // ✅ Pass fetched file name
     onError={handleErrorMessage} 
+    updateAPI={`trainings/registrations/documents/${presnetationID}/`}
     fileType={".pptx, .ppt, .pdf"} 
 />
 

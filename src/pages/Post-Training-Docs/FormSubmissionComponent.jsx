@@ -8,12 +8,11 @@ import './FormSubmission.scss';
 import { PulseLoader } from 'react-spinners';
 import FullScreenFailureMessage from '../Placement/Failed/FullScreenFailureMessage';
 
-const FormSubmissionComponent = ({ title, fileType, documentType, fileName }) => {
+const FormSubmissionComponent = ({ title, fileType, documentType, fileName, updateAPI }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [iD, setProgramID] = useState(null);
   const [showFailureMessage, setShowFailureMessage] = useState(false);
   const [failureMessage, setFailureMessage] = useState("");
-  const [fetchedFileName, setFetchedFileName] = useState(""); // ✅ Stores fetched file name
   const [hasExistingFile, setHasExistingFile] = useState(false); // ✅ Tracks existing file
 
   // Validation schema
@@ -53,13 +52,22 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName }) =>
       if (!iD) return;
       try {
         const response = await axiosInstance.get(`trainings/registrations/${iD}/documents/by-types`);
-        const existingFile = response.data[0]?.documents[0].document || "";
+        const existingFile = response.data[0].documents|| "";
+        console.log("THe FIle", existingFile)
+       if(existingFile!=0){
         const fileName = existingFile.split("/").pop();
         console.log("Fetched file name:", fileName);
         
-        setFetchedFileName(fileName);
+        // Update state with fetched file name
         setHasExistingFile(!!existingFile);
-      } catch (error) {
+       }
+
+       else{
+        console.log("No existing file found");
+       }
+      }
+      
+      catch (error) {
         console.error("Error fetching training types:", error);
       }
     };
@@ -83,12 +91,16 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName }) =>
       formData.append('document_type', values.document_type);
 
       const endpoint = hasExistingFile 
-        ? `/trainings/registrations/${iD}/documents/update/`
+        ? updateAPI
         : `/trainings/registrations/${iD}/documents/`;
+const response = hasExistingFile
+  ? await axiosInstance.put(endpoint, formData, { // ✅ Use PUT for updates
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  : await axiosInstance.post(endpoint, formData, { // ✅ Use POST for new uploads
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
 
-      const response = await axiosInstance.post(endpoint, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
 
       console.log("Submission successful:", response.data);
       resetForm();
@@ -156,13 +168,13 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName }) =>
                   {isSubmitting ? <PulseLoader size={10} color='white'/> : hasExistingFile ? 'Update' : 'Submit'}
                 </button>
 
-                <button
+                {/* <button
                   type="button"
                   className="change-file-button"
                   onClick={() => setFieldValue('document', null)}
                 >
                   Clear Selection
-                </button>
+                </button> */}
               </div>
             )}
           </Form>
