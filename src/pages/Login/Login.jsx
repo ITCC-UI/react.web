@@ -40,7 +40,7 @@ const Login = () => {
       }
       return false;
     } catch (error) {
-      //console.error('Error fetching user details:', error);
+
       return false;
     }
   };
@@ -117,7 +117,7 @@ const Login = () => {
       } else if (error.response && error.response.status === 404) {
         setLoginError('User not found in the database.');
       } else {
-        console.log(error)
+       
         setLoginError(error.response.data.non_field_errors[0]);
       }
       handleErrorTimeout();

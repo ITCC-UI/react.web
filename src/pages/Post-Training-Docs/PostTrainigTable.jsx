@@ -9,6 +9,10 @@ const PostTrainingTable = ({triggerRefresh}) => {
   const [letterRequests, setLetterRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
+import FormSubmissionComponent from './FormSubmissionComponent';
+
+const PostTrainingTable = ({triggerRefresh}) => {
+  const [letterRequests, setLetterRequests] = useState([]);
 
   const fetchJobReports = async () => {
     try {
@@ -77,6 +81,7 @@ const PostTrainingTable = ({triggerRefresh}) => {
   
 
 
+
   const getStatusClass = (status) => {
     switch(status) {
       case 'APPROVED':
@@ -91,10 +96,12 @@ const PostTrainingTable = ({triggerRefresh}) => {
 
 
 
+
   const formatDate = (dateString) => {
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
+
 
   const filteredRequests = letterRequests.filter((request) => {
     const matchesSearch = Object.values(request).some(
@@ -108,88 +115,17 @@ const PostTrainingTable = ({triggerRefresh}) => {
     return matchesSearch && matchesFilter;
   });
 
+
   return (
     <section className='shift placement_table'>
       <div className="mainBody">
-      <div className="search-bar">
-            <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={15} />
-              <input
-                type="text"
-                placeholder="Search Here"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                
-              />
-             
-            </div>
-            <div className='filter'>
-            <img src={Filter} alt="Hey" className='image-filter' />
-              <select
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="pyro"
-              >
-                
-                {/* <option value="all" disabled>Filter</option> */}
-                <option value="default" disabled selected hidden>
-      Select a status
-      
-    </option>
 
-                <option value="all"> All </option>
-                <option value="approved">Approved</option>
-                <option value="submitted">Submitted</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
-          </div>
+    
         <div className="containerCourse">
          
-          <table>
-            <thead>
-              <tr>
-                <th>Company Name</th>
-                <th>Date Reported for Duty</th>
-                <th>Date Completed</th>
-                <th>Employer Evaluation Score</th>
-                {/* <th>Action</th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredRequests.map((request, index) => {
-                const statusClasses = classNames({
-                  'status': true,
-                  'approved': request.statusClass === 'approved',
-                  'rejected': request.statusClass === 'rejected',
-                  'submitted': request.statusClass === 'submitted',
-                });
-                const downloadIconClasses = classNames({
-                  'downloadIcon': true,
-                  'inactive': request.statusClass !== 'approved',
-                });
-                return (
-                  <tr key={index}>
-                    <td>{request.placement.attached_company_branch.company.name}</td>
-                    <td>{request.company_supervisor}</td>
-                    
-                   
-                   <td>{request.supervisor_phone}</td>
-                    
-                   <td>{request.date_reported}</td>
-                    
-                  
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          {/* {selectedRequest && (
-            <MoreDetails
-              request={selectedRequest}
-              onClose={() => setSelectedRequest(null)}
-            />
-          )} */}
+         
+       <FormSubmissionComponent title={"Work Report"} />
+       <FormSubmissionComponent title={"Presentation Slide"} />
         </div>
       </div>
       <div className="register_above mobile">
