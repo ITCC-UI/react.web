@@ -167,7 +167,13 @@ useEffect (()=>{
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
+      setJobReportStatus("Your Job Reporting Form download will start shortly!");
+      setJobReportSuccess(true)
+      
     } catch (error) {
+      setFailureMessage("There was an error downloading your Job Reporting Form.")
+      // setTriggerRefresh(prev => !prev)
+      setShowJobReportingFailure(true)
 
     }
   };

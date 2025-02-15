@@ -66,7 +66,7 @@ const SignUpInitial = () => {
   };
 
   const VerificationModal = () => (
-    <div className="modal-overlay">
+    <div className="modal-overlay modal-new">
       <div className="modal-content">
         <button 
           className="modal-close-button"

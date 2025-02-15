@@ -1,138 +1,105 @@
 import React, { useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
-import classNames from 'classnames';
 import axiosInstance from '../../../API Instances/AxiosIntances';
-import { Search } from 'lucide-react';
-import Filter from "/images/Filter.png"
-
-const PostTrainingTable = ({triggerRefresh}) => {
-  const [letterRequests, setLetterRequests] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState('all');
 import FormSubmissionComponent from './FormSubmissionComponent';
 
-const PostTrainingTable = ({triggerRefresh}) => {
-  const [letterRequests, setLetterRequests] = useState([]);
 
-  const fetchJobReports = async () => {
-    try {
-      // Fetch registration data
-      const registrationResponse = await axiosInstance.get("trainings/registrations/");
-      const registrations = registrationResponse.data;
-  
-      if (!registrations || registrations.length === 0) {
-        
-        setLetterRequests([]); // Ensure state is cleared if no data exists
-        return;
-      }
-  
-      const id = registrations[0].id;
-  
-      // Fetch placement data for the first registration
-      const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements/`);
-      const requests = requestsResponse.data;
+const PostTrainingTable = ({ triggerRefresh }) => {
+    const [iD, setProgramID] = useState(null);
+    const [report, setReport] = useState(null);
+    const [presentation, setPresentation] = useState(null);
+       const [reportFileName, setReportFileName] = useState("");
+    const [presentationFileName, setPresentationFileName] = useState("");
+    const [reportID, setReportID] = useState(null);
+    const [presnetationID, setPresnetationID] = useState(null);
+    // Function to handle errors from the child component
+    const handleErrorMessage = (error) => {
+        console.error("Received error from child:", error);
+   
+    };
 
-      
-  
-      if (!requests || requests.length === 0) {
-        
-        setLetterRequests([]); // Ensure state is cleared if no data exists
-        return;
-      }
-  
-      const placementID = requests[0].id;
-  
-      // Fetch job report data
-      const jobReportSubmission = await axiosInstance.get(`/trainings/registrations/${id}/job-reporting/`);
-      const jobReports = jobReportSubmission.data;
-  
-      if (jobReports && typeof jobReports === "object") {
-      
-        
-        const processedRequests = Object.keys(jobReports).map(key => ({
-          id: key,
-          ...jobReports[key]
-          // statusClass: getStatusClass(jobReports[key].approval_status),
-        }));
-  
-        setLetterRequests(processedRequests); // Populate state with processed data
-      } else if (Array.isArray(jobReports)) {
-        // If data is an array, handle as before
-        const processedRequests = jobReports.map(request => ({
-          ...request
-          // statusClass: getStatusClass(request.approval_status),
-        }));
-  
-        setLetterRequests(processedRequests);
-      } else {
-        
-        setLetterRequests([]);
-      }
-    } catch (error) {
-      
-    }
-  };
-  
-  // Call the function in useEffect
-  useEffect(() => {
-    fetchJobReports();
-  }, [triggerRefresh]);
-  
-  
+    useEffect(() => {
+        const fetchProgrammeId = async () => {
+            try {
+                const response = await axiosInstance.get("trainings/registrations/");
+                if (response.data?.length > 0) {
+                    setProgramID(response.data[0].id);
+                } else {
+                    console.warn("No data found in response");
+                }
+            } catch (error) {
+                console.error("Error fetching program ID:", error);
+            }
+        };
+        fetchProgrammeId();
+    }, []);
 
+    useEffect(() => {
+      const fetchTrainingTypes = async () => {
+          if (!iD) return;
+          try {
+              const response = await axiosInstance.get(`trainings/registrations/${iD}/documents/by-types/`);
+              console.log(response.data);
+              // const me = await axiosInstance.get(`trainings/registrations/${iD}/documents/by-types/`);
+              // Extract file names from the API response
+              const reportID=(response.data[0].id);
+              const presnetationID=(response.data[1].id);
 
+              setReportID(reportID)
+              setPresnetationID(presnetationID)
+              if(response.data[0].documents.length>0 || response.data[1].documents.length>0){
+                const reportUrl = response.data[0]?.documents[0]?.document || "";
+                const presentationUrl = response.data[1]?.documents[0]?.document || "";
+                setReportFileName(reportUrl.split("/").pop()); // Extract file name
+                setPresentationFileName(presentationUrl.split("/").pop()); // Extract file name
+              }
 
-  const getStatusClass = (status) => {
-    switch(status) {
-      case 'APPROVED':
-        return 'approved';
-      case 'REJECTED':
-        return 'rejected';
-      case 'SUBMITTED':
-      default:
-        return 'submitted';
-    }
-  };
+              
+              setReport(response.data[0]?.id || null);
+              setPresentation(response.data[1]?.id || null);
+             
+              console.log("Report id", reportID)
+              console.log("Presentation id", presnetationID)
+              
+              
+  
+          } catch (error) {
+              console.error("Error fetching training types:", error);
+          }
+      };
+      fetchTrainingTypes();
+  }, [iD]);
 
+    return (
+        <section className='shift placement_table'>
+            <div className="mainBody">
+                <div className="containerCourse">
+                <FormSubmissionComponent 
+    title={"Work Report"} 
+    documentType={report} 
+    fileName={reportFileName} // ✅ Pass fetched file name
+    onError={handleErrorMessage} 
+    updateAPI={`trainings/registrations/documents/${reportID}/`}
+    fileType={".pdf, .docx, .doc"} 
+/>
+<FormSubmissionComponent 
+    title={"Presentation Slide"} 
+    documentType={presentation} 
+    fileName={presentationFileName} // ✅ Pass fetched file name
+    onError={handleErrorMessage} 
+    updateAPI={`trainings/registrations/documents/${presnetationID}/`}
+    fileType={".pptx, .ppt, .pdf"} 
+/>
 
+                </div>
+            </div>
+            <div className="register_above mobile">
+                Scroll horizontally to see more
+            </div>
 
-
-  const formatDate = (dateString) => {
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
-  };
-
-
-  const filteredRequests = letterRequests.filter((request) => {
-    const matchesSearch = Object.values(request).some(
-      (value) => 
-        value && 
-        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+          
+        </section>
     );
-    const matchesFilter = 
-      filter === 'all' || 
-      request.approval_status.toLowerCase() === filter.toLowerCase();
-    return matchesSearch && matchesFilter;
-  });
-
-
-  return (
-    <section className='shift placement_table'>
-      <div className="mainBody">
-
-    
-        <div className="containerCourse">
-         
-         
-       <FormSubmissionComponent title={"Work Report"} />
-       <FormSubmissionComponent title={"Presentation Slide"} />
-        </div>
-      </div>
-      <div className="register_above mobile">
-        Scroll horizontally to see more
-      </div>
-    </section>
-  );
 };
 
 export default PostTrainingTable;
