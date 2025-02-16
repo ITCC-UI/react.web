@@ -282,11 +282,7 @@ section.signUp {
         }
 
 
-        .logo {
-          img {
-            // width: 40px;
-          }
-        }
+       
       }
       .signUpForm {
         // height: 100vh;
@@ -432,7 +428,7 @@ section.signUp {
 
 
 .modal-new{
-  z-index: 1000 !important;
+  z-index: 5 !important;
 }
 .modal-content {
   background-color: white;
