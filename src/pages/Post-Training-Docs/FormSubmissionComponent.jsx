@@ -7,11 +7,13 @@ import axiosInstance from '../../../API Instances/AxiosIntances';
 import './FormSubmission.scss';
 import { PulseLoader } from 'react-spinners';
 import FullScreenFailureMessage from '../Placement/Failed/FullScreenFailureMessage';
+import FullScreenSuccessMessage from '../Placement/Successful/Successful';
 
 const FormSubmissionComponent = ({ title, fileType, documentType, fileName, updateAPI }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [iD, setProgramID] = useState(null);
   const [showFailureMessage, setShowFailureMessage] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [failureMessage, setFailureMessage] = useState("");
   const [hasExistingFile, setHasExistingFile] = useState(false); // ✅ Tracks existing file
 
@@ -53,13 +55,14 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName, upda
       try {
         const response = await axiosInstance.get(`trainings/registrations/${iD}/documents/by-types`);
         const existingFile = response.data[0].documents|| "";
-        console.log("THe FIle", existingFile)
+        console.log("THe FIle", existingFile[0].document)
        if(existingFile!=0){
-        const fileName = existingFile.split("/").pop();
+        const fileName = existingFile[0].document.split("/").pop();
         console.log("Fetched file name:", fileName);
         
         // Update state with fetched file name
-        setHasExistingFile(!!existingFile);
+        setHasExistingFile(true);
+       
        }
 
        else{
@@ -100,7 +103,7 @@ const response = hasExistingFile
   : await axiosInstance.post(endpoint, formData, { // ✅ Use POST for new uploads
       headers: { 'Content-Type': 'multipart/form-data' }
     });
-
+setShowSuccessMessage(true);
 
       console.log("Submission successful:", response.data);
       resetForm();
@@ -186,6 +189,12 @@ const response = hasExistingFile
         message={failureMessage}
         isOpen={showFailureMessage}
         onClose={() => setShowFailureMessage(false)}
+      />
+
+      <FullScreenSuccessMessage
+        message="Your File has been successfully Submitted!"
+        isOpen={showSuccessMessage}
+        onClose={() => setShowSuccessMessage(false)}
       />
     </>
   );
