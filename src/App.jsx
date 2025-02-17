@@ -57,6 +57,7 @@ function App() {
           <Route path='/form' element={<MultiStepForm/>}></Route>
           <Route path='/form-and-manuals' element={<Auth><FormsAndManuals></FormsAndManuals></Auth>}/>
           <Route path='/submit-training-document' element={<Auth><TrainingDocuments></TrainingDocuments></Auth>}/>
+          <Route path='/daily-logs' element={<Auth><DailyLogs></DailyLogs></Auth>}/>
           
         </Routes>        
       </div>

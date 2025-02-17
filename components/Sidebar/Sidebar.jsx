@@ -53,7 +53,7 @@ const SideBar = ({ disableCover, dashboardClass, placementClass, init, activeI, 
                 </div></Link>
               
               {/* Accordion Goes here */}
-              <AccordionS initialOpenSection={init} activeIntro={activeI} activeReg={activeR} activeDailyLog="null"/>
+              <AccordionS initialOpenSection={init} activeIntro={activeI} activeReg={activeR} activeDailyLog={activeR}/>
               {/* Accordion Ends here */}
             </div>
             <div className="logout_button" onClick={handleLogout}>

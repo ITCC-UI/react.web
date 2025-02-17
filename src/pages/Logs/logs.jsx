@@ -12,25 +12,14 @@ import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessa
 import FullScreenSuccessMessage from "../Placement/Successful/Successful";
 
 const DailyLogs = () => {
-  const [showSubmitForm, setShowSubmitForm] = useState(false);
-  const [id, setProgrammeId] = useState(null);
-  const [placements, setPlacementRequests] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [noProgrammeId, setNoProgrammeId] = useState(false); 
-  const [jobReports, setjobReports] = useState([]);
-  const [placementList, setPlacementList] = useState([]);
-  const [companyName, setCompanyName] = useState(["Job Reporting Form"]);
-  const [addressOptions, setAdressOptions] = useState([]);
+  const [placements, setPlacementRequests] = useState(""); //Fetch placement Id and set it
   const [successMessage, setJobReportStatus] = useState("");
   const [showSuccessStatus, setJobReportSuccess] = useState(false);
   const [failureMessage, setFailureMessage] = useState("");
   const [showFailureMessage, setShowJobReportingFailure] = useState(false);
-  const [triggerRefresh, setTriggerRefresh] = useState(false);
+  
 
-  const toggleNewSubmission = () => {
-    setShowSubmitForm((prev) => !prev);
-  };
+
 
   const submitDailyLogs = async (values, { setSubmitting }) => {
     const formData = new FormData();
@@ -48,7 +37,7 @@ const DailyLogs = () => {
         : "There was an error submitting your Job reporting form";
       setFailureMessage(errorMessage);
       setShowJobReportingFailure(true);
-      setTriggerRefresh((prev) => !prev);
+    
     } finally {
       setSubmitting(false);
       toggleNewSubmission();
@@ -144,6 +133,8 @@ const DailyLogs = () => {
             </div>
           ))}
         </div>
+
+
         {/* Conditionally display the submit button */}
         {values.form.length > 0 && (
           <button type="submit" disabled={isSubmitting}>
