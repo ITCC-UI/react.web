@@ -11,6 +11,7 @@ const PostTrainingTable = ({ triggerRefresh }) => {
        const [reportFileName, setReportFileName] = useState("");
     const [presentationFileName, setPresentationFileName] = useState("");
     const [reportID, setReportID] = useState(null);
+    const [patchReportID, setPatchReportID] = useState(null);
     const [presnetationID, setPresnetationID] = useState(null);
     // Function to handle errors from the child component
     const handleErrorMessage = (error) => {
@@ -44,9 +45,15 @@ const PostTrainingTable = ({ triggerRefresh }) => {
               // Extract file names from the API response
               const reportID=(response.data[0].id);
               const presnetationID=(response.data[1].id);
+              // console.log(presentat)
 
               setReportID(reportID)
               setPresnetationID(presnetationID)
+
+      const patchReportID = (response.data[0].documents[0].id);
+      setPatchReportID(patchReportID)
+
+      const patchPresentationID = (response.data[0].documents[1].id)
               if(response.data[0].documents.length>0 || response.data[1].documents.length>0){
                 const reportUrl = response.data[0]?.documents[0]?.document || "";
                 const presentationUrl = response.data[1]?.documents[0]?.document || "";
@@ -79,7 +86,7 @@ const PostTrainingTable = ({ triggerRefresh }) => {
     documentType={report} 
     fileName={reportFileName} // ✅ Pass fetched file name
     onError={handleErrorMessage} 
-    updateAPI={`trainings/registrations/documents/${reportID}/`}
+    updateAPI={`trainings/registrations/documents/${patchReportID}/`}
     fileType={".pdf, .docx, .doc"} 
 />
 <FormSubmissionComponent 
