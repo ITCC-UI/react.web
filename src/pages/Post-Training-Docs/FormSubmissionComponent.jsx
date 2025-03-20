@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { FiPaperclip } from 'react-icons/fi';
@@ -16,6 +16,8 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName, upda
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [failureMessage, setFailureMessage] = useState("");
   const [hasExistingFile, setHasExistingFile] = useState(false); // ✅ Tracks existing file
+
+  const fileInputRef = useRef(null);
 
   // Validation schema
   const FormSchema = Yup.object().shape({
@@ -54,8 +56,8 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName, upda
       if (!iD) return;
       try {
         const response = await axiosInstance.get(`trainings/registrations/${iD}/documents/by-types`);
-        const existingFile = response.data[0].documents|| "";
-        console.log("THe FIle", existingFile[0].document)
+        const existingFile = response.data[0]?.documents|| "";
+        console.log("THe FIle", existingFile[0]?.document)
        if(existingFile!=0){
         const fileName = existingFile[0].document.split("/").pop();
         console.log("Fetched file name:", fileName);
@@ -138,18 +140,30 @@ setShowSuccessMessage(true);
     readOnly
     value={values.document ? values.document.name : fileName} // ✅ Use prop
     className="file-name-display"
-    placeholder={fileName || "No file selected"} // ✅ Use prop as fallback
+    placeholder={fileName || "N/A"} // ✅ Use prop as fallback
 />
 
-                <label className="file-input-label">
+{!values.document ? ( 
+                  <label className="file-input-label">
+                    <FiPaperclip className="paperclip-icon" />
+                    <input
+                      type="file"
+                      ref={fileInputRef} // ✅ Set reference
+                      onChange={(e) => handleFileUpload(setFieldValue, e.target.files[0])}
+                      className="hidden-file-input"
+                      accept={fileType}
+                    />
+                  </label>
+                ) : (      <label className="file-input-label visi-none">
                   <FiPaperclip className="paperclip-icon" />
                   <input
                     type="file"
+                    ref={fileInputRef} // ✅ Set reference
                     onChange={(e) => handleFileUpload(setFieldValue, e.target.files[0])}
                     className="hidden-file-input"
                     accept={fileType}
                   />
-                </label>
+                </label> )}
               </div>
               {errors.document && touched.document && (
                 <div className="error-message">{errors.document}</div>
@@ -171,13 +185,12 @@ setShowSuccessMessage(true);
                   {isSubmitting ? <PulseLoader size={10} color='white'/> : hasExistingFile ? 'Update' : 'Submit'}
                 </button>
 
-                {/* <button
+                <button
                   type="button"
                   className="change-file-button"
-                  onClick={() => setFieldValue('document', null)}
-                >
-                  Clear Selection
-                </button> */}
+                  onClick={() => fileInputRef.current && fileInputRef.current.click()}                 >
+                  Change File
+                </button>
               </div>
             )}
           </Form>
