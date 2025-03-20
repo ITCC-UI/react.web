@@ -57,18 +57,8 @@ const IntroductionLetter = () => {
     fetchProgrammeId();
   }, []);
 
-  const fetchAddressee = () => {
-    axiosInstance.get(`/option-types/${type}/options`)
-      .then(titles => {
-        const addressee = titles.data.map(title => title.name);
-        setAdressOptions(addressee);
-      })
-      .catch(error => {
-        titleIsLoading(false);
-      });
-  };
 
-  const downloadITF = async () => {
+  const downloadITF8 = async () => {
     setIsDownloading(true); // Set loading state to true
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${programmeId}/job-reporting/itf/document/`, {
@@ -144,10 +134,10 @@ const IntroductionLetter = () => {
         </div>
         <div className="form-holder">
           <ManForms
-            title={"ITF Form"}
+            title={"ITF Form-8"}
             contents={"This ITF Form is to be returned to the ITF on completion by the respective institution under seal."}
             reveal={"Hi"}
-            download={downloadITF}
+            download={downloadITF8}
           />
           <ManForms
             title={"Job Reporting Form"}
