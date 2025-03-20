@@ -156,27 +156,67 @@ useEffect (()=>{
   }, [])
   const downloadReportForm = async () => {
     try {
-      const response = await axiosInstance.get(`/trainings/registrations/placements/${placements}/job-reporting/form/document/`, {
-        responseType: 'blob' // Important: Specify the response type as 'blob'
-      });
-
+      const response = await axiosInstance.get(
+        `/trainings/registrations/placements/${placements}/job-reporting/form/document/`,
+        {
+          responseType: 'blob',
+        }
+      );
+  
+      // ✅ Check if the response is an error disguised as a blob
+      const contentType = response.headers['content-type'];
+      if (contentType.includes('application/json')) {
+        const errorBlob = response.data;
+  
+        // ✅ Read and convert blob to text
+        const errorText = await errorBlob.text();
+        const errorJson = JSON.parse(errorText);
+  
+        console.error('Download error:', errorJson);
+  
+        setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.");
+        setShowJobReportingFailure(true);
+        return; // Stop the download from proceeding
+      }
+  
+      // ✅ If it's a valid file, proceed with download
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'report_form.pdf'); // Replace 'report_form.pdf' with the desired filename
+      link.setAttribute('download', 'report_form.pdf');
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
+  
       setJobReportStatus("Your Job Reporting Form download will start shortly!");
-      setJobReportSuccess(true)
-      
+      setJobReportSuccess(true);
+  
+      window.URL.revokeObjectURL(url);
     } catch (error) {
-      setFailureMessage("There was an error downloading your Job Reporting Form.")
-      // setTriggerRefresh(prev => !prev)
-      setShowJobReportingFailure(true)
-
+      console.error('Download error:', error);
+  
+      
+      if (error.response && error.response.data instanceof Blob) {
+        try {
+          const errorBlob = error.response.data;
+          const errorText = await errorBlob.text();
+          const errorJson = JSON.parse(errorText);
+  console.log(errorJson)
+          setFailureMessage(errorJson.detail || "An error occurred while downloading the file.");
+        } catch (parseError) {
+          console.error("Failed to parse error blob:", parseError);
+          setFailureMessage("An unknown error occurred while downloading.");
+        }
+      } else {
+        setFailureMessage(
+          error.response?.data?.detail || "There was an error downloading your Job Reporting Form."
+        );
+      }
+  
+      setShowJobReportingFailure(true);
     }
   };
+  
 
 
   const downloadSCAFForm = async () => {
