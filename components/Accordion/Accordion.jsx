@@ -117,6 +117,7 @@ const AccordionS = ({ initialOpenSection, activeIntro, activeReg, activeDailyLog
           }}
         >
           <Link to="/job-reporting-form">Job Reporting Form</Link>
+          <Link to="/employer-evaluation-form">Employer Evaluation Form</Link>
           <Link to="/daily-logs" className={activeDailyLog}>Daily logs</Link>
           <Link to="/new-logbook-request"className="null">New Logbook Request</Link>
         </div>

@@ -27,6 +27,7 @@ const JobReportingForm = () => {
   const [companyName, setCompanyName] = useState(["Job Reporting Form"])
   const [addressOptions, setAdressOptions] = useState([])
   const [successMessage, setJobReportStatus] = useState("")
+  const [title, setTitle] = useState("")
   const [showSuccessStatus, setJobReportSuccess] = useState(false)
   const [failureMessage, setFailureMessage] = useState("")
   const [showFailureMessage, setShowJobReportingFailure] = useState(false)
@@ -163,12 +164,12 @@ useEffect (()=>{
         }
       );
   
-      // ✅ Check if the response is an error disguised as a blob
+   
       const contentType = response.headers['content-type'];
       if (contentType.includes('application/json')) {
         const errorBlob = response.data;
   
-        // ✅ Read and convert blob to text
+      
         const errorText = await errorBlob.text();
         const errorJson = JSON.parse(errorText);
   
@@ -179,7 +180,7 @@ useEffect (()=>{
         return; // Stop the download from proceeding
       }
   
-      // ✅ If it's a valid file, proceed with download
+  
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -189,6 +190,8 @@ useEffect (()=>{
       link.parentNode.removeChild(link);
   
       setJobReportStatus("Your Job Reporting Form download will start shortly!");
+
+      setTitle("Form Downloaded Successfully");
       setJobReportSuccess(true);
   
       window.URL.revokeObjectURL(url);
@@ -278,6 +281,7 @@ useEffect (()=>{
         }
       });
       setJobReportStatus("Your Job Reporting Form has been submitted successfully!");
+      setTitle("Form Submitted Successfully");
       setJobReportSuccess(true)
       setTriggerRefresh(prev => !prev)
 
@@ -453,6 +457,7 @@ useEffect (()=>{
 
       <FullScreenSuccessMessage
         isOpen={showSuccessStatus}
+        title={title}
         message={successMessage}
         onClose={() => setJobReportSuccess(false)}
       />

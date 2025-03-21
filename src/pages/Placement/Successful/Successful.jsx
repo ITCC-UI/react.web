@@ -1,12 +1,12 @@
 import React from 'react';
 import Modal from 'react-modal';
 import './FullScreenSuccessMessage.scss';
-import Ticked from "/images/ticked.png"
-
+import Ticked from "/images/ticked.png";
+import { motion } from 'framer-motion';
 
 Modal.setAppElement('#root');
 
-const FullScreenSuccessMessage = ({ isOpen, message, onClose }) => {
+const FullScreenSuccessMessage = ({ isOpen, title = "Submitted successfully!", message, onClose }) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -16,21 +16,22 @@ const FullScreenSuccessMessage = ({ isOpen, message, onClose }) => {
       overlayClassName="fullScreenOverlay"
     >
       <div className="successContent">
-        {/* <AiOutlineCheckCircle size={100} color="#4CAF50" /> */}
-        <img src={Ticked} alt="" srcset="" />
-        {/* <h2>{message}</h2> */}
+        <motion.img 
+          src={Ticked} 
+          alt="Success tick icon"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+        />
         <div className="successMessage">
-        Submitted successfully!
+          {title}
         </div>
 
         <div className="successMessageContent">
-      {message}
+          {message}
         </div>
         <button onClick={onClose}>Close</button>
       </div>
-
-
-      
     </Modal>
   );
 };

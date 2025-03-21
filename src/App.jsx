@@ -26,6 +26,7 @@ import TrainingDocuments from './pages/Post-Training-Docs/TrainingDocument.jsx';
 import JobReportingForm from './pages/Job Reporting Form/JobReportMain.jsx';
 import SignUpInitial from './pages/SignUpInitial/signupinitial.jsx';
 import SignUp from './pages/SignUp/signup.jsx';
+import EmployerEvaluationForm from './pages/EmployerEvaluationForm/EmployerEvaluationForm.jsx';
 
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
           <Route path='/form-and-manuals' element={<Auth><FormsAndManuals></FormsAndManuals></Auth>}/>
           <Route path='/submit-training-document' element={<Auth><TrainingDocuments></TrainingDocuments></Auth>}/>
           <Route path='/daily-logs' element={<Auth><DailyLogs></DailyLogs></Auth>}/>
+          <Route path='/employer-evaluation-form' element={<Auth><EmployerEvaluationForm/></Auth>}/>
           
         </Routes>        
       </div>
