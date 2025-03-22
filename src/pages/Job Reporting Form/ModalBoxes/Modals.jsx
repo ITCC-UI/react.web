@@ -52,9 +52,6 @@ const EditModal = ({ onClose, onSave, request }) => {
     dateResumed: request?.job_reporting?.date_reported || '',
     mailingAddress: request?.job_reporting?.mailing_address || '',
     residential_address: request?.job_reporting?.residential_address || '',
-    nextOfKin: request?.job_reporting?.next_of_kin || '',
-    nextOfKinAddress: request?.job_reporting?.next_of_kin_address || '',
-    nextOfKinPhone: request?.job_reporting?.next_of_kin_phone || '',
     formFile: null
   };
 
@@ -155,17 +152,7 @@ const EditModal = ({ onClose, onSave, request }) => {
                 <ErrorMessage name="dateResumed" component="div" className="error-message" />
               </div>
               
-              <div className="form-group">
-                <label htmlFor="mailingAddress">Mailing Address (Email)</label>
-                <Field 
-                  type="email" 
-                  id="mailingAddress" 
-                  name="mailingAddress" 
-                  placeholder="example@email.com"
-                  className={errors.mailingAddress && touched.mailingAddress ? "error-input" : ""}
-                />
-                <ErrorMessage name="mailingAddress" component="div" className="error-message" />
-              </div>
+              
               
               <div className="form-group">
                 <label htmlFor="residential_address">Residential Address *</label>
@@ -179,37 +166,7 @@ const EditModal = ({ onClose, onSave, request }) => {
                 <ErrorMessage name="residential_address" component="div" className="error-message" />
               </div>
               
-              <div className="form-group">
-                <label htmlFor="nextOfKin">Next of Kin</label>
-                <Field 
-                  type="text" 
-                  id="nextOfKin" 
-                  name="nextOfKin" 
-                  placeholder="Enter next of kin name"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="nextOfKinAddress">Next of Kin Address</label>
-                <Field 
-                  type="text" 
-                  id="nextOfKinAddress" 
-                  name="nextOfKinAddress" 
-                  placeholder="Enter next of kin address"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="nextOfKinPhone">Next of Kin Phone</label>
-                <Field 
-                  type="text" 
-                  id="nextOfKinPhone" 
-                  name="nextOfKinPhone" 
-                  placeholder="Enter next of kin phone"
-                  className={errors.nextOfKinPhone && touched.nextOfKinPhone ? "error-input" : ""}
-                />
-                <ErrorMessage name="nextOfKinPhone" component="div" className="error-message" />
-              </div>
+         
               
               <div className="form-group">
                 <label>Upload your Form</label>

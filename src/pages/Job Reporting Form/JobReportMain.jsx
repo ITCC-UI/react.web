@@ -118,7 +118,7 @@ useEffect (()=>{
 
   const fetchJobReports = async () => {
     try {
-      const response = await axiosInstance.get(`/trainings/registrations/${id}/job-reporting/`);
+      const response = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
       setjobReports(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -289,7 +289,6 @@ useEffect (()=>{
 
       if (error.response.status === 400) {
         setFailureMessage(error.response.data.detail)
-        // setTriggerRefresh(prev => !prev)
         setShowJobReportingFailure(true)
 
       }
@@ -534,6 +533,7 @@ useEffect (()=>{
 
         ) : jobReports.length === 0 ? (
           <div className="image">
+            {console.log(jobReports)} 
             <img src={Empty} alt="Empty" />
           </div>
         ) : (
