@@ -4,6 +4,7 @@ import { X, ArrowLeft, Paperclip, AlertCircle } from 'lucide-react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import "./Modals.scss";
+import { PulseLoader } from 'react-spinners';
 
 // Download Modal
 const DownloadModal = ({ onClose, onDownload, request }) => (
@@ -100,7 +101,7 @@ const EditModal = ({ onClose, onSave, request }) => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ errors, touched, setFieldValue, values }) => (
+          {({ errors, touched, setFieldValue, values, isSubmitting }) => (
             <Form>
               <h2 className="company-name">{values.companyName}</h2>
               
@@ -191,8 +192,9 @@ const EditModal = ({ onClose, onSave, request }) => {
                   type="submit" 
                   variant="contained" 
                   className="next-button"
+                  disabled={isSubmitting}
                 >
-                  Next
+                {isSubmitting ? <PulseLoader size={15} color='white' /> : 'Save'}
                 </Button>
               </div>
             </Form>
@@ -204,13 +206,15 @@ const EditModal = ({ onClose, onSave, request }) => {
 };
 
 // Delete Modal
-const DeleteModal = ({ onClose, onConfirm, request }) => (
+const DeleteModal = ({ onClose, onConfirm, request, isSubmitting }) => (
   <div className="modal-overlay">
     <div className="modal-content">
       <h2>Confirm Deletion</h2>
       <p>Are you sure you want to delete this report from {request.attached_company_name}?</p>
       <div className="modal-actions">
-        <Button onClick={() => onConfirm(request.id)} className="btn-danger">Delete</Button>
+        <Button onClick={() => onConfirm(request.id)} className="btn-danger">
+          {isSubmitting ? <PulseLoader size={15} color="white" /> : "Delete"}
+          </Button>
         <Button onClick={onClose} className="btn-secondary">Cancel</Button>
       </div>
     </div>

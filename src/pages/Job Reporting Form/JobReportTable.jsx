@@ -11,7 +11,6 @@ import { DownloadModal, EditModal, DeleteModal } from "./ModalBoxes/Modals"
 import { ref } from "yup"
 import FullScreenSuccessMessage from "../Placement/Successful/Successful"
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage"
-import { set } from "react-hook-form"
 
 const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
   const [letterRequests, setLetterRequests] = useState([])
@@ -25,8 +24,8 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
   const [title, setTitle] = useState(null)
   const [jobReportSuccess, setJobReportSuccess] = useState(false)
   const [jobReportError, setJobReportError] = useState(null)
-  const [showFailureMessage, setShowJobReportingFailure] = useState(true)
-
+  const [showFailureMessage, setShowJobReportingFailure] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   useEffect(() => {
     const fetchJobReports = async () => {
       try {
@@ -60,7 +59,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
         )
         const jobReports = jobReportSubmission.data
         console.log("Job Reports:", jobReports)
-// setJobReportID(jobReports[0]?.id)
+        // setJobReportID(jobReports[0]?.id)
         // console.log("Job Report ID:", jobReports[0].id)
 
         if (jobReports && typeof jobReports === "object") {
@@ -134,33 +133,37 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
       if (selectedRequest.job_reporting && Object.keys(selectedRequest.job_reporting).length > 0) {
         // Update existing job report with PATCH
         await axiosInstance.put(`/trainings/registrations/job-reporting/${jobReportID}/`, apiFormData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-      } else {
-        // Create new job report with POST
-        await axiosInstance.post(`/trainings/registrations/placements/${placementId}/job-reporting/`, apiFormData, {
           // headers: {
           //   "Content-Type": "multipart/form-data",
           // },
         })
+        console.log("Updated job report")
+        setJobReportStatus("Form Updated")
+        setTitle("Your form has been successfully updated")
+        setJobReportSuccess(true)
+        closeModal()
+      } else {
+        // Create new job report with POST
+        await axiosInstance.post(`/trainings/registrations/placements/${placementId}/job-reporting/`, apiFormData, {
+        })
+        setJobReportStatus("Form Submitted")
+        setTitle("Your form has been successfully submitted")
+        setJobReportSuccess(true)
+        closeModal()
+        // setTriggerRefresh(prev => !prev)
       }
 
-      // Refresh the data
-      // setTriggerRefresh((prev) => !prev)
-setJobReportStatus("Submitted")
-setTitle("Form Submitted")
-setJobReportSuccess(true)
-// setTriggerRefresh(prev => !prev)
+
+
     } catch (error) {
       setJobReportError(error.response.data.detail)
-    setShowJobReportingFailure(true)
+      setShowJobReportingFailure(true)
       // setTriggerRefresh(prev => !prev)
     }
   }
 
   const handleDelete = async (requestId) => {
+    setIsDeleting(true)
     try {
       if (!registrationId) {
         console.error("No registration ID found")
@@ -170,20 +173,26 @@ setJobReportSuccess(true)
       // Get the job reporting ID from the selected request
       const jobReportingID = selectedRequest.job_reporting?.id
 
-      if (!jobReportingID) {
-        console.error("No job reporting ID found")
-        return
-      }
+      // if (!jobReportingID) {
+      //   console.error("No job reporting ID found")
+      //   return
+      // }
 
       // Delete the job report
       await axiosInstance.delete(`/trainings/registrations/job-reporting/${jobReportingID}/`)
 
       // Refresh the data
-      setTriggerRefresh((prev) => !prev)
-      ref.current = true
       closeModal()
+
+      ref.current = true
+      setJobReportStatus("Form Deleted Successfully")
+      setTitle("Deleted!")
+      setJobReportSuccess(true)
     } catch (error) {
       console.error("Error deleting job report:", error)
+      setJobReportError(error.response.data.detail)
+      setShowJobReportingFailure(true)
+      closeModal()
     }
   }
 
@@ -199,20 +208,20 @@ setJobReportSuccess(true)
   })
 
   return (
-    
-    <section className="shift placement_table">
-            <FullScreenSuccessMessage
-              isOpen={jobReportSuccess}
-              title={title}
-              message={successMessage}
-              onClose={() => setJobReportSuccess(false)}
-            />
 
-              <FullScreenFailureMessage
-                    message={jobReportError}
-                    isOpen={showFailureMessage}
-                    onClose={() => setShowJobReportingFailure(false)}
-                  />
+    <section className="shift placement_table">
+      <FullScreenSuccessMessage
+        isOpen={jobReportSuccess}
+        title={title}
+        message={successMessage}
+        onClose={() => setJobReportSuccess(false)}
+      />
+
+      <FullScreenFailureMessage
+        message={jobReportError}
+        isOpen={showFailureMessage}
+        onClose={() => setShowJobReportingFailure(false)}
+      />
       <div className="mainBody">
         <div className="search-bar">
           <div className="relative">
