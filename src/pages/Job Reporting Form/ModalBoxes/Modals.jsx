@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@mui/material';
+// import { button } from '@mui/material';
 import { X, ArrowLeft, Paperclip, AlertCircle } from 'lucide-react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -7,14 +7,16 @@ import "./Modals.scss";
 import { PulseLoader } from 'react-spinners';
 
 // Download Modal
-const DownloadModal = ({ onClose, onDownload, request }) => (
+const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
   <div className="modal-overlay">
     <div className="modal-content">
       <h2>Download Report</h2>
       <p>Are you sure you want to download this report?</p>
       <div className="modal-actions">
-        <Button onClick={() => onDownload(request)}>Download</Button>
-        <Button onClick={onClose} className="btn-secondary">Cancel</Button>
+        <button onClick={() => onDownload(request)} disabled={isDownloading}>
+          {isDownloading ? <PulseLoader size={10} color="blue" /> : "Download"}
+        </button>
+        <button onClick={onClose} className="btn-secondary">Cancel</button>
       </div>
     </div>
   </div>
@@ -102,10 +104,11 @@ const EditModal = ({ onClose, onSave, request }) => {
           onSubmit={handleSubmit}
         >
           {({ errors, touched, setFieldValue, values, isSubmitting }) => (
-            <Form>
+            <Form encType='multipart/form-data'>
               <h2 className="company-name">{values.companyName}</h2>
               
-              <div className="form-group">
+           <div className="companyDetails">
+           <div className="formInput">
                 <label htmlFor="supervisorName">Supervisor's Name *</label>
                 <Field 
                   type="text" 
@@ -114,10 +117,10 @@ const EditModal = ({ onClose, onSave, request }) => {
                   placeholder="eg Engr Opadare"
                   className={errors.supervisorName && touched.supervisorName ? "error-input" : ""}
                 />
-                <ErrorMessage name="supervisorName" component="div" className="error-message" />
+                <ErrorMessage name="supervisorName" component="div" className="error" />
               </div>
               
-              <div className="form-group">
+              <div className="formInput">
                 <label htmlFor="supervisorTitle">Supervisor's Title *</label>
                 <Field 
                   type="text" 
@@ -126,7 +129,7 @@ const EditModal = ({ onClose, onSave, request }) => {
                   placeholder="eg Manager"
                   className={errors.supervisorTitle && touched.supervisorTitle ? "error-input" : ""}
                 />
-                <ErrorMessage name="supervisorTitle" component="div" className="error-message" />
+                <ErrorMessage name="supervisorTitle" component="div" className="error" />
               </div>
               
               <div className="form-group">
@@ -138,7 +141,7 @@ const EditModal = ({ onClose, onSave, request }) => {
                   placeholder="eg 08066641912"
                   className={errors.supervisorPhone && touched.supervisorPhone ? "error-input" : ""}
                 />
-                <ErrorMessage name="supervisorPhone" component="div" className="error-message" />
+                <ErrorMessage name="supervisorPhone" component="div" className="error" />
               </div>
               
               <div className="form-group">
@@ -150,8 +153,9 @@ const EditModal = ({ onClose, onSave, request }) => {
                   placeholder="dd/mm/yy"
                   // className={errors.dateResumed && touched.dateResumed ? "error-input" : ""}
                 />
-                <ErrorMessage name="dateResumed" component="div" className="error-message" />
+                <ErrorMessage name="dateResumed" component="div" className="error" />
               </div>
+           </div>
               
               
               
@@ -164,7 +168,7 @@ const EditModal = ({ onClose, onSave, request }) => {
                   placeholder="Enter your address"
                   className={errors.residential_address && touched.residential_address ? "error-input" : ""}
                 />
-                <ErrorMessage name="residential_address" component="div" className="error-message" />
+                <ErrorMessage name="residential_address" component="div" className="error" />
               </div>
               
          
@@ -183,19 +187,19 @@ const EditModal = ({ onClose, onSave, request }) => {
                     <Paperclip size={18} />
                     <span>{formFile ? formFile.name : "Upload your file"}</span>
                   </div>
-                  {fileError && <div className="error-message">{fileError}</div>}
+                  {fileError && <div className="error">{fileError}</div>}
                 </div>
               </div>
               
               <div className="form-actions">
-                <Button 
+                <button 
                   type="submit" 
                   variant="contained" 
                   className="next-button"
                   disabled={isSubmitting}
                 >
-                {isSubmitting ? <PulseLoader size={15} color='white' /> : 'Save'}
-                </Button>
+                {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save'}
+                </button>
               </div>
             </Form>
           )}
@@ -206,16 +210,16 @@ const EditModal = ({ onClose, onSave, request }) => {
 };
 
 // Delete Modal
-const DeleteModal = ({ onClose, onConfirm, request, isSubmitting }) => (
+const DeleteModal = ({ onClose, onConfirm, request, isDeleting }) => (
   <div className="modal-overlay">
     <div className="modal-content">
       <h2>Confirm Deletion</h2>
       <p>Are you sure you want to delete this report from {request.attached_company_name}?</p>
       <div className="modal-actions">
-        <Button onClick={() => onConfirm(request.id)} className="btn-danger">
-          {isSubmitting ? <PulseLoader size={15} color="white" /> : "Delete"}
-          </Button>
-        <Button onClick={onClose} className="btn-secondary">Cancel</Button>
+        <button onClick={() => onConfirm(request.id)} className="btn-danger">
+          {isDeleting ? <PulseLoader size={10} color="white" /> : "Delete"}
+          </button>
+        <button onClick={onClose} className="btn-secondary">Cancel</button>
       </div>
     </div>
   </div>

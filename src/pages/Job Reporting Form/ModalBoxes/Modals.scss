@@ -33,7 +33,7 @@
     background-color: white;
     border-radius: 8px;
     width: 90%;
-    max-width: 500px;
+    max-width: 600px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     
@@ -44,7 +44,7 @@
       
       button {
         background: none;
-        border: none;
+        border: 1px solid red;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -69,7 +69,7 @@
       padding: 0 1.5rem 1.5rem;
       
       .form-group {
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.55rem;
         
         label {
           display: block;
@@ -141,6 +141,7 @@
     
     button {
       text-transform: none !important;
+      // background-color:;
     }
     
     .btn-secondary {

@@ -8,6 +8,7 @@ import { Search } from "lucide-react"
 import Filter from "/images/Filter.png"
 import { Button } from "@mui/material"
 import { DownloadModal, EditModal, DeleteModal } from "./ModalBoxes/Modals"
+import FormDetailsModal from "./ModalBoxes/FormDetailsModal"
 import { ref } from "yup"
 import FullScreenSuccessMessage from "../Placement/Successful/Successful"
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage"
@@ -26,6 +27,11 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
   const [jobReportError, setJobReportError] = useState(null)
   const [showFailureMessage, setShowJobReportingFailure] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [placementID, setPlacementID] = useState(null)
+  const [isDownloading, setIsDownloading] = useState(false)
+  const [showDetailsModal, setShowDetailsModal] = useState(false)
+  const [failureMessage, setFailureMessage] = useState(null)
+
   useEffect(() => {
     const fetchJobReports = async () => {
       try {
@@ -89,18 +95,60 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
 
   const handleAction = (action, request) => {
     console.log("Action:", action, "Request:", request)
+    console.log("PalcementID:", request.id)
+    setPlacementID(request.id)
     console.log("Job Reporting ID:", request.job_reporting?.id)
     setSelectedRequest(request)
     setJobReportID(request.job_reporting?.id)
     setActiveModal(action)
   }
 
-  const closeModal = () => setActiveModal(null)
+  const closeModal = () => {
+    setActiveModal(null)
+    setShowDetailsModal(false)
+  }
 
-  const handleDownload = (request) => {
-    // Implement download functionality
-    console.log("Downloading report for:", request)
-    closeModal()
+  const handleRowClick = (request) => {
+    setSelectedRequest(request)
+    setPlacementID(request.id)
+    setJobReportID(request.job_reporting?.id)
+    setShowDetailsModal(true)
+  }
+
+  const handleDownload = async (request) => {
+    setIsDownloading(true)
+    try {
+      const response = await axiosInstance.get(
+        `/trainings/registrations/placements/${placementID}/job-reporting/form/document/`,
+        { responseType: "blob" },
+      )
+
+      const contentType = response.headers["content-type"]
+      if (contentType.includes("application/json")) {
+        const errorText = await response.data.text()
+        const errorJson = JSON.parse(errorText)
+        console.error("Download error:", errorJson)
+
+        setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.")
+        setShowJobReportingFailure(true)
+        return
+      }
+
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement("a")
+      link.href = url
+      link.setAttribute("download", `Job_Report_.pdf`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+
+      console.log("Download successful for:", request)
+    } catch (error) {
+      console.error("Error downloading report:", error)
+    } finally {
+      setIsDownloading(false)
+      closeModal()
+    }
   }
 
   const handleSave = async (formData, requestId) => {
@@ -144,17 +192,13 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
         closeModal()
       } else {
         // Create new job report with POST
-        await axiosInstance.post(`/trainings/registrations/placements/${placementId}/job-reporting/`, apiFormData, {
-        })
+        await axiosInstance.post(`/trainings/registrations/placements/${placementId}/job-reporting/`, apiFormData, {})
         setJobReportStatus("Form Submitted")
         setTitle("Your form has been successfully submitted")
         setJobReportSuccess(true)
         closeModal()
         // setTriggerRefresh(prev => !prev)
       }
-
-
-
     } catch (error) {
       setJobReportError(error.response.data.detail)
       setShowJobReportingFailure(true)
@@ -208,7 +252,6 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
   })
 
   return (
-
     <section className="shift placement_table">
       <FullScreenSuccessMessage
         isOpen={jobReportSuccess}
@@ -260,7 +303,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
             </thead>
             <tbody>
               {filteredRequests.map((request, index) => (
-                <tr key={index}>
+                <tr key={index} onClick={() => handleRowClick(request)} className="cursor-pointer hover:bg-gray-100">
                   <td>{request.attached_company_name}</td>
                   <td>
                     {request.job_reporting?.supervisor_title || ""}{" "}
@@ -268,11 +311,11 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
                   </td>
                   <td>{request.job_reporting?.supervisor_phone || "----------"}</td>
                   <td>{request.job_reporting?.date_reported || "----------"}</td>
-                  <td>
-                    <Button onClick={() => handleAction("download", request)}>Download</Button>
-                    <Button onClick={() => handleAction("edit", request)}>Edit</Button>
+                  <td onClick={(e) => e.stopPropagation()}>
+                    <Button onClick={() => handleAction("download", request)}>D</Button>
+                    <Button onClick={() => handleAction("edit", request)}>E</Button>
                     <Button onClick={() => handleAction("delete", request)} className="delete-button">
-                      Delete
+                      De
                     </Button>
                   </td>
                 </tr>
@@ -283,13 +326,28 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
       </div>
 
       {activeModal === "download" && (
-        <DownloadModal request={selectedRequest} onClose={closeModal} onDownload={handleDownload} />
+        <DownloadModal
+          request={selectedRequest}
+          onClose={closeModal}
+          onDownload={handleDownload}
+          isDownloading={isDownloading}
+        />
       )}
 
       {activeModal === "edit" && <EditModal request={selectedRequest} onClose={closeModal} onSave={handleSave} />}
 
       {activeModal === "delete" && (
-        <DeleteModal request={selectedRequest} onClose={closeModal} onConfirm={handleDelete} />
+        <DeleteModal request={selectedRequest} onClose={closeModal} onConfirm={handleDelete} isDeleting={isDeleting} />
+      )}
+
+      {showDetailsModal && (
+        <FormDetailsModal
+          request={selectedRequest}
+          onClose={closeModal}
+          onDownload={handleDownload}
+          onEdit={(request) => handleAction("edit", request)}
+          onDelete={(request) => handleAction("delete", request)}
+        />
       )}
 
       <div className="register_above mobile">Scroll horizontally to see more</div>
