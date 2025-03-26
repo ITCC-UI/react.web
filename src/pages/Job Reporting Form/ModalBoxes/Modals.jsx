@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import "./Modals.scss";
 import { PulseLoader } from 'react-spinners';
+import Caution from "/images/Vector (1).png"
 
 // Download Modal
 const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
@@ -55,7 +56,7 @@ const EditModal = ({ onClose, onSave, request }) => {
     dateResumed: request?.job_reporting?.date_reported || '',
     mailingAddress: request?.job_reporting?.mailing_address || '',
     residential_address: request?.job_reporting?.residential_address || '',
-    formFile: null
+    formFile: null // Initialize as null to represent the form itself, not a URL
   };
 
   // Handle file change separately since Formik doesn't handle file inputs well
@@ -93,8 +94,8 @@ const EditModal = ({ onClose, onSave, request }) => {
           <button className="back-button" onClick={onClose}>
             <ArrowLeft size={20} />
           </button>
-          <button className="close-button" onClick={onClose}>
-            <X size={20} />
+          <button className="close-button the-x" onClick={onClose}>
+            <X size={20} color='white' />
           </button>
         </div>
         
@@ -186,6 +187,10 @@ const EditModal = ({ onClose, onSave, request }) => {
                   <div className={`file-upload-button ${fileError ? 'error-input' : ''}`}>
                     <Paperclip size={18} />
                     <span>{formFile ? formFile.name : "Upload your file"}</span>
+                  
+                  </div>
+                  <div className="error">
+                  {request.job_reporting.form ? "Kindly upload your form" : " "}
                   </div>
                   {fileError && <div className="error">{fileError}</div>}
                 </div>
@@ -214,9 +219,22 @@ const DeleteModal = ({ onClose, onConfirm, request, isDeleting }) => (
   <div className="modal-overlay">
     <div className="modal-content">
       <h2>Confirm Deletion</h2>
-      <p>Are you sure you want to delete this report from {request.attached_company_name}?</p>
+
+      <div className="alert-icon">
+        <AlertCircle size={90} color='red' />
+        </div>
+      <p>Are you sure you want to delete "{request.attached_company_name}” form? <br /> This action cannot be undone.</p>
+
+      <div className="warnings">
+        <img src={Caution} alt="" />
+      <div className="warner">
+      <h2> Warning</h2>
+
+<p>By deleting this Form, you agree to lose access to it permanently!</p>
+      </div>
+      </div>
       <div className="modal-actions">
-        <button onClick={() => onConfirm(request.id)} className="btn-danger">
+        <button onClick={() => onConfirm(request.id)} className="btn-danger" disabled={isDeleting}>
           {isDeleting ? <PulseLoader size={10} color="white" /> : "Delete"}
           </button>
         <button onClick={onClose} className="btn-secondary">Cancel</button>

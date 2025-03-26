@@ -227,16 +227,25 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
 
       // Refresh the data
       closeModal()
-
+setIsDeleting(false)
       ref.current = true
       setJobReportStatus("Form Deleted Successfully")
       setTitle("Deleted!")
       setJobReportSuccess(true)
     } catch (error) {
+      closeModal()
+      setIsDeleting(false)
+     if(error.response.status!==500){
       console.error("Error deleting job report:", error)
       setJobReportError(error.response.data.detail)
       setShowJobReportingFailure(true)
-      closeModal()
+     
+     }
+     else{
+      console.error("Error deleting job report:", error)
+      setJobReportError("There was an error deleting your Job reporting form")
+      setShowJobReportingFailure(true)
+     }
     }
   }
 

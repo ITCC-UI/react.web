@@ -2,7 +2,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://theegsd.pythonanywhere.com/api/v1/',
+  // baseURL: 'https://theegsd.pythonanywhere.com/api/v1/',
+  baseURL: 'https://itccims.pythonanywhere.com/api/v1/',
+  
 });
 
 axiosInstance.interceptors.request.use(

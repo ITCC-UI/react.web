@@ -22,7 +22,7 @@ const MoreDetails = ({ request, onClose }) => {
     const date = new Date(dateString);
     const day = date.getDate();
     const daySuffix = day % 10 === 1 && day !== 11 ? 'st' : day % 10 === 2 && day !== 12 ? 'nd' : day % 10 === 3 && day !== 13 ? 'rd' : 'th';
-    const options = { month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+    const options = { month: 'long', year: 'numeric'};
     const formattedDate = date.toLocaleDateString('en-US', options);
     return `${day}${daySuffix} ${formattedDate.replace(',', '')}`;
   };
@@ -48,29 +48,79 @@ const MoreDetails = ({ request, onClose }) => {
         <div className="more-details-content">
           <h2 className='approval'>Form Details</h2>
           <div className="compProfile">
-            <div className="cDetails"><b>Form for: {(request.attached_company_branch.company.name)} </b></div>
-            <div className="details"> {request.job_reporting ? (`Submitted on: ${formatApprovalDate(request.job_reporting?.date_created)}`) :("")}</div>
+            {/* <div className='details'>Company Name</div> */}
+            <div className="cDetails">{(request.attached_company_branch.company.name)}</div>
+            <div className="details">Submission Date: {request.job_reporting===null?"Not yet submitted": formatApprovalDate(request.job_reporting.date_created)} </div> 
           </div>
-{/* {console.log(formatApprovalDate(request.job_reporting.date_created))} */}
-          <div className='compProfile'>
-            <div className="details">Company Supervisor</div>
-            <div className="cDetails">{request.company_supervisor}</div>
+          <hr />
+<br />          
+
+{console.log(request)}
+
+<div className="compProfile">
+  <div className="details">
+    Company Information
+    
+   
+  </div>
+</div>
+
+<div className="compProfile">
+  <div className="detailsHeading">
+    Name
+  </div>
+  <div className="cDetails">
+    {request.attached_company_name}
+  </div>
+</div>
+
+{request.attached_company_branch.branch_name? (<div className="compProfile">
+  <div className="detailsHeading">
+    Address
+  </div>
+  <div className="cDetails">
+    {request.attached_company_name.address}
+  </div>
+</div>):" "}
+<hr />
+<br />
+
+{request.job_reporting ? 
+(<><div className="compProfile">
+  <div className="details">
+    Supervisor Information
+  </div>
+</div>
+         <div className='compProfile'>
+            <div className="details">Name</div>
+            <div className="cDetails">{request.job_reporting.company_supervisor}</div>
           </div>
 
-          <div className='compProfile'>
-            <div className="details">Start Date</div>
-            <div className="cDetails">{request.start_date === null ? "Not yet started" : formatApprovalDate(request.start_date)}</div>
-          </div>
 
           <div className='compProfile'>
-            <div className="details">End Date</div>
-            <div className="cDetails">{request.end_date === null ? "-----" : formatApprovalDate(request.end_date)}</div>
+            <div className="details">Phone Number</div>
+            <div className="cDetails">{request.job_reporting.supervisor_phone}</div>
+          </div>
+       
+{request.job_reporting.supervisor_email?
+ (<div className="compProfile">
+  <div className="details"> Email</div>
+  <div className="cDetails"> {request.job_reporting.supervisor_email}</div>
+</div>):" "}</>)
+: " "}
+
+      
+          <div className='compProfile'>
+            <div className="details">Uploaded Document</div>
+            <div className="cDetails">{request.end_date===null?"-----": request.end_date}</div>
           </div>
 
           <div className='compProfile'>
             <div className="details">Status</div>
             <div className={getStatusClass(request.status)}>{request.status}</div>
           </div>
+
+          
         </div>
       </div>
       <div className="modal-overlay" onClick={handleClose}></div>
