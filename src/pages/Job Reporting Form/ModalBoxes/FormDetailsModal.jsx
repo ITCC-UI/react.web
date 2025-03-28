@@ -27,7 +27,7 @@ const MoreDetails = ({ request, onClose }) => {
     return `${day}${daySuffix} ${formattedDate.replace(',', '')}`;
   };
 
- console.log( request.job_reporting?.form?(request.job_reporting.form.split("/").pop()):" ")
+ 
 
   const getStatusClass = (status) => {
     switch(status) {
@@ -57,7 +57,7 @@ const MoreDetails = ({ request, onClose }) => {
           <hr />
 <br />          
 
-{console.log("The request", request)}
+
 
 <div className="compProfile">
   <div className="details">

@@ -47,7 +47,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
 
         const regId = registrations[0].id
         setRegistrationId(regId)
-        // console.log("Registration ID:", regId)
+        // //("Registration ID:", regId)
 
         // Get placements
         const placementsResponse = await axiosInstance.get(`/trainings/registrations/${regId}/placements/`)
@@ -58,16 +58,16 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
           return
         }
 
-        // console.log("Placements:", placements)
+        // //("Placements:", placements)
 
         // Get reportable job reports
         const jobReportSubmission = await axiosInstance.get(
           `/trainings/registrations/${regId}/placements/job-reporting/reportable/`,
         )
         const jobReports = jobReportSubmission.data
-        // console.log("Job Reports:", jobReports)
+        // //("Job Reports:", jobReports)
         // setJobReportID(jobReports[0]?.id)
-        // console.log("Job Report ID:", jobReports[0].id)
+        // //("Job Report ID:", jobReports[0].id)
 
         if (jobReports && typeof jobReports === "object") {
           const processedRequests = Object.keys(jobReports).map((key) => ({
@@ -95,10 +95,10 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
   }, [triggerRefresh])
 
   const handleAction = (action, request) => {
-    console.log("Action:", action, "Request:", request)
-    console.log("PalcementID:", request.id)
+    // //("Action:", action, "Request:", request)
+    // //("PalcementID:", request.id)
     setPlacementID(request.id)
-    console.log("Job Reporting ID:", request.job_reporting?.id)
+    // //("Job Reporting ID:", request.job_reporting?.id)
     setSelectedRequest(request)
     setJobReportID(request.job_reporting?.id)
     setActiveModal(action)
@@ -128,7 +128,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
       if (contentType.includes("application/json")) {
         const errorText = await response.data.text()
         const errorJson = JSON.parse(errorText)
-        console.error("Download error:", errorJson)
+        // console.error("Download error:", errorJson)
 
         setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.")
         setShowJobReportingFailure(true)
@@ -144,15 +144,15 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
       link.click()
       link.parentNode.removeChild(link)
 
-      console.log("Download successful for:", request)
+      //("Download successful for:", request)
     } catch (error) {
      if(error.response.request.status!=500){
-      console.error("Error downloading this  file:", error)
+      // console.error("Error downloading this  file:", error)
       setJobReportError(error.response.data.detail)
       setShowJobReportingFailure(true)
      }
       else{
-        console.error("Error on that downloading file:", error)
+        // console.error("Error on that downloading file:", error)
         setJobReportError("There was an error downloading your Job reporting form")
         setShowJobReportingFailure(true)
       }
@@ -165,13 +165,13 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
   const handleSave = async (formData, requestId) => {
     try {
       if (!registrationId) {
-        console.error("No registration ID found")
+        // console.error("No registration ID found")
         return
       }
 
       const placementId = selectedRequest.id
 
-      console.log("This is the palcement", placementId)
+      //("This is the palcement", placementId)
       // Create form data for file upload if needed
       const apiFormData = new FormData()
       apiFormData.append("company_supervisor", formData?.supervisorName || " ")
@@ -186,7 +186,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
       if (formData.formFile) {
         apiFormData.append("form", formData.formFile)
       }
-      console.log("Seleced", selectedRequest)
+      // //("Seleced", selectedRequest)
 
       // Check if job reporting already exists
       if (selectedRequest.job_reporting && Object.keys(selectedRequest.job_reporting).length > 0) {
@@ -196,7 +196,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
           //   "Content-Type": "multipart/form-data",
           // },
         })
-        console.log("Updated job report")
+        //("Updated job report")
         setJobReportStatus("Form Updated")
         setTitle("Your form has been successfully updated")
         setJobReportSuccess(true)
@@ -221,7 +221,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
     setIsDeleting(true)
     try {
       if (!registrationId) {
-        console.error("No registration ID found")
+        // console.error("No registration ID found")
         return
       }
 
@@ -247,13 +247,13 @@ setIsDeleting(false)
       closeModal()
       setIsDeleting(false)
      if(error.response.status!==500){
-      console.error("Error deleting job report:", error)
+      // console.error("Error deleting job report:", error)
       setJobReportError(error.response.data.detail)
       setShowJobReportingFailure(true)
      
      }
      else{
-      console.error("Error deleting job report:", error)
+      // console.error("Error deleting job report:", error)
       setJobReportError("There was an error deleting your Job reporting form")
       setShowJobReportingFailure(true)
      }

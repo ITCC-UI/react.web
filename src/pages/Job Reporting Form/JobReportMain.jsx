@@ -172,7 +172,7 @@ useEffect (()=>{
         const errorText = await errorBlob.text();
         const errorJson = JSON.parse(errorText);
   
-        console.error('Download error:', errorJson);
+        // console.error('Download error:', errorJson);
   
         setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.");
         setShowJobReportingFailure(true);
@@ -195,7 +195,7 @@ useEffect (()=>{
   
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Download error:', error);
+      // console.error('Download error:', error);
   
       
       if (error.response && error.response.data instanceof Blob) {
@@ -203,10 +203,10 @@ useEffect (()=>{
           const errorBlob = error.response.data;
           const errorText = await errorBlob.text();
           const errorJson = JSON.parse(errorText);
-  console.log(errorJson)
+  // console.log(errorJson)
           setFailureMessage(errorJson.detail || "An error occurred while downloading the file.");
         } catch (parseError) {
-          console.error("Failed to parse error blob:", parseError);
+          // console.error("Failed to parse error blob:", parseError);
           setFailureMessage("An unknown error occurred while downloading.");
         }
       } else {
@@ -487,7 +487,7 @@ useEffect (()=>{
 
         ) : jobReports.length === 0 ? (
           <div className="image">
-            {console.log(jobReports)} 
+            {/* {console.log(jobReports)}  */}
             <img src={Empty} alt="Empty" />
           </div>
         ) : (
