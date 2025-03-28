@@ -271,11 +271,11 @@ margin-left: 0;
   .companyAddressedTo{
     gap: 20px;
   }
-  .newRequestComponent, .modal-form{
+  .newRequestComponent{
     height: auto;
     min-height: 100vh;
     width: 100% !important;
-    .newRequestHeader{
+    .newRequestHeader, .modal-form{
       padding-top: 45px;
       width: 95%;
       border-radius: 10px;

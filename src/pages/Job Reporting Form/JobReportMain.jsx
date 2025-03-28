@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import SideBar from "../../../components/Sidebar/Sidebar";
 import TopNav from "../../../components/Header/Header";
 import "./reporting-form.scss"
-import DownloadIcon from "/images/Download-white.png"
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import CloseIcon from '/images/closeButton.png'
 import * as Yup from "yup";

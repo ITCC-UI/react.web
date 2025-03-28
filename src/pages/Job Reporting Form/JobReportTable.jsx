@@ -58,14 +58,14 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
           return
         }
 
-        console.log("Placements:", placements)
+        // console.log("Placements:", placements)
 
         // Get reportable job reports
         const jobReportSubmission = await axiosInstance.get(
           `/trainings/registrations/${regId}/placements/job-reporting/reportable/`,
         )
         const jobReports = jobReportSubmission.data
-        console.log("Job Reports:", jobReports)
+        // console.log("Job Reports:", jobReports)
         // setJobReportID(jobReports[0]?.id)
         // console.log("Job Report ID:", jobReports[0].id)
 
@@ -87,7 +87,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
           setLetterRequests([])
         }
       } catch (error) {
-        console.error("Error fetching data:", error)
+        
       }
     }
 
@@ -132,6 +132,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
 
         setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.")
         setShowJobReportingFailure(true)
+        
         return
       }
 
@@ -145,7 +146,16 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
 
       console.log("Download successful for:", request)
     } catch (error) {
-      console.error("Error downloading report:", error)
+     if(error.response.request.status!=500){
+      console.error("Error downloading this  file:", error)
+      setJobReportError(error.response.data.detail)
+      setShowJobReportingFailure(true)
+     }
+      else{
+        console.error("Error on that downloading file:", error)
+        setJobReportError("There was an error downloading your Job reporting form")
+        setShowJobReportingFailure(true)
+      }
     } finally {
       setIsDownloading(false)
       closeModal()

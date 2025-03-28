@@ -15,7 +15,7 @@ const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
       <p>Are you sure you want to download this report?</p>
       <div className="modal-actions">
         <button onClick={() => onDownload(request)} disabled={isDownloading} className='download'>
-          {isDownloading ? <PulseLoader size={10} color="blue" /> : "Download"}
+          {isDownloading ? <PulseLoader size={10} color="white" /> : "Download"}
         </button>
         <button onClick={onClose} className="btn-secondary">Cancel</button>
       </div>
@@ -133,7 +133,7 @@ const EditModal = ({ onClose, onSave, request }) => {
                 <ErrorMessage name="supervisorTitle" component="div" className="error" />
               </div>
               
-              <div className="form-group">
+              <div className="formInput">
                 <label htmlFor="supervisorPhone">Supervisor's Phone Number *</label>
                 <Field 
                   type="text" 
@@ -145,7 +145,7 @@ const EditModal = ({ onClose, onSave, request }) => {
                 <ErrorMessage name="supervisorPhone" component="div" className="error" />
               </div>
               
-              <div className="form-group">
+              <div className="formInput">
                 <label htmlFor="dateResumed">Date Resumed For Training *</label>
                 <Field 
                   type="date" 
@@ -156,11 +156,11 @@ const EditModal = ({ onClose, onSave, request }) => {
                 />
                 <ErrorMessage name="dateResumed" component="div" className="error" />
               </div>
-           </div>
+           
               
               
               
-              <div className="form-group">
+              <div className="formInput">
                 <label htmlFor="residential_address">Residential Address *</label>
                 <Field 
                   type="text" 
@@ -174,7 +174,7 @@ const EditModal = ({ onClose, onSave, request }) => {
               
          
               
-              <div className="form-group">
+              <div className="formInput">
                 <label>Upload your Form</label>
                 <div className="file-upload">
                   <input 
@@ -190,12 +190,12 @@ const EditModal = ({ onClose, onSave, request }) => {
                   
                   </div>
                   <div className="error">
-                  {request.job_reporting.form ? "Kindly upload your form" : " "}
+                  {request.job_reporting.form ? "Kindly re-upload your form" : " "}
                   </div>
                   {fileError && <div className="error">{fileError}</div>}
                 </div>
               </div>
-              
+              </div>
               <div className="form-actions">
                 <button 
                   type="submit" 

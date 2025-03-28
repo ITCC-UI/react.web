@@ -27,6 +27,8 @@ const MoreDetails = ({ request, onClose }) => {
     return `${day}${daySuffix} ${formattedDate.replace(',', '')}`;
   };
 
+ console.log( request.job_reporting?.form?(request.job_reporting.form.split("/").pop()):" ")
+
   const getStatusClass = (status) => {
     switch(status) {
       case 'ACTIVE':
@@ -55,7 +57,7 @@ const MoreDetails = ({ request, onClose }) => {
           <hr />
 <br />          
 
-{console.log(request)}
+{console.log("The request", request)}
 
 <div className="compProfile">
   <div className="details">
@@ -112,13 +114,10 @@ const MoreDetails = ({ request, onClose }) => {
       
           <div className='compProfile'>
             <div className="details">Uploaded Document</div>
-            <div className="cDetails">{request.end_date===null?"-----": request.end_date}</div>
+            <div className="cDetails">{request.job_reporting?.form?(request.job_reporting.form.split("/").pop().split("-").slice(0,3))+ ".pdf ":" "}</div>
           </div>
-
-          <div className='compProfile'>
-            <div className="details">Status</div>
-            <div className={getStatusClass(request.status)}>{request.status}</div>
-          </div>
+{/* {console.log("THe file name",request.job_reporting?.form ? (request.job_reporting.form.split("/").pop().split("-").slice(0,3))+" " : " ")} */}
+      
 
           
         </div>
