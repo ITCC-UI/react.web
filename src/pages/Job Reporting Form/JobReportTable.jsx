@@ -6,13 +6,14 @@ import "./jobReportTable.scss"
 import axiosInstance from "../../../API Instances/AxiosIntances"
 import { Search } from "lucide-react"
 import Filter from "/images/Filter.png"
-import { Button } from "@mui/material"
 import { DownloadModal, EditModal, DeleteModal } from "./ModalBoxes/Modals"
 import FormDetailsModal from "./ModalBoxes/FormDetailsModal"
 import { ref } from "yup"
 import FullScreenSuccessMessage from "../Placement/Successful/Successful"
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage"
-
+import Delete from "/images/Delete.png"
+import Edit from "/images/Edit.png"
+import Download from "/images/Download.png"
 const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
   const [letterRequests, setLetterRequests] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
@@ -261,7 +262,7 @@ setIsDeleting(false)
   })
 
   return (
-    <section className="shift placement_table">
+    <section className="shift">
       <FullScreenSuccessMessage
         isOpen={jobReportSuccess}
         title={title}
@@ -320,12 +321,13 @@ setIsDeleting(false)
                   </td>
                   <td>{request.job_reporting?.supervisor_phone || "----------"}</td>
                   <td>{request.job_reporting?.date_reported || "----------"}</td>
-                  <td onClick={(e) => e.stopPropagation()}>
-                    <Button onClick={() => handleAction("download", request)}>D</Button>
-                    <Button onClick={() => handleAction("edit", request)}>E</Button>
-                    <Button onClick={() => handleAction("delete", request)} className="delete-button">
-                      De
-                    </Button>
+                  <td onClick={(e) => e.stopPropagation()} className="action-buttons">
+                    
+                      <img src={Download} alt="Download" onClick={()=> handleAction("download", request)} />
+                    
+                    <img src={Edit} alt ="Edit" onClick={() => handleAction("edit", request)} />
+                      
+                    <img src= {Delete} alt="Delete" onClick={() => handleAction("delete", request)} className="delete-button" />
                   </td>
                 </tr>
               ))}

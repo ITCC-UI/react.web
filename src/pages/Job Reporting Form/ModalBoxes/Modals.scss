@@ -215,12 +215,19 @@ margin: 0;
     
     button {
       text-transform: none !important;
-      // background-color:;
+      &.download{
+        background-color: #000080;
+        color: white !important;
+        &:hover {
+          background-color: #5b5bd6;
+        }
+      }
     }
     
     .btn-secondary {
       background-color: #e2e8f0 !important;
       color: #4a5568 !important;
+      border: none !important;
     }
     
     .btn-danger {

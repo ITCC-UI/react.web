@@ -14,7 +14,7 @@ const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
       <h2>Download Report</h2>
       <p>Are you sure you want to download this report?</p>
       <div className="modal-actions">
-        <button onClick={() => onDownload(request)} disabled={isDownloading}>
+        <button onClick={() => onDownload(request)} disabled={isDownloading} className='download'>
           {isDownloading ? <PulseLoader size={10} color="blue" /> : "Download"}
         </button>
         <button onClick={onClose} className="btn-secondary">Cancel</button>

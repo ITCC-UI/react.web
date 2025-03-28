@@ -474,51 +474,6 @@ useEffect (()=>{
             Job Reporting Form
           </div>
 
-          <div className="form-nest">
-            {placementList.length === 0 ? <button className="form-download null" onClick={null}>
-              <img src={DownloadIcon} alt="download" />Download Form
-            </button> : <button
-              className={`form-download ${isDownloading ? "fixed-width null" : ""}`}
-              disabled={isLoading}
-              onClick={handleJobReportDownload}
-            >
-              {isDownloading ? (
-                <BeatLoader size={10} color="#36d7b7" />
-              ) : (
-                <>
-                  <img src={DownloadIcon} alt="download" /> Download Form
-                </>
-              )}
-            </button>}
-            <button className="form-upload" onClick={() => toggleNewSubmission()}>
-
-              Submit Form
-            </button>
-
-
-            {/* SCAF Form Download */}
-            {jobReports.length > 0 && trainingDuration ===24 ?
-             (
-              <button
-                className={`form-download ${isSCAFDownloading ? "fixed-width null" : ""}`}
-                disabled={isLoading}
-                onClick={handleSCAFDownload}
-              >
-                {isSCAFDownloading ? (
-                  <BeatLoader size={10} color="#36d7b7" />
-                ) : (
-                  <>
-                    <img src={DownloadIcon} alt="download" /> Download SCAF
-                  </>
-                )}
-              </button>
-            ):
-             (
-  <button className="form-download null none" onClick={null}>
-    <img src={DownloadIcon} alt="download" />Download SCAF
-  </button>
-)}
-          </div>
         </div>
         {isLoading ? (
           <div className="loader">
