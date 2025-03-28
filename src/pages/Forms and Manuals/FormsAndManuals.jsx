@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import TopNav from "../../../components/Header/Header";
 import SideBar from "../../../components/Sidebar/Sidebar";
 import "./formsmanual.scss";
-import * as Yup from "yup";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import { Helmet } from "react-helmet";
 import ManForms from "./Forms";
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
-import { set } from "react-hook-form";
 
 
 const IntroductionLetter = () => {
@@ -15,9 +13,6 @@ const IntroductionLetter = () => {
   const [programmeId, setProgrammeId] = useState(null);
   const [letterRequests, setLetterRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [submissionStatus, setSubmissionStatus] = useState(""); 
-  const [successMessage, setIntroductionSuccessMessage] = useState("");
-  const [showSuccessStatus, setShowIntroSuccess] = useState(false);
   const [failureMessage, setFailureMessage] = useState("");
   const [showFailureMessage, setShowIntroFailure] = useState(false);
   const [noProgrammeId, setNoProgrammeId] = useState(false); 
