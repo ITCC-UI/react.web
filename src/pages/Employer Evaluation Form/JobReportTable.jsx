@@ -14,6 +14,8 @@ import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessa
 import Delete from "/images/Delete.png"
 import Edit from "/images/Edit.png"
 import Download from "/images/Download.png"
+import QuestionnaireModal from "./ModalBoxes/QuestionnaireModal"
+
 const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
   const [letterRequests, setLetterRequests] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
@@ -30,9 +32,10 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
   const [isDeleting, setIsDeleting] = useState(false)
   const [placementID, setPlacementID] = useState(null)
   const [isDownloading, setIsDownloading] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [failureMessage, setFailureMessage] = useState(null)
+  const [thisPlacementID, setThisPlacementID] = useState(null)
+  const [showQuestionnaireModal, setShowQuestionnaireModal] = useState(false)
 
   useEffect(() => {
     const fetchJobReports = async () => {
@@ -47,6 +50,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
         }
 
         const regId = registrations[0].id
+        console.log("Registration ID:", regId)
         setRegistrationId(regId)
         // //("Registration ID:", regId)
 
@@ -58,14 +62,17 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
           setLetterRequests([])
           return
         }
+        console.log("Placements:", placements)
+        console.log("Placement ID:", placements[0].id)
+        setThisPlacementID(placements[0].id)
 
-        // //("Placements:", placements)
-
-        // Get reportable job reports
+        // Get Employer Evaluation Forms
         const jobReportSubmission = await axiosInstance.get(
-          `/trainings/registrations/${regId}/placements/job-reporting/reportable/`,
+          // `/trainings/registrations/placements/${thisPlacementID}/employer-evaluable/`,
+          `/trainings/registrations/${regId}/placements/employer-evaluations/evaluable/`,
         )
         const jobReports = jobReportSubmission.data
+        console.log("Job Reports:", jobReports)
         // //("Job Reports:", jobReports)
         // setJobReportID(jobReports[0]?.id)
         // //("Job Report ID:", jobReports[0].id)
@@ -88,7 +95,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
           setLetterRequests([])
         }
       } catch (error) {
-        
+        console.log("Errssor:", error)
       }
     }
 
@@ -99,6 +106,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
     // //("Action:", action, "Request:", request)
     // //("PalcementID:", request.id)
     setPlacementID(request.id)
+    console.log("Placement ID:", request.id)
     // //("Job Reporting ID:", request.job_reporting?.id)
     setSelectedRequest(request)
     setJobReportID(request.job_reporting?.id)
@@ -202,20 +210,20 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
         setTitle("Your form has been successfully updated")
         setJobReportSuccess(true)
         closeModal()
+        setShowQuestionnaireModal(true)
       } else {
-        // Create new job report with POST
-        await axiosInstance.post(`/trainings/registrations/placements/${placementId}/job-reporting/`, apiFormData, {})
+        // Create new EMployer evaluation with POST
+        await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {})
         setJobReportStatus("Form Submitted")
         setTitle("Your form has been successfully submitted")
         setJobReportSuccess(true)
-        setIsSubmitting(false)
         closeModal()
+        setShowQuestionnaireModal(true)
         // setTriggerRefresh(prev => !prev)
       }
     } catch (error) {
       setJobReportError(error.response.data.detail)
       setShowJobReportingFailure(true)
-      setIsSubmitting(false)
       // setTriggerRefresh(prev => !prev)
     }
   }
@@ -358,7 +366,7 @@ setIsDeleting(false)
         />
       )}
 
-      {activeModal === "edit" && <EditModal request={selectedRequest} onClose={closeModal} onSave={handleSave} isSubmitting={isSubmitting} />}
+      {activeModal === "edit" && <EditModal request={selectedRequest} onClose={closeModal} onSave={handleSave} />}
 
       {activeModal === "delete" && (
         <DeleteModal request={selectedRequest} onClose={closeModal} onConfirm={handleDelete} isDeleting={isDeleting} />
@@ -371,6 +379,17 @@ setIsDeleting(false)
           onDownload={handleDownload}
           onEdit={(request) => handleAction("edit", request)}
           onDelete={(request) => handleAction("delete", request)}
+        />
+      )}
+
+      {showQuestionnaireModal && (
+        <QuestionnaireModal
+          placementId={placementID}
+          onClose={() => setShowQuestionnaireModal(false)}
+          onComplete={() => {
+            setShowQuestionnaireModal(false);
+            setTriggerRefresh(prev => !prev);
+          }}
         />
       )}
 

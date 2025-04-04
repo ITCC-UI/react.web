@@ -1,0 +1,100 @@
+.shift{
+    margin-top: 100px;
+}
+
+section table tr td, section th tr td, section td tr td{
+    width: 150px;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 30px;
+    text-align: center;
+  
+    &.approved {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+  
+    &.rejected {
+        background: rgba(255, 0, 0, 0.1);
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  
+    &.submitted {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+    &.not_started{
+        color: #000000;
+        background-color: #0000001A;
+    }
+
+      }
+
+
+  
+.down{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    button{
+        background-color: transparent;
+        color: var(--deep-blue);
+        border-radius: 7px;
+        cursor: pointer;
+        border: var(--deep-blue) 1px solid;
+padding: 10px ;
+text-align: center;
+gap: 8px;
+opacity: 0px;
+&:hover{
+opacity: .8;
+}
+
+    }
+}
+
+.downloadIcon{
+    width: 20px;
+    cursor:pointer;
+}
+.action-buttons{
+    
+    display: flex;
+    gap: 20px;
+    // width: fit-content;
+    justify-content: center;
+    img{
+        width: 22px;
+    }
+}
+
+
+@media (max-width:430px) {
+
+    .action-buttons{
+        gap:10px;
+        justify-content: start;
+        img{
+            width: 15px;
+        }
+    }
+    section table tr td, section th tr td, section td tr td{
+        width: 85px;
+    }
+
+    .down{
+        button{
+            padding: 8px;
+        }
+    }
+    .jobReport{
+        margin-top: 100px !important;
+    }
+}
+

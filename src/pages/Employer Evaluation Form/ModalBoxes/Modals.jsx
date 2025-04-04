@@ -24,7 +24,7 @@ const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
 );
 
 // Edit Modal with Formik and Yup
-const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
+const EditModal = ({ onClose, onSave, request }) => {
   // Define validation schema using Yup
   const validationSchema = Yup.object().shape({
     supervisorName: Yup.string()
@@ -104,7 +104,7 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ errors, touched, setFieldValue, values, isSubmitting={isSubmitting} }) => (
+          {({ errors, touched, setFieldValue, values, isSubmitting }) => (
             <Form encType='multipart/form-data'>
               <h2 className="company-name">{values.companyName}</h2>
               
@@ -190,7 +190,7 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
                   
                   </div>
                   <div className="error">
-                  {request.job_reporting.form ? "Kindly re-upload your form" : " "}
+                  {request?.employer_evaluation ? "Kindly re-upload your form" : " "}
                   </div>
                   {fileError && <div className="error">{fileError}</div>}
                 </div>
