@@ -11,7 +11,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { PulseLoader, BeatLoader } from "react-spinners";
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
 import FullScreenSuccessMessage from "../Placement/Successful/Successful";
-import JobReportingTable from "./JobReportTable";
+import EmployerEvalTable from "./EmployerEvalTable";
 
 const EmployerEvaluationForm = () => {
   const [showSubmitForm, setShowSubmitForm] = useState(false)
@@ -500,7 +500,7 @@ useEffect (()=>{
           </div>
         ) : (
 
-          <JobReportingTable triggerRefresh={triggerRefresh} />
+          <EmployerEvalTable triggerRefresh={triggerRefresh} />
         )}
 
       </main>

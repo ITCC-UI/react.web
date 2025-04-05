@@ -27,35 +27,17 @@ const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
 const EditModal = ({ onClose, onSave, request }) => {
   // Define validation schema using Yup
   const validationSchema = Yup.object().shape({
-    supervisorName: Yup.string()
-      .required('Supervisor name is required'),
-    supervisorTitle: Yup.string()
-      .required('Supervisor title is required'),
-    supervisorPhone: Yup.string()
-      .required('Supervisor phone is required')
-      .matches(/^[0-9+\s-]+$/, 'Invalid phone number format'),
-    dateResumed: Yup.date()
-      .required('Date is required'),
-    mailingAddress: Yup.string()
-      .email('Invalid email format'),
-    residential_address: Yup.string()
-      .required('Residential address required'),
-    nextOfKin: Yup.string(),
-    nextOfKinAddress: Yup.string(),
-    nextOfKinPhone: Yup.string()
-      .matches(/^[0-9+\s-]*$/, 'Invalid phone number format'),
+    date_of_completion: Yup.date()
+      .required('Date is required')
+      
+      
+      .typeError('Please enter a valid date'),
     // formFile validation is handled separately
   });
 
   // Initial form values from request data
   const initialValues = {
-    companyName: request?.attached_company_name || '',
-    supervisorName: request?.job_reporting?.company_supervisor || '',
-    supervisorTitle: request?.job_reporting?.supervisor_title || '',
-    supervisorPhone: request?.job_reporting?.supervisor_phone || '',
-    dateResumed: request?.job_reporting?.date_reported || '',
-    mailingAddress: request?.job_reporting?.mailing_address || '',
-    residential_address: request?.job_reporting?.residential_address || '',
+    date_of_completion: request.employer_evaluation?.date_of_completion || '',
     formFile: null // Initialize as null to represent the form itself, not a URL
   };
 
@@ -109,71 +91,26 @@ const EditModal = ({ onClose, onSave, request }) => {
               <h2 className="company-name">{values.companyName}</h2>
               
            <div className="companyDetails">
-           <div className="formInput">
-                <label htmlFor="supervisorName">Supervisor's Name *</label>
-                <Field 
-                  type="text" 
-                  id="supervisorName" 
-                  name="supervisorName" 
-                  placeholder="eg Engr Opadare"
-                  className={errors.supervisorName && touched.supervisorName ? "error-input" : ""}
-                />
-                <ErrorMessage name="supervisorName" component="div" className="error" />
-              </div>
+          
               
               <div className="formInput">
-                <label htmlFor="supervisorTitle">Supervisor's Title *</label>
-                <Field 
-                  type="text" 
-                  id="supervisorTitle" 
-                  name="supervisorTitle" 
-                  placeholder="eg Manager"
-                  className={errors.supervisorTitle && touched.supervisorTitle ? "error-input" : ""}
-                />
-                <ErrorMessage name="supervisorTitle" component="div" className="error" />
-              </div>
-              
-              <div className="formInput">
-                <label htmlFor="supervisorPhone">Supervisor's Phone Number *</label>
-                <Field 
-                  type="text" 
-                  id="supervisorPhone" 
-                  name="supervisorPhone" 
-                  placeholder="eg 08066641912"
-                  className={errors.supervisorPhone && touched.supervisorPhone ? "error-input" : ""}
-                />
-                <ErrorMessage name="supervisorPhone" component="div" className="error" />
-              </div>
-              
-              <div className="formInput">
-                <label htmlFor="dateResumed">Date Resumed For Training *</label>
+                <label htmlFor="date_of_completion">Date Resumed For Training *</label>
                 <Field 
                   type="date" 
-                  id="dateResumed" 
-                  name="dateResumed" 
+                  id="date_of_completion" 
+                  name="date_of_completion" 
                   placeholder="dd/mm/yy"
-                  // className={errors.dateResumed && touched.dateResumed ? "error-input" : ""}
+                  // className={errors.date_of_completion && touched.date_of_completion ? "error-input" : ""}
                 />
-                <ErrorMessage name="dateResumed" component="div" className="error" />
+                <ErrorMessage name="date_of_completion" component="div" className="error" />
               </div>
            
               
               
               
-              <div className="formInput">
-                <label htmlFor="residential_address">Residential Address *</label>
-                <Field 
-                  type="text" 
-                  id="residential_address" 
-                  name="residential_address" 
-                  placeholder="Enter your address"
-                  className={errors.residential_address && touched.residential_address ? "error-input" : ""}
-                />
-                <ErrorMessage name="residential_address" component="div" className="error" />
-              </div>
               
          
-              
+              {/* <request */}
               <div className="formInput">
                 <label>Upload your Form</label>
                 <div className="file-upload">
@@ -190,7 +127,7 @@ const EditModal = ({ onClose, onSave, request }) => {
                   
                   </div>
                   <div className="error">
-                  {request?.employer_evaluation ? "Kindly re-upload your form" : " "}
+                  {request.employer_evaluation.form ? "Kindly re-upload your form" : " "}
                   </div>
                   {fileError && <div className="error">{fileError}</div>}
                 </div>
