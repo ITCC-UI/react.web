@@ -129,7 +129,7 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
     setIsDownloading(true)
     try {
       const response = await axiosInstance.get(
-        `/trainings/registrations/placements/${placementID}/job-reporting/form/document/`,
+        `/trainings/registrations/placements/evaluation/${evaluationId}/form/document/`,
         { responseType: "blob" },
       )
 
