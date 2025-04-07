@@ -388,7 +388,7 @@ useEffect (()=>{
 
             <PulseLoader size={15} color={"#123abc"} />
           </div>
-        ) : noProgrammeId ?
+        ) : !noProgrammeId ?
         (
 
           <PostTrainingTable triggerRefresh={triggerRefresh} />

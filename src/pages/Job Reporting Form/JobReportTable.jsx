@@ -216,6 +216,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
       setJobReportError(error.response.data.detail)
       setShowJobReportingFailure(true)
       setIsSubmitting(false)
+      closeModal()
       // setTriggerRefresh(prev => !prev)
     }
   }

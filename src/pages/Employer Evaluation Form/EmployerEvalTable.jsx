@@ -8,15 +8,13 @@ import { Search } from "lucide-react"
 import Filter from "/images/Filter.png"
 import { DownloadModal, EditModal, DeleteModal } from "./ModalBoxes/Modals"
 import FormDetailsModal from "./ModalBoxes/FormDetailsModal"
-import { ref } from "yup"
 import FullScreenSuccessMessage from "../Placement/Successful/Successful"
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage"
-import Delete from "/images/Delete.png"
-import Edit from "/images/Edit.png"
 import Download from "/images/Download.png"
+import Edit from "/images/Edit.png"
 import QuestionnaireModal from "./ModalBoxes/QuestionnaireModal"
 
-const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
+const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => {
   const [letterRequests, setEvaluableForms] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [filter, setFilter] = useState("all")
@@ -29,16 +27,15 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
   const [jobReportSuccess, setJobReportSuccess] = useState(false)
   const [jobReportError, setJobReportError] = useState(null)
   const [showFailureMessage, setShowJobReportingFailure] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [placementID, setEmployerEvaluationID] = useState(null)
+  const [isDeleting] = useState(false)
+  const [evaluationID, setEmployerEvaluationID] = useState(null)
   const [isDownloading, setIsDownloading] = useState(false)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [, setFailureMessage] = useState(null)
-  const [, setThisPlacementID] = useState(null)
+  const [evaluationForm, setEvaluationForm] = useState(null)
   const [showQuestionnaireModal, setShowQuestionnaireModal] = useState(false)
-  const [evaluationId, setEvaluationId] = useState(null);
   const [placementId, setPlacementId] = useState(null);
-
+const [surveyResponseScore, setSurveyResponse] = useState(null)
   useEffect(() => {
     const fetchEvaluableFormTable = async () => {
       try {
@@ -50,7 +47,6 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
           setEvaluableForms([])
           return
         }
-
         const regId = registrations[0].id
         console.log("Registration ID:", regId)
         setRegistrationId(regId)
@@ -65,13 +61,14 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
           return
         }
         console.log("Placements:", placements)
-        console.log("Placement ID:", placements[0].id)
-        setThisPlacementID(placements[0].id)
+        // console.log("Placement ID:", placements[0].id)
+        // setThisPlacementID(placements[0].id)
 
         // Get Employer Evaluation Forms
         const employerEvaluableForms = await axiosInstance.get(
           `/trainings/registrations/${regId}/placements/employer-evaluations/evaluable/`,
         )
+      
         const employerForms = employerEvaluableForms.data
         console.log("Evaluable Forms:", employerForms)
         // //("Job Reports:", jobReports)
@@ -102,26 +99,94 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
     fetchEvaluableFormTable()
   }, [triggerRefresh])
 
+const startSurvey = async (placementId) => {
+  try {
+    const response = await axiosInstance.patch(`trainings/registrations/placements/${placementId}/employer-evaluation-surveys/start/`)
+    console.log("Survey started successfully:", response.data)
+    setShowQuestionnaireModal(true)
+  } catch (error) {
+    console.error("Error starting survey:", error)
+    setFailureMessage(error.response.data.detail)
+  }
+}
+
+
   const handleAction = (action, request) => {
     ("Action:", action, "Request:", request)
     // //("PalcementID:", request.id)
-    setEmployerEvaluationID(request.employer_evaluation.id)
-    console.log("Evaluation ID:", request.employer_evaluation.id)
+    // var placementId = request.employer_evaluation?.id
+    var placementId = request?.id
+
+    requestID(placementId)
+    setEmployerEvaluationID(request.employer_evaluation?.id)
+    console.log("Placmet ID:", request.id)
+    console.log("Employer Evaluation ID:", request.employer_evaluation?.id)
+    setEvaluationForm(request.employer_evaluation)
     // //("Job Reporting ID:", request.job_reporting?.id)
     setSelectedRequest(request)
-    setJobReportID(request.job_reporting?.id)
     setActiveModal(action)
+    setPlacementId(request.id)
+    startSurvey(request.id)
+
   }
+
+  const checkSurvey = async () => {
+    try {
+      const surveyReponse = await axiosInstance.get(`trainings/registrations/placements/${placementId}/employer-evaluation-surveys/summary/`)
+      console.log("Survey response:", surveyReponse.data.total_score)
+      setSurveyResponse(surveyReponse.data.total_score)
+    }catch (error) {
+      console.error("Unable to fetch survey response", error)
+    }
+  }
+
+  useEffect(() => {
+    if (placementId) {
+      checkSurvey()
+    }
+  }, [placementId])
 
   const closeModal = () => {
     setActiveModal(null)
     setShowDetailsModal(false)
   }
 
-  const handleRowClick = (request) => {
-    setSelectedRequest(request)
-    setEmployerEvaluationID(request.id)
-    setJobReportID(request.job_reporting?.id)
+
+  const getEvaluationId = async () => {
+    try {
+      const placements = await axiosInstance.get(`/trainings/registrations/${registrationId}/placements/`)
+      // console.log("This are the ", placements.data)
+      const placementId = placements?.data[0].id
+      console.log("Placement ID here:", placementId)
+      // setPlacementId(selectedRequest.id)
+      console.log("Placement jkbyiovtc ID:", placementId)
+      
+
+      //("This is the palcement", placementId)
+      // Create form data for file upload if needed
+      const response = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/evaluation/`)
+      // setEvaluationId(response.data.id)
+      console.log("Evaluation ID:", response.data)
+
+    } catch (error) {
+
+
+      console.error("Error getting Form  :", error)
+      // setTriggerRefresh(prev => !prev)
+    }
+  }
+
+
+  useEffect(() => {
+    getEvaluationId();
+  }, []);
+
+
+  function handleRowClick(request) {
+    setSelectedRequest(request.id)
+    // setEmployerEvaluationID(request.id)
+    console.log("Evaluation ID for row:", request.employer_evaluation.id)
+    // setJobReportID(request.job_reporting?.id)
     setShowDetailsModal(true)
   }
 
@@ -129,7 +194,7 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
     setIsDownloading(true)
     try {
       const response = await axiosInstance.get(
-        `/trainings/registrations/placements/evaluation/${evaluationId}/form/document/`,
+        `/trainings/registrations/placements/evaluation/${evaluationID}/form/document/`,
         { responseType: "blob" },
       )
 
@@ -171,7 +236,7 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
     }
   }
 
-
+  // setPlacementId(selectedRequest.id)?
 
   const handleSave = async (formData) => {
     try {
@@ -181,8 +246,9 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
       }
 
       // const placementId = selectedRequest.id
-      setPlacementId(selectedRequest.id)
-
+      // setPlacementId(selectedRequest.id)
+      console.log("Placementsss ID:", selectedRequest)
+      
 
       //("This is the palcement", placementId)
       // Create form data for file upload if needed
@@ -193,15 +259,15 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
       if (formData.formFile) {
         apiFormData.append("form", formData.formFile)
       }
-      // //("Seleced", selectedRequest)
-
+      
+console.log("Selected Request:", selectedRequest)
       // Check if job reporting already exists
-      if (selectedRequest.job_reporting && Object.keys(selectedRequest.job_reporting).length > 0) {
+      if (evaluationForm) {
         // Update existing job report with PATCH
-        await axiosInstance.put(`/trainings/registrations/placements/evaluation/${evaluationId}/`, apiFormData, {
-          // headers: {
-          //   "Content-Type": "multipart/form-data",
-          // },
+        await axiosInstance.put(`/trainings/registrations/placements/evaluation/${evaluationID}/`, apiFormData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         })
         //("Updated job report")
         setJobReportStatus("Form Updated")
@@ -216,60 +282,32 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
         setTitle("Your form has been successfully submitted")
         setJobReportSuccess(true)
         closeModal()
-        setShowQuestionnaireModal(true)
+        
         // setTriggerRefresh(prev => !prev)
       }
     } catch (error) {
-      setJobReportError(error.response.data.detail)
-      setShowJobReportingFailure(true)
-      console.log("Error Submitting Form  :", error)
+      // setJobReportError(error.response.data.detail)
+      if (error.response.status == 500) {
+        setJobReportError("There was an error submitting your form")
+        setShowJobReportingFailure(true)
+        closeModal()
+        setShowQuestionnaireModal(true)
+        console.error("Error Submitting Form  :", error)
+      }
+      else{
+        setJobReportError(error.response.data.detail)
+        setShowJobReportingFailure(true)
+        closeModal()
+        console.error("Error Submitting Form  w/0 500:", error)
+      }
+      // setShowJobReportingFailure(true)
+      // console.error("Error Submitting Form  :", error)
+      // closeModal()
       // setTriggerRefresh(prev => !prev)
     }
   }
 
-  const handleDelete = async () => {
-    setIsDeleting(true)
-    try {
-      if (!registrationId) {
-        // console.error("No registration ID found")
-        return
-      }
 
-      // Get the job reporting ID from the selected request
-      const employerEvalID = selectedRequest.employer_evaluation?.id
-    
-
-      // if (!jobReportingID) {
-      //   console.error("No job reporting ID found")
-      //   return
-      // }
-
-      // Delete the job report
-      await axiosInstance.delete(`/trainings/registrations/job-reporting/${employerEvalID}/`)
-
-      // Refresh the data
-      closeModal()
-      setIsDeleting(false)
-      ref.current = true
-      setJobReportStatus("Form Deleted Successfully")
-      setTitle("Deleted!")
-      setJobReportSuccess(true)
-    } catch (error) {
-      closeModal()
-      setIsDeleting(false)
-      if (error.response.status !== 500) {
-        // console.error("Error deleting job report:", error)
-        setJobReportError(error.response.data.detail)
-        setShowJobReportingFailure(true)
-
-      }
-      else {
-        // console.error("Error deleting job report:", error)
-        setJobReportError("There was an error deleting your Job reporting form")
-        setShowJobReportingFailure(true)
-      }
-    }
-  }
 
   // Filter and search functionality
   const filteredRequests = letterRequests.filter((request) => {
@@ -281,34 +319,6 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
     if (filter === "all") return matchesSearch
     return matchesSearch && request.status?.toLowerCase() === filter.toLowerCase()
   })
-
-  const getEvaluationId = async () => {
-    try {
-      const placements = await axiosInstance.get(`/trainings/registrations/${registrationId}/placements/`)
-      // console.log("This are the ", placements.data)
-      const placementId = placements.data[0].id
-      console.log("Placement ID here:", placementId)
-      // setPlacementId(selectedRequest.id)
-      console.log("Placement jkbyiovtc ID:", placementId)
-
-      //("This is the palcement", placementId)
-      // Create form data for file upload if needed
-      const response = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/evaluation/`)
-      setEvaluationId(response.data.id)
-      console.log("Evaluation ID:", response.data)
-
-    } catch (error) {
-
-
-      console.log("Error getting Form  :", error)
-      // setTriggerRefresh(prev => !prev)
-    }
-  }
-
-
-  useEffect(() => {
-    getEvaluationId();
-  }, []);
 
 
 
@@ -372,7 +382,7 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
                   </td>
                   <td>{request.job_reporting?.supervisor_phone || "----------"}</td> */}
                   <td>{request.employer_evaluation?.date_of_completion || "----------"}</td>
-                  {console.log(request.employer_evaluation.id)}
+                  {/* {console.log(request.employer_evaluation.id)} */}
                   <td onClick={(e) => e.stopPropagation()} className="action-buttons">
 
                     <img src={Download} alt="Download" onClick={() => handleAction("download", request)} />
@@ -413,13 +423,14 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh }) => {
         />
       )}
 
-      {showQuestionnaireModal && (
+      {showQuestionnaireModal && surveyResponseScore===0 && (
         <QuestionnaireModal
-          placementId={placementID}
+          placementId={placementId}
           onClose={() => setShowQuestionnaireModal(false)}
           onComplete={() => {
             setShowQuestionnaireModal(false);
             setTriggerRefresh(prev => !prev);
+            
           }}
         />
       )}

@@ -110,8 +110,8 @@ const EditModal = ({ onClose, onSave, request }) => {
               
               
          
-              {/* <request */}
-              <div className="formInput">
+              { request.employer_evaluation && 
+              (<div className="formInput">
                 <label>Upload your Form</label>
                 <div className="file-upload">
                   <input 
@@ -127,11 +127,12 @@ const EditModal = ({ onClose, onSave, request }) => {
                   
                   </div>
                   <div className="error">
-                  {request.employer_evaluation.form ? "Kindly re-upload your form" : " "}
+                  {request.employer_evaluation?.form ? "Kindly re-upload your form" : " "}
                   </div>
                   {fileError && <div className="error">{fileError}</div>}
                 </div>
-              </div>
+              </div>)
+          }
               </div>
               <div className="form-actions">
                 <button 

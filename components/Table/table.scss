@@ -11,7 +11,7 @@ section{
     width: 100%;
   }
   .containerCourse{
-    height: 450px;
+    height: 80vh;
     overflow-y: scroll;
     -ms-overflow-style: none; 
   scrollbar-width: none;
@@ -151,12 +151,16 @@ opacity: 0px;
 @media (max-width:430px) {
     section{
         width: 99%;
+        .containerCourse{
+            height: 60vh;
+
         table{
             width: 600px;
             font-size: 10px;
             margin-top: 60px;
            
         }
+    }
       
     }
     section table tr td .eligibility, section th tr td .eligibility, section td tr td .eligibility{

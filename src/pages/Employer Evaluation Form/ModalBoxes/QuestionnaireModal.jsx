@@ -1,72 +1,91 @@
-import React, { useState, useEffect } from 'react';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
-import { PulseLoader } from 'react-spinners';
-import axiosInstance from '../../../../API Instances/AxiosIntances';
-import './Modals.scss';
+import React, { useState, useEffect } from "react";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import { PulseLoader } from "react-spinners";
+import { X } from "lucide-react";
+import axiosInstance from "../../../../API Instances/AxiosIntances";
+import "./Modals.scss";
 
 const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
-  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [questions, setQuestions] = useState([]); // Store all questions
+  const [currentIndex, setCurrentIndex] = useState(0); // Track current question index
   const [loading, setLoading] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
   const [summary, setSummary] = useState(null);
-  const [progress, setProgress] = useState(5);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState({}); // Store selected answers
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchQuestion();
+    fetchQuestions();
   }, []);
 
-  const fetchQuestion = async () => {
+
+
+  const fetchQuestions = async () => {
     setLoading(true);
     try {
+
       const response = await axiosInstance.get(
-        `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/question/`
+        // `/trainings/registrations/placements/98a37101-d03a-4fbb-8914-f810884ce37e/employer-evaluation-surveys/`
+        `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/`
       );
-      console.log("Response:", response.data)
-      setCurrentQuestion(response.data);
-      setProgress((response.data.number / 20) * 100);
+      console.log("Questions Data:", response.data);
+      setQuestions(response.data);
+      setCurrentIndex(0);
+      setProgress((1 / response.data.length) * 100);
     } catch (error) {
-      setError(error.response?.data?.detail || 'Failed to fetch question');
-      console.log("Errosr:", error)
+      setError(error.response?.data?.detail || "Failed to fetch questions");
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchNextQuestion = async () => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get(
-        `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/question/?left=false`
-      );
-      setCurrentQuestion(response.data);
-      setProgress((response.data.number / 20) * 100);
-      setSelectedAnswer(null);
-    } catch (error) {
-      if (error.response?.status === 404) {
-        // No more questions, show summary
-        fetchSummary();
-      } else {
-        setError(error.response?.data?.detail || 'Failed to fetch next question');
-      }
-    } finally {
-      setLoading(false);
+  const handleNext = () => {
+    if (!selectedAnswers[questions[currentIndex]?.id]) {
+      setError("Please select an answer before proceeding.");
+      return;
+    }
+
+    setError(null);
+    if (currentIndex + 1 < questions.length) {
+      setCurrentIndex(currentIndex + 1);
+      setProgress(((currentIndex + 2) / questions.length) * 100);
     }
   };
 
-  const fetchPreviousQuestion = async () => {
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+      setProgress(((currentIndex) / questions.length) * 100);
+    }
+  };
+
+  const handleSelectAnswer = (value) => {
+    setSelectedAnswers({
+      ...selectedAnswers,
+      [questions[currentIndex]?.id]: value,
+    });
+    setError(null);
+  };
+
+  const handleSubmit = async () => {
     setLoading(true);
+    const responses = questions.map((question) => ({
+      score: (selectedAnswers[question.id])/100 || 0,
+      remarks: "", // If needed, you can add a remarks input
+      survey_question: question.id,
+    }));
+
     try {
-      const response = await axiosInstance.get(
-        `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/question/?left=true`
+      await axiosInstance.post(
+        // `/trainings/registrations/placements/98a37101-d03a-4fbb-8914-f810884ce37e/employer-evaluation-surveys/submit-response/`,
+        `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/submit-response/`,
+        { responses }
       );
-      setCurrentQuestion(response.data);
-      setProgress((response.data.number / 20) * 100);
-      setSelectedAnswer(null);
+      fetchSummary();
     } catch (error) {
-      setError(error.response?.data?.detail || 'Failed to fetch previous question');
+      setError(error.response?.data?.detail || "Failed to submit answers");
     } finally {
       setLoading(false);
     }
@@ -76,39 +95,24 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
+        // `/trainings/registrations/placements/98a37101-d03a-4fbb-8914-f810884ce37e/employer-evaluation-surveys/summary/`
         `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/summary/`
       );
+      console.log("Summary", response.data);
       setSummary(response.data);
       setShowSummary(true);
     } catch (error) {
-      setError(error.response?.data?.detail || 'Failed to fetch summary');
+      setError(error.response?.data?.detail || "Failed to fetch summary");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSubmitAnswer = async () => {
-    if (!selectedAnswer) {
-      setError('Please select an answer');
-      return;
+  useEffect(() => {
+    if (showSummary) {
+      fetchSummary();
     }
-
-    setLoading(true);
-    try {
-      await axiosInstance.post(
-        `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/submit-response/`,
-        {
-          question_number: currentQuestion.number,
-          response: selectedAnswer
-        }
-      );
-      fetchNextQuestion();
-    } catch (error) {
-      setError(error.response?.data?.detail || 'Failed to submit answer');
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [showSummary]);
 
   if (loading) {
     return (
@@ -127,29 +131,15 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
           <h2>Evaluation Summary</h2>
           <div className="summary-score">
             <CircularProgressbar
-              value={summary?.overall_score || 0}
-              text={`${summary?.overall_score || 0}%`}
+              value={summary?.total_score*100 || 0}
+              text={`${summary?.total_score*10*10 || 0}%`}
               styles={buildStyles({
-                pathColor: '#0066FF',
-                textColor: '#0066FF',
-                trailColor: '#E5E7EB'
+                pathColor: "#000080",
+                textColor: "#000080",
+                trailColor: "#E5E7EB",
               })}
             />
-            <p className="score-label">Excellent</p>
-          </div>
-          <div className="summary-details">
-            {summary?.category_scores?.map((category, index) => (
-              <div key={index} className="category-score">
-                <span className="category-name">{category.name}</span>
-                <div className="score-bar-container">
-                  <div 
-                    className="score-bar" 
-                    style={{ width: `${category.score}%` }}
-                  />
-                </div>
-                <span className="score-value">{category.score}%</span>
-              </div>
-            ))}
+            <p className="score-label">{summary?.remark}</p>
           </div>
           <button onClick={onClose} className="close-button">
             Close
@@ -161,51 +151,77 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
 
   return (
     <div className="modal-overlay">
+  <div className="warn">
+        You can only fill this questionnaire once. 
+        <br/>Please make sure to fill it out correctly.
+      </div>
       <div className="modal-content questionnaire">
+    
         <div className="progress-header">
-          <div className="progress-text">Question {currentQuestion?.number} of 20</div>
+          <div className="progress-text">
+          {/* <button onClick={onClose} className="close-button">
+            <X size={20} color='black' />
+          </button> */}
+
+            Question {currentIndex + 1} of {questions.length}
+          </div>
           <div className="progress-bar">
             <div className="progress" style={{ width: `${progress}%` }} />
           </div>
-          <div className="progress-percentage">{progress}%</div>
+          <div className="progress-percentage">{progress.toFixed(0)}%</div>
         </div>
 
-        <div className="question-content">
-          <h3>{currentQuestion?.text}</h3>
-          <div className="options">
-            {[25, 50, 75, 100].map((value) => (
-              <label key={value} className={`option ${selectedAnswer === value ? 'selected' : ''}`}>
-                <input
-                  type="radio"
-                  name="answer"
-                  value={value}
-                  checked={selectedAnswer === value}
-                  onChange={(e) => setSelectedAnswer(Number(e.target.value))}
-                />
-                <span className="option-text">{value}%</span>
-                <div className="option-bar">
-                  <div className="fill" style={{ width: `${value}%` }} />
-                </div>
-              </label>
-            ))}
+        {questions.length > 0 && (
+          <div className="question-content">
+            <h3>{questions[currentIndex]?.question}</h3>
+            <div className="options">
+              {[25, 50, 75, 100].map((value) => (
+                <label
+                  key={value}
+                  className={`option ${
+                    selectedAnswers[questions[currentIndex]?.id] === value
+                      ? "selected"
+                      : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="answer"
+                    value={value}
+                    checked={selectedAnswers[questions[currentIndex]?.id] === value}
+                    onChange={() => handleSelectAnswer(value)}
+                  />
+                  <span className="option-text">{value}%</span>
+                  <div className="option-bar">
+                    <div className="fill" style={{ width: `${value}%` }} />
+                  </div>
+                </label>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        {error && <div className="error-message">{error}</div>}
+        {error && <div className="error-message error-message-eef">{error}</div>}
 
         <div className="button-group">
-          {currentQuestion?.number > 1 && (
-            <button onClick={fetchPreviousQuestion} className="btn-secondary">
+          {currentIndex > 0 && (
+            <button onClick={handlePrevious} className="btn-secondary">
               Previous
             </button>
           )}
-          <button onClick={handleSubmitAnswer} className="btn-primary">
-            {loading ? <PulseLoader size={8} color="white" /> : 'Next'}
-          </button>
+          {currentIndex + 1 < questions.length ? (
+            <button onClick={handleNext} className="btn-primary">
+              {loading ? <PulseLoader size={8} color="white" /> : "Next"}
+            </button>
+          ) : (
+            <button onClick={handleSubmit} className="btn-primary submit">
+              {loading ? <PulseLoader size={8} color="white" /> : "Submit"}
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default QuestionnaireModal; 
+export default QuestionnaireModal;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import { button } from '@mui/material';
 import { X, ArrowLeft, Paperclip, AlertCircle } from 'lucide-react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -6,6 +6,11 @@ import * as Yup from 'yup';
 import "./Modals.scss";
 import { PulseLoader } from 'react-spinners';
 import Caution from "/images/Vector (1).png"
+import axiosInstance from '../../../../API Instances/AxiosIntances';
+
+
+
+
 
 // Download Modal
 const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
@@ -25,6 +30,29 @@ const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
 
 // Edit Modal with Formik and Yup
 const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
+
+
+  const [addressOptions, setAdressOptions]= useState([])
+
+const type="TITLE"
+const fetchAddressee =()=>{
+  axiosInstance.get(`/option-types/${type}/options`)
+  .then(titles =>{
+    const addressee=titles.data.map(title=>title.name)
+    
+    setAdressOptions(addressee)
+    
+  })
+
+  .catch(error=>{
+    
+    console.error("Error fetching addressee options:", error) 
+  })
+}
+
+useEffect(()=>{
+  fetchAddressee()
+}, [])
   // Define validation schema using Yup
   const validationSchema = Yup.object().shape({
     supervisorName: Yup.string()
@@ -123,13 +151,22 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
               
               <div className="formInput">
                 <label htmlFor="supervisorTitle">Supervisor's Title *</label>
-                <Field 
+                {/* <Field 
                   type="text" 
                   id="supervisorTitle" 
                   name="supervisorTitle" 
                   placeholder="eg Manager"
                   className={errors.supervisorTitle && touched.supervisorTitle ? "error-input" : ""}
-                />
+                /> */}
+
+                 <Field as="select" name="supervisorTitle" className="supervisorTitle">
+                    <option value="">Select Title/Position</option>
+                    {addressOptions.map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Field>
                 <ErrorMessage name="supervisorTitle" component="div" className="error" />
               </div>
               
@@ -190,7 +227,7 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
                   
                   </div>
                   <div className="error">
-                  {request.job_reporting.form ? "Kindly re-upload your form" : " "}
+                  {request.job_reporting?.form ? "Kindly re-upload your form" : " "}
                   </div>
                   {fileError && <div className="error">{fileError}</div>}
                 </div>
