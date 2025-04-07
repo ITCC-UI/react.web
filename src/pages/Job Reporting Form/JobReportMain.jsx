@@ -59,7 +59,7 @@ const JobReportingForm = () => {
       }
     } catch (error) {
       setNoProgrammeId(true);
-      console.error("Error fetching programme ID:", error);
+      
 
 
     }
@@ -101,7 +101,7 @@ useEffect (()=>{
       setIsLoading(false)
 
     } catch (error) {
-console.error("Error fetching placement ID:", error);
+
       setNoProgrammeId(true);
 
 
@@ -120,11 +120,11 @@ console.error("Error fetching placement ID:", error);
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/job-reporting/reportable/`);
       setjobReports(response.data);
-      console.log("Job Reports:", response.data)
+      
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.error("Error fetching job reports:", error);
+      
 
     }
   };
@@ -175,7 +175,7 @@ console.error("Error fetching placement ID:", error);
         const errorText = await errorBlob.text();
         const errorJson = JSON.parse(errorText);
   
-        // console.error('Download error:', errorJson);
+        
   
         setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.");
         setShowJobReportingFailure(true);
@@ -198,7 +198,7 @@ console.error("Error fetching placement ID:", error);
   
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      // console.error('Download error:', error);
+      
   
       
       if (error.response && error.response.data instanceof Blob) {
@@ -206,10 +206,10 @@ console.error("Error fetching placement ID:", error);
           const errorBlob = error.response.data;
           const errorText = await errorBlob.text();
           const errorJson = JSON.parse(errorText);
-  // console.log(errorJson)
+  
           setFailureMessage(errorJson.detail || "An error occurred while downloading the file.");
         } catch (parseError) {
-          // console.error("Failed to parse error blob:", parseError);
+          
           setFailureMessage("An unknown error occurred while downloading.");
         }
       } else {
@@ -490,7 +490,7 @@ console.error("Error fetching placement ID:", error);
 
         ) : jobReports.length === 0 ? (
           <div className="image">
-            {/* {console.log(jobReports)}  */}
+            
             <img src={Empty} alt="Empty" />
           </div>
         ) : (

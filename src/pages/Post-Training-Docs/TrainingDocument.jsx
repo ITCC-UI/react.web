@@ -3,13 +3,7 @@ import React, { useState, useEffect } from "react";
 import SideBar from "../../../components/Sidebar/Sidebar";
 import TopNav from "../../../components/Header/Header";
 // import "./reporting-form.scss"
-import DownloadIcon from "/images/Download-white.png"
 import axiosInstance from "../../../API Instances/AxiosIntances";
-import CloseIcon from '/images/closeButton.png'
-import * as Yup from "yup";
-import Empty from "/images/empty_dashboard.png";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { PulseLoader, BeatLoader } from "react-spinners";
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
 import FullScreenSuccessMessage from "../Placement/Successful/Successful";
 import PostTrainingTable from "./PostTrainigTable";
@@ -19,12 +13,7 @@ const TrainingDocuments = () => {
   const [id, setProgrammeId] = useState(null);
   const [placements, setPlacementRequests] = useState([])
   const [isLoading, setIsLoading] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [isSCAFDownloading, setSCAFIsDownloading] = useState(false);
   const [noProgrammeId, setNoProgrammeId] = useState(false);
-  const [jobReports, setjobReports] = useState([]);
-  const [placementList, setPlacementList] = useState([])
-  const [addressOptions, setAdressOptions] = useState([])
   const [successMessage, setJobReportStatus] = useState("")
   const [showSuccessStatus, setJobReportSuccess] = useState(false)
   const [failureMessage, setFailureMessage] = useState("")
@@ -42,9 +31,6 @@ const TrainingDocuments = () => {
     window.addEventListener("keydown", handleKeyDown);
   })
 
-  const toggleNewSubmission = () => {
-    setShowSubmitForm((prev) => !prev);
-  }
 
   const fetchProgrammeId = async () => {
     try {
@@ -52,7 +38,7 @@ const TrainingDocuments = () => {
       if (response.data.length > 0) {
         const id = response.data[0].id;
         setProgrammeId(id);
-      console.log("Programmessssssssssss ID:", id);
+      
         setIsLoading(false)
       } else {
 
@@ -74,8 +60,8 @@ const TrainingDocuments = () => {
 const fetchRegistrationType = async () =>{
   try{
     const response = await axiosInstance.get(`/trainings/registrations/${id}`);
-    const duration=(response.data.training.type.duration)
-    console.log("Duration", duration)
+    const duration=(response.data.training?.type?.duration)
+    
     setDuration(duration)
 
   }
@@ -90,39 +76,7 @@ useEffect (()=>{
   }
 }, [id])
 
-  // Fetch the placement id
-//   const fetchPlacement = async () => {
-//     try {
-//       const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/current`);
-//       setPlacementRequests(response.data.id);
-//       console.log("Placementssss ID:", response.data.id );
-//       setPlacementList(response)
-//       setIsLoading(false)
 
-//     } catch (error) {
-// console.error("Error fetching placement data:", error);
-//       setNoProgrammeId(true);
-//       console.error("Error fetching placement data:", error);
-
-
-
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (id) {
-//       fetchPlacement();
-//     }
-//   }, [id]);
-
-
- 
-
-
-
-  // SCAF FORM DOwnload
-
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 
 
