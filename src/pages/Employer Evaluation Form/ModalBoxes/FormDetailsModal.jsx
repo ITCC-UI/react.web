@@ -17,16 +17,20 @@ const MoreDetails = ({ request, onClose }) => {
     return !note ? "N/A" : note;
   };
 
-  const formatApprovalDate = (dateString) => {
-    if (!dateString) return null;
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const daySuffix = day % 10 === 1 && day !== 11 ? 'st' : day % 10 === 2 && day !== 12 ? 'nd' : day % 10 === 3 && day !== 13 ? 'rd' : 'th';
-    const options = { month: 'long', year: 'numeric'};
-    const formattedDate = date.toLocaleDateString('en-US', options);
-    return `${day}${daySuffix} ${formattedDate.replace(',', '')}`;
-  };
+  const downloadStudentFIle = () => {
+    try {
+      // Get the PDF URL from your backend
+      const pdfUrl = request?.employer_evaluation?.form;
+      // Open the PDF in a new tab
+      window.open(pdfUrl, '_blank');
 
+      
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+    } finally {
+      // setIsLoading(false);
+    }
+  };
  
 
   const getStatusClass = (status) => {
@@ -115,10 +119,8 @@ const MoreDetails = ({ request, onClose }) => {
       
           <div className='compProfile'>
             <div className="details">Uploaded Document</div>
-            {/* <div className="cDetails">{request.job_reporting?.form?(request.job_reporting.form.split("/").pop().split("-").slice(0,3))+ ".pdf ":" "}</div> */}
-            <div className="cDetails">{request.job_reporting?.form ? (request.job_reporting.form.split("/").pop()) : " "}</div>
+            {request.employer_evaluation?.form ? (<button onClick={()=>downloadStudentFIle()} className='btn-primary'>Download</button>):" "} 
           </div>
-{/* {console.log("THe file name",request.job_reporting?.form ? (request.job_reporting.form.split("/").pop().split("-").slice(0,3))+" " : " ")} */}
       
 
           

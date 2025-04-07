@@ -156,7 +156,7 @@ useEffect (()=>{
   
         // console.error('Download error:', errorJson);
   
-        setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.");
+        setFailureMessage(errorJson.detail || "Failed to download SCAF Form.");
         setShowJobReportingFailure(true);
         return; // Stop the download from proceeding
       }
