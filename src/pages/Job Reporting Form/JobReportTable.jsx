@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useNavigate } from "react"
 import "../../../components/Table/table.scss"
 import "./jobReportTable.scss"
 import axiosInstance from "../../../API Instances/AxiosIntances"
@@ -15,6 +15,7 @@ import Delete from "/images/Delete.png"
 import Edit from "/images/Edit.png"
 import Download from "/images/Download.png"
 const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
+
   const [letterRequests, setLetterRequests] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [filter, setFilter] = useState("all")
@@ -265,6 +266,9 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
     }
   }
 
+
+ 
+  
   // Filter and search functionality
   const filteredRequests = letterRequests.filter((request) => {
     const matchesSearch =

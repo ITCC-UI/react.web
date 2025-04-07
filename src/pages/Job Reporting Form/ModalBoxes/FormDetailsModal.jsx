@@ -13,9 +13,24 @@ const MoreDetails = ({ request, onClose }) => {
     setTimeout(onClose, 300);
   };
 
-  const getApprovalNote = (note) => {
-    return !note ? "N/A" : note;
-  };
+ 
+
+
+   const downloadStudentFIle = () => {
+      try {
+        // Get the PDF URL from your backend
+        const pdfUrl = request?.job_reporting?.form;
+console.log("The file name",request.job_reporting?.form ? (request.job_reporting.form): " ")        
+        // Open the PDF in a new tab
+        window.open(pdfUrl, '_blank');
+  
+        
+      } catch (error) {
+        console.error('Error downloading PDF:', error);
+      } finally {
+        // setIsLoading(false);
+      }
+    };
 
   const formatApprovalDate = (dateString) => {
     if (!dateString) return null;
@@ -103,7 +118,7 @@ const MoreDetails = ({ request, onClose }) => {
             <div className="details">Phone Number</div>
             <div className="cDetails">{request.job_reporting.supervisor_phone}</div>
           </div>
-       
+
 {request.job_reporting.supervisor_email?
  (<div className="compProfile">
   <div className="details"> Email</div>
@@ -112,14 +127,9 @@ const MoreDetails = ({ request, onClose }) => {
 : " "}
 
       
-          {/* <div className='compProfile'>
-            <div className="details">Uploaded Document</div> */}
-            {/* <div className="cDetails">{request.job_reporting?.form?(request.job_reporting.form.split("/").pop().split("-").slice(0,3))+ ".pdf ":" "}</div> */}
-         {/* <div className="cDetails">{request.job_reporting?.form}</div>
-          </div> */}
-{/* {console.log("THe file name",request.job_reporting?.form ? (request.job_reporting.form.split("/").pop().split("-").slice(0,3))+" " : " ")} */}
-      
-
+   
+{request.job_reporting?.form ? (<button onClick={()=>downloadStudentFIle()} className='btn-primary'>Download</button>):" "}
+        
           
         </div>
       </div>
