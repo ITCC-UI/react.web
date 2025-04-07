@@ -11,8 +11,8 @@ import Caution from "/images/Vector (1).png"
 const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
   <div className="modal-overlay">
     <div className="modal-content">
-      <h2>Download Employer Evaluation Form</h2>
-      <p>Are you sure you want to download this employer evaluation form?</p>
+      <h2>Download Report</h2>
+      <p>Are you sure you want to download this report?</p>
       <div className="modal-actions">
         <button onClick={() => onDownload(request)} disabled={isDownloading} className='download'>
           {isDownloading ? <PulseLoader size={10} color="white" /> : "Download"}
@@ -86,26 +86,15 @@ const EditModal = ({ onClose, onSave, request }) => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ setFieldValue, values, isSubmitting }) => (
+          {({ errors, touched, setFieldValue, values, isSubmitting }) => (
             <Form encType='multipart/form-data'>
               <h2 className="company-name">{values.companyName}</h2>
               
            <div className="companyDetails">
           
               
-             {request.employer_evaluation?.date_of_completion? ( <div className="formInput">
-                <label htmlFor="date_of_completion">Date of Completion *</label>
-                <Field 
-                  type="date" 
-                  id="date_of_completion" 
-                  name="date_of_completion" 
-                  placeholder="dd/mm/yy"
-                  disabled
-                  // className={errors.date_of_completion && touched.date_of_completion ? "error-input" : ""}
-                />
-                <ErrorMessage name="date_of_completion" component="div" className="error" />
-              </div>): (<div className="formInput">
-                <label htmlFor="date_of_completion">Date of Completion *</label>
+              <div className="formInput">
+                <label htmlFor="date_of_completion">Date Resumed For Training *</label>
                 <Field 
                   type="date" 
                   id="date_of_completion" 
@@ -114,7 +103,7 @@ const EditModal = ({ onClose, onSave, request }) => {
                   // className={errors.date_of_completion && touched.date_of_completion ? "error-input" : ""}
                 />
                 <ErrorMessage name="date_of_completion" component="div" className="error" />
-              </div>)}
+              </div>
            
               
               
@@ -131,7 +120,6 @@ const EditModal = ({ onClose, onSave, request }) => {
                     name="formFile" 
                     onChange={(e) => handleFileChange(e, setFieldValue)}
                     className="file-input"
-
                   />
                   <div className={`file-upload-button ${fileError ? 'error-input' : ''}`}>
                     <Paperclip size={18} />

@@ -117,16 +117,15 @@ const AccordionS = ({ initialOpenSection, activeIntro, activeReg, activeDailyLog
           }}
         >
           <Link to="/job-reporting-form">Job Reporting Form</Link>
-          
+          <Link to="/employer-evaluation-form">Employer Evaluation Form</Link>
           {/* <Link to="/daily-logs" className={activeDailyLog}>Daily logs</Link> */}
           <Link to="/new-logbook-request"className="null">New Logbook Request</Link>
-          <Link to="/employer-evaluation-form">Employer Evaluation Form</Link>
         </div>
       </div>
 
       <div className={`navigation-item ${openAccordion === 2 ? 'active' : ''}`}>
-        <div className="navigation-header" onClick={() => handlePanelToggle(2)}>
-        {/* <div className="navigation-header null" onClick={null}> */}
+        {/* <div className="navigation-header" onClick={() => handlePanelToggle(2)}> */}
+        <div className="navigation-header null" onClick={null}>
 
           <h3>Post-Training</h3>
           <img

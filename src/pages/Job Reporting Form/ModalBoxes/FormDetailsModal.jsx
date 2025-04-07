@@ -76,7 +76,7 @@ const MoreDetails = ({ request, onClose }) => {
   </div>
 </div>
 
-{!request.attached_company_branch.branch_name? (<div className="compProfile">
+{request.attached_company_branch.branch_name? (<div className="compProfile">
   <div className="detailsHeading">
     Address
   </div>
@@ -112,11 +112,10 @@ const MoreDetails = ({ request, onClose }) => {
 : " "}
 
       
-          {/* <div className='compProfile'>
-            <div className="details">Uploaded Document</div> */}
-            {/* <div className="cDetails">{request.job_reporting?.form?(request.job_reporting.form.split("/").pop().split("-").slice(0,3))+ ".pdf ":" "}</div> */}
-         {/* <div className="cDetails">{request.job_reporting?.form}</div>
-          </div> */}
+          <div className='compProfile'>
+            <div className="details">Uploaded Document</div>
+            <div className="cDetails">{request.job_reporting?.form?(request.job_reporting.form.split("/").pop().split("-").slice(0,3))+ ".pdf ":" "}</div>
+          </div>
 {/* {console.log("THe file name",request.job_reporting?.form ? (request.job_reporting.form.split("/").pop().split("-").slice(0,3))+" " : " ")} */}
       
 

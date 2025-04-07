@@ -16,8 +16,8 @@ import axiosInstance from '../../../../API Instances/AxiosIntances';
 const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
   <div className="modal-overlay">
     <div className="modal-content">
-      <h2>Download Job Reporting Form</h2>
-      <p>Are you sure you want to download this job reporting form?</p>
+      <h2>Download Report</h2>
+      <p>Are you sure you want to download this report?</p>
       <div className="modal-actions">
         <button onClick={() => onDownload(request)} disabled={isDownloading} className='download'>
           {isDownloading ? <PulseLoader size={10} color="white" /> : "Download"}
@@ -143,7 +143,7 @@ useEffect(()=>{
                   type="text" 
                   id="supervisorName" 
                   name="supervisorName" 
-                  placeholder="e.g  John Doe"
+                  placeholder="eg Engr Opadare"
                   className={errors.supervisorName && touched.supervisorName ? "error-input" : ""}
                 />
                 <ErrorMessage name="supervisorName" component="div" className="error" />
@@ -176,7 +176,7 @@ useEffect(()=>{
                   type="text" 
                   id="supervisorPhone" 
                   name="supervisorPhone" 
-                  placeholder="eg 080xxxxxxxxx"
+                  placeholder="eg 08066641912"
                   className={errors.supervisorPhone && touched.supervisorPhone ? "error-input" : ""}
                 />
                 <ErrorMessage name="supervisorPhone" component="div" className="error" />
