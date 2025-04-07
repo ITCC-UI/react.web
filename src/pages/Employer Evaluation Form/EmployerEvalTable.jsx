@@ -72,9 +72,7 @@ const [surveyResponseStatus, setSurveyResponse] = useState(null)
       
         const employerForms = employerEvaluableForms.data
         console.log("Evaluable Forms:", employerForms)
-        // //("Job Reports:", jobReports)
-        // setJobReportID(jobReports[0]?.id)
-        // //("Job Report ID:", jobReports[0].id)
+
 
         if (employerForms && typeof employerForms === "object" && employerForms !== null) {
           const processedRequests = Object.keys(employerForms).map((key) => ({
@@ -106,8 +104,6 @@ const startSurvey = async (placementId) => {
     console.log("Survey started successfully:", response.data)
     
   } catch (error) {
-    console.error("Error starting survey:", error)
-    setFailureMessage(error.response.data.detail)
   }
 }
 
@@ -133,9 +129,7 @@ const startSurvey = async (placementId) => {
 
   const checkSurvey = async () => {
     try {
-      // const surveyReponse = await axiosInstance.get(`trainings/registrations/placements/${placementId}/employer-evaluation-surveys/summary/`)
       const placementResponse = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/`)
-      console.log("Survey response:", placementResponse.data.employer_evaluation_survey_status)
       setSurveyResponse(placementResponse.data.employer_evaluation_survey_status)
     }catch (error) {
       console.error("Unable to fetch survey response", error)
@@ -169,9 +163,9 @@ const startSurvey = async (placementId) => {
 
       //("This is the palcement", placementId)
       // Create form data for file upload if needed
-      const response = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/evaluation/`)
+      // const response = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/evaluation/`)
       // setEvaluationId(response.data.id)
-      console.log("Evaluation ID:", response.data)
+      // console.log("Evaluation ID:", response.data)
 
     } catch (error) {
 
@@ -183,8 +177,10 @@ const startSurvey = async (placementId) => {
 
 
   useEffect(() => {
-    getEvaluationId();
-  }, []);
+    if(registrationId){
+      getEvaluationId()
+    } 
+  }, [registrationId]);
 
 
   function handleRowClick(request) {
@@ -283,7 +279,7 @@ const startSurvey = async (placementId) => {
         // Create new EMployer evaluation with POST
         await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {})
         setJobReportStatus(" ")
-        setTitle("Date of Completion has been successfully submitted")
+        setTitle("Date of Completion has been filled successfully")
         setJobReportSuccess(true)
         closeModal()
         
@@ -421,7 +417,7 @@ const startSurvey = async (placementId) => {
         />
       )}
 
-      {showQuestionnaireModal && surveyResponseStatus==="SUBMITTED" && (
+      {showQuestionnaireModal && surveyResponseStatus!=="SUBMITTED" && (
         <QuestionnaireModal
           placementId={placementId}
           onClose={() => setShowQuestionnaireModal(false)}
