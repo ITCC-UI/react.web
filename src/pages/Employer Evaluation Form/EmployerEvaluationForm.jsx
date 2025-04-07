@@ -165,15 +165,12 @@ useEffect (()=>{
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'report_form.pdf');
+      link.setAttribute('download', 'itf-8.pdf');
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
   
-      setJobReportStatus("Your Job Reporting Form download has been downloaded.!");
-
-      setTitle("Form Downloaded Successfully");
-      setJobReportSuccess(true);
+    
   
       window.URL.revokeObjectURL(url);
     } catch (error) {

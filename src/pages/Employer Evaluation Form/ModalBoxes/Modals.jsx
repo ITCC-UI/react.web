@@ -11,8 +11,8 @@ import Caution from "/images/Vector (1).png"
 const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
   <div className="modal-overlay">
     <div className="modal-content">
-      <h2>Download Report</h2>
-      <p>Are you sure you want to download this report?</p>
+      <h2>Download Employer Evaluation Form</h2>
+      <p>Are you sure you want to download this employer evaluation form?</p>
       <div className="modal-actions">
         <button onClick={() => onDownload(request)} disabled={isDownloading} className='download'>
           {isDownloading ? <PulseLoader size={10} color="white" /> : "Download"}

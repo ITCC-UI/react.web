@@ -379,20 +379,15 @@ const startSurvey = async (placementId) => {
               {filteredRequests.map((request, index) => (
                 <tr key={index} onClick={() => handleRowClick(request)} className="cursor-pointer hover:bg-gray-100">
                   <td>{request.attached_company_name}</td>
-                  {/* <td>
-                    {request.job_reporting?.supervisor_title || ""}{" "}
-                    {request.job_reporting?.company_supervisor || "----------"}
-                  </td>
-                  <td>{request.job_reporting?.supervisor_phone || "----------"}</td> */}
-                  <td>{request.employer_evaluation?.date_of_completion || "----------"}</td>
-                  {/* {console.log(request.employer_evaluation.id)} */}
+               <td>{request.employer_evaluation?.date_of_completion || "----------"}</td>
+               
                   <td onClick={(e) => e.stopPropagation()} className="action-buttons">
 
                     <img src={Download} alt="Download" onClick={() => handleAction("download", request)} />
 
                     <img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />
 
-                    {/* <img src={Delete} alt="Delete" onClick={() => handleAction("delete", request)} className="delete-button" /> */}
+                  
                   </td>
                 </tr>
               ))}
