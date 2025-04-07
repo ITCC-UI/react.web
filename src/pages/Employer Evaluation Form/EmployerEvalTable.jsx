@@ -104,7 +104,7 @@ const startSurvey = async (placementId) => {
   try {
     const response = await axiosInstance.patch(`trainings/registrations/placements/${placementId}/employer-evaluation-surveys/start/`)
     console.log("Survey started successfully:", response.data)
-    setShowQuestionnaireModal(true)
+    
   } catch (error) {
     console.error("Error starting survey:", error)
     setFailureMessage(error.response.data.detail)
@@ -265,9 +265,8 @@ const startSurvey = async (placementId) => {
         apiFormData.append("form", formData.formFile)
       }
       
-console.log("Selected Request:", selectedRequest)
       // Check if job reporting already exists
-      if (evaluationForm) {
+      if (formData.formFile&&evaluationForm) {
         // Update existing job report with PATCH
         await axiosInstance.put(`/trainings/registrations/placements/evaluation/${evaluationID}/`, apiFormData, {
           headers: {
@@ -283,8 +282,8 @@ console.log("Selected Request:", selectedRequest)
       } else {
         // Create new EMployer evaluation with POST
         await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {})
-        setJobReportStatus("Form Submitted")
-        setTitle("Your form has been successfully submitted")
+        setJobReportStatus(" ")
+        setTitle("Date of Completion has been successfully submitted")
         setJobReportSuccess(true)
         closeModal()
         
@@ -296,7 +295,6 @@ console.log("Selected Request:", selectedRequest)
         setJobReportError("There was an error submitting your form")
         setShowJobReportingFailure(true)
         closeModal()
-        setShowQuestionnaireModal(true)
         console.error("Error Submitting Form  :", error)
       }
       else{

@@ -86,15 +86,26 @@ const EditModal = ({ onClose, onSave, request }) => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ errors, touched, setFieldValue, values, isSubmitting }) => (
+          {({ setFieldValue, values, isSubmitting }) => (
             <Form encType='multipart/form-data'>
               <h2 className="company-name">{values.companyName}</h2>
               
            <div className="companyDetails">
           
               
-              <div className="formInput">
-                <label htmlFor="date_of_completion">Date Resumed For Training *</label>
+             {request.employer_evaluation?.date_of_completion? ( <div className="formInput">
+                <label htmlFor="date_of_completion">Date of Completion *</label>
+                <Field 
+                  type="date" 
+                  id="date_of_completion" 
+                  name="date_of_completion" 
+                  placeholder="dd/mm/yy"
+                  disabled
+                  // className={errors.date_of_completion && touched.date_of_completion ? "error-input" : ""}
+                />
+                <ErrorMessage name="date_of_completion" component="div" className="error" />
+              </div>): (<div className="formInput">
+                <label htmlFor="date_of_completion">Date of Completion *</label>
                 <Field 
                   type="date" 
                   id="date_of_completion" 
@@ -103,7 +114,7 @@ const EditModal = ({ onClose, onSave, request }) => {
                   // className={errors.date_of_completion && touched.date_of_completion ? "error-input" : ""}
                 />
                 <ErrorMessage name="date_of_completion" component="div" className="error" />
-              </div>
+              </div>)}
            
               
               
@@ -120,6 +131,7 @@ const EditModal = ({ onClose, onSave, request }) => {
                     name="formFile" 
                     onChange={(e) => handleFileChange(e, setFieldValue)}
                     className="file-input"
+
                   />
                   <div className={`file-upload-button ${fileError ? 'error-input' : ''}`}>
                     <Paperclip size={18} />

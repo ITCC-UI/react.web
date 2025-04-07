@@ -88,7 +88,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
           setLetterRequests([])
         }
       } catch (error) {
-        
+
       }
     }
 
@@ -117,6 +117,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
     setShowDetailsModal(true)
   }
 
+
   const handleDownload = async (request) => {
     setIsDownloading(true)
     try {
@@ -133,7 +134,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
 
         setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.")
         setShowJobReportingFailure(true)
-        
+
         return
       }
 
@@ -147,12 +148,12 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
 
       //("Download successful for:", request)
     } catch (error) {
-     if(error.response.request.status!=500){
-      // console.error("Error downloading this  file:", error)
-      setJobReportError(error.response.data.detail)
-      setShowJobReportingFailure(true)
-     }
-      else{
+      if (error.response.request.status != 500) {
+        // console.error("Error downloading this  file:", error)
+        setJobReportError(error.response.data.detail)
+        setShowJobReportingFailure(true)
+      }
+      else {
         // console.error("Error on that downloading file:", error)
         setJobReportError("There was an error downloading your Job reporting form")
         setShowJobReportingFailure(true)
@@ -242,7 +243,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
 
       // Refresh the data
       closeModal()
-setIsDeleting(false)
+      setIsDeleting(false)
       ref.current = true
       setJobReportStatus("Form Deleted Successfully")
       setTitle("Deleted!")
@@ -250,17 +251,17 @@ setIsDeleting(false)
     } catch (error) {
       closeModal()
       setIsDeleting(false)
-     if(error.response.status!==500){
-      // console.error("Error deleting job report:", error)
-      setJobReportError(error.response.data.detail)
-      setShowJobReportingFailure(true)
-     
-     }
-     else{
-      // console.error("Error deleting job report:", error)
-      setJobReportError("There was an error deleting your Job reporting form")
-      setShowJobReportingFailure(true)
-     }
+      if (error.response.status !== 500) {
+        // console.error("Error deleting job report:", error)
+        setJobReportError(error.response.data.detail)
+        setShowJobReportingFailure(true)
+
+      }
+      else {
+        // console.error("Error deleting job report:", error)
+        setJobReportError("There was an error deleting your Job reporting form")
+        setShowJobReportingFailure(true)
+      }
     }
   }
 
@@ -336,12 +337,14 @@ setIsDeleting(false)
                   <td>{request.job_reporting?.supervisor_phone || "----------"}</td>
                   <td>{request.job_reporting?.date_reported || "----------"}</td>
                   <td onClick={(e) => e.stopPropagation()} className="action-buttons">
-                    
-                      <img src={Download} alt="Download" onClick={()=> handleAction("download", request)} />
-                    
-                    <img src={Edit} alt ="Edit" onClick={() => handleAction("edit", request)} />
-                      
-                    <img src= {Delete} alt="Delete" onClick={() => handleAction("delete", request)} className="delete-button" />
+
+                    <img src={Download} alt="Download" onClick={() => handleAction("download", request)} />
+
+                    <img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />
+
+                    {request.job_reporting ?
+                     (<img src={Delete} alt="Delete" onClick={() => handleAction("delete", request)} className="delete-button" />) :
+                      (<img src={Delete} alt="Delete" disabled onClick={() => null} className="delete-button disable" />)}
                   </td>
                 </tr>
               ))}
