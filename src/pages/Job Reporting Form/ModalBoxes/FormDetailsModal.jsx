@@ -126,10 +126,14 @@ console.log("The file name",request.job_reporting?.form ? (request.job_reporting
 </div>):" "}</>)
 : " "}
 
-      
+<hr/>
+<br />
+
+<div className="compProfile">
+<div className="details"> Uploaded Document</div>   
    
 {request.job_reporting?.form ? (<button onClick={()=>downloadStudentFIle()} className='btn-primary'>Download</button>):" "}
-        
+        </div>
           
         </div>
       </div>
