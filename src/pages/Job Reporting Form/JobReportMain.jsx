@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import SideBar from "../../../components/Sidebar/Sidebar";
 import TopNav from "../../../components/Header/Header";
 import "./reporting-form.scss"
-import DownloadIcon from "/images/Download-white.png"
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import CloseIcon from '/images/closeButton.png'
 import * as Yup from "yup";
@@ -27,6 +26,7 @@ const JobReportingForm = () => {
   const [companyName, setCompanyName] = useState(["Job Reporting Form"])
   const [addressOptions, setAdressOptions] = useState([])
   const [successMessage, setJobReportStatus] = useState("")
+  const [title, setTitle] = useState("")
   const [showSuccessStatus, setJobReportSuccess] = useState(false)
   const [failureMessage, setFailureMessage] = useState("")
   const [showFailureMessage, setShowJobReportingFailure] = useState(false)
@@ -117,7 +117,7 @@ useEffect (()=>{
 
   const fetchJobReports = async () => {
     try {
-      const response = await axiosInstance.get(`/trainings/registrations/${id}/job-reporting/`);
+      const response = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
       setjobReports(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -156,27 +156,69 @@ useEffect (()=>{
   }, [])
   const downloadReportForm = async () => {
     try {
-      const response = await axiosInstance.get(`/trainings/registrations/placements/${placements}/job-reporting/form/document/`, {
-        responseType: 'blob' // Important: Specify the response type as 'blob'
-      });
-
+      const response = await axiosInstance.get(
+        `/trainings/registrations/placements/${placements}/job-reporting/form/document/`,
+        {
+          responseType: 'blob',
+        }
+      );
+  
+   
+      const contentType = response.headers['content-type'];
+      if (contentType.includes('application/json')) {
+        const errorBlob = response.data;
+  
+      
+        const errorText = await errorBlob.text();
+        const errorJson = JSON.parse(errorText);
+  
+        // console.error('Download error:', errorJson);
+  
+        setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.");
+        setShowJobReportingFailure(true);
+        return; // Stop the download from proceeding
+      }
+  
+  
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'report_form.pdf'); // Replace 'report_form.pdf' with the desired filename
+      link.setAttribute('download', 'report_form.pdf');
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
+  
       setJobReportStatus("Your Job Reporting Form download will start shortly!");
-      setJobReportSuccess(true)
-      
-    } catch (error) {
-      setFailureMessage("There was an error downloading your Job Reporting Form.")
-      // setTriggerRefresh(prev => !prev)
-      setShowJobReportingFailure(true)
 
+      setTitle("Form Downloaded Successfully");
+      setJobReportSuccess(true);
+  
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      // console.error('Download error:', error);
+  
+      
+      if (error.response && error.response.data instanceof Blob) {
+        try {
+          const errorBlob = error.response.data;
+          const errorText = await errorBlob.text();
+          const errorJson = JSON.parse(errorText);
+  // console.log(errorJson)
+          setFailureMessage(errorJson.detail || "An error occurred while downloading the file.");
+        } catch (parseError) {
+          // console.error("Failed to parse error blob:", parseError);
+          setFailureMessage("An unknown error occurred while downloading.");
+        }
+      } else {
+        setFailureMessage(
+          error.response?.data?.detail || "There was an error downloading your Job Reporting Form."
+        );
+      }
+  
+      setShowJobReportingFailure(true);
     }
   };
+  
 
 
   const downloadSCAFForm = async () => {
@@ -238,6 +280,7 @@ useEffect (()=>{
         }
       });
       setJobReportStatus("Your Job Reporting Form has been submitted successfully!");
+      setTitle("Form Submitted Successfully");
       setJobReportSuccess(true)
       setTriggerRefresh(prev => !prev)
 
@@ -245,7 +288,6 @@ useEffect (()=>{
 
       if (error.response.status === 400) {
         setFailureMessage(error.response.data.detail)
-        // setTriggerRefresh(prev => !prev)
         setShowJobReportingFailure(true)
 
       }
@@ -413,6 +455,7 @@ useEffect (()=>{
 
       <FullScreenSuccessMessage
         isOpen={showSuccessStatus}
+        title={title}
         message={successMessage}
         onClose={() => setJobReportSuccess(false)}
       />
@@ -430,51 +473,6 @@ useEffect (()=>{
             Job Reporting Form
           </div>
 
-          <div className="form-nest">
-            {placementList.length === 0 ? <button className="form-download null" onClick={null}>
-              <img src={DownloadIcon} alt="download" />Download Form
-            </button> : <button
-              className={`form-download ${isDownloading ? "fixed-width null" : ""}`}
-              disabled={isLoading}
-              onClick={handleJobReportDownload}
-            >
-              {isDownloading ? (
-                <BeatLoader size={10} color="#36d7b7" />
-              ) : (
-                <>
-                  <img src={DownloadIcon} alt="download" /> Download Form
-                </>
-              )}
-            </button>}
-            <button className="form-upload" onClick={() => toggleNewSubmission()}>
-
-              Submit Form
-            </button>
-
-
-            {/* SCAF Form Download */}
-            {jobReports.length > 0 && trainingDuration ===24 ?
-             (
-              <button
-                className={`form-download ${isSCAFDownloading ? "fixed-width null" : ""}`}
-                disabled={isLoading}
-                onClick={handleSCAFDownload}
-              >
-                {isSCAFDownloading ? (
-                  <BeatLoader size={10} color="#36d7b7" />
-                ) : (
-                  <>
-                    <img src={DownloadIcon} alt="download" /> Download SCAF
-                  </>
-                )}
-              </button>
-            ):
-             (
-  <button className="form-download null none" onClick={null}>
-    <img src={DownloadIcon} alt="download" />Download SCAF
-  </button>
-)}
-          </div>
         </div>
         {isLoading ? (
           <div className="loader">
@@ -489,6 +487,7 @@ useEffect (()=>{
 
         ) : jobReports.length === 0 ? (
           <div className="image">
+            {/* {console.log(jobReports)}  */}
             <img src={Empty} alt="Empty" />
           </div>
         ) : (

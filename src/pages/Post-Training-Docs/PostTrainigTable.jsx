@@ -50,12 +50,12 @@ const PostTrainingTable = ({ triggerRefresh }) => {
               setReportID(reportID)
               setPresnetationID(presnetationID)
 
-      const patchReportID = (response.data[0].documents[0].id);
+      const patchReportID = (response.data[0].id);
       setPatchReportID(patchReportID)
 
-      const patchPresentationID = (response.data[0].documents[1].id)
+      const patchPresentationID = (response.data[0].id)
               if(response.data[0].documents.length>0 || response.data[1].documents.length>0){
-                const reportUrl = response.data[0]?.documents[0]?.document || "";
+                const reportUrl = response.data[0]?.document || "";
                 const presentationUrl = response.data[1]?.documents[0]?.document || "";
                 setReportFileName(reportUrl.split("/").pop()); // Extract file name
                 setPresentationFileName(presentationUrl.split("/").pop()); // Extract file name
@@ -84,7 +84,7 @@ const PostTrainingTable = ({ triggerRefresh }) => {
                 <FormSubmissionComponent 
     title={"Work Report"} 
     documentType={report} 
-    fileName={reportFileName} // ✅ Pass fetched file name
+    fileName={reportFileName} // ✅ Pass fetched file namez
     onError={handleErrorMessage} 
     updateAPI={`trainings/registrations/documents/${patchReportID}/`}
     fileType={".pdf, .docx, .doc"} 

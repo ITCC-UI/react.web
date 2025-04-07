@@ -53,6 +53,7 @@ const TrainingDocuments = () => {
       if (response.data.length > 0) {
         const id = response.data[0].id;
         setProgrammeId(id);
+      
         setIsLoading(false)
       } else {
 
@@ -387,16 +388,17 @@ useEffect (()=>{
 
             <PulseLoader size={15} color={"#123abc"} />
           </div>
-        ) : noProgrammeId ? (
+        ) : !noProgrammeId ?
+        (
+
+          <PostTrainingTable triggerRefresh={triggerRefresh} />
+        ) : (
           <div className="noProgrammeId register_above">
             <p> You presently don't have an active placement </p>
           </div>
 
 
-        ) : (
-
-          <PostTrainingTable triggerRefresh={triggerRefresh} />
-        )}
+        ) }
 
       </main>
     </div>

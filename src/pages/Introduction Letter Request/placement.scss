@@ -275,7 +275,7 @@ margin-left: 0;
     height: auto;
     min-height: 100vh;
     width: 100% !important;
-    .newRequestHeader{
+    .newRequestHeader, .modal-form{
       padding-top: 45px;
       width: 95%;
       border-radius: 10px;
@@ -367,7 +367,6 @@ margin-left: 0;
 
 .cursor-pointer{
   cursor: pointer;
-  padding: 2px;
   transition: .2s linear all;
   &:hover{
     background-color: white;

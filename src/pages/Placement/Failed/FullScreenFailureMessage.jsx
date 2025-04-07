@@ -1,11 +1,17 @@
 import React from 'react';
 import Modal from 'react-modal';
+import { useNavigate } from 'react-router-dom';
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import './FullScreenFailureMessage.scss';
 
 Modal.setAppElement('#root');
 
 const FullScreenFailureMessage = ({ isOpen, message, onClose }) => {
+
+  const navigation = useNavigate();
+  const handleRefresh = () => {
+    navigation(0); // Refresh the page
+  };
   return (
     <Modal
       isOpen={isOpen}
@@ -17,7 +23,7 @@ const FullScreenFailureMessage = ({ isOpen, message, onClose }) => {
       <div className="failureContent">
         <AiOutlineCloseCircle size={100} color="#FF0000" />
         <h2>{message}</h2>
-        <button onClick={onClose}>Close</button>
+        <button onClick={() => { handleRefresh(); onClose(); }}>Close</button>
       </div>
     </Modal>
   );
