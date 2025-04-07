@@ -51,7 +51,8 @@ const MoreDetails = ({ request, onClose }) => {
           <h2 className='approval'>Form Details</h2>
           <div className="compProfile">
             {/* <div className='details'>Company Name</div> */}
-            <div className="cDetails">{(request.attached_company_branch.company.name)}</div>
+            {/* <div className="cDetails">{(request.placement.attached_company_branch?.company.name)}</div> */}
+            {console.log("Theis",request)}
             {/* <div className="details">Submission Date: {request.job_reporting===null?"Not yet submitted": formatApprovalDate(request.job_reporting.date_created)} </div>  */}
           </div>
           <hr />
@@ -76,12 +77,12 @@ const MoreDetails = ({ request, onClose }) => {
   </div>
 </div>
 
-{request.attached_company_branch.branch_name? (<div className="compProfile">
+{request.attached_company_branch?.branch_name? (<div className="compProfile">
   <div className="detailsHeading">
     Address
   </div>
   <div className="cDetails">
-    {request.attached_company_name.address}
+    {/* {request.attached_company_branch?.address?.[building_name]} */}
   </div>
 </div>):" "}
 <hr />

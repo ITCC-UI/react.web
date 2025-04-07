@@ -170,7 +170,7 @@ useEffect (()=>{
       link.click();
       link.parentNode.removeChild(link);
   
-      setJobReportStatus("Your Job Reporting Form download will start shortly!");
+      setJobReportStatus("Your Job Reporting Form download has been downloaded.!");
 
       setTitle("Form Downloaded Successfully");
       setJobReportSuccess(true);

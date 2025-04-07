@@ -35,7 +35,8 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => 
   const [evaluationForm, setEvaluationForm] = useState(null)
   const [showQuestionnaireModal, setShowQuestionnaireModal] = useState(false)
   const [placementId, setPlacementId] = useState(null);
-const [surveyResponseScore, setSurveyResponse] = useState(null)
+const [surveyResponseStatus, setSurveyResponse] = useState(null)
+
   useEffect(() => {
     const fetchEvaluableFormTable = async () => {
       try {
@@ -120,7 +121,7 @@ const startSurvey = async (placementId) => {
     requestID(placementId)
     setEmployerEvaluationID(request.employer_evaluation?.id)
     console.log("Placmet ID:", request.id)
-    console.log("Employer Evaluation ID:", request.employer_evaluation?.id)
+    console.log("Employer Evaluation ID:", request)
     setEvaluationForm(request.employer_evaluation)
     // //("Job Reporting ID:", request.job_reporting?.id)
     setSelectedRequest(request)
@@ -132,9 +133,10 @@ const startSurvey = async (placementId) => {
 
   const checkSurvey = async () => {
     try {
-      const surveyReponse = await axiosInstance.get(`trainings/registrations/placements/${placementId}/employer-evaluation-surveys/summary/`)
-      console.log("Survey response:", surveyReponse.data.total_score)
-      setSurveyResponse(surveyReponse.data.total_score)
+      // const surveyReponse = await axiosInstance.get(`trainings/registrations/placements/${placementId}/employer-evaluation-surveys/summary/`)
+      const placementResponse = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/`)
+      console.log("Survey response:", placementResponse.data.employer_evaluation_survey_status)
+      setSurveyResponse(placementResponse.data.employer_evaluation_survey_status)
     }catch (error) {
       console.error("Unable to fetch survey response", error)
     }
@@ -162,6 +164,9 @@ const startSurvey = async (placementId) => {
       console.log("Placement jkbyiovtc ID:", placementId)
       
 
+      const placementResponse = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/`)
+      console.log("Placement Response:", placementResponse.data)
+
       //("This is the palcement", placementId)
       // Create form data for file upload if needed
       const response = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/evaluation/`)
@@ -183,7 +188,7 @@ const startSurvey = async (placementId) => {
 
 
   function handleRowClick(request) {
-    setSelectedRequest(request.id)
+    setSelectedRequest(request)
     // setEmployerEvaluationID(request.id)
     console.log("Evaluation ID for row:", request.employer_evaluation.id)
     // setJobReportID(request.job_reporting?.id)
@@ -413,7 +418,7 @@ console.log("Selected Request:", selectedRequest)
         <DeleteModal request={selectedRequest} onClose={closeModal} onConfirm={handleDelete} isDeleting={isDeleting} />
       )}
 
-      {showDetailsModal && (
+      {/* {showDetailsModal && (
         <FormDetailsModal
           request={selectedRequest}
           onClose={closeModal}
@@ -421,9 +426,9 @@ console.log("Selected Request:", selectedRequest)
           onEdit={(request) => handleAction("edit", request)}
           onDelete={(request) => handleAction("delete", request)}
         />
-      )}
+      )} */}
 
-      {showQuestionnaireModal && surveyResponseScore===0 && (
+      {showQuestionnaireModal && surveyResponseStatus!=="SUBMITTED" && (
         <QuestionnaireModal
           placementId={placementId}
           onClose={() => setShowQuestionnaireModal(false)}
