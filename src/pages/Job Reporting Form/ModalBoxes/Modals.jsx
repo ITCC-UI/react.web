@@ -183,7 +183,7 @@ useEffect(()=>{
               </div>
               
               <div className="formInput">
-                <label htmlFor="dateResumed">Date Resumed For Training *</label>
+                <label htmlFor="dateResumed">Date Reported For Training *</label>
                 <Field 
                   type="date" 
                   id="dateResumed" 
