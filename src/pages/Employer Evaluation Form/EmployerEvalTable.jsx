@@ -411,7 +411,7 @@ const startSurvey = async (placementId) => {
         <DeleteModal request={selectedRequest} onClose={closeModal} onConfirm={handleDelete} isDeleting={isDeleting} />
       )}
 
-      {/* {showDetailsModal && (
+      {showDetailsModal && (
         <FormDetailsModal
           request={selectedRequest}
           onClose={closeModal}
@@ -419,7 +419,7 @@ const startSurvey = async (placementId) => {
           onEdit={(request) => handleAction("edit", request)}
           onDelete={(request) => handleAction("delete", request)}
         />
-      )} */}
+      )}
 
       {showQuestionnaireModal && surveyResponseStatus==="SUBMITTED" && (
         <QuestionnaireModal

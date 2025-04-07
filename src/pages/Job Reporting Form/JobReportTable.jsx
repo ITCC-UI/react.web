@@ -49,7 +49,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
 
         const regId = registrations[0].id
         setRegistrationId(regId)
-        // //("Registration ID:", regId)
+        // ("Registration ID:", regId)
 
         // Get placements
         const placementsResponse = await axiosInstance.get(`/trainings/registrations/${regId}/placements/`)
@@ -67,9 +67,7 @@ const JobReportingTable = ({ triggerRefresh, setTriggerRefresh }) => {
           `/trainings/registrations/${regId}/placements/job-reporting/reportable/`,
         )
         const jobReports = jobReportSubmission.data
-        // //("Job Reports:", jobReports)
-        // setJobReportID(jobReports[0]?.id)
-        // //("Job Report ID:", jobReports[0].id)
+        
 
         if (jobReports && typeof jobReports === "object") {
           const processedRequests = Object.keys(jobReports).map((key) => ({
