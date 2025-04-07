@@ -12,7 +12,7 @@ const PostTrainingTable = ({ triggerRefresh }) => {
     const [presentationFileName, setPresentationFileName] = useState("");
     const [reportID, setReportID] = useState(null);
     const [patchReportID, setPatchReportID] = useState(null);
-    const [presnetationID, setPresnetationID] = useState(null);
+    const [presentationID, setPresnetationID] = useState(null);
     // Function to handle errors from the child component
     const handleErrorMessage = (error) => {
         console.error("Received error from child:", error);
@@ -94,7 +94,7 @@ const PostTrainingTable = ({ triggerRefresh }) => {
     documentType={presentation} 
     fileName={presentationFileName} // ✅ Pass fetched file name
     onError={handleErrorMessage} 
-    updateAPI={`trainings/registrations/documents/${presnetationID}/`}
+    updateAPI={`trainings/registrations/documents/${presentationID}/`}
     fileType={".pptx, .ppt, .pdf"} 
 />
 

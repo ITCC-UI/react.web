@@ -99,10 +99,10 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName, upda
         ? updateAPI
         : `/trainings/registrations/${iD}/documents/`;
 const response = hasExistingFile
-  ? await axiosInstance.put(endpoint, formData, { // ✅ Use PUT for updates
+  ? await axiosInstance.put(endpoint, formData, { //  Use PUT for updates
       headers: { 'Content-Type': 'multipart/form-data' }
     })
-  : await axiosInstance.post(endpoint, formData, { // ✅ Use POST for new uploads
+  : await axiosInstance.post(endpoint, formData, { // Use POST for new uploads
       headers: { 'Content-Type': 'multipart/form-data' }
     });
 setShowSuccessMessage(true);

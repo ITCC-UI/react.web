@@ -33,7 +33,7 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => 
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [, setFailureMessage] = useState(null)
   const [evaluationForm, setEvaluationForm] = useState(null)
-  const [showQuestionnaireModal, setShowQuestionnaireModal] = useState(true)
+  const [showQuestionnaireModal, setShowQuestionnaireModal] = useState(false)
   const [placementId, setPlacementId] = useState(null);
 const [surveyResponseStatus, setSurveyResponse] = useState(null)
 
