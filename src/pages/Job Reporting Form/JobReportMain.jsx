@@ -59,6 +59,7 @@ const JobReportingForm = () => {
       }
     } catch (error) {
       setNoProgrammeId(true);
+      console.error("Error fetching programme ID:", error);
 
 
     }
@@ -93,14 +94,14 @@ useEffect (()=>{
   const fetchPlacement = async () => {
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/current`);
-      setPlacementRequests(response.data.id);
+      setPlacementRequests(response.data?.id);
       setPlacementList(response)
 
-      setCompanyName(response.data.attached_company_branch.company.name)
+      setCompanyName(response.data?.attached_company_branch?.company.name)
       setIsLoading(false)
 
     } catch (error) {
-
+console.error("Error fetching placement ID:", error);
       setNoProgrammeId(true);
 
 
@@ -117,11 +118,13 @@ useEffect (()=>{
 
   const fetchJobReports = async () => {
     try {
-      const response = await axiosInstance.get(`/trainings/registrations/${id}/placements`);
+      const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/job-reporting/reportable/`);
       setjobReports(response.data);
+      console.log("Job Reports:", response.data)
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
+      console.error("Error fetching job reports:", error);
 
     }
   };
@@ -129,10 +132,10 @@ useEffect (()=>{
 
 
   useEffect(() => {
-    if (placements) {
+    if (id) {
       fetchJobReports();
     }
-  }, [placements]);
+  }, [id]);
 
 
   const type = "TITLE"

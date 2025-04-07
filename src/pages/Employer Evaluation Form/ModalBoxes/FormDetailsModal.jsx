@@ -50,10 +50,10 @@ const MoreDetails = ({ request, onClose }) => {
         <div className="more-details-content">
           <h2 className='approval'>Form Details</h2>
           <div className="compProfile">
-            {/* <div className='details'>Company Name</div> */}
-            {/* <div className="cDetails">{(request.placement.attached_company_branch?.company.name)}</div> */}
-            {console.log("Theis",request)}
-            {/* <div className="details">Submission Date: {request.job_reporting===null?"Not yet submitted": formatApprovalDate(request.job_reporting.date_created)} </div>  */}
+            <div className='details'>Company Name</div>
+            <div className="cDetails">{(request.attached_company_branch?.company.name)}</div>
+           
+           
           </div>
           <hr />
 <br />          
@@ -79,10 +79,10 @@ const MoreDetails = ({ request, onClose }) => {
 
 {request.attached_company_branch?.branch_name? (<div className="compProfile">
   <div className="detailsHeading">
-    {/* Address */}
+    Address
   </div>
   <div className="cDetails">
-    {/* {request.attached_company_branch?.address?.[building_name]} */}
+    {request.attached_company_branch?.address?.city}
   </div>
 </div>):" "}
 <hr />

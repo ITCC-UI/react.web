@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 
 Modal.setAppElement('#root');
 
-const FullScreenSuccessMessage = ({ isOpen, title = "Submitted successfully!", message, onClose }) => {
+const FullScreenSuccessMessage = ({ isOpen, title = "Submitted successfully!", message, onClose, refresh }) => {
 
   
 

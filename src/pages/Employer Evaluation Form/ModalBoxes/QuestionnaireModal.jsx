@@ -27,7 +27,7 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
     try {
 
       const response = await axiosInstance.get(
-        // `/trainings/registrations/placements/98a37101-d03a-4fbb-8914-f810884ce37e/employer-evaluation-surveys/`
+    
         `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/`
       );
       console.log("Questions Data:", response.data);
@@ -156,12 +156,13 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
         <br/>Please make sure to fill it out correctly.
       </div>
       <div className="modal-content questionnaire">
-    
-        <div className="progress-header">
-          <div className="progress-text">
-          {/* <button onClick={onClose} className="close-button">
+      <div onClick={onClose} className="close-button">
             <X size={20} color='black' />
-          </button> */}
+          </div>
+        <div className="progress-header">
+        
+          <div className="progress-text">
+      
 
             Question {currentIndex + 1} of {questions.length}
           </div>
