@@ -3,17 +3,15 @@ import Modal from 'react-modal';
 import './FullScreenSuccessMessage.scss';
 import Ticked from "/images/ticked.png";
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+
 
 Modal.setAppElement('#root');
 
 const FullScreenSuccessMessage = ({ isOpen, title = "Submitted successfully!", message, onClose }) => {
 
-  const navigate=useNavigate()
+  
 
-  const handleRefresh = () => {
-    navigate(0)
-  } 
+
   return (
     <Modal
       isOpen={isOpen}
@@ -37,7 +35,7 @@ const FullScreenSuccessMessage = ({ isOpen, title = "Submitted successfully!", m
         <div className="successMessageContent">
           {message}
         </div>
-        <button onClick={() => { handleRefresh(); onClose(); }}>Close</button>
+        <button onClick={() => { onClose(); }}>Close</button>
       </div>
     </Modal>
   );

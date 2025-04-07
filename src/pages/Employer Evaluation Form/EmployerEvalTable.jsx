@@ -104,7 +104,7 @@ const startSurvey = async (placementId) => {
   try {
     const response = await axiosInstance.patch(`trainings/registrations/placements/${placementId}/employer-evaluation-surveys/start/`)
     console.log("Survey started successfully:", response.data)
-    setShowQuestionnaireModal(true)
+    
   } catch (error) {
     console.error("Error starting survey:", error)
     setFailureMessage(error.response.data.detail)
@@ -265,9 +265,8 @@ const startSurvey = async (placementId) => {
         apiFormData.append("form", formData.formFile)
       }
       
-console.log("Selected Request:", selectedRequest)
       // Check if job reporting already exists
-      if (evaluationForm) {
+      if (formData.formFile&&evaluationForm) {
         // Update existing job report with PATCH
         await axiosInstance.put(`/trainings/registrations/placements/evaluation/${evaluationID}/`, apiFormData, {
           headers: {
@@ -283,8 +282,8 @@ console.log("Selected Request:", selectedRequest)
       } else {
         // Create new EMployer evaluation with POST
         await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {})
-        setJobReportStatus("Form Submitted")
-        setTitle("Your form has been successfully submitted")
+        setJobReportStatus(" ")
+        setTitle("Date of Completion has been successfully submitted")
         setJobReportSuccess(true)
         closeModal()
         
@@ -296,7 +295,6 @@ console.log("Selected Request:", selectedRequest)
         setJobReportError("There was an error submitting your form")
         setShowJobReportingFailure(true)
         closeModal()
-        setShowQuestionnaireModal(true)
         console.error("Error Submitting Form  :", error)
       }
       else{
@@ -381,20 +379,15 @@ console.log("Selected Request:", selectedRequest)
               {filteredRequests.map((request, index) => (
                 <tr key={index} onClick={() => handleRowClick(request)} className="cursor-pointer hover:bg-gray-100">
                   <td>{request.attached_company_name}</td>
-                  {/* <td>
-                    {request.job_reporting?.supervisor_title || ""}{" "}
-                    {request.job_reporting?.company_supervisor || "----------"}
-                  </td>
-                  <td>{request.job_reporting?.supervisor_phone || "----------"}</td> */}
-                  <td>{request.employer_evaluation?.date_of_completion || "----------"}</td>
-                  {/* {console.log(request.employer_evaluation.id)} */}
+               <td>{request.employer_evaluation?.date_of_completion || "----------"}</td>
+               
                   <td onClick={(e) => e.stopPropagation()} className="action-buttons">
 
                     <img src={Download} alt="Download" onClick={() => handleAction("download", request)} />
 
                     <img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />
 
-                    {/* <img src={Delete} alt="Delete" onClick={() => handleAction("delete", request)} className="delete-button" /> */}
+                  
                   </td>
                 </tr>
               ))}
