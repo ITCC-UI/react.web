@@ -277,7 +277,7 @@ const JobReportingTable = ({ triggerRefresh }) => {
   })
 
   return (
-    <section className=" placement_table">
+    <section className="shift">
       <FullScreenSuccessMessage
         isOpen={jobReportSuccess}
         title={title}

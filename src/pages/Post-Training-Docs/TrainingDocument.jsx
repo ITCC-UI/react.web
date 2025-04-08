@@ -20,8 +20,8 @@ const TrainingDocuments = () => {
   const [showFailureMessage, setShowJobReportingFailure] = useState(false)
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const [trainingDuration, setDuration] =useState(0)
-  const [endDate, setEndDate] =useState("Deadline not set")
-  const [timeRemaining, setTimeRemaining] = useState("Deadline not set");
+  const [endDate, setEndDate] =useState(0)
+  const [timeRemaining, setTimeRemaining] = useState("");
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
