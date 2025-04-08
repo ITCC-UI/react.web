@@ -214,7 +214,7 @@ const startSurvey = async (placementId) => {
       const url = window.URL.createObjectURL(new Blob([response.data]))
       const link = document.createElement("a")
       link.href = url
-      link.setAttribute("download", `Job_Report_.pdf`)
+      link.setAttribute("download", `Employer_Evaluaton_Form.pdf`)
       document.body.appendChild(link)
       link.click()
       link.parentNode.removeChild(link)
@@ -228,7 +228,7 @@ const startSurvey = async (placementId) => {
       }
       else {
         // console.error("Error on that downloading file:", error)
-        setJobReportError("There was an error downloading your Job reporting form")
+        setJobReportError("There was an error downloading your Employer Evaluation form")
         setShowJobReportingFailure(true)
       }
     } finally {
@@ -245,9 +245,6 @@ const startSurvey = async (placementId) => {
         // console.error("No registration ID found")
         return
       }
-
-      // const placementId = selectedRequest.id
-      // setPlacementId(selectedRequest.id)
       console.log("Placementsss ID:", selectedRequest)
       
 
@@ -418,6 +415,7 @@ const startSurvey = async (placementId) => {
       )}
 
       {showQuestionnaireModal && surveyResponseStatus!=="SUBMITTED" && (
+      //  {showQuestionnaireModal && (
         <QuestionnaireModal
           placementId={placementId}
           onClose={() => setShowQuestionnaireModal(false)}

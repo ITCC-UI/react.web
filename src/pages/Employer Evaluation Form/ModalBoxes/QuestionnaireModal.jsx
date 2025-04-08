@@ -15,19 +15,16 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({}); // Store selected answers
   const [error, setError] = useState(null);
+  const [showWelcomeScreen, setShowWelcomeScreen] = useState(true);
 
   useEffect(() => {
     fetchQuestions();
   }, []);
 
-
-
   const fetchQuestions = async () => {
     setLoading(true);
     try {
-
       const response = await axiosInstance.get(
-    
         `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/`
       );
       console.log("Questions Data:", response.data);
@@ -39,6 +36,10 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const startSurvey = () => {
+    setShowWelcomeScreen(false);
   };
 
   const handleNext = () => {
@@ -79,7 +80,6 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
 
     try {
       await axiosInstance.post(
-        // `/trainings/registrations/placements/98a37101-d03a-4fbb-8914-f810884ce37e/employer-evaluation-surveys/submit-response/`,
         `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/submit-response/`,
         { responses }
       );
@@ -95,7 +95,6 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        // `/trainings/registrations/placements/98a37101-d03a-4fbb-8914-f810884ce37e/employer-evaluation-surveys/summary/`
         `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/summary/`
       );
       console.log("Summary", response.data);
@@ -149,21 +148,40 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
     );
   }
 
+  if (showWelcomeScreen) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content welcome-screen">
+          <div onClick={onClose} className="close-button fling">
+            <X size={20} color='black' />
+          </div>
+          
+          <h1>Training Evaluation Survey</h1>
+          
+          <p className="welcome-description">
+            Your feedback helps us improve future training placement
+          </p>
+          
+          <button onClick={startSurvey} className="start-button btn-primary">
+            Start
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="modal-overlay">
-  <div className="warn">
+      <div className="warn">
         You can only fill this questionnaire once. 
         <br/>Please make sure to fill it out correctly.
       </div>
       <div className="modal-content questionnaire">
-      <div onClick={onClose} className="close-button">
-            <X size={20} color='black' />
-          </div>
+        <div onClick={onClose} className="close-button">
+          <X size={20} color='black' />
+        </div>
         <div className="progress-header">
-        
           <div className="progress-text">
-      
-
             Question {currentIndex + 1} of {questions.length}
           </div>
           <div className="progress-bar">
