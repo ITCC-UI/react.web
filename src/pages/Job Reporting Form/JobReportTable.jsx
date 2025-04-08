@@ -179,8 +179,7 @@ const JobReportingTable = ({ triggerRefresh }) => {
       apiFormData.append("supervisor_phone", formData?.supervisorPhone || " ")
       apiFormData.append("date_reported", formData?.dateResumed || " ")
       apiFormData.append("residential_address", formData?.residential_address || " ")
-      apiFormData.append("company_address", formData?.company_address || " ")
-      apiFormData.append("company_email", formData?.company_email || " ")
+      apiFormData.append("supervisor_email", formData?.supervisor_email || " ")
       
 
       if (formData.formFile) {
@@ -339,7 +338,9 @@ const JobReportingTable = ({ triggerRefresh }) => {
                   <td>{request.job_reporting?.date_reported || "----------"}</td>
                   <td onClick={(e) => e.stopPropagation()} className="action-buttons">
 
-                    <img src={Download} alt="Download" onClick={() => handleAction("download", request)} />
+                  
+                 <img src={Download} alt="Download" onClick={() => handleAction("download", request)} />
+               
 
                     <img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />
 

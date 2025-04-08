@@ -49,9 +49,9 @@ const [surveyResponseStatus, setSurveyResponse] = useState(null)
           return
         }
         const regId = registrations[0].id
-        console.log("Registration ID:", regId)
+        
         setRegistrationId(regId)
-        // //("Registration ID:", regId)
+        
 
         // Get placements
         const placementsResponse = await axiosInstance.get(`/trainings/registrations/${regId}/placements/`)
@@ -61,9 +61,7 @@ const [surveyResponseStatus, setSurveyResponse] = useState(null)
           setEvaluableForms([])
           return
         }
-        console.log("Placements:", placements)
-        // console.log("Placement ID:", placements[0].id)
-        // setThisPlacementID(placements[0].id)
+        
 
         // Get Employer Evaluation Forms
         const employerEvaluableForms = await axiosInstance.get(
@@ -71,7 +69,7 @@ const [surveyResponseStatus, setSurveyResponse] = useState(null)
         )
       
         const employerForms = employerEvaluableForms.data
-        console.log("Evaluable Forms:", employerForms)
+
 
 
         if (employerForms && typeof employerForms === "object" && employerForms !== null) {
@@ -91,7 +89,7 @@ const [surveyResponseStatus, setSurveyResponse] = useState(null)
           setEvaluableForms([])
         }
       } catch (error) {
-        console.log("Errssor:", error)
+        
       }
     }
 
@@ -101,7 +99,7 @@ const [surveyResponseStatus, setSurveyResponse] = useState(null)
 const startSurvey = async (placementId) => {
   try {
     const response = await axiosInstance.patch(`trainings/registrations/placements/${placementId}/employer-evaluation-surveys/start/`)
-    console.log("Survey started successfully:", response.data)
+    
     
   } catch (error) {
   }
@@ -110,16 +108,14 @@ const startSurvey = async (placementId) => {
 
   const handleAction = (action, request) => {
     ("Action:", action, "Request:", request)
-    // //("PalcementID:", request.id)
-    // var placementId = request.employer_evaluation?.id
+ 
     var placementId = request?.id
 
     requestID(placementId)
     setEmployerEvaluationID(request.employer_evaluation?.id)
-    console.log("Placmet ID:", request.id)
-    console.log("Employer Evaluation ID:", request)
+
     setEvaluationForm(request.employer_evaluation)
-    // //("Job Reporting ID:", request.job_reporting?.id)
+    
     setSelectedRequest(request)
     setActiveModal(action)
     setPlacementId(request.id)
@@ -132,7 +128,7 @@ const startSurvey = async (placementId) => {
       const placementResponse = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/`)
       setSurveyResponse(placementResponse.data.employer_evaluation_survey_status)
     }catch (error) {
-      console.error("Unable to fetch survey response", error)
+      
     }
   }
 
@@ -151,27 +147,13 @@ const startSurvey = async (placementId) => {
   const getEvaluationId = async () => {
     try {
       const placements = await axiosInstance.get(`/trainings/registrations/${registrationId}/placements/`)
-      // console.log("This are the ", placements.data)
-      const placementId = placements?.data[0].id
-      console.log("Placement ID here:", placementId)
-      // setPlacementId(selectedRequest.id)
-      console.log("Placement jkbyiovtc ID:", placementId)
       
-
+      const placementId = placements?.data[0].id
+      
       const placementResponse = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/`)
-      console.log("Placement Response:", placementResponse.data)
-
-      //("This is the palcement", placementId)
-      // Create form data for file upload if needed
-      // const response = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/evaluation/`)
-      // setEvaluationId(response.data.id)
-      // console.log("Evaluation ID:", response.data)
-
+    
     } catch (error) {
 
-
-      console.error("Error getting Form  :", error)
-      // setTriggerRefresh(prev => !prev)
     }
   }
 
@@ -185,9 +167,8 @@ const startSurvey = async (placementId) => {
 
   function handleRowClick(request) {
     setSelectedRequest(request)
-    // setEmployerEvaluationID(request.id)
-    console.log("Evaluation ID for row:", request.employer_evaluation.id)
-    // setJobReportID(request.job_reporting?.id)
+ 
+ 
     setShowDetailsModal(true)
   }
 
@@ -203,7 +184,7 @@ const startSurvey = async (placementId) => {
       if (contentType.includes("application/json")) {
         const errorText = await response.data.text()
         const errorJson = JSON.parse(errorText)
-        // console.error("Download error:", errorJson)
+        
 
         setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.")
         setShowJobReportingFailure(true)
@@ -222,12 +203,12 @@ const startSurvey = async (placementId) => {
       //("Download successful for:", request)
     } catch (error) {
       if (error.response.request.status != 500) {
-        // console.error("Error downloading this  file:", error)
+        
         setJobReportError(error.response.data.detail)
         setShowJobReportingFailure(true)
       }
       else {
-        // console.error("Error on that downloading file:", error)
+        
         setJobReportError("There was an error downloading your Employer Evaluation form")
         setShowJobReportingFailure(true)
       }
@@ -242,10 +223,10 @@ const startSurvey = async (placementId) => {
   const handleSave = async (formData) => {
     try {
       if (!registrationId) {
-        // console.error("No registration ID found")
+        
         return
       }
-      console.log("Placementsss ID:", selectedRequest)
+      
       
 
       //("This is the palcement", placementId)
@@ -288,18 +269,16 @@ const startSurvey = async (placementId) => {
         setJobReportError("There was an error submitting your form")
         setShowJobReportingFailure(true)
         closeModal()
-        console.error("Error Submitting Form  :", error)
+        
       }
       else{
         setJobReportError(error.response.data.detail)
         setShowJobReportingFailure(true)
         closeModal()
-        console.error("Error Submitting Form  w/0 500:", error)
+        
       }
-      // setShowJobReportingFailure(true)
-      // console.error("Error Submitting Form  :", error)
-      // closeModal()
-      // setTriggerRefresh(prev => !prev)
+    
+    
     }
   }
 
@@ -376,7 +355,8 @@ const startSurvey = async (placementId) => {
                
                   <td onClick={(e) => e.stopPropagation()} className="action-buttons">
 
-                    <img src={Download} alt="Download" onClick={() => handleAction("download", request)} />
+                    {request.employer_evaluation?.date_of_completion? (<img src={Download} alt="Download" onClick={() => handleAction("download", request)} />):
+                    (<img src={Download} alt="Download" onClick={() => null}  className="disable"/>)}
 
                     <img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />
 
@@ -415,7 +395,6 @@ const startSurvey = async (placementId) => {
       )}
 
       {showQuestionnaireModal && surveyResponseStatus!=="SUBMITTED" && (
-      //  {showQuestionnaireModal && (
         <QuestionnaireModal
           placementId={placementId}
           onClose={() => setShowQuestionnaireModal(false)}

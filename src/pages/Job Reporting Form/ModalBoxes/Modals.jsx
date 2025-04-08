@@ -31,28 +31,29 @@ const DownloadModal = ({ onClose, onDownload, request, isDownloading }) => (
 // Edit Modal with Formik and Yup
 const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
 
+  
+  const [addressOptions, setAdressOptions] = useState([])
 
-  const [addressOptions, setAdressOptions]= useState([])
+  const type = "TITLE"
+  const fetchAddressee = () => {
+    axiosInstance.get(`/option-types/${type}/options`)
+      .then(titles => {
+        const addressee = titles.data.map(title => title.name)
 
-const type="TITLE"
-const fetchAddressee =()=>{
-  axiosInstance.get(`/option-types/${type}/options`)
-  .then(titles =>{
-    const addressee=titles.data.map(title=>title.name)
-    
-    setAdressOptions(addressee)
-    
-  })
+        setAdressOptions(addressee)
 
-  .catch(error=>{
-    
-    console.error("Error fetching addressee options:", error) 
-  })
-}
+      })
 
-useEffect(()=>{
-  fetchAddressee()
-}, [])
+      .catch(error => {
+
+        
+        
+      })
+  }
+
+  useEffect(() => {
+    fetchAddressee()
+  }, [])
   // Define validation schema using Yup
   const validationSchema = Yup.object().shape({
     supervisorName: Yup.string()
@@ -68,10 +69,15 @@ useEffect(()=>{
       .email('Invalid email format'),
     residential_address: Yup.string()
       .required('Residential address required'),
+    supervisor_email: Yup.string()
+      .email('Invalid email format')
+      .required('Supervisor email is required'),
     nextOfKin: Yup.string(),
     nextOfKinAddress: Yup.string(),
     nextOfKinPhone: Yup.string()
       .matches(/^[0-9+\s-]*$/, 'Invalid phone number format'),
+      formFile: Yup.mixed()
+      .required('File is required')
     // formFile validation is handled separately
   });
 
@@ -84,6 +90,8 @@ useEffect(()=>{
     dateResumed: request?.job_reporting?.date_reported || '',
     mailingAddress: request?.job_reporting?.mailing_address || '',
     residential_address: request?.job_reporting?.residential_address || '',
+    supervisor_email: request?.job_reporting?.supervisor_email || '',
+
     formFile: null // Initialize as null to represent the form itself, not a URL
   };
 
@@ -102,18 +110,18 @@ useEffect(()=>{
 
   // Handle form submission
   const handleSubmit = (values) => {
-    console.log("Form values:", values);
     
+
     const formData = {
       ...values,
       formFile: formFile,
     };
-  
-    console.log("Final payload:", formData);
-  
+
+    
+
     onSave(formData, request.id);
   };
-  
+
 
   return (
     <div className="modal-overlay">
@@ -126,40 +134,34 @@ useEffect(()=>{
             <X size={20} color='white' />
           </button>
         </div>
-        
+
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ errors, touched, setFieldValue, values, isSubmitting={isSubmitting} }) => (
+          {({ errors, touched, setFieldValue, values, isSubmitting = { isSubmitting } }) => (
             <Form encType='multipart/form-data'>
               <h2 className="company-name">{values.companyName}</h2>
-              
-           <div className="companyDetails">
-           <div className="formInput">
-                <label htmlFor="supervisorName">Supervisor's Name *</label>
-                <Field 
-                  type="text" 
-                  id="supervisorName" 
-                  name="supervisorName" 
-                  placeholder="e.g  John Doe"
-                  className={errors.supervisorName && touched.supervisorName ? "error-input" : ""}
-                />
-                <ErrorMessage name="supervisorName" component="div" className="error" />
-              </div>
-              
-              <div className="formInput">
-                <label htmlFor="supervisorTitle">Supervisor's Title *</label>
-                {/* <Field 
-                  type="text" 
-                  id="supervisorTitle" 
-                  name="supervisorTitle" 
-                  placeholder="eg Manager"
-                  className={errors.supervisorTitle && touched.supervisorTitle ? "error-input" : ""}
-                /> */}
 
-                 <Field as="select" name="supervisorTitle" className="supervisorTitle">
+              <div className="companyDetails">
+                <div className="formInput">
+                  <label htmlFor="supervisorName">Supervisor's Name *</label>
+                  <Field
+                    type="text"
+                    id="supervisorName"
+                    name="supervisorName"
+                    placeholder="e.g  John Doe"
+                    className={errors.supervisorName && touched.supervisorName ? "error-input" : ""}
+                  />
+                  <ErrorMessage name="supervisorName" component="div" className="error" />
+                </div>
+
+                <div className="formInput">
+                  <label htmlFor="supervisorTitle">Supervisor's Title *</label>
+
+
+                  <Field as="select" name="supervisorTitle" className="supervisorTitle">
                     <option value="">Select Title/Position</option>
                     {addressOptions.map((option, index) => (
                       <option key={index} value={option}>
@@ -167,80 +169,91 @@ useEffect(()=>{
                       </option>
                     ))}
                   </Field>
-                <ErrorMessage name="supervisorTitle" component="div" className="error" />
-              </div>
-              
-              <div className="formInput">
-                <label htmlFor="supervisorPhone">Supervisor's Phone Number *</label>
-                <Field 
-                  type="text" 
-                  id="supervisorPhone" 
-                  name="supervisorPhone" 
-                  placeholder="eg 080xxxxxxxxx"
-                  className={errors.supervisorPhone && touched.supervisorPhone ? "error-input" : ""}
-                />
-                <ErrorMessage name="supervisorPhone" component="div" className="error" />
-              </div>
-              
-              <div className="formInput">
-                <label htmlFor="dateResumed">Date Reported For Training *</label>
-                <Field 
-                  type="date" 
-                  id="dateResumed" 
-                  name="dateResumed" 
-                  placeholder="dd/mm/yy"
-                  // className={errors.dateResumed && touched.dateResumed ? "error-input" : ""}
-                />
-                <ErrorMessage name="dateResumed" component="div" className="error" />
-              </div>
-           
-              
-              
-              
-              <div className="formInput">
-                <label htmlFor="residential_address">Residential Address *</label>
-                <Field 
-                  type="text" 
-                  id="residential_address" 
-                  name="residential_address" 
-                  placeholder="Enter your address"
-                  className={errors.residential_address && touched.residential_address ? "error-input" : ""}
-                />
-                <ErrorMessage name="residential_address" component="div" className="error" />
-              </div>
-              
-         
-              
-              <div className="formInput">
-                <label>Upload your Form</label>
-                <div className="file-upload">
-                  <input 
-                    type="file" 
-                    id="formFile" 
-                    name="formFile" 
-                    onChange={(e) => handleFileChange(e, setFieldValue)}
-                    className="file-input"
+                  <ErrorMessage name="supervisorTitle" component="div" className="error" />
+                </div>
+
+                <div className="formInput">
+                  <label htmlFor="supervisorPhone">Supervisor's Phone Number *</label>
+                  <Field
+                    type="text"
+                    id="supervisorPhone"
+                    name="supervisorPhone"
+                    placeholder="eg 080xxxxxxxxx"
+                    className={errors.supervisorPhone && touched.supervisorPhone ? "error-input" : ""}
                   />
-                  <div className={`file-upload-button ${fileError ? 'error-input' : ''}`}>
-                    <Paperclip size={18} />
-                    <span>{formFile ? formFile.name : "Upload your file"}</span>
-                  
+                  <ErrorMessage name="supervisorPhone" component="div" className="error" />
+                </div>
+
+                <div className="formInput">
+                  <label htmlFor="dateResumed">Date Reported For Training *</label>
+                  <Field
+                    type="date"
+                    id="dateResumed"
+                    name="dateResumed"
+                    placeholder="dd/mm/yy"
+                  // className={errors.dateResumed && touched.dateResumed ? "error-input" : ""}
+                  />
+                  <ErrorMessage name="dateResumed" component="div" className="error" />
+                </div>
+
+                <div className="formInput">
+                  <label htmlFor="supervisor_email">Supervisor's Email *</label>
+                  <Field
+                    type="text"
+                    id="supervisor_email"
+                    name="supervisor_email"
+                    placeholder="mail@google.com"
+                    className={errors.supervisor_email && touched.supervisor_email ? "error-input" : ""}
+                  />
+                  <ErrorMessage name="supervisor_email" component="div" className="error" />
+                </div>
+
+
+                <div className="formInput">
+                  <label htmlFor="residential_address">Residential Address *</label>
+                  <Field
+                    type="text"
+                    id="residential_address"
+                    name="residential_address"
+                    placeholder="Enter your address"
+                    className={errors.residential_address && touched.residential_address ? "error-input" : ""}
+                  />
+                  <ErrorMessage name="residential_address" component="div" className="error" />
+                </div>
+
+
+
+                <div className="formInput">
+                  <label>Upload your Form</label>
+                  <div className="file-upload">
+                    <input
+                      type="file"
+                      id="formFile"
+                      name="formFile"
+                      onChange={(e) => handleFileChange(e, setFieldValue)}
+                      className="file-input"
+                    />
+                    <div className={`file-upload-button ${fileError ? 'error-input' : ''}`}>
+                      <Paperclip size={18} />
+                      <span>{formFile ? formFile.name : "Upload your file"}</span>
+
+                    </div>
+                    <div className="error">
+                      {request.job_reporting?.form ? "Kindly re-upload your form" : " "}
+                    </div>
+                    {fileError && <div className="error">{fileError}</div>}
                   </div>
-                  <div className="error">
-                  {request.job_reporting?.form ? "Kindly re-upload your form" : " "}
-                  </div>
-                  {fileError && <div className="error">{fileError}</div>}
+                  <ErrorMessage name="formFile" component="div" className="error" />
                 </div>
               </div>
-              </div>
               <div className="form-actions">
-                <button 
-                  type="submit" 
-                  variant="contained" 
+                <button
+                  type="submit"
+                  variant="contained"
                   className="next-button"
                   disabled={isSubmitting}
                 >
-                {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save'}
+                  {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save'}
                 </button>
               </div>
             </Form>
@@ -259,21 +272,21 @@ const DeleteModal = ({ onClose, onConfirm, request, isDeleting }) => (
 
       <div className="alert-icon">
         <AlertCircle size={90} color='red' />
-        </div>
+      </div>
       <p>Are you sure you want to delete "{request.attached_company_name}” form? <br /> This action cannot be undone.</p>
 
       <div className="warnings">
         <img src={Caution} alt="" />
-      <div className="warner">
-      <h2> Warning</h2>
+        <div className="warner">
+          <h2> Warning</h2>
 
-<p>By deleting this Form, you agree to lose access to it permanently!</p>
-      </div>
+          <p>By deleting this Form, you agree to lose access to it permanently!</p>
+        </div>
       </div>
       <div className="modal-actions">
         <button onClick={() => onConfirm(request.id)} className="btn-danger" disabled={isDeleting}>
           {isDeleting ? <PulseLoader size={10} color="white" /> : "Delete"}
-          </button>
+        </button>
         <button onClick={onClose} className="btn-secondary">Cancel</button>
       </div>
     </div>

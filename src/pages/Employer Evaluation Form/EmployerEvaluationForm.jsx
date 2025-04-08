@@ -10,14 +10,14 @@ import Empty from "/images/empty_dashboard.png";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { PulseLoader, BeatLoader } from "react-spinners";
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
-import FullScreenSuccessMessage from "../Placement/Successful/Successful";
+import FullScreenSuccessMessage from "../Placement/Successful/Successful2";
 import EmployerEvalTable from "./EmployerEvalTable";
 
 const EmployerEvaluationForm = () => {
   const [showSubmitForm, setShowSubmitForm] = useState(false)
   const [id, setProgrammeId] = useState(null);
   const [placements, setPlacementRequests] = useState([])
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSCAFDownloading, setSCAFIsDownloading] = useState(false);
   const [noProgrammeId, setNoProgrammeId] = useState(false);
@@ -76,6 +76,7 @@ const fetchRegistrationType = async () =>{
     const response = await axiosInstance.get(`/trainings/registrations/${id}`);
     const duration=(response.data.training.type.duration)
     setDuration(duration)
+    
 
   }
   catch (error){
@@ -90,7 +91,7 @@ useEffect (()=>{
 }, [id])
 
   const handlePlacementId = (placementId) => {
-    console.log("Received placement ID in parent:", placementId);
+    
     setPlacementID(placementId);
     setRequestFromChild(placementId);
   }
@@ -102,9 +103,9 @@ useEffect (()=>{
       const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/employer-evaluations/evaluable/`);
       setEvaluable(response.data);
       setIsLoading(false);
-      console.log("Placement List:", response.data)
+      
       setPlacementID(response.data[0].id)
-      console.log("Placement ID:", response.data[0].id)
+      
     } catch (error) {
       setIsLoading(false);
 
@@ -121,11 +122,11 @@ useEffect (()=>{
   const fetchEvaluationForm = async () => {
     try {
       const response = await axiosInstance.get(`/trainings/registrations/placements/${placementID}/evaluation/`)
-      console.log("Evaluation Form:", response.data)
+      
       setEvaluationForm(response.data)
     } catch (error) {
       setIsLoading(false);
-      console.error("Error Here:", error)
+      
     }
   }
 
@@ -154,7 +155,7 @@ useEffect (()=>{
         const errorText = await errorBlob.text();
         const errorJson = JSON.parse(errorText);
   
-        // console.error('Download error:', errorJson);
+        
   
         setFailureMessage(errorJson.detail || "Failed to download SCAF Form.");
         setShowJobReportingFailure(true);
@@ -174,7 +175,7 @@ useEffect (()=>{
   
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      // console.error('Download error:', error);
+      
   
       
       if (error.response && error.response.data instanceof Blob) {
@@ -182,10 +183,10 @@ useEffect (()=>{
           const errorBlob = error.response.data;
           const errorText = await errorBlob.text();
           const errorJson = JSON.parse(errorText);
-  // console.log(errorJson)
+  
           setFailureMessage(errorJson.detail || "An error occurred while downloading the file.");
         } catch (parseError) {
-          // console.error("Failed to parse error blob:", parseError);
+       
           setFailureMessage("An unknown error occurred while downloading.");
         }
       } else {
@@ -233,7 +234,7 @@ useEffect (()=>{
             Employer Evaluation Form
           </div>
 
-          {evaluationForm && (
+          {evaluationForm && trainingDuration===24 && (
             <button className="btn-primary scafdownload" onClick={async () => {
               setIsDownloading(true);
               await downloadSCAFFormIT_8();
@@ -242,7 +243,7 @@ useEffect (()=>{
               {isDownloading ? (
                 <PulseLoader size={8} color={"#fff"}  />
              ) : (
-                "Download ITF SCAF Form"
+                "Download IT Form-8"
               )}
             </button>
           )}
@@ -256,9 +257,14 @@ useEffect (()=>{
             <p> You presently don't have an active placement </p>
           </div>
         ) : evaluables.length === 0 ? (
-          <div className="image">
+        <>  <div className="image">
             <img src={Empty} alt="Empty" />
+
+        
           </div>
+              <div className="noProgrammeId register_above">
+              You need to submit your Job Reporting Form before you can fill the Employer Evaluation Form.
+            </div></>
         ) : (
           <EmployerEvalTable 
             triggerRefresh={triggerRefresh} 

@@ -27,7 +27,7 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
       const response = await axiosInstance.get(
         `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/`
       );
-      console.log("Questions Data:", response.data);
+      
       setQuestions(response.data);
       setCurrentIndex(0);
       setProgress((1 / response.data.length) * 100);
@@ -97,11 +97,12 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
       const response = await axiosInstance.get(
         `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/summary/`
       );
-      console.log("Summary", response.data);
+      
       setSummary(response.data);
       setShowSummary(true);
     } catch (error) {
-      setError(error.response?.data?.detail || "Failed to fetch summary");
+     
+      
     } finally {
       setLoading(false);
     }
@@ -131,15 +132,37 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
           <div className="summary-score">
             <CircularProgressbar
               value={summary?.total_score*100 || 0}
-              text={`${summary?.total_score*10*10 || 0}%`}
+              text={`${summary?.total_score*10*10 || 0}%`} 
               styles={buildStyles({
                 pathColor: "#000080",
                 textColor: "#000080",
                 trailColor: "#E5E7EB",
               })}
             />
-            <p className="score-label">{summary?.remark}</p>
+            
+            {/* Display category scores as individual progress bars */}
+           
           </div>
+          {summary?.category_score && Object.entries(summary.category_score).map(([criteria, score]) => (
+              <div key={criteria} className="skill-progress-container">
+                <div className="skill-info">
+                  <span className="skill-name">{score.criteria}</span>
+                  <span className="skill-percentage">{Math.round(score.score * 100)}%</span>
+                  
+                </div>
+                <div className="progress-bar-container">
+                  <div 
+                    className="progress-bar-summary" 
+                    style={{ 
+                      width: `${score.score * 100}%`,
+                      backgroundColor: "#000080"
+                    }}
+                  ></div>
+                </div>
+              </div>
+            ))}
+    
+            <p className="skill-label ">{summary?.remark}</p>
           <button onClick={onClose} className="close-button">
             Close
           </button>
@@ -159,7 +182,10 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
           <h1>Training Evaluation Survey</h1>
           
           <p className="welcome-description">
-            Your feedback helps us improve future training placement
+            Hey there! 
+            
+            We trust you enjoyed your recently concluded Industrial Training. 
+            <br/> <br/> Kindly take a minute to fill out this survey. Your feedback helps us improve future training placement. Thank you.
           </p>
           
           <button onClick={startSurvey} className="start-button btn-primary">
@@ -192,6 +218,8 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
 
         {questions.length > 0 && (
           <div className="question-content">
+            <div className="crit">{questions[currentIndex]?.criteria}</div>
+            <div className="critDescript">{questions[currentIndex]?.criteria_description}</div>
             <h3>{questions[currentIndex]?.question}</h3>
             <div className="options">
               {[25, 50, 75, 100].map((value) => (
