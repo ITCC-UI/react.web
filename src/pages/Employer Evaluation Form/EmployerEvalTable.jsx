@@ -69,7 +69,7 @@ const [surveyResponseStatus, setSurveyResponse] = useState(null)
         )
       
         const employerForms = employerEvaluableForms.data
-
+console.log("Employer Forms:", employerForms)
 
 
         if (employerForms && typeof employerForms === "object" && employerForms !== null) {
@@ -360,7 +360,8 @@ const startSurvey = async (placementId) => {
                
                   <td onClick={(e) => e.stopPropagation()} className="action-buttons">
 
-                    <img src={Download} alt="Download" onClick={() => handleAction("download", request)} />
+                    {request.employer_evaluation?.date_of_completion? (<img src={Download} alt="Download" onClick={() => handleAction("download", request)} />):
+                    (<img src={Download} alt="Download" onClick={() => null}  className="disable"/>)}
 
                     <img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />
 

@@ -2,7 +2,8 @@
     display: none;
 }
 .disable{
-    pointer-events: none;
+    // pointer-events: none;
+    pointer-events: none !important;
 }
 
 .css-1086bdv-MuiPaper-root-MuiAccordion-root{

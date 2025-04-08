@@ -10,7 +10,7 @@ import Empty from "/images/empty_dashboard.png";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { PulseLoader, BeatLoader } from "react-spinners";
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
-import FullScreenSuccessMessage from "../Placement/Successful/Successful";
+import FullScreenSuccessMessage from "../Placement/Successful/Successful2";
 import EmployerEvalTable from "./EmployerEvalTable";
 
 const EmployerEvaluationForm = () => {

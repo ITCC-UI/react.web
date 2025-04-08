@@ -338,7 +338,9 @@ const JobReportingTable = ({ triggerRefresh }) => {
                   <td>{request.job_reporting?.date_reported || "----------"}</td>
                   <td onClick={(e) => e.stopPropagation()} className="action-buttons">
 
-                    <img src={Download} alt="Download" onClick={() => handleAction("download", request)} />
+                  {request.job_reporting ?
+                  (  <img src={Download} alt="Download" onClick={() => handleAction("download", request)} />):
+                  (<img src={Download} alt="Download" onClick={() => null} className="disable"/>)}
 
                     <img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />
 
