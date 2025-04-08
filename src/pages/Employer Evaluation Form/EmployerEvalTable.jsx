@@ -36,6 +36,7 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => 
   const [showQuestionnaireModal, setShowQuestionnaireModal] = useState(false)
   const [placementId, setPlacementId] = useState(null);
 const [surveyResponseStatus, setSurveyResponse] = useState(null)
+const [totalScore, setTotalScore] = useState(null)  
 
   useEffect(() => {
     const fetchEvaluableFormTable = async () => {
@@ -220,6 +221,24 @@ const startSurvey = async (placementId) => {
 
   // setPlacementId(selectedRequest.id)?
 
+
+const fetchEvaluationScore = async () => {
+  try {
+    const response = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/summary/`)
+    setTotalScore(response.data.total_score)
+  }
+  catch (error) {
+    
+  }
+}
+
+useEffect(() => {
+  if (placementId) {
+    fetchEvaluationScore()}}, [placementId])
+
+
+
+
   const handleSave = async (formData) => {
     try {
       if (!registrationId) {
@@ -229,11 +248,12 @@ const startSurvey = async (placementId) => {
       
       
 
-      //("This is the palcement", placementId)
+      
       // Create form data for file upload if needed
       const apiFormData = new FormData()
       apiFormData.append("date_of_completion", formData?.date_of_completion || " ")
-      // apiFormData.append("form", formData?.form)
+      apiFormData.append("overall_score", totalScore)
+      
 
       if (formData.formFile) {
         apiFormData.append("form", formData.formFile)
@@ -298,7 +318,7 @@ const startSurvey = async (placementId) => {
 
 
   return (
-    <section className="shift">
+    <section className="shift placement_table">
       <FullScreenSuccessMessage
         isOpen={jobReportSuccess}
         title={title}

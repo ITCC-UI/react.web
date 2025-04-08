@@ -44,7 +44,7 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName, upda
           setProgramID(response.data[0].id);
         }
       } catch (error) {
-        console.error("Error fetching program ID:", error);
+       
       }
     };
     fetchProgrammeId();
@@ -57,10 +57,10 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName, upda
       try {
         const response = await axiosInstance.get(`trainings/registrations/${iD}/documents/by-types`);
         const existingFile = response.data[0]?.documents|| "";
-        console.log("THe FIle", existingFile[0]?.document)
+       
        if(existingFile!=0){
         const fileName = existingFile[0].document.split("/").pop();
-        console.log("Fetched file name:", fileName);
+     
         
         // Update state with fetched file name
         setHasExistingFile(true);
@@ -68,12 +68,12 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName, upda
        }
 
        else{
-        console.log("No existing file found");
+      
        }
       }
       
       catch (error) {
-        console.error("Error fetching training types:", error);
+      
       }
     };
     fetchTrainingTypes();
@@ -107,10 +107,10 @@ const response = hasExistingFile
     });
 setShowSuccessMessage(true);
 
-      console.log("Submission successful:", response.data);
+    
       resetForm();
     } catch (error) {
-      console.error("Error submitting form:", error);
+     
       setFailureMessage(error.response?.data?.detail || "An error occurred");
       setShowFailureMessage(true);
     } finally {
