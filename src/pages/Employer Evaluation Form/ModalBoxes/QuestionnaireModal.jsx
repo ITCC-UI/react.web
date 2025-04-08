@@ -27,7 +27,7 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
       const response = await axiosInstance.get(
         `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/`
       );
-      console.log("Questions Data:", response.data);
+      
       setQuestions(response.data);
       setCurrentIndex(0);
       setProgress((1 / response.data.length) * 100);
@@ -148,7 +148,7 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
                 <div className="skill-info">
                   <span className="skill-name">{score.criteria}</span>
                   <span className="skill-percentage">{Math.round(score.score * 100)}%</span>
-                  {console.log("The score", summary)}
+                  
                 </div>
                 <div className="progress-bar-container">
                   <div 

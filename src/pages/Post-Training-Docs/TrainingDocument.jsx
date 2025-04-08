@@ -74,12 +74,12 @@ const fetchRegistrationType = async () =>{
       const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
 
       const formattedTimeLeft = `${days} days, ${hours} hours, and ${minutes} minutes left`;
-      console.log("Time Left:", formattedTimeLeft);
+      
 
       setCountDown(formattedTimeLeft);
     } else {
-      setCountDown("Time has expired");
-      console.error("Ha")
+      
+      
     }
 
 
@@ -98,7 +98,7 @@ useEffect (()=>{
 
 const getTimeRemaining = (endDateString) => {
   if (!endDateString) {
-    console.error("Invalid end date provided");
+    
     return "No deadline set";
   }
   
@@ -122,7 +122,7 @@ const getTimeRemaining = (endDateString) => {
   return `${days} days, ${hours} hours, and ${minutes} minutes`;
 };
 
-// Here's how to integrate it with your existing code:
+
 const fetchSchedule = async () => {
   try {
     const response = await axiosInstance.get(`trainings/registrations/${id}/documents/schedule/`);
@@ -137,23 +137,23 @@ const fetchSchedule = async () => {
       minute: 'numeric',
       hour12: true,
     });
-    console.log("Document Schedule Date:", formattedDate);
+
     
     // Get the formatted time remaining
     const timeRemaining = getTimeRemaining(response.data.end_date);
-    console.log("Time remaining:", timeRemaining);
+
     
     // You can set both to state
     setPlacementRequests(response.data);
     setEndDate(formattedDate);
-    setTimeRemaining(timeRemaining); // You'll need to create this state variable
+    setTimeRemaining(timeRemaining); 
+    
     
   } catch (error) {
-    console.error("Error fetching placement requests:", error);
+  
   }
 };
 
-// For updating the countdown in real-time, you could add:
 useEffect(() => {
   if (id) {
     fetchSchedule();

@@ -76,7 +76,7 @@ const fetchRegistrationType = async () =>{
     const response = await axiosInstance.get(`/trainings/registrations/${id}`);
     const duration=(response.data.training.type.duration)
     setDuration(duration)
-    console.log("Duration", duration)
+    
 
   }
   catch (error){
@@ -91,7 +91,7 @@ useEffect (()=>{
 }, [id])
 
   const handlePlacementId = (placementId) => {
-    console.log("Received placement ID in parent:", placementId);
+    
     setPlacementID(placementId);
     setRequestFromChild(placementId);
   }
@@ -155,7 +155,7 @@ useEffect (()=>{
         const errorText = await errorBlob.text();
         const errorJson = JSON.parse(errorText);
   
-        // console.error('Download error:', errorJson);
+        
   
         setFailureMessage(errorJson.detail || "Failed to download SCAF Form.");
         setShowJobReportingFailure(true);
@@ -175,7 +175,7 @@ useEffect (()=>{
   
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      // console.error('Download error:', error);
+      
   
       
       if (error.response && error.response.data instanceof Blob) {
@@ -183,10 +183,10 @@ useEffect (()=>{
           const errorBlob = error.response.data;
           const errorText = await errorBlob.text();
           const errorJson = JSON.parse(errorText);
-  // console.log(errorJson)
+  
           setFailureMessage(errorJson.detail || "An error occurred while downloading the file.");
         } catch (parseError) {
-          // console.error("Failed to parse error blob:", parseError);
+       
           setFailureMessage("An unknown error occurred while downloading.");
         }
       } else {
