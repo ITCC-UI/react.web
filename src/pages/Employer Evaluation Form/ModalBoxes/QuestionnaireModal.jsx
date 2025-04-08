@@ -97,12 +97,12 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
       const response = await axiosInstance.get(
         `/trainings/registrations/placements/${placementId}/employer-evaluation-surveys/summary/`
       );
-      console.log("Summary", response.data);
+      
       setSummary(response.data);
       setShowSummary(true);
     } catch (error) {
-      setError(error.response?.data?.detail || "Failed to fetch summary");
-      console.log("Summary", response.data);
+     
+      
     } finally {
       setLoading(false);
     }
@@ -132,7 +132,7 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
           <div className="summary-score">
             <CircularProgressbar
               value={summary?.total_score*100 || 0}
-              text={`${summary?.total_score*10*10 || 0}%`}
+              text={`${summary?.total_score*10*10 || 0}%`} 
               styles={buildStyles({
                 pathColor: "#000080",
                 textColor: "#000080",
@@ -162,7 +162,7 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
               </div>
             ))}
     
-            <p className="skill-label">{summary?.remark}</p>
+            <p className="skill-label ">{summary?.remark}</p>
           <button onClick={onClose} className="close-button">
             Close
           </button>
