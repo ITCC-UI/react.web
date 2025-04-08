@@ -141,17 +141,20 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
             />
             
             {/* Display category scores as individual progress bars */}
-            {summary?.category_score && Object.entries(summary.category_score).map(([criteria, score]) => (
+           
+          </div>
+          {summary?.category_score && Object.entries(summary.category_score).map(([criteria, score]) => (
               <div key={criteria} className="skill-progress-container">
                 <div className="skill-info">
-                  <span className="skill-name">{criteria}</span>
-                  <span className="skill-percentage">{Math.round(score * 100)}%</span>
+                  <span className="skill-name">{score.criteria}</span>
+                  <span className="skill-percentage">{Math.round(score.score * 100)}%</span>
+                  {console.log("The score", summary)}
                 </div>
                 <div className="progress-bar-container">
                   <div 
                     className="progress-bar-summary" 
                     style={{ 
-                      width: `${score * 100}%`,
+                      width: `${score.score * 100}%`,
                       backgroundColor: "#000080"
                     }}
                   ></div>
@@ -160,7 +163,6 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
             ))}
     
             <p className="skill-label">{summary?.remark}</p>
-          </div>
           <button onClick={onClose} className="close-button">
             Close
           </button>
@@ -180,7 +182,10 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
           <h1>Training Evaluation Survey</h1>
           
           <p className="welcome-description">
-            Your feedback helps us improve future training placement
+            Hey there! 
+            
+            We trust you enjoyed your recently concluded Industrial Training. 
+            <br/> <br/> Kindly take a minute to fill out this survey. Your feedback helps us improve future training placement. Thank you.
           </p>
           
           <button onClick={startSurvey} className="start-button btn-primary">

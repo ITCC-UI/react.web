@@ -17,7 +17,7 @@ const EmployerEvaluationForm = () => {
   const [showSubmitForm, setShowSubmitForm] = useState(false)
   const [id, setProgrammeId] = useState(null);
   const [placements, setPlacementRequests] = useState([])
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSCAFDownloading, setSCAFIsDownloading] = useState(false);
   const [noProgrammeId, setNoProgrammeId] = useState(false);
@@ -76,6 +76,7 @@ const fetchRegistrationType = async () =>{
     const response = await axiosInstance.get(`/trainings/registrations/${id}`);
     const duration=(response.data.training.type.duration)
     setDuration(duration)
+    console.log("Duration", duration)
 
   }
   catch (error){
@@ -233,7 +234,7 @@ useEffect (()=>{
             Employer Evaluation Form
           </div>
 
-          {evaluationForm && (
+          {evaluationForm && trainingDuration===24 && (
             <button className="btn-primary scafdownload" onClick={async () => {
               setIsDownloading(true);
               await downloadSCAFFormIT_8();
@@ -242,7 +243,7 @@ useEffect (()=>{
               {isDownloading ? (
                 <PulseLoader size={8} color={"#fff"}  />
              ) : (
-                "Download ITF SCAF Form"
+                "Download Form-8"
               )}
             </button>
           )}

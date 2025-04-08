@@ -495,7 +495,6 @@ padding-top: 5rem !important;
   background-color: white;
   padding: 2rem;
   border-radius: 8px;
-  width: 90%;
   max-width: 500px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
@@ -599,12 +598,17 @@ padding-top: 5rem !important;
 }
 
 .progress-bar-container {
-  height: 10px;
+  flex: 1;
+  height: 8px;
   background-color: #E5E7EB;
-  border-radius: 5px;
+  border-radius: 4px;
   overflow: hidden;
 }
 
+.option-bar {
+  height: 100%;
+  background-color: #000080 ;
+}
 .progress-bar-summary {
   height: 100%;
   border-radius: 5px;

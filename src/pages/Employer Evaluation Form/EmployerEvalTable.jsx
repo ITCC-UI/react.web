@@ -399,7 +399,6 @@ const startSurvey = async (placementId) => {
       )}
 
       {showQuestionnaireModal && surveyResponseStatus!=="SUBMITTED" && (
-        // {/* {!showQuestionnaireModal && ( */}
         <QuestionnaireModal
           placementId={placementId}
           onClose={() => setShowQuestionnaireModal(false)}
