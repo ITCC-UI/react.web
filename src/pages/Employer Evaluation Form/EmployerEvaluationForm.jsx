@@ -35,8 +35,8 @@ const EmployerEvaluationForm = () => {
   const [placementID, setPlacementID] = useState(null)
   const [requestFromChild, setRequestFromChild] = useState(null)
   const [evaluationForm, setEvaluationForm] = useState(null)
-  const [endDate, setEndDate] =useState(0)
-    const [timeRemaining, setTimeRemaining] = useState("");
+  const [endDate, setEndDate] =useState("Deadline not set")
+    const [timeRemaining, setTimeRemaining] = useState("Deadline note set");
   
   useEffect(() => {
     const handleKeyDown = (event) => {

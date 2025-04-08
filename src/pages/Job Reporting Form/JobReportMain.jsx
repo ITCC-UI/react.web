@@ -31,8 +31,8 @@ const JobReportingForm = () => {
   const [failureMessage, setFailureMessage] = useState("")
   const [showFailureMessage, setShowJobReportingFailure] = useState(false)
   const [triggerRefresh, setTriggerRefresh] = useState(false);
-    const [endDate, setEndDate] =useState("")
-    const [timeRemaining, setTimeRemaining] = useState(" ");
+    const [endDate, setEndDate] =useState("Deadline not set")
+    const [timeRemaining, setTimeRemaining] = useState("Deadline not set");
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -121,7 +121,7 @@ const JobReportingForm = () => {
       setPlacementRequests(response.data);
       setEndDate(formattedDate);
       setTimeRemaining(timeRemaining); 
-      console.log(timeRemaining)
+  
       
     } catch (error) {
     
