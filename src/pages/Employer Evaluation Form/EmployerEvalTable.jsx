@@ -298,7 +298,7 @@ const startSurvey = async (placementId) => {
 
 
   return (
-    <section className="shift">
+    <section className="shift placement_table">
       <FullScreenSuccessMessage
         isOpen={jobReportSuccess}
         title={title}

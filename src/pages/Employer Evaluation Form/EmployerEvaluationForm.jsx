@@ -35,6 +35,9 @@ const EmployerEvaluationForm = () => {
   const [placementID, setPlacementID] = useState(null)
   const [requestFromChild, setRequestFromChild] = useState(null)
   const [evaluationForm, setEvaluationForm] = useState(null)
+  const [endDate, setEndDate] =useState(0)
+    const [timeRemaining, setTimeRemaining] = useState("");
+  
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -69,6 +72,70 @@ const EmployerEvaluationForm = () => {
   }, []);
 
 
+  const getTimeRemaining = (endDateString) => {
+    if (!endDateString) {
+      
+      return "No deadline set";
+    }
+    
+    const endDate = new Date(endDateString);
+    const currentDate = new Date();
+    
+    // Calculate the difference in milliseconds
+    const timeDifference = endDate - currentDate;
+    
+    // If the deadline has passed
+    if (timeDifference <= 0) {
+      return "Deadline has passed";
+    }
+    
+    // Calculate days, hours, minutes
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    
+    // Format as "12 days, 4 hours, and 30 minutes"
+    return `${days} days, ${hours} hours, and ${minutes} minutes`;
+  };
+  
+  
+  const fetchSchedule = async () => {
+    try {
+      const response = await axiosInstance.get(`trainings/registrations/${id}/documents/schedule/`);
+      const endDate = new Date(response.data.end_date);
+      
+      // Format the end date as before
+      const formattedDate = endDate.toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+      });
+  
+      
+      // Get the formatted time remaining
+      const timeRemaining = getTimeRemaining(response.data.end_date);
+  
+      
+      // You can set both to state
+      setPlacementRequests(response.data);
+      setEndDate(formattedDate);
+      setTimeRemaining(timeRemaining); 
+      
+      
+    } catch (error) {
+    
+    }
+  };
+  
+  useEffect(() => {
+    if (id) {
+      fetchSchedule();
+    }
+  }, [id]);
+  
 
   // Fetch Registration ID
 const fetchRegistrationType = async () =>{
@@ -241,13 +308,16 @@ useEffect (()=>{
               setIsDownloading(false);
             }}>
               {isDownloading ? (
-                <PulseLoader size={8} color={"#fff"}  />
+                <PulseLoader size ={8} color={"#fff"}  />
              ) : (
                 "Download IT Form-8"
               )}
             </button>
           )}
         </div>
+        <div className="error deadline">Submission Deadline: {endDate} </div>
+        <div className="error deadline">Time Remaining: {timeRemaining} </div>
+       
         {isLoading ? (
           <div className="loader">
             <PulseLoader size={15} color={"#123abc"} />
