@@ -102,6 +102,7 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
       setShowSummary(true);
     } catch (error) {
       setError(error.response?.data?.detail || "Failed to fetch summary");
+      console.log("Summary", response.data);
     } finally {
       setLoading(false);
     }
@@ -138,7 +139,27 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
                 trailColor: "#E5E7EB",
               })}
             />
-            <p className="score-label">{summary?.remark}</p>
+            
+            {/* Display category scores as individual progress bars */}
+            {summary?.category_score && Object.entries(summary.category_score).map(([criteria, score]) => (
+              <div key={criteria} className="skill-progress-container">
+                <div className="skill-info">
+                  <span className="skill-name">{criteria}</span>
+                  <span className="skill-percentage">{Math.round(score * 100)}%</span>
+                </div>
+                <div className="progress-bar-container">
+                  <div 
+                    className="progress-bar-summary" 
+                    style={{ 
+                      width: `${score * 100}%`,
+                      backgroundColor: "#000080"
+                    }}
+                  ></div>
+                </div>
+              </div>
+            ))}
+    
+            <p className="skill-label">{summary?.remark}</p>
           </div>
           <button onClick={onClose} className="close-button">
             Close
@@ -192,6 +213,8 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
 
         {questions.length > 0 && (
           <div className="question-content">
+            <div className="crit">{questions[currentIndex]?.criteria}</div>
+            <div className="critDescript">{questions[currentIndex]?.criteria_description}</div>
             <h3>{questions[currentIndex]?.question}</h3>
             <div className="options">
               {[25, 50, 75, 100].map((value) => (

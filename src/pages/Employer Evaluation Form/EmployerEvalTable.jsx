@@ -49,9 +49,9 @@ const [surveyResponseStatus, setSurveyResponse] = useState(null)
           return
         }
         const regId = registrations[0].id
-        console.log("Registration ID:", regId)
+        
         setRegistrationId(regId)
-        // //("Registration ID:", regId)
+        
 
         // Get placements
         const placementsResponse = await axiosInstance.get(`/trainings/registrations/${regId}/placements/`)
@@ -61,9 +61,7 @@ const [surveyResponseStatus, setSurveyResponse] = useState(null)
           setEvaluableForms([])
           return
         }
-        console.log("Placements:", placements)
-        // console.log("Placement ID:", placements[0].id)
-        // setThisPlacementID(placements[0].id)
+        
 
         // Get Employer Evaluation Forms
         const employerEvaluableForms = await axiosInstance.get(
@@ -71,7 +69,7 @@ const [surveyResponseStatus, setSurveyResponse] = useState(null)
         )
       
         const employerForms = employerEvaluableForms.data
-        console.log("Evaluable Forms:", employerForms)
+
 
 
         if (employerForms && typeof employerForms === "object" && employerForms !== null) {
@@ -151,27 +149,13 @@ const startSurvey = async (placementId) => {
   const getEvaluationId = async () => {
     try {
       const placements = await axiosInstance.get(`/trainings/registrations/${registrationId}/placements/`)
-      // console.log("This are the ", placements.data)
-      const placementId = placements?.data[0].id
-      console.log("Placement ID here:", placementId)
-      // setPlacementId(selectedRequest.id)
-      console.log("Placement jkbyiovtc ID:", placementId)
       
-
+      const placementId = placements?.data[0].id
+      
       const placementResponse = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/`)
-      console.log("Placement Response:", placementResponse.data)
-
-      //("This is the palcement", placementId)
-      // Create form data for file upload if needed
-      // const response = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/evaluation/`)
-      // setEvaluationId(response.data.id)
-      // console.log("Evaluation ID:", response.data)
-
+    
     } catch (error) {
 
-
-      console.error("Error getting Form  :", error)
-      // setTriggerRefresh(prev => !prev)
     }
   }
 
@@ -415,7 +399,7 @@ const startSurvey = async (placementId) => {
       )}
 
       {showQuestionnaireModal && surveyResponseStatus!=="SUBMITTED" && (
-      //  {showQuestionnaireModal && (
+        // {/* {!showQuestionnaireModal && ( */}
         <QuestionnaireModal
           placementId={placementId}
           onClose={() => setShowQuestionnaireModal(false)}

@@ -102,9 +102,9 @@ useEffect (()=>{
       const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/employer-evaluations/evaluable/`);
       setEvaluable(response.data);
       setIsLoading(false);
-      console.log("Placement List:", response.data)
+      
       setPlacementID(response.data[0].id)
-      console.log("Placement ID:", response.data[0].id)
+      
     } catch (error) {
       setIsLoading(false);
 
@@ -121,11 +121,11 @@ useEffect (()=>{
   const fetchEvaluationForm = async () => {
     try {
       const response = await axiosInstance.get(`/trainings/registrations/placements/${placementID}/evaluation/`)
-      console.log("Evaluation Form:", response.data)
+      
       setEvaluationForm(response.data)
     } catch (error) {
       setIsLoading(false);
-      console.error("Error Here:", error)
+      
     }
   }
 
@@ -256,9 +256,14 @@ useEffect (()=>{
             <p> You presently don't have an active placement </p>
           </div>
         ) : evaluables.length === 0 ? (
-          <div className="image">
+        <>  <div className="image">
             <img src={Empty} alt="Empty" />
+
+        
           </div>
+              <div className="noProgrammeId register_above">
+              You need to submit your Job Reporting Form before you can fill the Employer Evaluation Form.
+            </div></>
         ) : (
           <EmployerEvalTable 
             triggerRefresh={triggerRefresh} 
