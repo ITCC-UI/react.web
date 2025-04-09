@@ -191,6 +191,7 @@ useEffect (()=>{
       const response = await axiosInstance.get(`/trainings/registrations/placements/${placementID}/evaluation/`)
       
       setEvaluationForm(response.data)
+      console.log(response.data)
     } catch (error) {
       setIsLoading(false);
       

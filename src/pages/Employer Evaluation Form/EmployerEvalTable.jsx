@@ -8,6 +8,7 @@ import { Search } from "lucide-react"
 import Filter from "/images/Filter.png"
 import { DownloadModal, EditModal, DeleteModal } from "./ModalBoxes/Modals"
 import FormDetailsModal from "./ModalBoxes/FormDetailsModal"
+import FullScreenSuccessMessage2 from "../Placement/Successful/Successful2"
 import FullScreenSuccessMessage from "../Placement/Successful/Successful"
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage"
 import Download from "/images/Download.png"
@@ -25,6 +26,7 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => 
   const [successMessage, setJobReportStatus] = useState(null)
   const [title, setTitle] = useState(null)
   const [jobReportSuccess, setJobReportSuccess] = useState(false)
+  const [jobReportSuccess2, setJobReportSuccess2] = useState(false)
   const [jobReportError, setJobReportError] = useState(null)
   const [showFailureMessage, setShowJobReportingFailure] = useState(false)
   const [isDeleting] = useState(false)
@@ -127,7 +129,8 @@ const startSurvey = async (placementId) => {
   const checkSurvey = async () => {
     try {
       const placementResponse = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/`)
-      setSurveyResponse(placementResponse.data.employer_evaluation_survey_status)
+      setSurveyResponse(placementResponse?.data?.employer_evaluation_survey_status)
+      
     }catch (error) {
       
     }
@@ -270,7 +273,8 @@ useEffect(() => {
         //("Updated job report")
         setJobReportStatus("Form Updated")
         setTitle("Your form has been successfully updated")
-        setJobReportSuccess(true)
+        surveyResponseStatus!=="SUBMITTED"?(setJobReportSuccess2(true)):(setJobReportSuccess(true))
+        // setJobReportSuccess(true)
         closeModal()
         setShowQuestionnaireModal(true)
       } else {
@@ -319,13 +323,19 @@ useEffect(() => {
 
   return (
     <section className="shift placement_table">
-      <FullScreenSuccessMessage
+      <FullScreenSuccessMessage2
+        isOpen={jobReportSuccess2}
+        title={title}
+        message={successMessage}
+        onClose={() => setJobReportSuccess2(false)}
+      />
+
+<FullScreenSuccessMessage
         isOpen={jobReportSuccess}
         title={title}
         message={successMessage}
         onClose={() => setJobReportSuccess(false)}
       />
-
       <FullScreenFailureMessage
         message={jobReportError}
         isOpen={showFailureMessage}
@@ -378,8 +388,7 @@ useEffect(() => {
                     {request.employer_evaluation?.date_of_completion? (<img src={Download} alt="Download" onClick={() => handleAction("download", request)} />):
                     (<img src={Download} alt="Download" onClick={() => null}  className="disable"/>)}
 
-                    <img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />
-
+{request.employer_evaluation?.date_of_completion? (<img src={Download} alt="Edit" onClick={() => handleAction("edit", request)} className="rotate" />): (<img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />)}
                   
                   </td>
                 </tr>

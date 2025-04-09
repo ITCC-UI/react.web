@@ -72,8 +72,9 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
     supervisor_email: Yup.string()
       .email('Invalid email format')
       .required('Supervisor email is required'),
-    nextOfKin: Yup.string(),
-    nextOfKinAddress: Yup.string(),
+  company_email: Yup.string()
+      .email('Invalid email format')
+      .required('Company email is required'),
     nextOfKinPhone: Yup.string()
       .matches(/^[0-9+\s-]*$/, 'Invalid phone number format'),
       formFile: Yup.mixed()
@@ -91,6 +92,7 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
     mailingAddress: request?.job_reporting?.mailing_address || '',
     residential_address: request?.job_reporting?.residential_address || '',
     supervisor_email: request?.job_reporting?.supervisor_email || '',
+    company_email: request?.job_reporting?.company_email || '',
 
     formFile: null // Initialize as null to represent the form itself, not a URL
   };
@@ -208,6 +210,18 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
                   <ErrorMessage name="supervisor_email" component="div" className="error" />
                 </div>
 
+
+                <div className="formInput">
+                  <label htmlFor="company_email">Company's Email *</label>
+                  <Field
+                    type="text"
+                    id="company_email"
+                    name="company_email"
+                    placeholder="companymail@google.com"
+                    className={errors.company_email && touched.company_email ? "error-input" : ""}
+                  />
+                  <ErrorMessage name="company_email" component="div" className="error" />
+                </div>
 
                 <div className="formInput">
                   <label htmlFor="residential_address">Residential Address *</label>

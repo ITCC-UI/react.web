@@ -125,7 +125,7 @@ const getTimeRemaining = (endDateString) => {
 
 const fetchSchedule = async () => {
   try {
-    const response = await axiosInstance.get(`trainings/registrations/${id}/documents/schedule/`);
+    const response = await axiosInstance.get(`trainings/registrations/${id}/documents/schedule/`); //WOrk Report submission
     const endDate = new Date(response.data.end_date);
     
     // Format the end date as before
