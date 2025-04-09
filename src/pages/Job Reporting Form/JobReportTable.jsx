@@ -14,6 +14,7 @@ import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessa
 import Delete from "/images/Delete.png"
 import Edit from "/images/Edit.png"
 import Download from "/images/Download.png"
+import { Tooltip } from 'react-tooltip';
 const JobReportingTable = ({ triggerRefresh }) => {
 
   const [letterRequests, setLetterRequests] = useState([])
@@ -277,7 +278,7 @@ const JobReportingTable = ({ triggerRefresh }) => {
   })
 
   return (
-    <section className=" placement_table">
+    <section className="placement_table">
       <FullScreenSuccessMessage
         isOpen={jobReportSuccess}
         title={title}
@@ -336,18 +337,49 @@ const JobReportingTable = ({ triggerRefresh }) => {
                   </td>
                   <td>{request.job_reporting?.supervisor_phone || "----------"}</td>
                   <td>{request.job_reporting?.date_reported || "----------"}</td>
-                  <td onClick={(e) => e.stopPropagation()} className="action-buttons">
-
                   
-                 <img src={Download} alt="Download" onClick={() => handleAction("download", request)} />
-               
 
-                    <img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />
 
-                    {request.job_reporting ?
-                     (<img src={Delete} alt="Delete" onClick={() => handleAction("delete", request)} className="delete-button" />) :
-                      (<img src={Delete} alt="Delete" disabled onClick={() => null} className="delete-button disable" />)}
-                  </td>
+<td onClick={(e) => e.stopPropagation()} className="action-buttons">
+  <img 
+    src={Download} 
+    alt="Download" 
+    onClick={() => handleAction("download", request)} 
+    data-tooltip-id="download-tooltip"
+    data-tooltip-content="Download this item"
+  />
+  <Tooltip id="download-tooltip" place="top" effect="solid" />
+  
+  <img 
+    src={Edit} 
+    alt="Edit" 
+    onClick={() => handleAction("edit", request)}
+    data-tooltip-id="edit-tooltip" 
+    data-tooltip-content="Edit this item"
+  />
+  <Tooltip id="edit-tooltip" place="top" effect="solid" />
+  
+  {request.job_reporting ?
+    (<img 
+      src={Delete} 
+      alt="Delete" 
+      onClick={() => handleAction("delete", request)} 
+      className="delete-button"
+      data-tooltip-id="delete-tooltip" 
+      data-tooltip-content="Delete this item" 
+    />) :
+    (<img 
+      src={Delete} 
+      alt="Delete" 
+      disabled 
+      onClick={() => null} 
+      className="pointer disable"
+      data-tooltip-id="delete-disabled-tooltip" 
+      data-tooltip-content="This item cannot be deleted" 
+    />)}
+  <Tooltip id="delete-tooltip" place="top" effect="solid" />
+  <Tooltip id="delete-disabled-tooltip" place="top" effect="solid" />
+</td>
                 </tr>
               ))}
             </tbody>

@@ -55,6 +55,9 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
     }
   };
 
+  const handleClose = () => {
+    window.location.reload()
+   }
   const handlePrevious = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
@@ -164,7 +167,7 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
             ))}
     
             <p className="skill-label ">{summary?.remark}</p>
-          <button onClick={onClose} className="close-button">
+          <button onClick={()=>{onClose(); handleClose()}} className="close-button">
             Close
           </button>
         </div>

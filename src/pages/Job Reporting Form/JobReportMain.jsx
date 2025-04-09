@@ -33,6 +33,7 @@ const JobReportingForm = () => {
   const [triggerRefresh, setTriggerRefresh] = useState(false);
     const [endDate, setEndDate] =useState("Deadline not set")
     const [timeRemaining, setTimeRemaining] = useState("Deadline not set");
+    const [duration, setDuration] = useState("")
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -100,7 +101,7 @@ const JobReportingForm = () => {
   // fecth schedule
   const fetchSchedule = async () => {
     try {
-      const response = await axiosInstance.get(`trainings/registrations/${id}/documents/schedule/`);
+      const response = await axiosInstance.get(`trainings/registrations/${id}/job-reporting/schedule/`);
       const endDate = new Date(response.data.end_date);
       // Format the end date as before
       const formattedDate = endDate.toLocaleString('en-US', {
@@ -135,11 +136,13 @@ const JobReportingForm = () => {
   }, [id]);
 
 
+
   // Fetch Registration ID
 const fetchRegistrationType = async () =>{
   try{
     const response = await axiosInstance.get(`/trainings/registrations/${id}`);
     const duration=(response.data.training.type.duration)
+    setDuration(duration)
 
   }
   catch (error){
@@ -183,6 +186,7 @@ useEffect (()=>{
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/job-reporting/reportable/`);
       setjobReports(response.data);
+      
       
       setIsLoading(false);
     } catch (error) {
@@ -540,7 +544,7 @@ useEffect (()=>{
           <div className="placement-head">
             Job Reporting Form
           </div>
-         
+         {jobReports[0]?.job_reporting && duration===24 ? (<button className="btn-primary" onClick={()=>{handleSCAFDownload()}}>Download SCAF Form</button>) : ""}
         </div>
         <div className="error deadline">Submission Deadline: {endDate} </div>
         <div className="error deadline">Time Remaining: {timeRemaining} </div>

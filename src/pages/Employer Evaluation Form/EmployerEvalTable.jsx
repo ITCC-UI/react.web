@@ -8,11 +8,13 @@ import { Search } from "lucide-react"
 import Filter from "/images/Filter.png"
 import { DownloadModal, EditModal, DeleteModal } from "./ModalBoxes/Modals"
 import FormDetailsModal from "./ModalBoxes/FormDetailsModal"
-import FullScreenSuccessMessage from "../Placement/Successful/Successful2"
+import FullScreenSuccessMessage2 from "../Placement/Successful/Successful2"
+import FullScreenSuccessMessage from "../Placement/Successful/Successful"
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage"
 import Download from "/images/Download.png"
 import Edit from "/images/Edit.png"
 import QuestionnaireModal from "./ModalBoxes/QuestionnaireModal"
+import { Tooltip } from 'react-tooltip';
 
 const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => {
   const [letterRequests, setEvaluableForms] = useState([])
@@ -21,10 +23,10 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => 
   const [activeModal, setActiveModal] = useState(null)
   const [selectedRequest, setSelectedRequest] = useState(null)
   const [registrationId, setRegistrationId] = useState(null)
-  const [, setJobReportID] = useState(null)
   const [successMessage, setJobReportStatus] = useState(null)
   const [title, setTitle] = useState(null)
   const [jobReportSuccess, setJobReportSuccess] = useState(false)
+  const [jobReportSuccess2, setJobReportSuccess2] = useState(false)
   const [jobReportError, setJobReportError] = useState(null)
   const [showFailureMessage, setShowJobReportingFailure] = useState(false)
   const [isDeleting] = useState(false)
@@ -127,7 +129,8 @@ const startSurvey = async (placementId) => {
   const checkSurvey = async () => {
     try {
       const placementResponse = await axiosInstance.get(`/trainings/registrations/placements/${placementId}/`)
-      setSurveyResponse(placementResponse.data.employer_evaluation_survey_status)
+      setSurveyResponse(placementResponse?.data?.employer_evaluation_survey_status)
+      
     }catch (error) {
       
     }
@@ -270,7 +273,8 @@ useEffect(() => {
         //("Updated job report")
         setJobReportStatus("Form Updated")
         setTitle("Your form has been successfully updated")
-        setJobReportSuccess(true)
+        surveyResponseStatus!=="SUBMITTED"?(setJobReportSuccess2(true)):(setJobReportSuccess(true))
+        // setJobReportSuccess(true)
         closeModal()
         setShowQuestionnaireModal(true)
       } else {
@@ -319,13 +323,19 @@ useEffect(() => {
 
   return (
     <section className="shift placement_table">
-      <FullScreenSuccessMessage
+      <FullScreenSuccessMessage2
+        isOpen={jobReportSuccess2}
+        title={title}
+        message={successMessage}
+        onClose={() => setJobReportSuccess2(false)}
+      />
+
+<FullScreenSuccessMessage
         isOpen={jobReportSuccess}
         title={title}
         message={successMessage}
         onClose={() => setJobReportSuccess(false)}
       />
-
       <FullScreenFailureMessage
         message={jobReportError}
         isOpen={showFailureMessage}
@@ -373,15 +383,54 @@ useEffect(() => {
                   <td>{request.attached_company_name}</td>
                <td>{request.employer_evaluation?.date_of_completion || "----------"}</td>
                
-                  <td onClick={(e) => e.stopPropagation()} className="action-buttons">
 
-                    {request.employer_evaluation?.date_of_completion? (<img src={Download} alt="Download" onClick={() => handleAction("download", request)} />):
-                    (<img src={Download} alt="Download" onClick={() => null}  className="disable"/>)}
 
-                    <img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />
 
-                  
-                  </td>
+<td onClick={(e) => e.stopPropagation()} className="action-buttons">
+  {!request.employer_evaluation?.date_of_completion ? (
+    <img 
+      src={Download} 
+      alt="Download" 
+      onClick={() => handleAction("download", request)}
+      data-tooltip-id="download-tooltip"
+      data-tooltip-content="Download evaluation"
+    />
+  ) : (
+    <img 
+      src={Download} 
+      alt="Download" 
+      onClick={() => null}
+      className="disable pointer"
+      data-tooltip-id="download-disabled-tooltip"
+      data-tooltip-content="No evaluation to download"
+    />
+  )}
+
+  {request.employer_evaluation?.date_of_completion ? (
+    <img 
+      src={Download} 
+      alt="Edit" 
+      onClick={() => handleAction("edit", request)} 
+      className="rotate"
+      data-tooltip-id="edit-completed-tooltip"
+      data-tooltip-content="Upload File"
+    />
+  ) : (
+    <img 
+      src={Edit} 
+      alt="Edit" 
+      onClick={() => handleAction("edit", request)}
+      data-tooltip-id="edit-tooltip"
+      data-tooltip-content="Create evaluation"
+    />
+  )}
+  
+  {/* Add tooltip components */}
+  <Tooltip id="download-tooltip" place="top" effect="solid" />
+  <Tooltip id="download-disabled-tooltip" place="top" effect="solid" />
+  <Tooltip id="edit-completed-tooltip" place="top" effect="solid" />
+  <Tooltip id="edit-tooltip" place="top" effect="solid" />
+</td>
                 </tr>
               ))}
             </tbody>

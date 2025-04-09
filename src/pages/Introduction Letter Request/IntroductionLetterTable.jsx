@@ -92,7 +92,7 @@ const IntroductionLetterTable = ({ triggerRefresh }) => {
   });
 
   return (
-    <section className='shift'>
+    <section className='shif placement_table'>
       <div className="mainBody">
         <div className="containerCourse">
           <div className="search-bar">
