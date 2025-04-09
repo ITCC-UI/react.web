@@ -14,6 +14,7 @@ import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessa
 import Download from "/images/Download.png"
 import Edit from "/images/Edit.png"
 import QuestionnaireModal from "./ModalBoxes/QuestionnaireModal"
+import { Tooltip } from 'react-tooltip';
 
 const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => {
   const [letterRequests, setEvaluableForms] = useState([])
@@ -22,7 +23,6 @@ const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => 
   const [activeModal, setActiveModal] = useState(null)
   const [selectedRequest, setSelectedRequest] = useState(null)
   const [registrationId, setRegistrationId] = useState(null)
-  const [, setJobReportID] = useState(null)
   const [successMessage, setJobReportStatus] = useState(null)
   const [title, setTitle] = useState(null)
   const [jobReportSuccess, setJobReportSuccess] = useState(false)
@@ -383,14 +383,54 @@ useEffect(() => {
                   <td>{request.attached_company_name}</td>
                <td>{request.employer_evaluation?.date_of_completion || "----------"}</td>
                
-                  <td onClick={(e) => e.stopPropagation()} className="action-buttons">
 
-                    {request.employer_evaluation?.date_of_completion? (<img src={Download} alt="Download" onClick={() => handleAction("download", request)} />):
-                    (<img src={Download} alt="Download" onClick={() => null}  className="disable"/>)}
 
-{request.employer_evaluation?.date_of_completion? (<img src={Download} alt="Edit" onClick={() => handleAction("edit", request)} className="rotate" />): (<img src={Edit} alt="Edit" onClick={() => handleAction("edit", request)} />)}
-                  
-                  </td>
+
+<td onClick={(e) => e.stopPropagation()} className="action-buttons">
+  {!request.employer_evaluation?.date_of_completion ? (
+    <img 
+      src={Download} 
+      alt="Download" 
+      onClick={() => handleAction("download", request)}
+      data-tooltip-id="download-tooltip"
+      data-tooltip-content="Download evaluation"
+    />
+  ) : (
+    <img 
+      src={Download} 
+      alt="Download" 
+      onClick={() => null}
+      className="disable pointer"
+      data-tooltip-id="download-disabled-tooltip"
+      data-tooltip-content="No evaluation to download"
+    />
+  )}
+
+  {request.employer_evaluation?.date_of_completion ? (
+    <img 
+      src={Download} 
+      alt="Edit" 
+      onClick={() => handleAction("edit", request)} 
+      className="rotate"
+      data-tooltip-id="edit-completed-tooltip"
+      data-tooltip-content="Upload File"
+    />
+  ) : (
+    <img 
+      src={Edit} 
+      alt="Edit" 
+      onClick={() => handleAction("edit", request)}
+      data-tooltip-id="edit-tooltip"
+      data-tooltip-content="Create evaluation"
+    />
+  )}
+  
+  {/* Add tooltip components */}
+  <Tooltip id="download-tooltip" place="top" effect="solid" />
+  <Tooltip id="download-disabled-tooltip" place="top" effect="solid" />
+  <Tooltip id="edit-completed-tooltip" place="top" effect="solid" />
+  <Tooltip id="edit-tooltip" place="top" effect="solid" />
+</td>
                 </tr>
               ))}
             </tbody>

@@ -373,7 +373,7 @@ const JobReportingTable = ({ triggerRefresh }) => {
       alt="Delete" 
       disabled 
       onClick={() => null} 
-      className="delete-button disable"
+      className="pointer disable"
       data-tooltip-id="delete-disabled-tooltip" 
       data-tooltip-content="This item cannot be deleted" 
     />)}
