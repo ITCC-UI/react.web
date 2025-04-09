@@ -29,6 +29,9 @@ const [showFailureMessage, setShowIntroFailure]=useState(false)
   const [loading, titleIsLoading] =useState(false)
   const [addressOptions, setAdressOptions]= useState([])
   const [statesOfNigeria, setNewState] =useState([])
+  const [endDate, setEndDate] =useState("Deadline not set")
+ const [timeRemaining, setTimeRemaining] = useState("Deadline not set");
+    
 
   const toggleNewRequest = () => {
     setShowNewRequest(!showNewRequest);
@@ -63,6 +66,76 @@ const [showFailureMessage, setShowIntroFailure]=useState(false)
   useEffect(() => {
     fetchProgrammeId();
   }, []);
+
+  const getTimeRemaining = (endDateString) => {
+    if (!endDateString) {
+      
+      return "No deadline set";
+    }
+    
+    const endDate = new Date(endDateString);
+    const currentDate = new Date();
+    
+    // Calculate the difference in milliseconds
+    const timeDifference = endDate - currentDate;
+    
+    // If the deadline has passed
+    if (timeDifference <= 0) {
+      return "Deadline has passed";
+    }
+    
+    // Calculate days, hours, minutes
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    
+    // Format as "12 days, 4 hours, and 30 minutes"
+    return `${days} days, ${hours} hours, and ${minutes} minutes`;
+  };
+
+  // fecth schedule
+  const fetchSchedule = async () => {
+    try {
+      const response = await axiosInstance.get(`trainings/registrations/${programmeId}/introduction-letter-requests/schedule/`);
+      const endDate = new Date(response.data.end_date);
+      // Format the end date as before
+      const formattedDate = endDate.toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+      });
+  
+      
+      // Get the formatted time remaining
+      const timeRemaining = getTimeRemaining(response.data.end_date);
+  
+      
+      // You can set both to state
+      // setPlacementRequests(response.data);
+      setEndDate(formattedDate);
+      setTimeRemaining(timeRemaining); 
+  
+      
+    } catch (error) {
+    console.error("Error fetching schedule:", error);
+    }
+  };
+  
+  useEffect(() => {
+    if (programmeId) {
+      fetchSchedule();
+    }
+  }, [programmeId]);
+
+
+
+
+
+
+
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const handleSubmit = async (values, { setSubmitting }) => {
     if (!programmeId) {
@@ -301,7 +374,7 @@ useEffect(()=>{
           <div className="topHead">
             <div className="heading">INTRODUCTION LETTERS</div>
             
-              {programmeId  &&   (
+              {programmeId  && timeRemaining!="Deadline has passed" &&  (
         <button className="newReq" onClick={toggleNewRequest}>
           + New Request
         </button>
@@ -309,6 +382,12 @@ useEffect(()=>{
       
           </div>
         </div>
+
+        <div className="error deadline">Submission Deadline: {endDate} </div>
+        <div className="error deadline">Time Remaining: {timeRemaining} </div>
+     
+
+
         {isLoading ? (
           <div className="loader">
             <GridLoader size={15} color={"#123abc"} />
