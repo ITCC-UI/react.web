@@ -134,7 +134,7 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
                                         <div className="key">Status</div>
                                         <div className="value">{doc.approval_status}</div>
                                     </div>
-                                    <div className="actions">
+                                    <div className="actions-submit">
                                         <a href={doc.document} target="_blank" rel="noopener noreferrer" className="action-btn" title="View"><FiEye /></a>
                                         <button onClick={() => handleEdit(doc.id)} className="action-btn" title="Edit"><FiEdit /></button>
                                         <button onClick={() => handleDelete(doc.id)} className="action-btn" title="Delete"><FiTrash2 /></button>
@@ -144,9 +144,11 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
                         ) : (
                             <p>No documents uploaded yet.</p>
                         )}
-                        <button className="add-btn" onClick={() => fileInputRef.current.click()} disabled={uploading}>
-                            {uploading ? <TailSpin height={20} width={20} color='blue' /> : <FiPlus />} Upload
-                        </button>
+                     {uploading? (  <button className="add-btn" disabled={uploading}>
+                            <TailSpin height={20} width={20} color='blue' />   Uploadling...
+                        </button>):  (  <button className="add-btn" onClick={() => fileInputRef.current.click()} disabled={uploading}>
+                        {<FiPlus/>}    Upload
+                        </button>)}
                         <input
                             type="file"
                             className="hidden-input"
