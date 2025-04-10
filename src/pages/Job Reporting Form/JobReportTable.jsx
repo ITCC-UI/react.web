@@ -55,7 +55,7 @@ const JobReportingTable = ({ triggerRefresh }) => {
         
         const placementsResponse = await axiosInstance.get(`/trainings/registrations/${regId}/placements/`)
         const placements = placementsResponse.data
-
+console.log("PLaccements", placements)
         if (!placements || placements.length === 0) {
           setLetterRequests([])
           return
@@ -346,7 +346,7 @@ const JobReportingTable = ({ triggerRefresh }) => {
     alt="Download" 
     onClick={() => handleAction("download", request)} 
     data-tooltip-id="download-tooltip"
-    data-tooltip-content="Download this item"
+    data-tooltip-content="Download Job Reporting Form"
   />
   <Tooltip id="download-tooltip" place="top" effect="solid" />
   
@@ -355,7 +355,7 @@ const JobReportingTable = ({ triggerRefresh }) => {
     alt="Edit" 
     onClick={() => handleAction("edit", request)}
     data-tooltip-id="edit-tooltip" 
-    data-tooltip-content="Edit this item"
+    data-tooltip-content="Upload filled Job Reporting Form"
   />
   <Tooltip id="edit-tooltip" place="top" effect="solid" />
   
@@ -366,7 +366,7 @@ const JobReportingTable = ({ triggerRefresh }) => {
       onClick={() => handleAction("delete", request)} 
       className="delete-button"
       data-tooltip-id="delete-tooltip" 
-      data-tooltip-content="Delete this item" 
+      data-tooltip-content="Delete submission" 
     />) :
     (<img 
       src={Delete} 
@@ -375,7 +375,7 @@ const JobReportingTable = ({ triggerRefresh }) => {
       onClick={() => null} 
       className="pointer disable"
       data-tooltip-id="delete-disabled-tooltip" 
-      data-tooltip-content="This item cannot be deleted" 
+      data-tooltip-content="No submission available to delete" 
     />)}
   <Tooltip id="delete-tooltip" place="top" effect="solid" />
   <Tooltip id="delete-disabled-tooltip" place="top" effect="solid" />

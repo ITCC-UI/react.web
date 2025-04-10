@@ -15,6 +15,7 @@ import Download from "/images/Download.png"
 import Edit from "/images/Edit.png"
 import QuestionnaireModal from "./ModalBoxes/QuestionnaireModal"
 import { Tooltip } from 'react-tooltip';
+import Upload  from "/images/upload-to-cloud.png"
 
 const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => {
   const [letterRequests, setEvaluableForms] = useState([])
@@ -306,7 +307,46 @@ useEffect(() => {
     }
   }
 
+  const handleDateSave = async (formData) => {
+    try {
+      if (!registrationId) {
+        
+        return
+      }
+      
+      // Create form data for file upload if needed
+      const apiFormData = new FormData()
+      apiFormData.append("date_of_completion", formData?.date_of_completion || " ")
+           
+        // Create new EMployer evaluation with POST
+        await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {})
+        setJobReportStatus(" ")
+        setTitle("Date of Completion has been filled successfully")
+        setJobReportSuccess(true)
+        closeModal()
+        
+        // setTriggerRefresh(prev => !prev)
 
+        handleDownload()
+      
+    } catch (error) {
+      // setJobReportError(error.response.data.detail)
+      if (error.response.status == 500) {
+        setJobReportError("There was an error submitting your form")
+        setShowJobReportingFailure(true)
+        closeModal()
+        
+      }
+      else{
+        setJobReportError(error.response.data.detail)
+        setShowJobReportingFailure(true)
+        closeModal()
+        
+      }
+    
+    
+    }
+  }
 
   // Filter and search functionality
   const filteredRequests = letterRequests.filter((request) => {
@@ -371,8 +411,8 @@ useEffect(() => {
             <thead>
               <tr>
                 <th>Company Name</th>
-                {/* <th>Supervisor's Name</th>
-                <th>Supervisor's Phone Number</th> */}
+                
+             
                 <th>Date of Completion</th>
                 <th>Action</th>
               </tr>
@@ -387,33 +427,23 @@ useEffect(() => {
 
 
 <td onClick={(e) => e.stopPropagation()} className="action-buttons">
-  {!request.employer_evaluation?.date_of_completion ? (
-    <img 
+     <img 
       src={Download} 
       alt="Download" 
       onClick={() => handleAction("download", request)}
       data-tooltip-id="download-tooltip"
-      data-tooltip-content="Download evaluation"
+      data-tooltip-content="Download Employer Evaluation Form"
+      
     />
-  ) : (
-    <img 
-      src={Download} 
-      alt="Download" 
-      onClick={() => null}
-      className="disable pointer"
-      data-tooltip-id="download-disabled-tooltip"
-      data-tooltip-content="No evaluation to download"
-    />
-  )}
+   
 
   {request.employer_evaluation?.date_of_completion ? (
     <img 
-      src={Download} 
+      src={Upload} 
       alt="Edit" 
-      onClick={() => handleAction("edit", request)} 
-      className="rotate"
+      onClick={() => handleAction("edit", request)}
       data-tooltip-id="edit-completed-tooltip"
-      data-tooltip-content="Upload File"
+      data-tooltip-content="Upload Employer Evaluation Form"
     />
   ) : (
     <img 
@@ -444,6 +474,8 @@ useEffect(() => {
           onClose={closeModal}
           onDownload={handleDownload}
           isDownloading={isDownloading}
+          onSave={handleDateSave}
+          isSubmitting={isDownloading}
         />
       )}
 

@@ -9,7 +9,7 @@ import { PulseLoader } from 'react-spinners';
 import FullScreenFailureMessage from '../Placement/Failed/FullScreenFailureMessage';
 import FullScreenSuccessMessage from '../Placement/Successful/Successful';
 
-const FormSubmissionComponent = ({ title, fileType, documentType, fileName, updateAPI }) => {
+const FormSubmissionComponent = ({ title, fileType, documentType, fileName, updateAPI, onError, onClick }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [iD, setProgramID] = useState(null);
   const [showFailureMessage, setShowFailureMessage] = useState(false);
@@ -44,11 +44,11 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName, upda
           setProgramID(response.data[0].id);
         }
       } catch (error) {
-       
+        if (onError) onError(error.message || "Failed to fetch program ID");
       }
     };
     fetchProgrammeId();
-  }, []);
+  }, [onError]);
 
   // Fetch existing training documents
   useEffect(() => {
@@ -56,28 +56,21 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName, upda
       if (!iD) return;
       try {
         const response = await axiosInstance.get(`trainings/registrations/${iD}/documents/by-types`);
-        const existingFile = response.data[0]?.documents|| "";
+        const existingFile = response.data[0]?.documents || "";
        
-       if(existingFile!=0){
-        const fileName = existingFile[0].document.split("/").pop();
-     
-        
-        // Update state with fetched file name
-        setHasExistingFile(true);
-       
-       }
-
-       else{
-      
-       }
+        if(existingFile != 0){
+          const fileName = existingFile[0].document.split("/").pop();
+          
+          // Update state with fetched file name
+          setHasExistingFile(true);
+        }
       }
-      
       catch (error) {
-      
+        if (onError) onError(error.message || "Failed to fetch training documents");
       }
     };
     fetchTrainingTypes();
-  }, [iD]);
+  }, [iD, onError]);
 
   // Handle file upload
   const handleFileUpload = async (setFieldValue, file) => {
@@ -98,23 +91,28 @@ const FormSubmissionComponent = ({ title, fileType, documentType, fileName, upda
       const endpoint = hasExistingFile 
         ? updateAPI
         : `/trainings/registrations/${iD}/documents/`;
-const response = hasExistingFile
-  ? await axiosInstance.put(endpoint, formData, { //  Use PUT for updates
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-  : await axiosInstance.post(endpoint, formData, { // Use POST for new uploads
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
-setShowSuccessMessage(true);
-
-    
+      const response = hasExistingFile
+        ? await axiosInstance.put(endpoint, formData, { //  Use PUT for updates
+            headers: { 'Content-Type': 'multipart/form-data' }
+          })
+        : await axiosInstance.post(endpoint, formData, { // Use POST for new uploads
+            headers: { 'Content-Type': 'multipart/form-data' }
+          });
+      setShowSuccessMessage(true);
       resetForm();
     } catch (error) {
-     
       setFailureMessage(error.response?.data?.detail || "An error occurred");
       setShowFailureMessage(true);
+      if (onError) onError(error.message || "Form submission failed");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  // Handle click on the file name to open the file
+  const handleFileNameClick = () => {
+    if (onClick && hasExistingFile) {
+      onClick();
     }
   };
 
@@ -135,35 +133,39 @@ setShowSuccessMessage(true);
             <div className="file-input-container">
               <label>{title}</label>
               <div className="file-input-wrapper">
-              <input
-    type="text"
-    readOnly
-    value={values.document ? values.document.name : fileName} // ✅ Use prop
-    className="file-name-display"
-    placeholder={fileName || "N/A"} // ✅ Use prop as fallback
-/>
+                <input
+                  type="text"
+                  readOnly
+                  value={values.document ? values.document.name : fileName}
+                  className="file-name-display"
+                  placeholder={fileName || "N/A"}
+                  onClick={handleFileNameClick}
+                  style={hasExistingFile && !values.document ? { cursor: 'pointer' } : {}}
+                />
 
-{!values.document ? ( 
+                {!values.document ? ( 
                   <label className="file-input-label">
                     <FiPaperclip className="paperclip-icon" />
                     <input
                       type="file"
-                      ref={fileInputRef} // ✅ Set reference
+                      ref={fileInputRef}
                       onChange={(e) => handleFileUpload(setFieldValue, e.target.files[0])}
                       className="hidden-file-input"
                       accept={fileType}
                     />
                   </label>
-                ) : (      <label className="file-input-label visi-none">
-                  <FiPaperclip className="paperclip-icon" />
-                  <input
-                    type="file"
-                    ref={fileInputRef} // ✅ Set reference
-                    onChange={(e) => handleFileUpload(setFieldValue, e.target.files[0])}
-                    className="hidden-file-input"
-                    accept={fileType}
-                  />
-                </label> )}
+                ) : (
+                  <label className="file-input-label visi-none">
+                    <FiPaperclip className="paperclip-icon" />
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={(e) => handleFileUpload(setFieldValue, e.target.files[0])}
+                      className="hidden-file-input"
+                      accept={fileType}
+                    />
+                  </label>
+                )}
               </div>
               {errors.document && touched.document && (
                 <div className="error-message">{errors.document}</div>
@@ -188,7 +190,8 @@ setShowSuccessMessage(true);
                 <button
                   type="button"
                   className="change-file-button"
-                  onClick={() => fileInputRef.current && fileInputRef.current.click()}                 >
+                  onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                >
                   Change File
                 </button>
               </div>
@@ -212,5 +215,4 @@ setShowSuccessMessage(true);
     </>
   );
 };
-
 export default FormSubmissionComponent;
