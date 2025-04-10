@@ -26,13 +26,7 @@ const DownloadModal = ({ onClose, onDownload, onSave, request, isDownloading }) 
   const handleSubmit = (values, { setSubmitting }) => {
     // Call the onSave prop with the date_of_completion
     onSave({ date_of_completion: values.date_of_completion }, request.id);
-  
-    
-    // Auto-download after saving the date
-    setTimeout(() => {
-      onDownload(request);
-      setSubmitting(false);
-    }, 1000);
+    // setSubmitting(false);
   };
 
   // Check if employer_evaluation exists and has a date_of_completion
@@ -80,7 +74,7 @@ const DownloadModal = ({ onClose, onDownload, onSave, request, isDownloading }) 
                     className="next-button"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save & Download'}
+                    {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save Date'}
                   </button>
                 </div>
               </Form>
@@ -147,7 +141,7 @@ const EditModal = ({ onClose, onSave, request }) => {
       formFile: formFile,
     };
   
-    console.log("Final payload:", formData);
+    
   
     onSave(formData, request.id);
   };

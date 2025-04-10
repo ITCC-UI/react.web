@@ -205,11 +205,11 @@ const startSurvey = async (placementId) => {
       link.click()
       link.parentNode.removeChild(link)
 
-      //("Download successful for:", request)
+      
     } catch (error) {
       if (error.response.request.status != 500) {
-        
-        setJobReportError(error.response.data.detail)
+        console.error(error.response)
+        setJobReportError(error.response?.data?(error.response.data.detail):("There was an error downloading your Employer Evaluation form"))
         setShowJobReportingFailure(true)
       }
       else {
@@ -327,7 +327,7 @@ useEffect(() => {
         
         // setTriggerRefresh(prev => !prev)
 
-        handleDownload()
+        // handleDownload()
       
     } catch (error) {
       // setJobReportError(error.response.data.detail)
@@ -447,11 +447,13 @@ useEffect(() => {
     />
   ) : (
     <img 
-      src={Edit} 
+      src={Upload} 
       alt="Edit" 
-      onClick={() => handleAction("edit", request)}
-      data-tooltip-id="edit-tooltip"
-      data-tooltip-content="Create evaluation"
+      onClick={() =>null}
+      data-tooltip-id="edit-completed-tooltip"
+      className="disable"
+      disabled={true}
+      data-tooltip-content="Upload Employer Evaluation Form"
     />
   )}
   

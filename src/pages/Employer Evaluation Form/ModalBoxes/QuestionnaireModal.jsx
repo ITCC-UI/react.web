@@ -102,7 +102,7 @@ const QuestionnaireModal = ({ onClose, placementId, onComplete }) => {
       );
       
       setSummary(response.data);
-      console.log(response.data)
+      
       setShowSummary(true);
     } catch (error) {
      

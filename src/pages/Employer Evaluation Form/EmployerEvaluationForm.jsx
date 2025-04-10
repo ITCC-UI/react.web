@@ -190,9 +190,9 @@ useEffect (()=>{
   const fetchEvaluationForm = async () => {
     try {
       const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/last/evaluation/status/`)
-      console.log(response.data)
+      
       setEvaluationForm(response.data)
-      console.log(response.data)
+
     } catch (error) {
       setIsLoading(false);
       console.error("Error fetching evaluation form:", error);

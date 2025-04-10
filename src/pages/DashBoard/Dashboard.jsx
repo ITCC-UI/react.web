@@ -31,7 +31,7 @@ const Dashboard = (dashboardClass, placementClass, disableCover,disableReg) => {
       });
 
       if (response.ok) {
-        console.log('Form data saved successfully');
+      
         setFormData(values); // Store form data in state
         setIsVisible(true); // Show confirmation after successful form submission
       } else {
