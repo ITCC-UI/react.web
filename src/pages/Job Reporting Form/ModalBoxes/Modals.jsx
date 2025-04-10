@@ -70,11 +70,9 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
     residential_address: Yup.string()
       .required('Residential address required'),
     supervisor_email: Yup.string()
-      .email('Invalid email format')
-      .required('Supervisor email is required'),
+      .email('Invalid email format'),
   company_email: Yup.string()
-      .email('Invalid email format')
-      .required('Company email is required'),
+      .email('Invalid email format'),
     nextOfKinPhone: Yup.string()
       .matches(/^[0-9+\s-]*$/, 'Invalid phone number format'),
       formFile: Yup.mixed()
@@ -193,13 +191,13 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
                     id="dateResumed"
                     name="dateResumed"
                     placeholder="dd/mm/yy"
-                  // className={errors.dateResumed && touched.dateResumed ? "error-input" : ""}
+                    className={errors.dateResumed && touched.dateResumed ? "error-input" : ""}
                   />
-                  <ErrorMessage name="dateResumed" component="div" className="error" />
+                  
                 </div>
 
                 <div className="formInput">
-                  <label htmlFor="supervisor_email">Supervisor's Email *</label>
+                  <label htmlFor="supervisor_email">Supervisor's Email (optional)</label>
                   <Field
                     type="text"
                     id="supervisor_email"
@@ -212,7 +210,7 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
 
 
                 <div className="formInput">
-                  <label htmlFor="company_email">Company's Email *</label>
+                  <label htmlFor="company_email">Company's Email (optional)</label>
                   <Field
                     type="text"
                     id="company_email"
@@ -220,7 +218,7 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
                     placeholder="companymail@google.com"
                     className={errors.company_email && touched.company_email ? "error-input" : ""}
                   />
-                  <ErrorMessage name="company_email" component="div" className="error" />
+                 
                 </div>
 
                 <div className="formInput">
@@ -306,5 +304,6 @@ const DeleteModal = ({ onClose, onConfirm, request, isDeleting }) => (
     </div>
   </div>
 );
+
 
 export { DownloadModal, EditModal, DeleteModal };

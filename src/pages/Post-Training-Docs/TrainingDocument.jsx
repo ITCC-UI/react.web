@@ -6,7 +6,7 @@ import TopNav from "../../../components/Header/Header";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
 import FullScreenSuccessMessage from "../Placement/Successful/Successful";
-import PostTrainingTable from "./PostTrainigTable";
+import PostTrainingTable from "./PostTrainingComponent";
 
 const TrainingDocuments = () => {
   

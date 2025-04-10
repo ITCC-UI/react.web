@@ -17,7 +17,7 @@ const EmployerEvaluationForm = () => {
   const [showSubmitForm, setShowSubmitForm] = useState(false)
   const [id, setProgrammeId] = useState(null);
   const [placements, setPlacementRequests] = useState([])
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSCAFDownloading, setSCAFIsDownloading] = useState(false);
   const [noProgrammeId, setNoProgrammeId] = useState(false);
@@ -62,6 +62,7 @@ const EmployerEvaluationForm = () => {
       }
     } catch (error) {
       setNoProgrammeId(true);
+      setIsLoading(false)
 
 
     }
@@ -101,7 +102,7 @@ const EmployerEvaluationForm = () => {
   
   const fetchSchedule = async () => {
     try {
-      const response = await axiosInstance.get(`trainings/registrations/${id}/documents/schedule/`);
+      const response = await axiosInstance.get(`trainings/registrations/${id}/placements/evaluation/schedule/`);
       const endDate = new Date(response.data.end_date);
       
       // Format the end date as before
@@ -188,27 +189,28 @@ useEffect (()=>{
 
   const fetchEvaluationForm = async () => {
     try {
-      const response = await axiosInstance.get(`/trainings/registrations/placements/${placementID}/evaluation/`)
-      
+      const response = await axiosInstance.get(`/trainings/registrations/${id}/placements/last/evaluation/status/`)
+      console.log(response.data)
       setEvaluationForm(response.data)
       console.log(response.data)
     } catch (error) {
       setIsLoading(false);
+      console.error("Error fetching evaluation form:", error);
       
     }
   }
 
   useEffect(() => {
-    if (placementID) {
+    if (id) {
     fetchEvaluationForm()
     }
-  }, [placementID])
+  }, [id])
 
 
   const downloadSCAFFormIT_8 = async () => {
     try {
       const response = await axiosInstance.get(
-        `/trainings/registrations/${id}/evaluation/itf-form8/document/`,
+        `/trainings/registrations/${id}/placements/evaluation/itf-form8/document/`,
         {
           responseType: 'blob',
         }
