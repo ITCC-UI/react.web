@@ -327,7 +327,7 @@ useEffect(() => {
         
         // setTriggerRefresh(prev => !prev)
 
-        handleDownload()
+        // handleDownload()
       
     } catch (error) {
       // setJobReportError(error.response.data.detail)
