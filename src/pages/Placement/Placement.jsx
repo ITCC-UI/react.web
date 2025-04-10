@@ -15,6 +15,7 @@ import PlacementChange from "./PlacementChange";
 import FullScreenSuccessMessage from "./Successful/Successful";
 import FullScreenFailureMessage from "./Failed/FullScreenFailureMessage";
 import MultiStepForm from "../../../components/View More/NewForm";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -48,6 +49,17 @@ const [ refreshData, setRefreshData]= useState(false)
 
 
   const [isFormOpen, setIsFormOpen] = useState(true);
+const navigate=useNavigate()
+
+const modalClose= () =>{
+  setShowChangeOfPlacementSuccessful(false)
+  navigate(0)
+}
+
+const acceptanceReload=()=>{
+  setShowAcceptanceSuccessful(false)
+  navigate(0)
+}
 
 
   const toggleNewRequest = () => {
@@ -90,6 +102,11 @@ const [ refreshData, setRefreshData]= useState(false)
   }, []);
 
   
+
+  const reloadRequest = ()=>{
+    setShowPlacementSuccessful(false)
+    navigate(0)
+  }
 
   const handleAcceptanceRequest = async (values, { setSubmitting }) => {
     try {
@@ -497,7 +514,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq} onFormSubm
       <FullScreenSuccessMessage
         isOpen={showAcceptanceSuccessful}
         message={acceptanceSuccessMessage}
-        onClose={() => setShowAcceptanceSuccessful(false)}
+        onClose={() => acceptanceReload()}
       />
 
 <FullScreenFailureMessage
@@ -510,7 +527,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq} onFormSubm
       <FullScreenSuccessMessage
         isOpen={showPlacementSuccessful}
         message={placementSuccessMessage}
-        onClose={() => setShowPlacementSuccessful(false)}
+        onClose={() => reloadRequest()}
       />
 
 <FullScreenFailureMessage
@@ -524,7 +541,7 @@ isFormOpen && <MultiStepForm toggleNewRequest={toggleNewPlacementReq} onFormSubm
       <FullScreenSuccessMessage
   isOpen={showChangeOfPlacementSuccessful}
   message={changeOfPlacementSuccessMessage}
-  onClose={() => setShowChangeOfPlacementSuccessful(false)}
+  onClose={() => modalClose()}
 />
 
 <FullScreenFailureMessage
