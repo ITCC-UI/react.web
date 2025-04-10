@@ -24,7 +24,7 @@ const PlacementRequest = ({refreshPlacementTable}) => {
         return;
       }
 
-      const id = registrations[0].id;
+      const id = registrations[registrations.length - 1].id;
 
       const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placement-requests-view`);
       const requests = requestsResponse.data;

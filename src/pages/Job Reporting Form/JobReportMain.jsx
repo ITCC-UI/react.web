@@ -53,7 +53,7 @@ const JobReportingForm = () => {
     try {
       const response = await axiosInstance.get("trainings/registrations/");
       if (response.data.length > 0) {
-        const id = response.data[0].id;
+        const id = response.data[response.data.length - 1].id;
         setProgrammeId(id);
         setIsLoading(false)
     
