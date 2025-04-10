@@ -6,13 +6,7 @@ import TopNav from "../../../components/Header/Header";
 import axiosInstance from "../../../API Instances/AxiosIntances";
 import FullScreenFailureMessage from "../Placement/Failed/FullScreenFailureMessage";
 import FullScreenSuccessMessage from "../Placement/Successful/Successful";
-<<<<<<< HEAD
-import PostTrainingTable from "./PostTrainingComponent";
-=======
-import PostTrainingTable from "./PostTrainigTable";
 import TrainingDocumentTable from "./TrainingDocumentTable.jsx";
->>>>>>> origin/main
-
 const TrainingDocuments = () => {
 
     const [id, setProgrammeId] = useState(null);
