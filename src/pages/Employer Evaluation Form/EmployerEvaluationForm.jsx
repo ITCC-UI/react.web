@@ -195,7 +195,6 @@ useEffect (()=>{
 
     } catch (error) {
       setIsLoading(false);
-      console.error("Error fetching evaluation form:", error);
       
     }
   }

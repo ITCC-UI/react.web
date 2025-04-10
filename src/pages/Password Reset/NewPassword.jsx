@@ -53,7 +53,6 @@ const ResetPassword = () => {
       setSuccessMessage('Password reset successfully! Redirecting to login page...');
       setTimeout(() => navigate('/login'), 5000);
     } catch (error) {
-      // console.error('Error:', error.response?.data || error.message); // Log the error details
       setErrorMessage(error.response?.data?.message || 'Failed to reset password. Please try again.');
     } finally {
       setSubmitting(false);

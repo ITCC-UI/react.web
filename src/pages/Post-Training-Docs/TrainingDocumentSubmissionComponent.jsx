@@ -48,7 +48,6 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
             toast.success("Document deleted successfully");
         } catch (error) {
             toast.error("Failed to delete document");
-            console.error("Delete failed", error);
         }
     };
 
@@ -86,7 +85,6 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
         } catch (error) {
             const msg = error?.message || "Failed to upload document";
             toast.error(msg);
-            console.error("Validation/Upload error:", error);
         } finally {
             setUploading(false);
         }

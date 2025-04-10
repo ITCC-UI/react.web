@@ -42,7 +42,6 @@ const PersistentFormComponent = ({ showNewRequest, toggleNewRequest, id }) => {
         toggleNewRequest(); // Close the form after success
       }, 5000);
     } catch (error) {
-      console.error("Error submitting placement request form", error);
       let errorMessage = "Failed to submit placement request. Please try again.";
       if (error.response && error.response.data) {
         errorMessage = Object.entries(error.response.data)

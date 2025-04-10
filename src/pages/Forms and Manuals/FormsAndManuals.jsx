@@ -91,14 +91,14 @@ const IntroductionLetter = () => {
       link.click();
       link.remove();
     } catch (error) {
-      console.error("Error downloading the ITF Form", error);
+          /* empty */
     } finally {
       setIsDownloading(false); 
 
     }
       }
     } catch (error) {
-      console.error("Error fetching placements", error);
+      /* empty */
      setShowIntroFailure(true);
      setFailureMessage(error.response.data.detail);
     }

@@ -120,7 +120,7 @@ const [showFailureMessage, setShowIntroFailure]=useState(false)
   
       
     } catch (error) {
-    console.error("Error fetching schedule:", error);
+        /* empty */
     }
   };
   

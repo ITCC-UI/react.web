@@ -21,7 +21,6 @@ const MyForm = () => {
       setSubmitting(false);
       resetForm();
     } catch (error) {
-      console.error(error);
       setSubmitting(false);
     }
   };

@@ -90,9 +90,7 @@ const UpdateProfileForm = () => {
         setApiError(response.data);
       }
     } catch (error) {
-      console.error('Error in handleSubmitPersonalDetails:');
       if (error.response) {
-       
         setApiError(error.response.data);
       } else if (error.request) {
         

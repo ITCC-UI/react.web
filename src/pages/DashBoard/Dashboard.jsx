@@ -35,10 +35,10 @@ const Dashboard = (dashboardClass, placementClass, disableCover,disableReg) => {
         setFormData(values); // Store form data in state
         setIsVisible(true); // Show confirmation after successful form submission
       } else {
-        console.error('Error saving form data');
+        /* empty */
       }
     } catch (error) {
-      console.error('Error saving form data:', error);
+      /* empty */
     }
     setSubmitting(false);
   };

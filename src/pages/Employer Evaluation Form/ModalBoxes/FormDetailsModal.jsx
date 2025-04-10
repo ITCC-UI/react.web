@@ -26,7 +26,7 @@ const MoreDetails = ({ request, onClose }) => {
 
       
     } catch (error) {
-      console.error('Error downloading PDF:', error);
+      /* empty */
     } finally {
       // setIsLoading(false);
     }

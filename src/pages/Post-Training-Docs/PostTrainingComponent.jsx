@@ -79,7 +79,7 @@ const PostTrainingTable = ({ triggerRefresh }) => {
 
 
             } catch (error) {
-console.error("Error fetching training types:", error);
+                /* empty */
             }
         };
 

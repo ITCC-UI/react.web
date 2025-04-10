@@ -34,7 +34,7 @@ const IntroductionLetterTable = ({ triggerRefresh }) => {
 
       setLetterRequests(processedRequests);
     } catch (error) {
-      console.error("Error fetching letter requests", error);
+      /* empty */
     }
   };
 
@@ -72,7 +72,7 @@ const IntroductionLetterTable = ({ triggerRefresh }) => {
       document.body.appendChild(link);
       link.click();
     } catch (error) {
-      console.error("Error downloading document", error);
+      /* empty */
     } finally {
       setLoadingDownloads(prevState => ({ ...prevState, [id]: false }));
     }
