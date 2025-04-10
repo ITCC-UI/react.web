@@ -20,7 +20,7 @@ const MoreDetails = ({ request, onClose }) => {
       try {
         // Get the PDF URL from your backend
         const pdfUrl = request?.job_reporting?.form;
-console.log("The file name",request.job_reporting?.form ? (request.job_reporting.form): " ")        
+
         // Open the PDF in a new tab
         window.open(pdfUrl, '_blank');
   

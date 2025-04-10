@@ -70,7 +70,7 @@ const SignUp = () => {
         setErrorMessage(error.response.data.message);
       } else {
         setErrorMessage(error.response.data[0]);
-        console.log(error)
+        
       }
       setTimeout(() => setErrorMessage(''), 5000);
     } finally {

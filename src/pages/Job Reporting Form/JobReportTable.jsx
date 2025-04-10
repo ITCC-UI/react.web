@@ -55,7 +55,7 @@ const JobReportingTable = ({ triggerRefresh }) => {
         
         const placementsResponse = await axiosInstance.get(`/trainings/registrations/${regId}/placements/`)
         const placements = placementsResponse.data
-console.log("PLaccements", placements)
+
         if (!placements || placements.length === 0) {
           setLetterRequests([])
           return

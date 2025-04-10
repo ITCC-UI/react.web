@@ -48,7 +48,6 @@ const MultiStepForm = ({ toggleNewRequest, onFormSubmit }) => {
                 const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements/current/`);
                 const requests = requestsResponse.data;
                 const placementId = requests?.id;
-                console.log(placementId)
                 setPlacementId(placementId);
                 
 

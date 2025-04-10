@@ -35,7 +35,7 @@ const ResetPassword = () => {
   // Extract the token from the query parameters
   const token = new URLSearchParams(location.search).get('token');
 
-  // console.log('Token:', token); // This will log the token to the console
+  
 
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -48,7 +48,7 @@ const ResetPassword = () => {
         new_password: values.password, // Use the correct key for the new password
       });
   
-      // console.log('Response:', response); // Log the response
+      
   
       setSuccessMessage('Password reset successfully! Redirecting to login page...');
       setTimeout(() => navigate('/login'), 5000);

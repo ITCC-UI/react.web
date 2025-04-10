@@ -16,7 +16,7 @@ const MyForm = () => {
   const onSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       const response = await axios.post('/api/users', values);
-      console.log(response.data);
+      
       setUsers([...users, values]); // Update local state (optional)
       setSubmitting(false);
       resetForm();

@@ -205,11 +205,11 @@ const startSurvey = async (placementId) => {
       link.click()
       link.parentNode.removeChild(link)
 
-      //("Download successful for:", request)
+      
     } catch (error) {
       if (error.response.request.status != 500) {
-        console.error(response.data)
-        setJobReportError(error.response.data.detail)
+        console.error(error.response)
+        setJobReportError(error.response.detail)
         setShowJobReportingFailure(true)
       }
       else {

@@ -137,7 +137,7 @@ const CombinedForm = () => {
       ]);
 
       if (personalResponse.status === 200 && programmeResponse.status === 200) {
-        console.log('Forms submitted successfully');
+    
         navigate('/dashboard');
       } else {
         console.error('Unexpected response status');
