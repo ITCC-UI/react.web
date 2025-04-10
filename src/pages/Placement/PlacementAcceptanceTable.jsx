@@ -24,7 +24,7 @@ const PlacementAcceptanceTable = (refreshAcceptanceTable) => {
 
       if (registrations.length === 0) return;
 
-      const id = registrations[0].id;
+      const id = registrations[registrations.length - 1].id;
       const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/acceptance-letters`);
       const requests = requestsResponse.data;
 

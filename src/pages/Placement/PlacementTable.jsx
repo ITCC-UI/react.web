@@ -31,7 +31,7 @@ const [filter, setFilter] =useState('all')
       }
 
       // Use the ID of the first registration
-      const id = registrations[0].id;
+      const id = registrations[registrations.length - 1].id;
       
       const requestsResponse = await axiosInstance.get(`/trainings/registrations/${id}/placements`)
       const requests = requestsResponse.data;

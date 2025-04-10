@@ -24,7 +24,7 @@ const PlacementChangeReq = ({ letterRequests: initialLetterRequests, refreshData
         return;
       }
       
-      const registrationId = registrationResponse.data[0].id;
+      const registrationId = registrationResponse.data[registrationResponse.data.length - 1].id;
       
       const requestsResponse = await axiosInstance.get(`/trainings/registrations/${registrationId}/change-of-placements/`);
       const requests = requestsResponse.data;
