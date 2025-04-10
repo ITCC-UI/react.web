@@ -208,7 +208,7 @@ const startSurvey = async (placementId) => {
       //("Download successful for:", request)
     } catch (error) {
       if (error.response.request.status != 500) {
-        
+        console.error(response.data)
         setJobReportError(error.response.data.detail)
         setShowJobReportingFailure(true)
       }
@@ -447,11 +447,13 @@ useEffect(() => {
     />
   ) : (
     <img 
-      src={Edit} 
+      src={Upload} 
       alt="Edit" 
-      onClick={() => handleAction("edit", request)}
-      data-tooltip-id="edit-tooltip"
-      data-tooltip-content="Create evaluation"
+      onClick={() =>null}
+      data-tooltip-id="edit-completed-tooltip"
+      className="disable"
+      disabled={true}
+      data-tooltip-content="Upload Employer Evaluation Form"
     />
   )}
   
