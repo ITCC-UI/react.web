@@ -209,7 +209,7 @@ const startSurvey = async (placementId) => {
     } catch (error) {
       if (error.response.request.status != 500) {
         console.error(error.response)
-        setJobReportError(error.response.detail)
+        setJobReportError(error.response?.data?(error.response.data.detail):("There was an error downloading your Employer Evaluation form"))
         setShowJobReportingFailure(true)
       }
       else {

@@ -74,7 +74,7 @@ const DownloadModal = ({ onClose, onDownload, onSave, request, isDownloading }) 
                     className="next-button"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save & Download'}
+                    {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save Date'}
                   </button>
                 </div>
               </Form>
