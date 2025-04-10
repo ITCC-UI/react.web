@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect } from 'react';
 import "../../../components/Table/table.scss";
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import FormSubmissionComponent from './FormSubmissionComponent';
@@ -15,6 +15,8 @@ const PostTrainingTable = ({ triggerRefresh }) => {
     const [presentationID, setPresnetationID] = useState(null);
     const [fileReportView, setReportFileNameViewer] = useState("");
     const [presentationFileView, setPresentationFileNameViewer] = useState("");
+    const [trainingDocuments, setTrainingDocuments] = useState([]);
+
     // Function to handle errors from the child component
     const handleErrorMessage = (error) => {
 
@@ -26,7 +28,7 @@ const PostTrainingTable = ({ triggerRefresh }) => {
             try {
                 const response = await axiosInstance.get("trainings/registrations/");
                 if (response.data?.length > 0) {
-                    setProgramID(response.data[0].id);
+                    setProgramID(response.data[response.data.length -1].id);
                 } else {
 
                 }
