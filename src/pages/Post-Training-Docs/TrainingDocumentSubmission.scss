@@ -91,6 +91,7 @@ align-self: flex-end;
 .add-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   padding: 8px 12px;
   background-color: var(--Primary-blue, #000080);
@@ -100,10 +101,11 @@ align-self: flex-end;
   margin-top: 10px;
   cursor: pointer;
   font-size: 0.95rem;
-  width: fit-content;
+  width: 100px;
+  ;
 
   &:hover {
-    background-color: #1565c0;
+    background-color: #4e4e81;
   }
 
   &:disabled {

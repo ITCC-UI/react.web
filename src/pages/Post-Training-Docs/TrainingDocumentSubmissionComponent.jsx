@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './TrainingDocumentSubmission.scss';
 import { FiPlus, FiEdit, FiTrash2, FiEye, FiChevronDown, FiChevronUp, FiDownload } from 'react-icons/fi';
-import { TailSpin } from 'react-loader-spinner';
 import axiosInstance from '../../../API Instances/AxiosIntances';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AnimatePresence, motion } from 'framer-motion';
 import * as Yup from 'yup';
+import { PulseLoader } from 'react-spinners';
 
 // toast.configure();
 
@@ -144,8 +144,8 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
                         ) : (
                             <p>No documents uploaded yet.</p>
                         )}
-                     {uploading? (  <button className="add-btn" disabled={uploading}>
-                            <TailSpin height={20} width={20} color='blue' />   Uploadling...
+                     {uploading? (  <button className="add-btn btn-primary" disabled={uploading}>
+                            <PulseLoader size={12} color='#ffffff' />
                         </button>):  (  <button className="add-btn" onClick={() => fileInputRef.current.click()} disabled={uploading}>
                         {<FiPlus/>}    Upload
                         </button>)}
