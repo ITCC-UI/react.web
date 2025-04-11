@@ -7,6 +7,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AnimatePresence, motion } from 'framer-motion';
 import * as Yup from 'yup';
 import { PulseLoader } from 'react-spinners';
+import FullScreenFailureMessage from '../Placement/Failed/FullScreenFailureMessage';
+import FullScreenSuccessMessage from '../Placement/Successful/Successful2';
+import { DeleteModal } from './Modals/Modals';
 
 // toast.configure();
 
@@ -30,6 +33,14 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
     const [expanded, setExpanded] = useState(false);
     const [documents, setDocuments] = useState(docTypeDocuments);
     const [uploading, setUploading] = useState(false);
+    const [submissionSuccess, setSubmissionSuccess] =useState(false)
+    const [submissionFailure, setSubmissionFailure] = useState(false)
+    const [failureMessage, setFailureMessage]= useState("Error submitting file")
+    const [successMessage, setSuccessMessage]= useState("")
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [docToDelete, setDocToDelete] = useState(null);
+    const [title, setTitle] = useState("")
+    const [deleteState, setDeleteState]=useState(false)
     const fileInputRef = useRef();
     const lastDocRef = useRef();
 
@@ -40,15 +51,21 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
             lastDocRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }, [documents]);
-
+// Delete The Document
     const handleDelete = async (docId) => {
+        setDeleteState(true)
         try {
             await axiosInstance.delete(`/trainings/registrations/documents/${docId}/`);
             setDocuments((prev) => prev.filter((doc) => doc.id !== docId));
-            toast.success("Document deleted successfully");
+            toast.success("Document deleted successfully")
+            setSubmissionSuccess(true)
+            setSuccessMessage("File successfully deleted")
+            setTitle("File Deleted!")
+            
         } catch (error) {
             toast.error("Failed to delete document");
             console.error("Delete failed", error);
+            setSubmissionFailure(true)
         }
     };
 
@@ -70,11 +87,13 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
             let res;
             if (editId) {
                 res = await axiosInstance.put(`/trainings/registrations/documents/${editId}/`, formData);
-                toast.success("Document updated successfully");
+                setSubmissionSuccess(true)
             } else {
                 formData.append('student_training', registrationId);
                 res = await axiosInstance.post(`/trainings/registrations/${registrationId}/documents/`, formData);
-                toast.success("Document uploaded successfully");
+                setSubmissionSuccess(true)
+                setSuccessMessage("Your Document has been Submitted!")
+                setTitle("File Submitted ")
             }
             setDocuments((prev) => {
                 if (editId) {
@@ -85,7 +104,9 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
             });
         } catch (error) {
             const msg = error?.message || "Failed to upload document";
-            toast.error(msg);
+        
+            setSubmissionFailure(true)
+            setFailureMessage=error.response?.data?.detail
             console.error("Validation/Upload error:", error);
         } finally {
             setUploading(false);
@@ -100,7 +121,45 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
         fileInputRef.current.dataset.editId = '';
     };
 
+    const openDeleteModal = (docId) => {
+        setDocToDelete(docId);
+        setDeleteModal(true);
+    };
+
+    const closeDeleteModal = () => {
+        setDocToDelete(null);
+        setDeleteModal(false);
+    };
+
+    const confirmDelete = async () => {
+        if (docToDelete) {
+            await handleDelete(docToDelete);
+            closeDeleteModal();
+        }
+    };
+
     return (
+
+        <>
+        <FullScreenSuccessMessage 
+        title={title}
+        isOpen={submissionSuccess}
+        message={successMessage}
+        onClose={()=>setSubmissionSuccess(false)}
+        />
+
+        <FullScreenFailureMessage
+        isOpen={submissionFailure}
+        onClose={()=>setSubmissionFailure(false)}
+        message={failureMessage}/>
+<DeleteModal
+    onClose={closeDeleteModal}
+    onConfirm={confirmDelete}
+    request={docToDelete ? { id: docToDelete } : null}
+    isDeleting={deleteState}
+/>
+
+
         <div className="training-doc-section">
             <div className="header" onClick={toggleExpand}>
                 <h3>{docTypeName}</h3>
@@ -137,7 +196,7 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
                                     <div className="actions-submit">
                                         <a href={doc.document} target="_blank" rel="noopener noreferrer" className="action-btn" title="View"><FiEye /></a>
                                         <button onClick={() => handleEdit(doc.id)} className="action-btn" title="Edit"><FiEdit /></button>
-                                        <button onClick={() => handleDelete(doc.id)} className="action-btn" title="Delete"><FiTrash2 /></button>
+                                        <button onClick={() => openDeleteModal(doc.id)} className="action-btn" title="Delete"><FiTrash2 /></button>
                                     </div>
                                 </div>
                             ))
@@ -145,7 +204,7 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
                             <p>No documents uploaded yet.</p>
                         )}
                      {uploading? (  <button className="add-btn btn-primary" disabled={uploading}>
-                            <PulseLoader size={12} color='#ffffff' />
+                            <PulseLoader size={10} color='#ffffff' />
                         </button>):  (  <button className="add-btn" onClick={() => fileInputRef.current.click()} disabled={uploading}>
                         {<FiPlus/>}    Upload
                         </button>)}
@@ -160,6 +219,8 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
                 )}
             </AnimatePresence>
         </div>
+
+        </>
     );
 };
 
