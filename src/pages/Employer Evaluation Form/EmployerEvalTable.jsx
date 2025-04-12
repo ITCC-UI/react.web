@@ -6,7 +6,7 @@ import "./jobReportTable.scss"
 import axiosInstance from "../../../API Instances/AxiosIntances"
 import { Search } from "lucide-react"
 import Filter from "/images/Filter.png"
-import { DownloadModal, EditModal, DeleteModal } from "./ModalBoxes/Modals"
+import { DownloadModal, EditModal, DeleteModal, UploadModal } from "./ModalBoxes/Modals"
 import FormDetailsModal from "./ModalBoxes/FormDetailsModal"
 import FullScreenSuccessMessage2 from "../Placement/Successful/Successful2"
 import FullScreenSuccessMessage from "../Placement/Successful/Successful"
@@ -18,7 +18,7 @@ import { Tooltip } from 'react-tooltip';
 import Upload  from "/images/upload-to-cloud.png"
 
 const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => {
-  const [letterRequests, setEvaluableForms] = useState([])
+  const [evaluationForms, setEvaluableForms] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [filter, setFilter] = useState("all")
   const [activeModal, setActiveModal] = useState(null)
@@ -71,7 +71,7 @@ const [totalScore, setTotalScore] = useState(null)
         const employerEvaluableForms = await axiosInstance.get(
           `/trainings/registrations/${regId}/placements/employer-evaluations/evaluable/`,
         )
-      
+    
         const employerForms = employerEvaluableForms.data
 
 
@@ -398,8 +398,53 @@ useEffect(() => {
     }
   };
 
+  const handleDateSaveEdit = async (formData) => {
+    try {
+      if (!registrationId) {
+        return;
+      }
+      
+      // Create form data for file upload if needed
+      const apiFormData = new FormData();
+      apiFormData.append("date_of_completion", formData?.date_of_completion || " ");
+         
+      // Create new Employer evaluation with POST
+      const response = await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {});
+      
+      setJobReportStatus(" ");
+      setTitle("Date of Completion has been filled successfully, your download will start shortly");
+      setJobReportSuccess(true);
+      closeModal();
+      
+      // If the POST is successful and you have an evaluationID, call handleDownload immediately
+      if (response.data && response.data.id) {
+        // If the response provides the evaluation ID
+        
+        handleDownloadImmediate(response.data.id);
+      } else if (evaluationID) {
+        // If you already have the evaluation ID from somewhere else
+        handleDownloadImmediate(evaluationID);
+      }
+      
+      // setTriggerRefresh(prev => !prev)
+    } catch (error) {
+      if (error.response && error.response.status == 500) {
+        setJobReportError("There was an error submitting your form");
+        setShowJobReportingFailure(true);
+        closeModal();
+      } else if (error.response) {
+        setJobReportError(error.response.data.detail);
+        setShowJobReportingFailure(true);
+        closeModal();
+      } else {
+        setJobReportError("An unexpected error occurred");
+        setShowJobReportingFailure(true);
+        closeModal();
+      }
+    }
+  };
   // Filter and search functionality
-  const filteredRequests = letterRequests.filter((request) => {
+  const filteredRequests = evaluationForms.filter((request) => {
     const matchesSearch =
       request.attached_company_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       request.job_reporting?.company_supervisor?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -490,20 +535,42 @@ useEffect(() => {
   {request.employer_evaluation?.date_of_completion ? (
     <img 
       src={Upload} 
-      alt="Edit" 
-      onClick={() => handleAction("edit", request)}
+      alt="Upload" 
+      onClick={() => handleAction("upload", request)}
       data-tooltip-id="edit-completed-tooltip"
       data-tooltip-content="Upload Employer Evaluation Form"
     />
   ) : (
     <img 
       src={Upload} 
-      alt="Edit" 
+      alt="Upload" 
       onClick={() =>null}
       data-tooltip-id="edit-completed-tooltip"
       className="disable"
       disabled={true}
       data-tooltip-content="Upload Employer Evaluation Form"
+    />
+  )}
+
+  {/* EDit section check for if they have upploaded thier form first though*/}
+        
+  {request.employer_evaluation?.date_of_completion && request.employer_evaluation?.form===null ? (
+    <img 
+      src={Edit} 
+      alt="Edit" 
+      onClick={() =>handleAction("edit", request)}
+      data-tooltip-id="edit-completed-tooltip"
+      data-tooltip-content="Modify date of completion"
+    />
+  ) : (
+    <img 
+      src={Edit} 
+      alt="Edit" 
+      onClick={() =>null}
+      data-tooltip-id="edit-completed-tooltip"
+      className="disable"
+      disabled={true}
+      data-tooltip-content="Modify date of completion"
     />
   )}
   
@@ -531,6 +598,7 @@ useEffect(() => {
         />
       )}
 
+      {activeModal === "upload" && <UploadModal request={selectedRequest} onClose={closeModal} onSave={handleSave} />}
       {activeModal === "edit" && <EditModal request={selectedRequest} onClose={closeModal} onSave={handleSave} />}
 
       {activeModal === "delete" && (

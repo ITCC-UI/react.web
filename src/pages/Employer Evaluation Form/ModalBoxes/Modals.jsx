@@ -74,7 +74,7 @@ const DownloadModal = ({ onClose, onDownload, onSave, request, isDownloading }) 
                     className="next-button"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save Date'}
+                    {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save Date & Download Form'}
                   </button>
                 </div>
               </Form>
@@ -101,6 +101,95 @@ const DownloadModal = ({ onClose, onDownload, onSave, request, isDownloading }) 
 
 // Edit Modal with Formik and Yup - Restored date field but made it disabled
 const EditModal = ({ onClose, onSave, request }) => {
+  // Define validation schema using Yup
+  const validationSchema = Yup.object().shape({
+    date_of_completion: Yup.date()
+      .required('Date is required')
+      .typeError('Please enter a valid date'),
+    
+  });
+
+  // Initial form values from request data
+  const initialValues = {
+    date_of_completion: request.employer_evaluation?.date_of_completion || '',
+    
+  };
+
+  // Handle form submission
+  const handleSubmit = (values) => {
+    
+    const formData = {
+      ...values,
+      
+    };
+  
+    
+  
+    onSave(formData,request.id);
+  };
+  
+  return (
+    <div className="modal-overlay">
+      <div className="modal-form">
+        <div className="modal-header">
+          <button className="back-button" onClick={onClose}>
+            <ArrowLeft size={20} />
+          </button>
+          <h2>Edit Date of completion</h2>
+          <button className="close-button the-x" onClick={onClose}>
+            <X size={20} color='white' />
+          </button>
+        </div>
+        
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ setFieldValue, values, isSubmitting }) => (
+            <Form encType='multipart/form-data'>
+              <h2 className="company-name">{values.companyName}</h2>
+              
+              <div className="companyDetails">
+                {/* Always show the date field but disabled */}
+                <div className="formInput">
+                  <label htmlFor="date_of_completion">Date of Completion</label>
+                  <Field 
+                    type="date" 
+                    id="date_of_completion" 
+                    name="date_of_completion" 
+                    placeholder="dd/mm/yy"
+                    disabled={false}
+                    
+                  />
+                  {/* <small className="input-helper-text">Date cannot be modified</small> */}
+                </div>
+                
+               
+              </div>
+              
+              <div className="form-actions">
+                <button 
+                  type="submit" 
+                  variant="contained" 
+                  className="next-button"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save'}
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </div>
+  );
+};
+
+
+// Upload Modal
+
+const UploadModal = ({ onClose, onSave, request }) => {
   // Define validation schema using Yup
   const validationSchema = Yup.object().shape({
     // We don't need to validate date_of_completion since it's disabled
@@ -253,4 +342,4 @@ const DeleteModal = ({ onClose, onConfirm, request, isDeleting }) => (
   </div>
 );
 
-export { DownloadModal, EditModal, DeleteModal };
+export { DownloadModal, EditModal, DeleteModal, UploadModal };
