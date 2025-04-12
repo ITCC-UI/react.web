@@ -86,6 +86,8 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
             if (editId) {
                 res = await axiosInstance.put(`/trainings/registrations/documents/${editId}/`, formData);
                 setSubmissionSuccess(true)
+                setSuccessMessage("Document submitted successfully!")
+                setTitle("Document Submitted ")
             } else {
                 formData.append('student_training', registrationId);
                 res = await axiosInstance.post(`/trainings/registrations/${registrationId}/documents/`, formData);
@@ -133,6 +135,8 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
             closeDeleteModal();
         }
     };
+
+    const isUploadEnabled = documents.length === 0 || documents.some(doc => !doc.document);
 
     return (
 
@@ -213,7 +217,7 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
                             )}
                             {uploading ? (<button className="add-btn btn-primary" disabled={uploading}>
                                 <PulseLoader size={10} color='#ffffff' />
-                            </button>) : (<button className="add-btn" onClick={() => fileInputRef.current.click()} disabled={uploading} data-tooltip-id="upload-tooltip" data-tooltip-content="Upload a new document">
+                            </button>) : (<button className="add-btn" onClick={() => fileInputRef.current.click()} disabled={!isUploadEnabled} data-tooltip-id="upload-tooltip" data-tooltip-content={isUploadEnabled ? "Upload a new document" : "All documents submitted"}>
                                 {<FiPlus />}    Upload
                             </button>)}
                             <Tooltip id="upload-tooltip" />

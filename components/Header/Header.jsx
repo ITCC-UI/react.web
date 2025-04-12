@@ -37,7 +37,7 @@ const TopNav = ({ disableReg, toggleVisibility, isVisible, setVisible, regVisibl
         setUserImage(passport);
         setUserName(`${first_name.charAt(0)}.${last_name}`);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+       
       }
     };
 

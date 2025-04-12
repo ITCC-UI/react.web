@@ -37,7 +37,7 @@ const TrainingDocumentTable = ({triggerRefresh}) => {
 
             try {
                 const response = await axiosInstance.get(`trainings/registrations/${registrationId}/documents/by-types/`);
-console.log("Training Documents", response.data)
+
                 setTrainingDocuments(response.data);
             } catch (error) { 
                 console.error("Error Fecthing training docs", error.response)
@@ -60,7 +60,7 @@ console.log("Training Documents", response.data)
                             docTypeDescription={docType.description}
                             docTypeDocuments={docType.documents}
                             fileType={resolveFileType(docType.name)}
-                            // onError={handleErrorMessage}
+                            // Pass the documents context for upload button state
                         />
                     ))}
                 </div>

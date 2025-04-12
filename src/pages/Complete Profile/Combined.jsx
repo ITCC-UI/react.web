@@ -22,7 +22,7 @@ const CombinedForm = () => {
       const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/lookups/faculties/');
       setFacultyData(response.data);
     } catch (error) {
-      console.error('Error fetching faculty data:', error);
+    
     }
   };
 
@@ -31,7 +31,7 @@ const CombinedForm = () => {
       const response = await axios.get(`https://theegsd.pythonanywhere.com/api/v1/lookups/faculties/${facultyId}/departments/`);
       setDepartmentData(response.data);
     } catch (error) {
-      console.error('Error fetching department data:', error);
+     
     }
   };
 
