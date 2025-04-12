@@ -6,7 +6,7 @@ import "./jobReportTable.scss"
 import axiosInstance from "../../../API Instances/AxiosIntances"
 import { Search } from "lucide-react"
 import Filter from "/images/Filter.png"
-import { DownloadModal, EditModal, DeleteModal } from "./ModalBoxes/Modals"
+import { DownloadModal, EditModal, DeleteModal, UploadModal } from "./ModalBoxes/Modals"
 import FormDetailsModal from "./ModalBoxes/FormDetailsModal"
 import FullScreenSuccessMessage2 from "../Placement/Successful/Successful2"
 import FullScreenSuccessMessage from "../Placement/Successful/Successful"
@@ -18,7 +18,7 @@ import { Tooltip } from 'react-tooltip';
 import Upload  from "/images/upload-to-cloud.png"
 
 const EmployerEvalTable = ({ triggerRefresh, setTriggerRefresh, requestID }) => {
-  const [letterRequests, setEvaluableForms] = useState([])
+  const [evaluationForms, setEvaluableForms] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [filter, setFilter] = useState("all")
   const [activeModal, setActiveModal] = useState(null)
@@ -71,7 +71,7 @@ const [totalScore, setTotalScore] = useState(null)
         const employerEvaluableForms = await axiosInstance.get(
           `/trainings/registrations/${regId}/placements/employer-evaluations/evaluable/`,
         )
-      
+    
         const employerForms = employerEvaluableForms.data
 
 
@@ -208,8 +208,8 @@ const startSurvey = async (placementId) => {
       
     } catch (error) {
       if (error.response.request.status != 500) {
-        console.error(error.response)
-        setJobReportError(error.response?.data?(error.response.data.detail):("There was an error downloading your Employer Evaluation form"))
+        setJobReportError("There was an error downloading your Employer Evaluation form")
+        
         setShowJobReportingFailure(true)
       }
       else {
@@ -223,6 +223,51 @@ const startSurvey = async (placementId) => {
     }
   }
 
+
+  const handleDownloadImmediate = async (evaluationID) => {
+    setIsDownloading(true)
+    try {
+      const response = await axiosInstance.get(
+        `/trainings/registrations/placements/evaluation/${evaluationID}/form/document/`,
+        { responseType: "blob" },
+      )
+
+      const contentType = response.headers["content-type"]
+      if (contentType.includes("application/json")) {
+        const errorText = await response.data.text()
+        const errorJson = JSON.parse(errorText)
+        
+
+        setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.")
+        setShowJobReportingFailure(true)
+
+        return
+      }
+
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement("a")
+      link.href = url
+      link.setAttribute("download", `Employer_Evaluaton_Form.pdf`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+
+      
+    } catch (error) {
+      if (error.response.request.status != 500) {
+        setJobReportError("There was an error downloading your Employer Evaluation form")
+        setShowJobReportingFailure(true)
+      }
+      else {
+        
+        setJobReportError("There was an error downloading your Employer Evaluation form")
+        setShowJobReportingFailure(true)
+      }
+    } finally {
+      setIsDownloading(false)
+      closeModal()
+    }
+  }
   // setPlacementId(selectedRequest.id)?
 
 
@@ -255,7 +300,7 @@ useEffect(() => {
       
       // Create form data for file upload if needed
       const apiFormData = new FormData()
-      apiFormData.append("date_of_completion", formData?.date_of_completion || " ")
+      apiFormData.append("date_of_completion", formData?.date_of_completion)
       apiFormData.append("overall_score", totalScore)
       
 
@@ -310,46 +355,59 @@ useEffect(() => {
   const handleDateSave = async (formData) => {
     try {
       if (!registrationId) {
-        
-        return
+        return;
       }
       
       // Create form data for file upload if needed
-      const apiFormData = new FormData()
-      apiFormData.append("date_of_completion", formData?.date_of_completion || " ")
-           
-        // Create new EMployer evaluation with POST
-        await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {})
-        setJobReportStatus(" ")
-        setTitle("Date of Completion has been filled successfully")
-        setJobReportSuccess(true)
-        closeModal()
-        
-        // setTriggerRefresh(prev => !prev)
-
-        // handleDownload()
+      const apiFormData = new FormData();
+      apiFormData.append("date_of_completion", formData?.date_of_completion);
+         
+      // Create new Employer evaluation with POST
+      const response = await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {});
       
+      setJobReportStatus(" ");
+      setTitle("Date of Completion has been filled successfully, your download will start shortly");
+
+      // Add a countdown timer for 5 seconds
+      let countdown = 5;
+      const countdownInterval = setInterval(() => {
+        setTitle(`Date of Completion has been filled successfully, your download will start in ${countdown} seconds`);
+        countdown -= 1;
+
+        if (countdown < 0) {
+          clearInterval(countdownInterval);
+          setTitle("Date of Completion has been filled successfully, your download will start shortly");
+          // Trigger the download after the countdown
+          if (response.data && response.data.id) {
+        handleDownloadImmediate(response.data.id);
+          }
+        }
+      }, 1000);
+      setJobReportSuccess(true);
+      closeModal();
+      
+     
+      
+      // setTriggerRefresh(prev => !prev)
     } catch (error) {
-      // setJobReportError(error.response.data.detail)
-      if (error.response.status == 500) {
-        setJobReportError("There was an error submitting your form")
-        setShowJobReportingFailure(true)
-        closeModal()
-        
+      if (error.response && error.response.status == 500) {
+        setJobReportError("There was an error submitting your form");
+        setShowJobReportingFailure(true);
+        closeModal();
+      } else if (error.response) {
+        setJobReportError(error.response.data.detail);
+        setShowJobReportingFailure(true);
+        closeModal();
+      } else {
+        setJobReportError("An unexpected error occurred");
+        setShowJobReportingFailure(true);
+        closeModal();
       }
-      else{
-        setJobReportError(error.response.data.detail)
-        setShowJobReportingFailure(true)
-        closeModal()
-        
-      }
-    
-    
     }
-  }
+  };
 
   // Filter and search functionality
-  const filteredRequests = letterRequests.filter((request) => {
+  const filteredRequests = evaluationForms.filter((request) => {
     const matchesSearch =
       request.attached_company_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       request.job_reporting?.company_supervisor?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -440,20 +498,42 @@ useEffect(() => {
   {request.employer_evaluation?.date_of_completion ? (
     <img 
       src={Upload} 
-      alt="Edit" 
-      onClick={() => handleAction("edit", request)}
+      alt="Upload" 
+      onClick={() => handleAction("upload", request)}
       data-tooltip-id="edit-completed-tooltip"
       data-tooltip-content="Upload Employer Evaluation Form"
     />
   ) : (
     <img 
       src={Upload} 
-      alt="Edit" 
+      alt="Upload" 
       onClick={() =>null}
       data-tooltip-id="edit-completed-tooltip"
       className="disable"
       disabled={true}
       data-tooltip-content="Upload Employer Evaluation Form"
+    />
+  )}
+
+  {/* EDit section check for if they have upploaded thier form first though*/}
+        
+  {request.employer_evaluation?.date_of_completion && request.employer_evaluation?.form===null ? (
+    <img 
+      src={Edit} 
+      alt="Edit" 
+      onClick={() =>handleAction("edit", request)}
+      data-tooltip-id="edit-completed-tooltip"
+      data-tooltip-content="Modify date of completion"
+    />
+  ) : (
+    <img 
+      src={Edit} 
+      alt="Edit" 
+      onClick={() =>null}
+      data-tooltip-id="edit-completed-tooltip"
+      className="disable"
+      disabled={true}
+      data-tooltip-content="Modify date of completion"
     />
   )}
   
@@ -481,6 +561,7 @@ useEffect(() => {
         />
       )}
 
+      {activeModal === "upload" && <UploadModal request={selectedRequest} onClose={closeModal} onSave={handleSave} />}
       {activeModal === "edit" && <EditModal request={selectedRequest} onClose={closeModal} onSave={handleSave} />}
 
       {activeModal === "delete" && (

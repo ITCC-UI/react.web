@@ -28,7 +28,7 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
         const response = await axiosInstance.get('https://theegsd.pythonanywhere.com/api/v1/lookups/banks/');
         setBanks(response.data);
       } catch (error) {
-        console.error('Error fetching banks', error);
+       
       }
     };
 
@@ -117,16 +117,14 @@ const DisplayedComponent = ({ onClose, selectedCourse }) => {
           setErrorMessage('');
         }
          else {
-          console.error('Unexpected response status:', response.status);
+         
           setErrorMessage('An unexpected error occurred. Please try again.');
         }
 
 
       } catch (error) {
         
-        console.error('Error submitting the form:', error);
-        // console.error('Server response:', error.response.data);
-        setFailure(error.response.data[0]);
+           setFailure(error.response.data[0]);
         setCurrentStep(1)
   
       }

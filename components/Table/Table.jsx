@@ -25,7 +25,7 @@ const DepartmentTrainingCourses = ({ checked }) => {
 
       setCourses(processedCourses);
     } catch (error) {
-      console.error("Error fetching training courses:", error);
+     
     }
   };
 

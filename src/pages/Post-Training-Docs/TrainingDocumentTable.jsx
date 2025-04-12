@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import axiosInstance from "../../../API Instances/AxiosIntances.jsx";
-import FormSubmissionComponent from "./FormSubmissionComponent.jsx";
+// import FormSubmissionComponent from "./FormSubmissionComponent.jsx";
 import TrainingDocumentSubmissionComponent from "./TrainingDocumentSubmissionComponent.jsx";
-
+import "./FormSubmission.scss"
 
 const TrainingDocumentTable = ({triggerRefresh}) => {
 
@@ -16,9 +16,7 @@ const TrainingDocumentTable = ({triggerRefresh}) => {
         return ".pdf";
     };
 
-    const handleErrorMessage = (error) => {
-        /* Empty */
-    };
+   
 
     useEffect(() => {
         const fetchRegistrationId = async () => {
@@ -41,14 +39,16 @@ const TrainingDocumentTable = ({triggerRefresh}) => {
                 const response = await axiosInstance.get(`trainings/registrations/${registrationId}/documents/by-types/`);
 
                 setTrainingDocuments(response.data);
-            } catch (error) { /* empty */ }
+            } catch (error) { 
+                console.error("Error Fecthing training docs", error.response)
+             }
 
         }
         fetchTrainingDocuments().then(() => {});
     }, [registrationId]);
 
     return (
-        <section className='shif placement_table'>
+        <section className='shift placement_table'>
             <div className='mainBody'>
                 <div className='containerCourse'>
                     {trainingDocuments.map((docType) => (
@@ -60,7 +60,7 @@ const TrainingDocumentTable = ({triggerRefresh}) => {
                             docTypeDescription={docType.description}
                             docTypeDocuments={docType.documents}
                             fileType={resolveFileType(docType.name)}
-                            onError={handleErrorMessage}
+                            // Pass the documents context for upload button state
                         />
                     ))}
                 </div>
