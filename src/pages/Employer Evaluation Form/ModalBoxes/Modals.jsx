@@ -135,7 +135,7 @@ const EditModal = ({ onClose, onSave, request }) => {
           <button className="back-button" onClick={onClose}>
             <ArrowLeft size={20} />
           </button>
-          <h2>Edit Date of completion</h2>
+          
           <button className="close-button the-x" onClick={onClose}>
             <X size={20} color='white' />
           </button>
@@ -148,11 +148,13 @@ const EditModal = ({ onClose, onSave, request }) => {
         >
           {({ setFieldValue, values, isSubmitting }) => (
             <Form encType='multipart/form-data'>
-              <h2 className="company-name">{values.companyName}</h2>
-              
+              {/* <h2 className="company-name">{values.companyName}</h2> */}
+              <h2>Edit Date of completion</h2>
               <div className="companyDetails">
+                
                 {/* Always show the date field but disabled */}
                 <div className="formInput">
+                  
                   <label htmlFor="date_of_completion">Date of Completion</label>
                   <Field 
                     type="date" 

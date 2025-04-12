@@ -140,11 +140,11 @@ const CombinedForm = () => {
     
         navigate('/dashboard');
       } else {
-        console.error('Unexpected response status');
+        
         alert('There was an error saving your data. Please try again.');
       }
     } catch (error) {
-      console.error('Error in handleSubmit:', error);
+     
       alert('There was an error submitting your forms. Please try again.');
     } finally {
       setSubmitting(false);

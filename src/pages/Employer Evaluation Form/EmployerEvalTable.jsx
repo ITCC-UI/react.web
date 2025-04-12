@@ -300,7 +300,7 @@ useEffect(() => {
       
       // Create form data for file upload if needed
       const apiFormData = new FormData()
-      apiFormData.append("date_of_completion", formData?.date_of_completion || " ")
+      apiFormData.append("date_of_completion", formData?.date_of_completion)
       apiFormData.append("overall_score", totalScore)
       
 
@@ -360,25 +360,33 @@ useEffect(() => {
       
       // Create form data for file upload if needed
       const apiFormData = new FormData();
-      apiFormData.append("date_of_completion", formData?.date_of_completion || " ");
+      apiFormData.append("date_of_completion", formData?.date_of_completion);
          
       // Create new Employer evaluation with POST
       const response = await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {});
       
       setJobReportStatus(" ");
       setTitle("Date of Completion has been filled successfully, your download will start shortly");
+
+      // Add a countdown timer for 5 seconds
+      let countdown = 5;
+      const countdownInterval = setInterval(() => {
+        setTitle(`Date of Completion has been filled successfully, your download will start in ${countdown} seconds`);
+        countdown -= 1;
+
+        if (countdown < 0) {
+          clearInterval(countdownInterval);
+          setTitle("Date of Completion has been filled successfully, your download will start shortly");
+          // Trigger the download after the countdown
+          if (response.data && response.data.id) {
+        handleDownloadImmediate(response.data.id);
+          }
+        }
+      }, 1000);
       setJobReportSuccess(true);
       closeModal();
       
-      // If the POST is successful and you have an evaluationID, call handleDownload immediately
-      if (response.data && response.data.id) {
-        // If the response provides the evaluation ID
-        
-        handleDownloadImmediate(response.data.id);
-      } else if (evaluationID) {
-        // If you already have the evaluation ID from somewhere else
-        handleDownloadImmediate(evaluationID);
-      }
+     
       
       // setTriggerRefresh(prev => !prev)
     } catch (error) {
@@ -398,51 +406,6 @@ useEffect(() => {
     }
   };
 
-  const handleDateSaveEdit = async (formData) => {
-    try {
-      if (!registrationId) {
-        return;
-      }
-      
-      // Create form data for file upload if needed
-      const apiFormData = new FormData();
-      apiFormData.append("date_of_completion", formData?.date_of_completion || " ");
-         
-      // Create new Employer evaluation with POST
-      const response = await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {});
-      
-      setJobReportStatus(" ");
-      setTitle("Date of Completion has been filled successfully, your download will start shortly");
-      setJobReportSuccess(true);
-      closeModal();
-      
-      // If the POST is successful and you have an evaluationID, call handleDownload immediately
-      if (response.data && response.data.id) {
-        // If the response provides the evaluation ID
-        
-        handleDownloadImmediate(response.data.id);
-      } else if (evaluationID) {
-        // If you already have the evaluation ID from somewhere else
-        handleDownloadImmediate(evaluationID);
-      }
-      
-      // setTriggerRefresh(prev => !prev)
-    } catch (error) {
-      if (error.response && error.response.status == 500) {
-        setJobReportError("There was an error submitting your form");
-        setShowJobReportingFailure(true);
-        closeModal();
-      } else if (error.response) {
-        setJobReportError(error.response.data.detail);
-        setShowJobReportingFailure(true);
-        closeModal();
-      } else {
-        setJobReportError("An unexpected error occurred");
-        setShowJobReportingFailure(true);
-        closeModal();
-      }
-    }
-  };
   // Filter and search functionality
   const filteredRequests = evaluationForms.filter((request) => {
     const matchesSearch =
