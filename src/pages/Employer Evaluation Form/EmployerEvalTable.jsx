@@ -209,6 +209,7 @@ const startSurvey = async (placementId) => {
     } catch (error) {
       if (error.response.request.status != 500) {
         setJobReportError("There was an error downloading your Employer Evaluation form")
+        
         setShowJobReportingFailure(true)
       }
       else {
@@ -222,6 +223,51 @@ const startSurvey = async (placementId) => {
     }
   }
 
+
+  const handleDownloadImmediate = async (evaluationID) => {
+    setIsDownloading(true)
+    try {
+      const response = await axiosInstance.get(
+        `/trainings/registrations/placements/evaluation/${evaluationID}/form/document/`,
+        { responseType: "blob" },
+      )
+
+      const contentType = response.headers["content-type"]
+      if (contentType.includes("application/json")) {
+        const errorText = await response.data.text()
+        const errorJson = JSON.parse(errorText)
+        
+
+        setFailureMessage(errorJson.detail || "Failed to download Job Reporting Form.")
+        setShowJobReportingFailure(true)
+
+        return
+      }
+
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement("a")
+      link.href = url
+      link.setAttribute("download", `Employer_Evaluaton_Form.pdf`)
+      document.body.appendChild(link)
+      link.click()
+      link.parentNode.removeChild(link)
+
+      
+    } catch (error) {
+      if (error.response.request.status != 500) {
+        setJobReportError("There was an error downloading your Employer Evaluation form")
+        setShowJobReportingFailure(true)
+      }
+      else {
+        
+        setJobReportError("There was an error downloading your Employer Evaluation form")
+        setShowJobReportingFailure(true)
+      }
+    } finally {
+      setIsDownloading(false)
+      closeModal()
+    }
+  }
   // setPlacementId(selectedRequest.id)?
 
 
@@ -309,47 +355,48 @@ useEffect(() => {
   const handleDateSave = async (formData) => {
     try {
       if (!registrationId) {
-        
-        return
+        return;
       }
       
       // Create form data for file upload if needed
-      const apiFormData = new FormData()
-      apiFormData.append("date_of_completion", formData?.date_of_completion || " ")
-           
-        // Create new EMployer evaluation with POST
-        await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {})
-        setJobReportStatus(" ")
-        setTitle("Date of Completion has been filled successfully")
-        setJobReportSuccess(true)
-        closeModal()
-        
-        // setTriggerRefresh(prev => !prev)
-
-        useEffect(()=>{
-          if(evaluationID){
-            handleDownload()
-          }
-        },[evaluationID])
+      const apiFormData = new FormData();
+      apiFormData.append("date_of_completion", formData?.date_of_completion || " ");
+         
+      // Create new Employer evaluation with POST
+      const response = await axiosInstance.post(`/trainings/registrations/placements/${placementId}/evaluation/`, apiFormData, {});
       
+      setJobReportStatus(" ");
+      setTitle("Date of Completion has been filled successfully, your download will start shortly");
+      setJobReportSuccess(true);
+      closeModal();
+      
+      // If the POST is successful and you have an evaluationID, call handleDownload immediately
+      if (response.data && response.data.id) {
+        // If the response provides the evaluation ID
+        
+        handleDownloadImmediate(response.data.id);
+      } else if (evaluationID) {
+        // If you already have the evaluation ID from somewhere else
+        handleDownloadImmediate(evaluationID);
+      }
+      
+      // setTriggerRefresh(prev => !prev)
     } catch (error) {
-      // setJobReportError(error.response.data.detail)
-      if (error.response.status == 500) {
-        setJobReportError("There was an error submitting your form")
-        setShowJobReportingFailure(true)
-        closeModal()
-        
+      if (error.response && error.response.status == 500) {
+        setJobReportError("There was an error submitting your form");
+        setShowJobReportingFailure(true);
+        closeModal();
+      } else if (error.response) {
+        setJobReportError(error.response.data.detail);
+        setShowJobReportingFailure(true);
+        closeModal();
+      } else {
+        setJobReportError("An unexpected error occurred");
+        setShowJobReportingFailure(true);
+        closeModal();
       }
-      else{
-        setJobReportError(error.response.data.detail)
-        setShowJobReportingFailure(true)
-        closeModal()
-        
-      }
-    
-    
     }
-  }
+  };
 
   // Filter and search functionality
   const filteredRequests = letterRequests.filter((request) => {

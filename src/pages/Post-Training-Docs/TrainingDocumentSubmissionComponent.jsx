@@ -12,7 +12,6 @@ import FullScreenSuccessMessage from '../Placement/Successful/Successful2';
 import { DeleteModal } from './Modals/Modals';
 import { Tooltip } from 'react-tooltip';
 
-// toast.configure();
 
 const fileSchema = Yup.mixed()
     .required('A file is required')
@@ -58,9 +57,8 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
         try {
             await axiosInstance.delete(`/trainings/registrations/documents/${docId}/`);
             setDocuments((prev) => prev.filter((doc) => doc.id !== docId));
-            toast.success("Document deleted successfully")
             setSubmissionSuccess(true)
-            setSuccessMessage("File successfully deleted")
+            setSuccessMessage("Document deleted successfully")
             setTitle("File Deleted!")
 
         } catch (error) {
@@ -92,8 +90,8 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
                 formData.append('student_training', registrationId);
                 res = await axiosInstance.post(`/trainings/registrations/${registrationId}/documents/`, formData);
                 setSubmissionSuccess(true)
-                setSuccessMessage("Your Document has been Submitted!")
-                setTitle("File Submitted ")
+                setSuccessMessage("Document submitted successfully!")
+                setTitle("Document Submitted ")
             }
             setDocuments((prev) => {
                 if (editId) {
@@ -105,7 +103,7 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
         } catch (error) {
             setSubmissionFailure(true)
             setFailureMessage(error.response?.data?.detail ? (error.response.data.detail) : ("Failed to upload document"))
-            console.error("Validation/Upload error:", error);
+            
         } finally {
             setUploading(false);
         }
