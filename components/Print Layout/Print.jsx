@@ -26,7 +26,7 @@ const PrintPreview = () => {
         setSubmittedData(printoutResponse.data);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching data", error);
+      
         setError('Failed to fetch data. Please try again.');
         setIsLoading(false);
       }

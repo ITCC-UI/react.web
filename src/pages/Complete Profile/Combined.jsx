@@ -22,7 +22,7 @@ const CombinedForm = () => {
       const response = await axios.get('https://theegsd.pythonanywhere.com/api/v1/lookups/faculties/');
       setFacultyData(response.data);
     } catch (error) {
-      /* empty */
+    
     }
   };
 
@@ -31,7 +31,7 @@ const CombinedForm = () => {
       const response = await axios.get(`https://theegsd.pythonanywhere.com/api/v1/lookups/faculties/${facultyId}/departments/`);
       setDepartmentData(response.data);
     } catch (error) {
-      /* empty */
+     
     }
   };
 
@@ -140,9 +140,11 @@ const CombinedForm = () => {
     
         navigate('/dashboard');
       } else {
+        
         alert('There was an error saving your data. Please try again.');
       }
     } catch (error) {
+     
       alert('There was an error submitting your forms. Please try again.');
     } finally {
       setSubmitting(false);

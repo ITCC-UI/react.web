@@ -74,7 +74,7 @@ const DownloadModal = ({ onClose, onDownload, onSave, request, isDownloading }) 
                     className="next-button"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save Date & Download Form'}
+                    {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save Date'}
                   </button>
                 </div>
               </Form>
@@ -101,97 +101,6 @@ const DownloadModal = ({ onClose, onDownload, onSave, request, isDownloading }) 
 
 // Edit Modal with Formik and Yup - Restored date field but made it disabled
 const EditModal = ({ onClose, onSave, request }) => {
-  // Define validation schema using Yup
-  const validationSchema = Yup.object().shape({
-    date_of_completion: Yup.date()
-      .required('Date is required')
-      .typeError('Please enter a valid date'),
-    
-  });
-
-  // Initial form values from request data
-  const initialValues = {
-    date_of_completion: request.employer_evaluation?.date_of_completion || '',
-    
-  };
-
-  // Handle form submission
-  const handleSubmit = (values) => {
-    
-    const formData = {
-      ...values,
-      
-    };
-  
-    
-  
-    onSave(formData,request.id);
-  };
-  
-  return (
-    <div className="modal-overlay">
-      <div className="modal-form">
-        <div className="modal-header">
-          <button className="back-button" onClick={onClose}>
-            <ArrowLeft size={20} />
-          </button>
-          
-          <button className="close-button the-x" onClick={onClose}>
-            <X size={20} color='white' />
-          </button>
-        </div>
-        
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ setFieldValue, values, isSubmitting }) => (
-            <Form encType='multipart/form-data'>
-              {/* <h2 className="company-name">{values.companyName}</h2> */}
-              <h2>Edit Date of completion</h2>
-              <div className="companyDetails">
-                
-                {/* Always show the date field but disabled */}
-                <div className="formInput">
-                  
-                  <label htmlFor="date_of_completion">Date of Completion</label>
-                  <Field 
-                    type="date" 
-                    id="date_of_completion" 
-                    name="date_of_completion" 
-                    placeholder="dd/mm/yy"
-                    disabled={false}
-                    
-                  />
-                  {/* <small className="input-helper-text">Date cannot be modified</small> */}
-                </div>
-                
-               
-              </div>
-              
-              <div className="form-actions">
-                <button 
-                  type="submit" 
-                  variant="contained" 
-                  className="next-button"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? <PulseLoader size={10} color='white' /> : 'Save'}
-                </button>
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    </div>
-  );
-};
-
-
-// Upload Modal
-
-const UploadModal = ({ onClose, onSave, request }) => {
   // Define validation schema using Yup
   const validationSchema = Yup.object().shape({
     // We don't need to validate date_of_completion since it's disabled
@@ -317,31 +226,33 @@ const UploadModal = ({ onClose, onSave, request }) => {
 };
 
 // Delete Modal - unchanged
-const DeleteModal = ({ onClose, onConfirm, request, isDeleting }) => (
-  <div className="modal-overlay">
-    <div className="modal-content">
-      <h2>Confirm Deletion</h2>
+const DeleteModal = ({ onClose, onConfirm, request, isDeleting }) => {
+  if (!request) return null; // Do not render if no request is provided
 
-      <div className="alert-icon">
-        <AlertCircle size={90} color='red' />
-      </div>
-      <p>Are you sure you want to delete "{request.attached_company_name}" form? <br /> This action cannot be undone.</p>
-
-      <div className="warnings">
-        <img src={Caution} alt="" />
-        <div className="warner">
-          <h2> Warning</h2>
-          <p>By deleting this Form, you agree to lose access to it permanently!</p>
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <h2>Confirm Deletion</h2>
+        <div className="alert-icon">
+          <AlertCircle size={90} color='red' />
+        </div>
+        <p>Are you sure you want to delete this document? This action cannot be undone.</p>
+         <div className="warnings">
+                <img src={Caution} alt="" />
+                <div className="warner">
+                  <h2> Warning</h2>
+                  <p>By deleting this Form, you agree to lose access to it permanently!</p>
+                </div>
+              </div>
+        <div className="modal-actions">
+          <button onClick={onConfirm} className="btn-danger" disabled={isDeleting}>
+            {isDeleting ? <PulseLoader size={10} color="white" /> : "Delete"}
+          </button>
+          <button onClick={onClose} className="btn-secondary">Cancel</button>
         </div>
       </div>
-      <div className="modal-actions">
-        <button onClick={() => onConfirm(request.id)} className="btn-danger" disabled={isDeleting}>
-          {isDeleting ? <PulseLoader size={10} color="white" /> : "Delete"}
-        </button>
-        <button onClick={onClose} className="btn-secondary">Cancel</button>
-      </div>
     </div>
-  </div>
-);
+  );
+};
 
-export { DownloadModal, EditModal, DeleteModal, UploadModal };
+export { DownloadModal, EditModal, DeleteModal };

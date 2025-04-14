@@ -18,7 +18,7 @@ const PrintButton = ({ children }) => {
         pdf.save('download.pdf');
       })
       .catch(error => {
-        console.error('Error generating PDF: ', error);
+       
       });
   };
 
