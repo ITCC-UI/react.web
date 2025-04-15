@@ -21,6 +21,7 @@ const TrainingDocuments = () => {
     const [trainingDuration, setDuration] = useState(0)
     const [endDate, setEndDate] = useState("Deadline not set")
     const [timeRemaining, setTimeRemaining] = useState("Deadline not set");
+    const [startDate, setStartDate] = useState ("Submission not yet begin")
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.key === "Escape") {
@@ -124,7 +125,7 @@ const TrainingDocuments = () => {
         try {
             const response = await axiosInstance.get(`trainings/registrations/${id}/documents/schedule/`); //WOrk Report submission
             const endDate = new Date(response.data.end_date);
-
+            const startDate = new Date(response.data.start_date);
             // Format the end date as before
             const formattedDate = endDate.toLocaleString('en-US', {
                 month: 'long',
@@ -135,12 +136,20 @@ const TrainingDocuments = () => {
                 hour12: true,
             });
 
-
+            const formattedStartDate = startDate.toLocaleString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true,
+              });
             // Get the formatted time remaining
             const timeRemaining = getTimeRemaining(response.data.end_date);
 
 
             // You can set both to state
+            setStartDate(formattedStartDate)
             setPlacementRequests(response.data);
             setEndDate(formattedDate);
             setTimeRemaining(timeRemaining);
@@ -194,6 +203,8 @@ const TrainingDocuments = () => {
                         Training Report and Presentation Submission
                     </div>
                 </div>
+
+                <div className="error deadline">Start Date: {startDate} </div>
                 <div className="error deadline">Submission Deadline: {endDate} </div>
                 <div className="error deadline">Time Remaining: {timeRemaining} </div>
                 {isLoading ? (

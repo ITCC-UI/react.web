@@ -31,6 +31,7 @@ const [showFailureMessage, setShowIntroFailure]=useState(false)
   const [statesOfNigeria, setNewState] =useState([])
   const [endDate, setEndDate] =useState("Deadline not set")
  const [timeRemaining, setTimeRemaining] = useState("Deadline not set");
+ const [startDate, setStartDate] = useState ("Submission not yet begin")
     
 
   const toggleNewRequest = () => {
@@ -98,8 +99,18 @@ const [showFailureMessage, setShowIntroFailure]=useState(false)
     try {
       const response = await axiosInstance.get(`trainings/registrations/${programmeId}/introduction-letter-requests/schedule/`);
       const endDate = new Date(response.data.end_date);
+      const startDate = new Date(response.data.start_date)
       // Format the end date as before
       const formattedDate = endDate.toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+      });
+
+      const formattedStartDate = startDate.toLocaleString('en-US', {
         month: 'long',
         day: 'numeric',
         year: 'numeric',
@@ -115,6 +126,7 @@ const [showFailureMessage, setShowIntroFailure]=useState(false)
       
       // You can set both to state
       // setPlacementRequests(response.data);
+      setStartDate(formattedStartDate)
       setEndDate(formattedDate);
       setTimeRemaining(timeRemaining); 
   
@@ -382,7 +394,7 @@ useEffect(()=>{
       
           </div>
         </div>
-
+        <div className="error deadline">Start Date: {startDate} </div>
         <div className="error deadline">Submission Deadline: {endDate} </div>
         <div className="error deadline">Time Remaining: {timeRemaining} </div>
      
