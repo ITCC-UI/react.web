@@ -106,7 +106,7 @@ const EmployerEvaluationForm = () => {
       const response = await axiosInstance.get(`trainings/registrations/${id}/placements/evaluation/schedule/`);
       const endDate = new Date(response.data.end_date);
       const startDate = new Date(response.data.start_date);
-      console.log("THe data",response.data)
+      
       // Format the end date as before
       const formattedDate = endDate.toLocaleString('en-US', {
         month: 'long',
