@@ -1,17 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './TrainingDocumentSubmission.scss';
-import { FiPlus, FiEdit, FiTrash2, FiEye, FiChevronDown, FiChevronUp, FiDownload } from 'react-icons/fi';
+import { FiPlus, FiEdit, FiTrash2, FiEye, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import axiosInstance from '../../../API Instances/AxiosIntances';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AnimatePresence, motion } from 'framer-motion';
 import * as Yup from 'yup';
 import { PulseLoader } from 'react-spinners';
-import FullScreenFailureMessage from '../Placement/Failed/FullScreenFailureMessage';
+import FullScreenFailureMessage2 from '../Placement/Failed/FullScreenFailureMessage2';
 import FullScreenSuccessMessage from '../Placement/Successful/Successful2';
 import { DeleteModal } from './Modals/Modals';
 import { Tooltip } from 'react-tooltip';
 
+// 8MB in bytes
+const MAX_FILE_SIZE = 8 * 1024 * 1024;
 
 const fileSchema = Yup.mixed()
     .required('A file is required')
@@ -27,6 +28,10 @@ const fileSchema = Yup.mixed()
             'application/vnd.apple.keynote'
         ];
         return allowedTypes.includes(value.type);
+    })
+    .test('fileSize', 'File size must be less than 8MB', (value) => {
+        if (!value) return false;
+        return value.size <= MAX_FILE_SIZE;
     });
 
 const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDescription, docTypeDocuments, fileType, registrationId }) => {
@@ -103,9 +108,14 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
                 }
             });
         } catch (error) {
-            setSubmissionFailure(true)
-            setFailureMessage(error.response?.data?.detail ? (error.response.data.detail) : ("Failed to upload document"))
-            
+            if (error.name === 'ValidationError') {
+                // Handle Yup validation errors
+                setSubmissionFailure(true)
+                setFailureMessage(error.message || "Invalid file. Please check file type and size (max 8MB).")
+            } else {
+                setSubmissionFailure(true)
+                setFailureMessage(error.response?.data?.detail ? (error.response.data.detail) : ("Failed to upload document"))
+            }
         } finally {
             setUploading(false);
         }
@@ -113,10 +123,20 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        const editId = fileInputRef.current.dataset.editId;
-        handleUpload(file, editId || null);
-        fileInputRef.current.value = '';
-        fileInputRef.current.dataset.editId = '';
+        if (file) {
+            if (file.size > MAX_FILE_SIZE) {
+                setSubmissionFailure(true);
+                setFailureMessage("File size exceeds the 8MB limit. Please select a smaller file.");
+                fileInputRef.current.value = '';
+                fileInputRef.current.dataset.editId = '';
+                return;
+            }
+            
+            const editId = fileInputRef.current.dataset.editId;
+            handleUpload(file, editId || null);
+            fileInputRef.current.value = '';
+            fileInputRef.current.dataset.editId = '';
+        }
     };
 
     const openDeleteModal = (docId) => {
@@ -148,7 +168,7 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
                 onClose={() => setSubmissionSuccess(false)}
             />
 
-            <FullScreenFailureMessage
+            <FullScreenFailureMessage2
                 isOpen={submissionFailure}
                 onClose={() => setSubmissionFailure(false)}
                 message={failureMessage} />
@@ -217,7 +237,7 @@ const TrainingDocumentSubmissionComponent = ({ docTypeId, docTypeName, docTypeDe
                             )}
                             {uploading ? (<button className="add-btn btn-primary" disabled={uploading}>
                                 <PulseLoader size={10} color='#ffffff' />
-                            </button>) : (<button className="add-btn" onClick={() => fileInputRef.current.click()} disabled={!isUploadEnabled} data-tooltip-id="upload-tooltip" data-tooltip-content={isUploadEnabled ? "Upload a new document" : "All documents submitted"}>
+                            </button>) : (<button className="add-btn" onClick={() => fileInputRef.current.click()} disabled={!isUploadEnabled} data-tooltip-id="upload-tooltip" data-tooltip-content={isUploadEnabled ? "Upload a new document (max 8MB)" : "All documents submitted"}>
                                 {<FiPlus />}    Upload
                             </button>)}
                             <Tooltip id="upload-tooltip" />
