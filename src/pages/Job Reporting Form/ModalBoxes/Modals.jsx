@@ -50,7 +50,7 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
         
       })
   }
-
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   useEffect(() => {
     fetchAddressee()
   }, [])
@@ -62,7 +62,10 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
       .required('Supervisor title is required'),
     supervisorPhone: Yup.string()
       .required('Supervisor phone is required')
-      .matches(/^[0-9+\s-]+$/, 'Invalid phone number format'),
+      .matches(phoneRegExp, "Invalid phone number")
+      .test('no-spaces', 'Phone number should not contain spaces',
+        (value) => value && !value.includes(' '))
+      .length(11, "Phone number must be exactly 11 digits"),
     dateResumed: Yup.date()
       .required('Date is required'),
     mailingAddress: Yup.string()
@@ -180,6 +183,11 @@ const EditModal = ({ onClose, onSave, request, isSubmitting }) => {
                     name="supervisorPhone"
                     placeholder="eg 080xxxxxxxxx"
                     className={errors.supervisorPhone && touched.supervisorPhone ? "error-input" : ""}
+                    onKeyPress={(e) => {
+                      if (e.key === ' ') {
+                        e.preventDefault();
+                      }
+                    }}
                   />
                   <ErrorMessage name="supervisorPhone" component="div" className="error" />
                 </div>
